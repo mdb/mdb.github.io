@@ -6,5 +6,12 @@ describe "Posts" do
       get posts_path
       response.status.should be(200)
     end
+
+    it "displays some posts" do
+      @post = Post.create :title => "Test Post", :content => "test content"
+      visit posts_path
+      page.should have_content "Test Post"
+      page.should have_content "test content"
+    end
   end
 end
