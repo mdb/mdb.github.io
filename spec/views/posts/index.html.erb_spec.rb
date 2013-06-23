@@ -18,4 +18,8 @@ describe "posts/index.html.erb" do
   it "displays a list of posts, each with content" do
     rendered.should have_selector('li p', :text => "test content")
   end
+
+  it "displays a 'New Post' link" do
+    rendered.should have_selector('a', :text => "New Post")
+  end
 end
