@@ -2,6 +2,7 @@
  
 <h1><%= @post.title %></h1>
 <p><%= @post.content %></p>
+<p><b>Tags:</b> <%= @post.tags.map { |t| t.name }.join(", ") %></p>
                 
 <ul>
   <li><%= link_to 'Edit', edit_post_path(@post) %></li>
