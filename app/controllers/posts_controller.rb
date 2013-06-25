@@ -14,22 +14,13 @@ class PostsController < ApplicationController
       if @post.save
         format.html  { redirect_to(@post,
           :notice => 'Post was successfully created.') }
-        format.json  { render :json => @post,
-          :status => :created, :location => @post }
       else
         format.html  { render :action => "new" }
-        format.json  { render :json => @post.errors,
-          :status => :unprocessable_entity }
       end
     end
   end
 
   def show
-    @post = Post.find(params[:id])
-   
-    respond_to do |format|
-      format.html  # show.html.erb
-      format.json  { render :json => @post }
-    end
+    @post = Post.find_by_slug(params[:id])
   end
 end
