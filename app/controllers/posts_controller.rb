@@ -28,7 +28,7 @@ class PostsController < ApplicationController
     @post = Post.find_by_slug(params[:id])
 
     respond_to do |format|
-      if @post.update_attributes(params[:id])
+      if @post.update_attributes(params[:post])
         format.html { redirect_to(@post, :notice => 'Post was successfully updated.') }
       else
         format.html { render :action => "edit" }
