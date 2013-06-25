@@ -32,11 +32,11 @@ describe PostsController do
 
   describe "POST 'create'" do
     before :each do
-      post 'create'
+      post :create, :post => {:title => "some fake title"}
     end
 
     it "redirects to the post's permalink" do
-      response.should redirect_to('/posts/1')
+      response.should redirect_to('/posts/some-fake-title')
     end
   end
 
