@@ -14,4 +14,8 @@ describe "posts/_form.html.erb" do
   it "renders a form with a tags field" do
     rendered.should have_selector 'label', :text => 'Tags (separated by commas)'
   end
+
+  it "renders a form with an 'Active' field" do
+    rendered.should have_selector 'label', :text => 'Active'
+  end
 end

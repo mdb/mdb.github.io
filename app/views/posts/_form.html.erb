@@ -21,6 +21,10 @@
     <%= post_form.label :tag_list, "Tags (separated by commas)" %><br />
     <%= post_form.text_field :tag_list %>
   </div>
+  <div class="field">
+    <%= post_form.label :active %><br />
+    <%= post_form.check_box :active %>
+  </div>
   <div class="actions">
     <%= post_form.submit "Save" %>
   </div>
