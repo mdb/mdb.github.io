@@ -16,6 +16,11 @@ describe "posts/index.html.erb" do
     rendered.should have_selector('li h2', :text => "test title")
   end
 
+  it "displays the date published" do
+    date = "Published #{Time.now.strftime("%B %-d, %Y")}"
+    rendered.should have_selector('date', :text => date)
+  end
+
   it "displays a list of posts, each with content" do
     rendered.should have_selector('li p', :text => "test content")
   end

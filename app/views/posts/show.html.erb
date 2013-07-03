@@ -1,6 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <h1><%= @post.title %></h1>
+<date>Published <%= @post.created_at.strftime("%B %-d, %Y") %></date>
 <p><%= @post.content %></p>
 <% if @post.tag_list.length >= 1 %>
   <p>Tags: <%= raw @post.tag_list.map { |t| link_to t, tag_path(t) }.join(', ') %></p>

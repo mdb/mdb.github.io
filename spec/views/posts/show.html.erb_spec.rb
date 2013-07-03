@@ -14,6 +14,11 @@ describe "posts/show.html.erb" do
     rendered.should have_selector('h1', :text => "test title")
   end
 
+  it "displays the date published" do
+    date = "Published #{Time.now.strftime("%B %-d, %Y")}"
+    rendered.should have_selector('date', :text => date)
+  end
+
   it "displays post content" do
     rendered.should have_selector('p', :text => "test content")
   end
