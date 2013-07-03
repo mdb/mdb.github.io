@@ -11,15 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130703181819) do
+ActiveRecord::Schema.define(:version => 20130703184251) do
 
   create_table "posts", :force => true do |t|
     t.string   "title"
     t.text     "content"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
     t.string   "slug"
-    t.boolean  "active"
+    t.boolean  "active",     :default => true
   end
 
   create_table "taggings", :force => true do |t|

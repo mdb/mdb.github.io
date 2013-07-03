@@ -40,5 +40,9 @@ describe Post do
     it "exists as a method on a Post" do
       @post.respond_to?(:active).should eq true
     end
+
+    it "is true by default" do
+      @post.active.should eq true
+    end
   end
 end
