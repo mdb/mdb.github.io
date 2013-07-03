@@ -1,6 +1,6 @@
 Mdb::Application.routes.draw do
   get "posts/index"
-
+  get 'tags/:tag', to: 'posts#index', as: :tag
   resources :posts
   # The priority is based upon order of creation:
   # first created -> highest priority.

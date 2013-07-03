@@ -1,6 +1,10 @@
 class PostsController < ApplicationController
   def index
-    @posts = Post.all
+    if params[:tag]
+      @posts = Post.tagged_with(params[:tag])
+    else
+      @posts = Post.all
+    end
   end
 
   def new
@@ -23,7 +27,7 @@ class PostsController < ApplicationController
       end
     end
   end
-  
+
   def update
     @post = Post.find_by_slug(params[:id])
 

@@ -19,8 +19,8 @@ describe Post do
       Post.new(:title => 'at least five chars').should be_valid
     end
 
-    xit "accepts nested tag attributes" do
-      @post.should accept_nested_attributes_for :tags
+    it "responds to #tag_list" do
+      @post.respond_to?(:tag_list).should eq true
     end
   end
 

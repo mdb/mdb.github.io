@@ -2,6 +2,9 @@
 
 <h1><%= @post.title %></h1>
 <p><%= @post.content %></p>
+<% if @post.tag_list.length >= 1 %>
+  <p>Tags: <%= raw @post.tag_list.map { |t| link_to t, tag_path(t) }.join(', ') %></p>
+<% end %>
 
 <ul>
   <li><%= link_to 'Edit', edit_post_path(@post) %></li>
