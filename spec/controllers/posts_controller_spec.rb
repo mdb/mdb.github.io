@@ -12,7 +12,7 @@ describe PostsController do
     end
 
     it "creates a @posts instance variable with all the posts" do
-      assigns(:posts).should eq Post.all      
+      assigns(:posts).should eq Post.all
     end
   end
 
