@@ -1,6 +1,6 @@
 class Post < ActiveRecord::Base
   before_save :update_or_create_slug
-  attr_accessible :content, :title, :tag_list
+  attr_accessible :content, :title, :active, :tag_list
   acts_as_taggable
   validates :title,
     :presence => true,

@@ -29,4 +29,16 @@ describe Post do
       @post.respond_to?(:content).should eq true
     end
   end
+
+  describe "#tag_list" do
+    it "exists as a method on a Post" do
+      @post.respond_to?(:tag_list).should eq true
+    end
+  end
+
+  describe "#active" do
+    it "exists as a method on a Post" do
+      @post.respond_to?(:active).should eq true
+    end
+  end
 end
