@@ -1,9 +1,9 @@
 class PostsController < ApplicationController
   def index
     if params[:tag]
-      @posts = Post.tagged_with(params[:tag])
+      @posts = Post.where(:active => true).tagged_with(params[:tag])
     else
-      @posts = Post.all
+      @posts = Post.where(:active => true)
     end
   end
 
