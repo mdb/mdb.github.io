@@ -29,14 +29,4 @@ describe Post do
       @post.respond_to?(:content).should eq true
     end
   end
-
-  describe "#tags" do
-    it "exists as a method on a Post" do
-      @post.respond_to?(:content).should eq true
-    end
-
-    it "is an emptry array by default" do
-      @post.tags.should eq [] 
-    end
-  end
 end
