@@ -1,4 +1,6 @@
 class PostsController < ApplicationController
+  http_basic_authenticate_with name: "username", password: "secret", except: [:index, :show]
+
   def index
     if params[:tag]
       @posts = Post.where(:active => true).tagged_with(params[:tag])
