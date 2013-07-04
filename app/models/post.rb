@@ -1,8 +1,6 @@
 class Post < ActiveRecord::Base
   before_save :update_or_create_slug
 
-  attr_accessible :content, :title, :active, :tag_list, :thumbnail
-
   has_attached_file :thumbnail
 
   acts_as_taggable

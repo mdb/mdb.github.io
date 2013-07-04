@@ -16,7 +16,7 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(params[:post])
+    @post = Post.new(app_params)
 
     respond_to do |format|
       if @post.save
@@ -32,7 +32,7 @@ class PostsController < ApplicationController
     @post = Post.find_by_slug(params[:id])
 
     respond_to do |format|
-      if @post.update_attributes(params[:post])
+      if @post.update_attributes(app_params)
         format.html { redirect_to(@post, :notice => 'Post was successfully updated.') }
       else
         format.html { render :action => "edit" }
@@ -42,5 +42,10 @@ class PostsController < ApplicationController
 
   def show
     @post = Post.find_by_slug(params[:id])
+  end
+
+  private
+  def app_params
+    params.require(:post).permit(:title, :content, :updated_at, :created_at, :active, :tag_list, :thumbnail)
   end
 end
