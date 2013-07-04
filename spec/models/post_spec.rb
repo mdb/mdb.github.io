@@ -45,4 +45,10 @@ describe Post do
       @post.active.should eq true
     end
   end
+
+  describe "#thumbnail" do
+    it "exists as a method on a Post" do
+      @post.respond_to?(:thumbnail).should eq true
+    end
+  end
 end
