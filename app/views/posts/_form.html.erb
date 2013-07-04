@@ -25,6 +25,10 @@
     <%= post_form.label :active %><br />
     <%= post_form.check_box :active %>
   </div>
+  <div class="field">
+    <%= post_form.label :thumbnail %><br />
+    <%= post_form.file_field :thumbnail %>
+  </div>
   <div class="actions">
     <%= post_form.submit "Save" %>
   </div>

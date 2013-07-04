@@ -18,4 +18,9 @@ describe "posts/_form.html.erb" do
   it "renders a form with an 'Active' field" do
     rendered.should have_selector 'label', :text => 'Active'
   end
+
+  it "renders a form with a 'Thumbnail' field" do
+    rendered.should have_selector 'label', :text => 'Thumbnail'
+    rendered.should have_selector 'input#post_thumbnail'
+  end
 end
