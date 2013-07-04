@@ -75,4 +75,7 @@ Mdb::Application.configure do
       :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']
     }
   }
+
+  # Eager load the app every time classes are cached
+  config.eager_load = true
 end

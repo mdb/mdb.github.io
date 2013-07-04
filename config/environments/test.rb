@@ -31,4 +31,7 @@ Mdb::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
+
+  # Eager load the app every time classes are cached
+  config.eager_load = false
 end
