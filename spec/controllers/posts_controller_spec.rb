@@ -7,6 +7,7 @@ describe PostsController do
     before :each do
       Post.create(:title => "inactive post", :active => false)
       Post.create(:title => "active post")
+      Post.create(:title => "active post two")
       get :index
     end
 
@@ -15,7 +16,11 @@ describe PostsController do
     end
 
     it "creates a @posts instance variable with all the active posts" do
-      assigns(:posts).should eq Post.where(:active => true)
+      assigns(:posts).should eq Post.where(:active => true).sort_by(&:created_at).reverse
+    end
+
+    it "sorts the posts in order of most recently created to least recently created" do
+      assigns(:posts)[0].title.should eq 'active post two'
     end
 
     it "does not return inactive posts" do

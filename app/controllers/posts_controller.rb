@@ -3,9 +3,9 @@ class PostsController < ApplicationController
 
   def index
     if params[:tag]
-      @posts = Post.where(:active => true).tagged_with(params[:tag])
+      @posts = Post.where(:active => true).tagged_with(params[:tag]).sort_by(&:created_at).reverse
     else
-      @posts = Post.where(:active => true)
+      @posts = Post.where(:active => true).sort_by(&:created_at).reverse
     end
   end
 
