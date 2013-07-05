@@ -183,6 +183,7 @@ DEPENDENCIES
   jquery-rails
   minitest
   paperclip (= 3.4.2)
+  pry
   rails (= 4.0.0)
   rspec-rails
   sass-rails
