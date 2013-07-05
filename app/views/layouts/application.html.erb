@@ -1,14 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mdb</title>
+  <title>Mike Ball</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <header>
+    <h1>
+      <a href="">Mike Ball</a>
+      Recent Projects, Blog &amp; Information
+    </h1>
+  </header>
 
-<%= yield %>
+  <section class="content">
+    <%= yield %>
+  </section>
 
+  <footer>
+    <h1 id="info">Info</h1>
+    <div class="column double">
+      <div class="column double">
+        <h2>Mike Ball</h2>
+        <p>I live in Philadelphia and work as a web developer and designer.</p>
+        <p>I am especially excited to work with artists, nonprofits, and journalists. I like to work in Node.js, Ruby on Rails, Django, and on open source projects. I want to use technology to make cities more livable. Interested in working with me? <a href="mailto:&#109;&#105;&#107;&#101;&#100;&#98;&#97;&#108;&#108;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">Get in touch</a>.</p>
+      </div>
+      <div class="column double">
+        <h2>Skills &amp; Experience</h2>
+        <ul>
+          <li>XHTML, HTML5, XML</li>
+          <li>CSS, SASS, Compass</li>
+          <li>JavaScript, AJAX, jQuery</li>
+          <li>User Interface/IX Design</li>
+          <li>Adobe CS3, CS4 Software</li>
+          <li>Subversion, Mercurial, Git</li>
+          <li>Ruby, Freemarker, PHP, Python</li>
+          <li>Node.js, Rails, Django, Wordpress</li>
+          <li>Basic LAMP configuration experience</li>
+          <li>TDD utilizing Rspec, Cucumber &amp; Jasmine</li>
+        </ul>
+      </div><!--end .column.double-->
+    </div>
+    <div class="column double">
+      <h3>From Delicious</h3>
+      <ul id="delicious">
+        <li>TODO</li>
+      </ul>
+    </div>
+    <div class="column clear-left double">
+      <h3>Clients &amp; Affiliations</h3> 
+        <div class="column double">
+          <ul>
+            <li>Comcast Interactive Media</li>
+            <li>SecondMuse/NASA</li>
+            <li>Books On Wheels</li>
+            <li>Tomorrow</li>
+            <li>Parcell Press</li>
+            <li>The Drama Magazine</li>
+            <li>Public Interest GRFX</li>
+            <li>Grassroots Campaigns, Inc.</li>
+          </ul>
+        </div>
+        <div class="column double">
+          <ul>
+            <li>Code for America Brigade</li>
+            <li>Common Cause Pennsylvania</li>
+            <li>American Civil Liberties Union</li>
+            <li>British American Business Council</li>
+            <li>Greater Philadelphia Chamber of Commerce</li>
+          </ul>
+        </div>
+      </div>
+      <div class="column double">
+        <h3>Etc.</h3>
+        <ul class="two-column">
+          <li><a href="/feed">RSS Feed</a></li>
+          <li><a href="/feed/atom">Atom Feed</a></li>
+          <li><a href="http://github.com/mdb/">On GitHub</a></li>
+          <li><a href="http://twitter.com/clapexcitement">On Twitter</a></li>
+          <li><a id="contact" href="mailto:&#109;&#105;&#107;&#101;&#100;&#98;&#97;&#108;&#108;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">Contact Me</a></li>        
+        </ul>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
