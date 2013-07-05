@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  http_basic_authenticate_with name: "username", password: "secret", except: [:index, :show]
+  http_basic_authenticate_with name: Mdb::Application.config.username, password: Mdb::Application.config.password, except: [:index, :show]
 
   def index
     if params[:tag]

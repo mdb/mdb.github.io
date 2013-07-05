@@ -38,6 +38,9 @@ RSpec.configure do |config|
 
   # Make capybara methods available in specs
   config.include Capybara::DSL
+
+  # include Helpers module
+  config.include Helpers
 end
 
 # https://gist.github.com/1353500/bae9d4514737a5cd7fa7315338fdd9053dbff543
