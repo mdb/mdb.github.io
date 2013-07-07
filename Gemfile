@@ -23,6 +23,7 @@ gem 'jquery-rails'
 gem 'acts-as-taggable-on', '2.4.1'
 gem 'paperclip', '3.4.2'
 gem 'aws-sdk'
+gem 'git'
 
 group :test, :development do
   gem "rspec-rails"

@@ -58,6 +58,7 @@ GEM
       multi_json (~> 1.0)
     ffi (1.9.0)
     formatador (0.2.4)
+    git (1.2.5)
     growl_notify (0.0.3)
       rb-appscript
     guard (1.8.1)
@@ -178,6 +179,7 @@ DEPENDENCIES
   aws-sdk
   capybara
   coffee-rails
+  git
   growl_notify
   guard-rspec
   jquery-rails
