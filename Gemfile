@@ -25,6 +25,11 @@ gem 'paperclip', '3.4.2'
 gem 'aws-sdk'
 gem 'git'
 
+# Gems only required when building
+group :build do
+  gem 'archive-tar-minitar'
+end
+
 group :test, :development do
   gem "rspec-rails"
   gem "capybara"

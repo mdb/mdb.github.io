@@ -27,6 +27,7 @@ GEM
       tzinfo (~> 0.3.37)
     acts-as-taggable-on (2.4.1)
       rails (>= 3, < 5)
+    archive-tar-minitar (0.5.2)
     arel (4.0.0)
     atomic (1.1.10)
     aws-sdk (1.11.1)
@@ -176,6 +177,7 @@ PLATFORMS
 
 DEPENDENCIES
   acts-as-taggable-on (= 2.4.1)
+  archive-tar-minitar
   aws-sdk
   capybara
   coffee-rails
