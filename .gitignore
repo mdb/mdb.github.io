@@ -14,4 +14,7 @@
 /log/*.log
 /tmp
 
+# Ignore asset tarball
+mdb.tar.gz
+
 .DS_Store
