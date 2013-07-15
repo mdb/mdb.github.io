@@ -16,5 +16,6 @@
 
 # Ignore asset tarball
 mdb.tar.gz
+/assets
 
 .DS_Store
