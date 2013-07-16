@@ -2,10 +2,12 @@ class PostsController < ApplicationController
   http_basic_authenticate_with name: Mdb::Application.config.username, password: Mdb::Application.config.password, except: [:index, :show]
 
   def index
+    query = logged_in? ? Post.all : Post.where(:active => true)
+
     if params[:tag]
-      @posts = Post.where(:active => true).tagged_with(params[:tag]).sort_by(&:created_at).reverse
+      @posts = query.tagged_with(params[:tag]).sort_by(&:created_at).reverse
     else
-      @posts = Post.where(:active => true).sort_by(&:created_at).reverse
+      @posts = query.sort_by(&:created_at).reverse
     end
   end
 
@@ -46,8 +48,21 @@ class PostsController < ApplicationController
     @post = Post.find_by_slug(params[:id])
   end
 
+  def destroy
+    @post = Post.find_by_slug(params[:id])
+    @post.destroy
+
+    respond_to do |format|
+      format.html { redirect_to posts_url }
+    end
+  end
+
   private
   def app_params
     params.require(:post).permit(:title, :content, :updated_at, :created_at, :active, :tag_list, :thumbnail)
+  end
+
+  def logged_in?
+    !request.authorization.nil?
   end
 end
