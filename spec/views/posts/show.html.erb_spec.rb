@@ -42,4 +42,18 @@ describe "posts/show.html.erb" do
       rendered.should have_content 'Tags'
     end
   end
+
+  context "the user is logged in" do
+    before :each do
+      ApplicationHelper.stub(:logged_in?).and_return true
+      render :template => "posts/show"
+    end
+
+    # TODO
+    xit "displays a 'Destroy' link" do
+      rendered.should have_selector('li a',
+        :text => 'Destroy'
+      )
+    end
+  end
 end
