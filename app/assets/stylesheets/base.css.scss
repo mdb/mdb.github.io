@@ -1,0 +1,27 @@
+@import 'variables';
+
+body {
+  color: $text_color;
+  font-family: $font_family;
+  font-size: $font_size;
+  background: $background_color;
+}
+
+a {
+  color: $link_color;
+}
+
+.column {
+  float: left;
+  overflow: hidden;
+  margin-bottom: 15px;
+
+  &.double {
+    width: 49%;
+    margin-right: 1%;
+  }
+
+  &.quarter {
+    width: 25%;
+  }
+}
