@@ -5,6 +5,13 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+  <!-- FINGERPRINT
+  Application: mdb
+  Environment: <%= Rails.env %>
+  <% @fingerprint.each_pair do |key, value| %>
+  <%= key %>: <%= value %>
+  <% end %>
+  -->
 </head>
 <body>
   <header>

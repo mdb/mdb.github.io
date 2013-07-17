@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe "status/index.html.erb" do
   before :each do
-    @revision = {
-      :id => 'some_id',
-      :message => 'some_message'
+    @fingerprint = {
+      :some_key => 'some value',
+      :another_key => 'another value'
     }
     render :template => "status/index", :layout => 'layouts/status'
   end
@@ -13,17 +13,10 @@ describe "status/index.html.erb" do
     rendered.should have_selector('h1', :text => "Status")
   end
 
-  context "the version control details it reports" do
-    it "renders a revision heading" do
-      rendered.should have_selector('dl dt', :text => "Revision")
-    end
-
-    it "reports revision id" do
-      rendered.should have_selector('dl dd', :text => "some_id")
-    end
-
-    it "reports revision message" do
-      rendered.should have_selector('dl dd', :text => "some_message")
-    end
+  it "renders a definition list reporting all the keys/values contained in the @fingerprint hash" do
+    rendered.should have_selector('dl dt', :text => "some_key")
+    rendered.should have_selector('dl dd', :text => "some value")
+    rendered.should have_selector('dl dt', :text => "another_key")
+    rendered.should have_selector('dl dd', :text => "another value")
   end
 end
