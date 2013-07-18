@@ -27,6 +27,7 @@ test:
 production:
   adapter: postgresql
   encoding: unicode
+  host: localhost
   database: mdb_production
   pool: 5
   username: mdb
