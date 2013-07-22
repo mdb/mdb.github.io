@@ -81,4 +81,8 @@ Mdb::Application.configure do
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
   #config.assets.precompile << "*.js"
   #config.assets.precompile << "*.css"
+
+  # Keep app from connecting to database during asset compilation
+  # Allegedly not necessary in Rails 4
+  config.assets.initialize_on_precompile = false
 end
