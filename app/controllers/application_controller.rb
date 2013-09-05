@@ -1,10 +1,12 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  #before_filter :get_fingerprint
+  before_filter :get_fingerprint
 
   private
   def get_fingerprint
-    @fingerprint = Mdb::Application.config.fingerprint.merge(git_info)
+    if Mdb::Application.config.git_fingerprint_activated
+      @fingerprint = Mdb::Application.config.fingerprint.merge(git_info)
+    end
   end
 
   def git_info

@@ -85,4 +85,8 @@ Mdb::Application.configure do
   # Keep app from connecting to database during asset compilation
   # Allegedly not necessary in Rails 4
   config.assets.initialize_on_precompile = false
+
+  # Report repo info in the Fingerprint
+  # Heroku doesn't like
+  config.git_fingerprint_activated = false
 end
