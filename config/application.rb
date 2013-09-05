@@ -55,5 +55,8 @@ module Mdb
     rescue Exception
       # Do nothing
     end
+
+    # Fix for Heroku + NewRelic and asset compilation
+    config.assets.initialize_on_precompile = false
   end
 end
