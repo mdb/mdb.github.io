@@ -51,6 +51,9 @@ end
 # Use unicorn as the app server
 gem 'unicorn'
 
+# Heroku
+gem 'rails_12factor', group: :production
+
 # Deploy with Capistrano
 # gem 'capistrano'
 
