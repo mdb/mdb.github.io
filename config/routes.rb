@@ -1,4 +1,6 @@
 Mdb::Application.routes.draw do
+  root :to => 'home#index'
+
   get "posts/index"
 
   get 'tags/:tag', to: 'posts#index', as: :tag

@@ -8,8 +8,10 @@
   <!-- FINGERPRINT
   Application: mdb
   Environment: <%= Rails.env %>
-  <% @fingerprint.each_pair do |key, value| %>
-  <%= key %>: <%= value %>
+  <% unless @fingerprint.nil? %>
+    <% @fingerprint.each_pair do |key, value| %>
+      <%= key %>: <%= value %>
+    <% end %>
   <% end %>
   -->
 </head>
