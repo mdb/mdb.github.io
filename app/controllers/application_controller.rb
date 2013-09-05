@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_filter :get_fingerprint
+  #before_filter :get_fingerprint
 
   private
   def get_fingerprint
