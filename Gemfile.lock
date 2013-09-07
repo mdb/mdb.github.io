@@ -85,6 +85,11 @@ GEM
     guard-rspec (3.0.2)
       guard (>= 1.8)
       rspec (~> 2.13)
+    heroku-api (0.3.15)
+      excon (~> 0.25.1)
+    heroku_san (4.3.0)
+      heroku-api (>= 0.1.2)
+      rake
     hike (1.2.3)
     i18n (0.6.4)
     jquery-rails (3.0.2)
@@ -214,6 +219,7 @@ DEPENDENCIES
   git
   growl_notify
   guard-rspec
+  heroku_san
   jquery-rails
   minitest
   paperclip (= 3.4.2)

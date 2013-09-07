@@ -41,6 +41,7 @@ group :test, :development do
   gem "growl_notify"
   gem "minitest"
   gem "pry"
+  gem 'heroku_san'
 end
 
 # To use ActiveModel has_secure_password
