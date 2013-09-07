@@ -89,4 +89,7 @@ Mdb::Application.configure do
   # Report repo info in the Fingerprint
   # Heroku doesn't like
   config.git_fingerprint_activated = false
+
+  # asset host CDN
+  config.action_controller.asset_host = "http://clapclapexcitement.s3-website-us-east-1.amazonaws.com"
 end
