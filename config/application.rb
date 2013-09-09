@@ -28,12 +28,12 @@ module Mdb
     config.password = 'password'
 
     # version and environment info
-    #config.fingerprint = { :Hostname => Socket.gethostname }
-    #begin
-    #  config.fingerprint = config.fingerprint.merge(YAML.load_file(Rails.root.join('config', 'fingerprint.yml')))
-    #rescue Exception
+    config.fingerprint = { :Hostname => Socket.gethostname }
+    begin
+      config.fingerprint = config.fingerprint.merge(YAML.load_file(Rails.root.join('config', 'fingerprint.yml')))
+    rescue Exception
       # Do nothing
-    #end
+    end
 
     # Report git revision info in the Fingerprint
     config.git_fingerprint_activated = true
