@@ -56,9 +56,6 @@ module Mdb
       # Do nothing
     end
 
-    # Fix for Heroku + NewRelic and asset compilation
-    config.assets.initialize_on_precompile = false
-
     # Report git revision info in the Fingerprint
     config.git_fingerprint_activated = true
   end
