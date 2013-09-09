@@ -1,5 +1,3 @@
-added config.assets.initialize_on_precompile = false to application.rb, per justin campbell
-
 Tried:
 * How to get assets to compile on Heroku - this worked after many attempts: heroku labs:enable user-env-compile (http://stackoverflow.com/questions/16124490/heroku-rails-4-could-not-connect-to-server-connection-refused)
 * heroku run db:create - doesn't work
