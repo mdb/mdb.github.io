@@ -6,6 +6,9 @@ Mdb::Application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
+  # Do not eager load code on boot.
+  config.eager_load = false
+
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
@@ -16,15 +19,11 @@ Mdb::Application.configure do
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
 
-  # Only use best-standards-support built into browsers
-  config.action_dispatch.best_standards_support = :builtin
+  # Raise an error on page load if there are pending migrations
+  config.active_record.migration_error = :page_load
 
-  # Do not compress assets
-  config.assets.compress = false
-
-  # Expands the lines which load the assets
+  # Debug mode disables concatenation and preprocessing of assets.
+  # This option may cause significant delays in view rendering with a large
+  # number of complex assets.
   config.assets.debug = true
-
-  # Eager load the app every time classes are cached
-  config.eager_load = false
 end
