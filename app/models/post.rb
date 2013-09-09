@@ -3,7 +3,7 @@ class Post < ActiveRecord::Base
 
   has_attached_file :thumbnail
 
-  acts_as_taggable
+  #acts_as_taggable
 
   validates :title,
     :presence => true,
