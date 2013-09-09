@@ -3,7 +3,8 @@ class Post < ActiveRecord::Base
 
   has_attached_file :thumbnail
 
-  #acts_as_taggable
+  # Heroku hack; http://pivotallabs.com/rails-4-upgrade/
+  act_as_taggable raise nil
 
   validates :title,
     :presence => true,
