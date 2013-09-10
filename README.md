@@ -9,3 +9,8 @@ Tried:
 * heroku addons:upgrade logging:expanded - does not work
 * heroku addons:add logentries:tryit
 * removed git revision fingerprint reporting stuff - that worked
+
+How to get asset_sync working:
+* set env variables in heroku
+* created initializer
+* heroku labs:enable user-env-compile -a myapp
