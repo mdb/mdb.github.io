@@ -14,3 +14,4 @@ How to get asset_sync working:
 * set env variables in heroku
 * created initializer
 * heroku labs:enable user-env-compile -a myapp
+* move asset_sync outside :assets group - this finally worked
