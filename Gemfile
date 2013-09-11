@@ -9,10 +9,13 @@ gem 'rails', '4.0.0'
 
 gem 'pg'
 
+# Only seems to work when required outside of
+# :assets group
+gem 'asset_sync'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'asset_sync'
   gem 'sass-rails'
   gem 'coffee-rails'
 
