@@ -25,8 +25,8 @@ staging:
     BUNDLE_WITHOUT: "development:test"
     FOG_PROVIDER: "AWS"
     FOG_DIRECTORY: "clapclapexcitement"
-    AWS_ACCESS_KEY: ""
-    AWS_SECRET_KEY: ""
+    AWS_ACCESS_KEY_ID: ""
+    AWS_SECRET_ACCESS_KEY: ""
   addons:
     - pgbackups:auto-week
     - memcache:5mb
