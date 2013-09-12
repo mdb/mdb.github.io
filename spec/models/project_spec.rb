@@ -20,4 +20,14 @@ describe Project do
       @project.respond_to?(:description).should eq true
     end
   end
+
+  describe "#active" do
+    it "exists as a method on a Project" do
+      @project.respond_to?(:active).should eq true
+    end
+
+    it "is true by default" do
+      @project.active.should eq true
+    end
+  end
 end
