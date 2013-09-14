@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130912143726) do
+ActiveRecord::Schema.define(version: 20130914180604) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,16 @@ ActiveRecord::Schema.define(version: 20130912143726) do
     t.string   "thumbnail_content_type"
     t.integer  "thumbnail_file_size"
     t.datetime "thumbnail_updated_at"
+  end
+
+  create_table "project_assets", force: true do |t|
+    t.string   "project_asset_file_name"
+    t.string   "project_asset_file_type"
+    t.integer  "project_asset_file_size"
+    t.datetime "project_asset_updated_at"
+    t.integer  "project_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "projects", force: true do |t|
