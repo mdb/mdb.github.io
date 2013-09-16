@@ -68,6 +68,13 @@ describe ProjectsController do
       it "creates a new project in a @project instance variable" do
         assigns(:project).class.should eq Project
       end
+
+      # TODO: how to test this?
+      xit "builds 6 project asset fields" do
+        project = double Project
+        project.project_assets.should_receive(:build).exactly(6).times
+        get :new
+      end
     end
   end
 
@@ -134,6 +141,19 @@ describe ProjectsController do
         delete :destroy, :id => 'test-title'
         response.status.should eq 401
       end
+    end
+  end
+
+  describe "GET 'edit'" do
+    before :each do
+      @a_project = Project.create(:title => "test title", :description => "test description")
+    end
+
+    # TODO: how to test this?
+    xit "builds 6 project asset fields" do
+      project = double Project
+      project.project_assets.should_receive(:build).exactly(6).times
+      get :edit, id: "test-title"
     end
   end
 end

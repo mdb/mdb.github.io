@@ -13,10 +13,12 @@ class ProjectsController < ApplicationController
 
   def new
     @project = Project.new
+    build_assets
   end
 
   def edit
     @project = Project.find_by_slug(params[:id])
+    build_assets
   end
 
   def create
@@ -64,5 +66,9 @@ class ProjectsController < ApplicationController
 
   def logged_in?
     !request.authorization.nil?
+  end
+
+  def build_assets
+    6.times { @project.project_assets.build }
   end
 end
