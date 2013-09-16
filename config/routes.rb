@@ -1,11 +1,11 @@
 Mdb::Application.routes.draw do
   root :to => 'home#index'
 
-  get "posts/index"
+  resources :posts
 
   get 'tags/:tag', to: 'posts#index', as: :tag
 
-  resources :posts
+  resources :projects
 
   get '_status', to: 'status#index'
   # The priority is based upon order of creation:
