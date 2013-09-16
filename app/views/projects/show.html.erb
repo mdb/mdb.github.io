@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<h1><%= project.title %></h1>
+
+<date>Published <%= project.created_at.strftime("%B %-d, %Y") %></date>
+
+<p><%= project.content %></p>
+
+<ul>
+  <% if logged_in? %>
+    <li><%= link_to 'Edit', edit_project_path(project) %></li>
+    <li><%= link_to 'Destroy', project, :method => :delete, :confirm => "Are you sure?" %></li>
+  <% end %>
+  <li><%= link_to 'Back', projects_path %></li>
+</ul>
