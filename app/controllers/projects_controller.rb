@@ -1,5 +1,8 @@
 class ProjectsController < ApplicationController
-  http_basic_authenticate_with name: Mdb::Application.config.username, password: Mdb::Application.config.password, except: [:index, :show]
+  http_basic_authenticate_with(
+    name: Mdb::Application.config.username,
+    password: Mdb::Application.config.password, except: [:index, :show]
+  )
 
   def index
     query = logged_in? ? Project.all : Project.where(:active => true)
@@ -61,7 +64,14 @@ class ProjectsController < ApplicationController
 
   private
   def app_params
-    params.require(:project).permit(:title, :description, :updated_at, :created_at, :active, :tag_list)
+    params.require(:project).permit(
+      :title,
+      :description,
+      :updated_at,
+      :created_at,
+      :active,
+      :project_assets_attributes => [:project_asset, :id]
+    )
   end
 
   def logged_in?
