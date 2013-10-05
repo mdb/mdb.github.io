@@ -55,6 +55,8 @@ activate :blog do |blog|
   blog.prefix = "blog"
 end
 
+page "blog/*", :layout => :article
+
 activate :directory_indexes
 
 # Add bower_components directory to asset pipeline
