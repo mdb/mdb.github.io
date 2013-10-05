@@ -57,6 +57,9 @@ end
 
 activate :directory_indexes
 
+# Add bower_components directory to asset pipeline
+sprockets.append_path File.join "#{root}", "bower_components"
+
 # Build-specific configuration
 configure :build do
   # For example, change the Compass output style for deployment
