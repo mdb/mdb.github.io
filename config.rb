@@ -53,6 +53,7 @@ set :images_dir, 'images'
 
 activate :blog do |blog|
   blog.prefix = "blog"
+  blog.tag_template  = "tag.html"
 end
 
 page "blog/*", :layout => :article

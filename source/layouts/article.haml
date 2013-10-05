@@ -1,4 +1,16 @@
 - wrap_layout :layout do
-  %h1=data.page.title
-  %article
-    = yield
+  - if current_page.url.include? "tags"
+    %h1= "Articles tagged #{tagname}"
+    %ul
+      - page_articles.each_with_index do |article, i|
+        %li
+          %a{ :href => article.url }=article.title
+          %span=article.date.strftime('%b %e')
+  - else
+    %h1=data.page.title
+    %article
+      = yield
+      %ul
+      - current_article.tags.each do |tag|
+        %li
+          %a{:href => tag_path(tag)}=tag
