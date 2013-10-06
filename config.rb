@@ -1,3 +1,5 @@
+require 'pry'
+
 ###
 # Compass
 ###
@@ -57,6 +59,8 @@ activate :blog do |blog|
 end
 
 page "blog/*", :layout => :article
+page "blog", :layout => :layout
+page "blog/tags/*", :layout => :layout
 
 activate :directory_indexes
 

@@ -1,1 +1,6 @@
-/ noop - seemingly necessary as the the article layout
+%h1= "Articles tagged #{tagname}"
+%ul
+  - page_articles.each_with_index do |article, i|
+    %li
+      %a{ :href => article.url }=article.title
+      %span=article.date.strftime('%b %e')
