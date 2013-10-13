@@ -1,0 +1,4 @@
+%h1 Projects
+- blog('projects').articles.each do |article|
+  %h2
+    %a{:href => article.url}=article.title
