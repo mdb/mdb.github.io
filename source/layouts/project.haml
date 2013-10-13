@@ -1,3 +1,10 @@
 - wrap_layout :layout do
   %article
     %h1=current_article.title
+    %date="Posted #{current_article.date.strftime('%B %e, %Y')}"
+    %p=current_article.body
+    - if current_article && current_article.tags
+      %ul
+      - current_article.tags.each do |tag|
+        %li
+          %a{:href => "/projects/tags/#{tag}"}=tag

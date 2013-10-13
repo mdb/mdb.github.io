@@ -1,0 +1,6 @@
+%h1= "Projects tagged #{tagname}"
+%ul
+  - page_articles.each_with_index do |article, i|
+    %li
+      %a{ :href => article.url }=article.title
+      %span=article.date.strftime('%b %e')

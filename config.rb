@@ -6,7 +6,7 @@ set :images_dir, 'images'
 activate :blog do |blog|
   blog.name = "blog"
   blog.prefix = "blog"
-  blog.tag_template  = "tag.html"
+  blog.tag_template  = "tag_blog.html"
 end
 
 page "blog/*", :layout => :article
@@ -18,7 +18,7 @@ activate :blog do |blog|
   blog.name = "projects"
   blog.prefix = "projects"
   blog.permalink = ":title.html"
-  blog.tag_template  = "tag.html"
+  blog.tag_template  = "tag_projects.html"
 end
 
 page "projects/*", :layout => :project
