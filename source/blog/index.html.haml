@@ -5,4 +5,4 @@
     %h2
       %a{:href => article.url}=article.title
     %a{:href => article.url}
-      %img{:src => image_path("blog/thumbnails/#{article.data.thumbnail}")}
+      %img{:src => blog_thumb_path(article.data.thumbnail)}
