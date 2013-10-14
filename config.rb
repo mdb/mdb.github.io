@@ -1,4 +1,7 @@
 require 'redcarpet'
+require 'lib/template_helpers'
+
+helpers TemplateHelpers
 
 set :markdown,
   :tables => true,
