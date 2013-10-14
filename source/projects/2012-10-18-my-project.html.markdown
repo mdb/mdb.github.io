@@ -6,3 +6,6 @@ thumbnail: foo
 ---
 
 A Project
+
+* foo
+* bar
