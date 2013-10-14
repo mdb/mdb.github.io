@@ -1,3 +1,12 @@
+require 'redcarpet'
+
+set :markdown,
+  :tables => true,
+  :autolink => true,
+  :gh_blockcode => true,
+  :fenced_code_blocks => true,
+  :with_toc_data => true
+set :markdown_engine, :redcarpet
 set :css_dir, 'stylesheets'
 set :js_dir, 'javascripts'
 set :images_dir, 'images'
