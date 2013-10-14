@@ -2,7 +2,7 @@
 title: How to Set Up a Git Repository on Webfaction
 date: 2010/10/26
 tags: git, notes
-thumbnail: default_thumb.png
+thumbnail: default_thumb.gif
 ---
 
 <b>NOTE</b>: This documentation is old; I don't know if these instructions still work. These days, I recommend [BitBucket](https://bitbucket.org) if you need free, private Git repositories.
