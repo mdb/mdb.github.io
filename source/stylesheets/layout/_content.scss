@@ -1,3 +1,50 @@
 div.content {
   @include center;
 }
+
+ul.gallery li.item {
+  float: left;
+  width: 300px;
+  height: 340px;
+  margin-right: 20px;
+
+  date {
+    margin-bottom: 5px;
+    color: $secondary_text_color;
+  }
+
+  img {
+    margin-bottom: 5px;
+  }
+
+  h2, h2 a {
+    font-size: $font_size + 3;
+    text-decoration: none;
+    color: $text_color;
+    line-height: $font_size + 7;
+    margin-bottom: 5px;
+  }
+
+  ul.tags {
+    li {
+      display: inline;
+
+      a {
+        display: inline;
+        text-decoration: none;
+        font-style: italic;
+        color: $secondary_text_color;
+
+        &:after {
+          content: ',';
+        }
+
+        &.last {
+          &:after {
+            content: '';
+          }
+        }
+      }
+    }
+  }
+}
