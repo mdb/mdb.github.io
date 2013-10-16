@@ -1,0 +1,9 @@
+html {
+  font-family: $font_family;
+  font-size: $font_size;
+  color: $text_color;
+}
+
+a, a:visited, a:focus {
+  color: $link_color;
+}

@@ -2,3 +2,8 @@
   color: $text_color;
   font-weight: bold;
 }
+
+@mixin center {
+  width: $container_width;
+  margin: 0 auto;
+}
