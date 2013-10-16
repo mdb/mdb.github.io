@@ -1,5 +1,5 @@
 ---
-title: "Lobbing.ph"
+title: "Lobbying.ph"
 date: 2012/03/05
 tags: code for america, ruby, sinatra, open data
 thumbnail: cfa_thumb.jpg
