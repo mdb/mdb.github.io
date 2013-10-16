@@ -1,0 +1,31 @@
+// Text Colors
+$text_color: #313131;
+$link_color: #0473ad;
+$heading_color: #cc191f;
+$highlight_color: #fecb00;
+$minor_text_color: #8a8a8a;
+$text_color_reverse: white;
+$link_color_reverse: #2ca4e3;
+
+// Misc UI Elements
+$text_separator_color: #dbdbdb;
+$module_separator_color: #dbdbdb;
+$panel_border_color: #e1e1e1;
+$text_separator: 1px dotted $text_separator_color;
+$module_separator: 1px solid $module_separator_color;
+$component_separator: 4px solid $module_separator_color;
+$component_shadow: 1px solid #cccccc;
+$module_bg_color: white;
+$dotted_border: 1px dotted $text_separator_color;
+
+// Gradients
+$universal_nav_gradient_color1: #343434;
+$universal_nav_gradient_color2: #2a2a2a;
+
+// Font Styles
+$font_family: helvetica, arial, sans-serif;
+$font_size: 12px;
+$small_font_size: 11px;
+
+// Heading Styles
+$h1_font_size: 15px;
