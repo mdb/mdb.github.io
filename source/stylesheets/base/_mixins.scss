@@ -7,3 +7,13 @@
   width: $container_width;
   margin: 0 auto;
 }
+
+@mixin thumb_dimensions {
+  width: $thumb_width;
+  height: $thumb_height;
+}
+
+@mixin gallery_item_dimensions {
+  width: $thumb_width;
+  height: $gallery_item_height;
+}
