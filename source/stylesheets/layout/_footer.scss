@@ -1,3 +1,23 @@
 footer {
-  @include center;
+  padding: 50px 0;
+  clear: both;
+  background: $text_color;
+  color: $text_color_reverse;
+  overflow: hidden;
+
+  section {
+    @include center;
+  }
+
+  h2 {
+    margin-bottom: 15px;
+  }
+
+  .column {
+    float: left;
+
+    h3 {
+      border-bottom: 1px solid $text_color_reverse;
+    }
+  }
 }

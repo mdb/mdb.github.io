@@ -1,0 +1,12 @@
+.column {
+  float: left;
+  width: 100%;
+
+  &.double {
+    width: 50%;
+  }
+
+  &.clear {
+    clear: both;
+  }
+}

@@ -2,7 +2,7 @@
 title: MDB!
 ---
 
-%h1 Blog
+%h1.divider Recent Blog Posts
 %ul.gallery
   - blog('blog').articles.each do |article|
     %li.item
@@ -16,7 +16,7 @@ title: MDB!
           %li
             %a{:href => "/blog/tags/#{tag}"}=tag
 
-%h1 Recent Projects
+%h1.divider Recent Projects
 %ul.gallery
   - blog('projects').articles.each do |project|
     %li.item
