@@ -1,7 +1,3 @@
-div.content {
-  @include center;
-}
-
 ul.gallery li.item {
   @include gallery_item_dimensions;
   float: left;
@@ -14,6 +10,7 @@ ul.gallery li.item {
 
   img {
     margin-bottom: 5px;
+    border: 2px solid #fff;
     @include thumb_dimensions;
   }
 

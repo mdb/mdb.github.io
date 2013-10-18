@@ -2,7 +2,7 @@ footer {
   padding: 50px 0;
   clear: both;
   background: $text_color;
-  color: $text_color_reverse;
+  color: #ccc;
   overflow: hidden;
 
   section {
@@ -10,14 +10,16 @@ footer {
   }
 
   h2 {
-    margin-bottom: 15px;
+    margin-bottom: 25px;
   }
 
   .column {
     float: left;
 
     h3 {
-      border-bottom: 1px solid $text_color_reverse;
+      border-bottom: 1px solid #999;
+      padding-bottom: 5px;
+      margin-bottom: 15px;
     }
   }
 }

@@ -1,6 +1,24 @@
+div.content-wrap {
+  padding-top: 50px;
+  background: #eee;
+  overflow: hidden;
+
+  &.secondary {
+    background: #ddd;
+  }
+
+  div.content {
+    @include center;
+  }
+}
+
 .column {
   float: left;
   width: 100%;
+
+  h3, p, ul {
+    width: 90%;
+  }
 
   &.double {
     width: 50%;
