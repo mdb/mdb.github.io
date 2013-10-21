@@ -1,0 +1,12 @@
+%ul.gallery
+  - blog('blog').articles.each do |article|
+    %li.item
+      %date="Posted #{article.date.strftime('%B %e, %Y')}"
+      %a{:href => article.url}
+        %img{:src => blog_thumb_path(article.data.thumbnail)}
+      %h2
+        %a{:href => article.url}=article.title
+      %ul.tags
+        - article.tags.each do |tag|
+          %li
+            %a{:href => "/blog/tags/#{tag}"}=tag

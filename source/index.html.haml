@@ -5,30 +5,9 @@ title: MDB!
 %div.content-wrap
   %div.content
     %h1.divider Recent Blog Posts
-    %ul.gallery
-      - blog('blog').articles.each do |article|
-        %li.item
-          %date="Posted #{article.date.strftime('%B %e, %Y')}"
-          %a{:href => article.url}
-            %img{:src => blog_thumb_path(article.data.thumbnail)}
-          %h2
-            %a{:href => article.url}=article.title
-          %ul.tags
-            - article.tags.each do |tag|
-              %li
-                %a{:href => "/blog/tags/#{tag}"}=tag
+    = partial :blog_gallery
 
 %div.content-wrap.secondary
   %div.content
     %h1.divider Recent Projects
-    %ul.gallery
-      - blog('projects').articles.each do |project|
-        %li.item
-          %a{:href => project.url}
-            %img{:src => project_thumb_path(project.data.thumbnail)}
-          %h2
-            %a{:href => project.url}=project.title
-          %ul.tags
-            - project.tags.each do |tag|
-              %li
-                %a{:href => "/projects/tags/#{tag}"}=tag
+    = partial :project_gallery
