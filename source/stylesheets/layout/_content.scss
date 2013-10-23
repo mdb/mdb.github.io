@@ -20,27 +20,33 @@ ul.gallery li.item {
     color: $text_color;
     margin-bottom: 3px;
   }
+}
 
-  ul.tags {
-    li {
-      display: inline;
+article {
+  display: block;
+  width: 50%;
+  margin: 0 auto 50px auto;
 
-      a {
-        display: inline;
-        text-decoration: none;
-        font-style: italic;
-        color: $secondary_text_color;
+  h1 {
+    margin-bottom: -15px;
+    font-size: 20px;
+  }
 
-        &:after {
-          content: ',';
-        }
+  h2 {
+    font-size: 17px;
+    margin-bottom: 15px;
+    line-height: 22px;
+  }
 
-        &.last {
-          &:after {
-            content: '';
-          }
-        }
-      }
-    }
+  date {
+    margin-bottom: 15px;
+    text-align: center;
+    color: $secondary_text_color;
+  }
+
+  p {
+    font-size: $font_size + 3;
+    line-height: $font_size + 10;
+    margin-bottom: 15px;
   }
 }
