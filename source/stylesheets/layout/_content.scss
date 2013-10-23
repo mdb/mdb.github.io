@@ -44,7 +44,7 @@ article {
     color: $secondary_text_color;
   }
 
-  p {
+  p, ul, ol {
     font-size: $font_size + 3;
     line-height: $font_size + 10;
     margin-bottom: 15px;

@@ -22,6 +22,28 @@ a, a:visited, a:focus {
   color: $link_color;
 }
 
+code {
+  font-family: courier;
+  font-size: $font_size + 2;
+}
+
+pre {
+  background: $text_color;
+  display: block;
+  overflow: auto;
+  padding: 3px 5px;
+
+  code {
+    color: $inverse_text_color;
+  }
+}
+
+ol li {
+  list-style-type: decimal;
+  list-style-position: outside;
+  margin-bottom: 5px;
+}
+
 h1, h2, h3, h4, h5 {
   font-weight: normal;
   clear: both;
