@@ -17,27 +17,29 @@ There's probably a fun way to do this with [Vagrant](http://www.vagrantup.com/),
   <li>Install <a target="_blank" href="http://www.mamp.info/">MAMP</a> if you haven't already done so. The free version is fine.</li>
   <li>Run your MAMP Apache and MySQL servers by opening MAMP</li>
   <li>Enter your MAMP <code>htdocs</code> directory:
-    <pre><code>cd /Applications/MAMP/htdocs</code></pre></li>
+    <pre class="highlight manual"><code>cd /Applications/MAMP/htdocs</code></pre></li>
   <li>Download Wordpress:
-    <pre><code>wget http://wordpress.org/latest.tar.gz</code></pre></li>
+    <pre class="highlight manual"><code>wget http://wordpress.org/latest.tar.gz</code></pre></li>
   <li>Unzip Wordpress:
-    <pre><code>tar -xzvf latest.tar.gz</code></pre></li>
+    <pre class="highlight manual"><code>tar -xzvf latest.tar.gz</code></pre></li>
   <li>Change the name of the resulting <code>wordpress</code> directory to something more descriptive:
-    <pre><code>mv wordpress your_site</code></pre></li>
+    <pre class="highlight manual"><code>mv wordpress your_site</code></pre></li>
   <li>Enter the MySQL command line client:
-    <pre><code>/Applications/MAMP/Library/bin/mysql -u root -p</code></pre>
+    <pre class="highlight manual"><code>/Applications/MAMP/Library/bin/mysql -u root -p</code></pre>
   </li>
   <li>Create a MySQL database for <code>your_site</code>:
-    <pre><code>CREATE DATABASE your_database_name;</code></pre>
+    <pre class="highlight manual"><code>CREATE DATABASE your_database_name;</code></pre>
   </li>
   <li>Exit the MySQL command line client with <code>Ctrl + C</code></li>
   <li>Create a <code>wp-config.php</code> file:
-    <pre><code>cp your_site/wp-config-sample.php your_site/wp-config.php</code></pre></li>
+    <pre class="highlight manual"><code>cp your_site/wp-config-sample.php your_site/wp-config.php</code></pre></li>
   <li>Add your local database credentials to your newly created <code>wp-config.php</code> file:
-    <pre><code>define('DB_NAME', 'your_database_name');
+    <pre class="highlight manual"><code>
+    define('DB_NAME', 'your_database_name');
     define('DB_USER', 'root');
     define('DB_PASSWORD', 'root');
-    define('DB_HOST', 'localhost');</code></pre>
+    define('DB_HOST', 'localhost');
+    </code></pre>
   </li>
   <li>Run the Wordpress installation script by visiting <code>http://localhost:8888/your_site/wp-admin/install.php</code> in your web browser.</li>
 </ol>
@@ -48,13 +50,13 @@ Note that these instructions assume you have Git installed.
 
 <ol>
   <li>Make your Wordpress app a Git repository by entering the following from within <code>/Applications/MAMP/htdocs/your_site</code>:
-    <pre><code>git init</code></pre>
+    <pre class="highlight manual"><code>git init</code></pre>
   </li>
   <li>Add all of <code>your_site</code>'s files to your repository:
-    <pre><code>git add .</code></pre>
+    <pre class="highlight manual"><code>git add .</code></pre>
   </li>
   <li>Commit your code:
-    <pre><code>git commit -m "First commit."</code></pre>
+    <pre class="highlight manual"><code>git commit -m "First commit."</code></pre>
   </li>
 </ol>
 
@@ -62,13 +64,14 @@ Note that these instructions assume you have Git installed.
 
 <ol>
   <li>Create a Boxfile. This is the Pagodabox config file:
-    <pre><code>touch Boxfile</code></pre>
+    <pre class="highlight manual"><code>touch Boxfile</code></pre>
   </li>
   <li>Add the following to your Boxfile to set up a basic Wordpress configuration:
-    <pre><code>web1: #component type & number
-        name: wp #component settings
-        shared_writable_dirs:
-            - wp-content/uploads
+    <pre class="highlight manual"><code>
+    web1: #component type & number
+    name: wp #component settings
+    shared_writable_dirs:
+        - wp-content/uploads
     </code></pre>
   </li>
   <li>Save and commit your Boxfile.</li>
@@ -82,10 +85,10 @@ Follow the instructions provided by <a target="_blank" href="https://dashboard.p
 
 <ol>
   <li>Declare a <code>pagodabox</code> remote repository:
-    <pre><code>git remote add pagoda git@git.pagodabox.com:your_site.git</code></pre>
+    <pre class="highlight manual"><code>git remote add pagoda git@git.pagodabox.com:your_site.git</code></pre>
   </li>
   <li>Push your code to Pagodabox:
-    <pre><code>git push pagodabox master</code></pre>
+    <pre class="highlight manual"><code>git push pagodabox master</code></pre>
   </li>
 </ol>
 
@@ -97,7 +100,8 @@ At this point, you can vew your site at http://your_site.pagodabox.com, although
   <li>Log into Pagodabox, visit the dashboard for your Wordpress app, and click "Add Database."</li> 
   <li>Click "Environment vars" and add a <code>PLATFORM = PAGODABOX</code> variable.</li>
   <li>Because Pagodabox automatically houses your database credentials in environment variables, you can now connect your Wordpress app to your local database while working locally and to your Pagodabox database when it's deployed to Pagodabox. To connect to different databases based on environment, open your <code>wp-config.php</code> file and replace your local database credentials with the following:
-    <pre><code>if (isset($_SERVER['PLATFORM']) && $_SERVER['PLATFORM'] == 'PAGODABOX') {
+    <pre class="manual highlight"><code>
+    if (isset($_SERVER['PLATFORM']) && $_SERVER['PLATFORM'] == 'PAGODABOX') {
       define('DB_NAME', $_SERVER['DB1_NAME']);
       define('DB_USER', $_SERVER['DB1_USER']);
       define('DB_PASSWORD', $_SERVER['DB1_PASS']);
@@ -112,7 +116,8 @@ At this point, you can vew your site at http://your_site.pagodabox.com, although
     </code></pre>
   </li>
   <li>Commit your code and push your Wordpress app to Pagodabox:
-    <pre><code>git add wp-config.php
+    <pre class="manual highlight"><code>
+    git add wp-config.php
     git commit -m "Wordpress now detects environment and connects to the appropriate database accordingly."
     git push pagodabox master
     </code></pre>
