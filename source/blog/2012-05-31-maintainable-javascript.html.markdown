@@ -33,12 +33,10 @@ thumbnail: glasses_thumb.png
 
 <p>Event handlers: event handlers should be small and limited in what they do. Developers should also be wary of passing around the event object. Consider the following:</p>
 
-<pre><code>
+```javascript
 // bad - the click handler does too much:
 function handleClick(event) {
-  /*
-  do a bunch of stuff with event to show a modal dialog
-  */
+  // do a bunch of stuff with event to show a modal dialog
 }
 
 // better - the click handler does one thing:
@@ -47,9 +45,7 @@ function handleClick(event) {
 }
 
 function showModalDialog(event) {
-   /*
-  do a bunch of stuff with event to show a modal dialog
-  */
+  // do a bunch of stuff with event to show a modal dialog
 }
 
 // best - the click handler does one thing and we no longer pass around the event object:
@@ -58,11 +54,9 @@ function handleClick(event) {
 }
 
 function showModalDialog(clientX, clientY) {
-   /*
-  do a bunch of stuff with clientX and clientY to show a modal dialog
-  */
+  // do a bunch of stuff with clientX and clientY to show a modal dialog
 }
-</code></pre>
+```
 
 <p>Don't add new methods on objects you don't own. <code>Array.prototype.awYeah = function() { alert('Yeah!') }</code> is problematic, as it challenges other developers' expectations surrounding the behavior of Array. Similarly, don't override methods and avoid global functions and variables.</p>
 

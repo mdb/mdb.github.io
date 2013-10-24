@@ -9,34 +9,34 @@ thumbnail: computer_thumb.png
 
 <ol>
   <li>Uninstall old versions of postgres:
-    <pre><code>brew rm postgresql --force</code></pre>
+    <pre class="highlight manual"><code>brew rm postgresql --force</code></pre>
   </li>
   <li>Update homebrew:
-    <pre><code>brew update</code></pre>
+    <pre class="highlight manual"><code>brew update</code></pre>
   </li>
   <li>Install postgres:
-    <pre><code>brew install postgresql</code></pre>
+    <pre class="highlight manual"><code>brew install postgresql</code></pre>
   </li>
   <li>Make a postgres directory:
     <pre><code>sudo mkdir -p /usr/local/var/postgres</code></pre>
   </li>
   <li>Tweak its permissions (change "YOURUSERNAME" to your username:
-    <pre><code>sudo chown YOURUSERNAME:admin /usr/local/var/postgres/</code></pre>
+    <pre class="highlight manual"><code>sudo chown YOURUSERNAME:admin /usr/local/var/postgres/</code></pre>
   </li>
   <li>initdb:
-    <pre><code>initdb /usr/local/var/postgres/data</code></pre>
+    <pre class="highlight manual"><code>initdb /usr/local/var/postgres/data</code></pre>
   </li>
   <li>Add postgres to LaunchAgents directory:
-    <pre><code>cp /usr/local/Cellar/postgresql/9.2.4/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents</code></pre>
+    <pre class="highlight manual"><code>cp /usr/local/Cellar/postgresql/9.2.4/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents</code></pre>
   </li>
   <li>Load it:
-    <pre><code>launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgres.plist</code></pre>
+    <pre class="highlight manual"><code>launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgres.plist</code></pre>
   </li>
   <li>Start the server:
-    <pre><code>pg_ctl -D /usr/local/var/postgres/data -l /usr/local/var/postgres/data/server.log start</code></pre>
+    <pre class="highlight manual"><code>pg_ctl -D /usr/local/var/postgres/data -l /usr/local/var/postgres/data/server.log start</code></pre>
   </li>
 </ol>
 
 <p>Note: If you receive a 'FATAL:  role "postgres" does not exist' message when doing something like <code>rake db:create</code>, you may be missing the default postres user, postgres. This can be fixed with the following command:</p>
 
-<pre><code>createuser -s -U $USER</code></pre>
+<pre class="highlight manual"><code>createuser -s -U $USER</code></pre>

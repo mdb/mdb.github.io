@@ -13,6 +13,7 @@ set :markdown_engine, :redcarpet
 set :css_dir, 'stylesheets'
 set :js_dir, 'javascripts'
 set :images_dir, 'images'
+set :haml, { ugly: true }
 
 # Blog
 activate :blog do |blog|
@@ -38,7 +39,7 @@ page "projects", :layout => :layout
 page "projects/tags/*", :layout => :layout
 
 activate :directory_indexes
-activate :syntax
+activate :syntax, :line_numbers => true
 
 # Add bower_components directory to asset pipeline
 sprockets.append_path File.join "#{root}", "bower_components"

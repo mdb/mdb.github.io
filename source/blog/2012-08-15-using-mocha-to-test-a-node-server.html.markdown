@@ -12,7 +12,6 @@ How do you write Mocha tests against a Node.js server and run the tests during d
 Let's assume this code lives in <code>your-project/server.js</code>.
 
 ```javascript
-
 var http = require('http');
 var util = require('util');
 var port = process.env.PORT || 4824;
@@ -27,7 +26,6 @@ http.createServer(function (req, res) {
     process.send('listening');
   }
 });
-
 ```
 
 ## Mocha Test Code
@@ -35,7 +33,6 @@ http.createServer(function (req, res) {
 Let's assume this code lives in <code>your-project/test/server.js</code>.
 
 ```javascript
-
 var assert = require("assert");
 var request = require("request");
 var fork = require("child_process").fork;
