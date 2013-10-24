@@ -2,7 +2,7 @@
 title: Using Mocha to Test a Node.js Server
 date: 2012/08/15
 tags: javascript, node.js, mocha, tdd
-thumbnail: pink_pattern_thumb.png
+thumbnail: pattern_thumb.png
 ---
 
 How do you write Mocha tests against a Node.js server and run the tests during development? Solution: Leverage fork to run the server code as a child process of the Mocha test. The following is a quick example of what this could look like.</p>
@@ -11,7 +11,9 @@ How do you write Mocha tests against a Node.js server and run the tests during d
 
 Let's assume this code lives in <code>your-project/server.js</code>.
 
-<pre><code>var http = require('http');
+```javascript
+
+var http = require('http');
 var util = require('util');
 var port = process.env.PORT || 4824;
 
@@ -25,13 +27,16 @@ http.createServer(function (req, res) {
     process.send('listening');
   }
 });
-</code></pre>
+
+```
 
 ## Mocha Test Code
 
 Let's assume this code lives in <code>your-project/test/server.js</code>.
 
-<pre><code>var assert = require("assert");
+```javascript
+
+var assert = require("assert");
 var request = require("request");
 var fork = require("child_process").fork;
 
@@ -59,4 +64,4 @@ describe('auther', function () {
     });
   });
 });
-</code></pre>
+```
