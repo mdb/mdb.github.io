@@ -22,20 +22,8 @@ a, a:visited, a:focus {
   color: $link_color;
 }
 
-code {
-  font-family: courier;
-  font-size: $font_size + 2;
-}
-
 pre {
-  background: $text_color;
-  display: block;
   overflow: auto;
-  padding: 3px 5px;
-
-  code {
-    color: $inverse_text_color;
-  }
 }
 
 ol li {
