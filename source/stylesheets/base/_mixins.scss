@@ -17,3 +17,8 @@
   width: $thumb_width;
   height: $gallery_item_height;
 }
+
+@mixin instagram_item_dimensions {
+  width: $instagram_thumb;
+  height: $instagram_thumb;
+}

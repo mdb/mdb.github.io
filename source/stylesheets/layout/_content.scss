@@ -33,8 +33,9 @@ article {
   }
 
   h2 {
-    font-size: 17px;
-    margin-bottom: 15px;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 17px;
     line-height: 22px;
   }
 
@@ -47,6 +48,6 @@ article {
   p, ul, ol {
     font-size: $font_size + 3;
     line-height: $font_size + 10;
-    margin-bottom: 15px;
+    margin-bottom: 17px;
   }
 }

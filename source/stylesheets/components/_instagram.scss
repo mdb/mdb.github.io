@@ -1,0 +1,17 @@
+.instagram {
+  .instagram-placeholder {
+    float: left;
+    margin-right: 7px;
+    margin-bottom: 7px;
+    padding: 3px;
+    border: 1px solid #999;
+    @include instagram_item_dimensions;
+
+
+    a {
+      img {
+        @include instagram_item_dimensions;
+      }
+    }
+  }
+}
