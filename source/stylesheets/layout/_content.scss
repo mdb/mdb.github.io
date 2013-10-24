@@ -50,4 +50,9 @@ article {
     line-height: $font_size + 10;
     margin-bottom: 17px;
   }
+
+  ul li {
+    list-style-type: disc;
+    list-style-position: outside;
+  }
 }
