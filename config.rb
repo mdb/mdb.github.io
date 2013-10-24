@@ -38,6 +38,7 @@ page "projects", :layout => :layout
 page "projects/tags/*", :layout => :layout
 
 activate :directory_indexes
+activate :syntax
 
 # Add bower_components directory to asset pipeline
 sprockets.append_path File.join "#{root}", "bower_components"

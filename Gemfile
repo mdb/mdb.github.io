@@ -17,3 +17,4 @@ end
 
 gem "middleman-blog"
 gem "redcarpet"
+gem "middleman-syntax"
