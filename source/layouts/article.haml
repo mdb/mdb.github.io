@@ -7,9 +7,9 @@
         = yield
         - if current_article && current_article.tags
           %ul.tags
-          - current_article.tags.each do |tag|
-            %li
-              %a{:href => tag_path(tag)}=tag
+            - current_article.tags.each do |tag|
+              %li
+                %a{:href => tag_path(tag)}=tag
   %div.content-wrap.secondary
     %div.content
       %h1.divider Recent Posts
