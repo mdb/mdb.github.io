@@ -1,0 +1,11 @@
+---
+title: Gull
+date: 2012/08/06
+date_completed: August 2012
+thumbnail: gull_thumb.png
+tags: illustration, collage, design, print
+images:
+  - gull_gif.gif
+---
+
+A set of images for use by <a href="http://gullface.com/">Nate Rappole</a> as a postcard series.
