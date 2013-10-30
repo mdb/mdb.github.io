@@ -1,0 +1,27 @@
+.content ul.tags {
+  font-size: $font_size;
+
+  li {
+    display: inline;
+
+    a {
+      display: inline;
+      text-decoration: none;
+      font-style: italic;
+      color: $secondary_text_color;
+
+      &:after {
+        content: ',';
+      }
+
+      &:hover {
+        color: $link_color;
+        text-decoration: underline;
+      }
+    }
+
+    &.last a:after {
+      content: '';
+    }
+  }
+}

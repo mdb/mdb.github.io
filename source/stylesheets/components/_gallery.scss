@@ -1,24 +1,29 @@
-ul.gallery li.item {
+.content ul.gallery li.item {
   @include gallery_item_dimensions;
   float: left;
   margin-right: 15px;
+  margin-bottom: 0;
 
   date {
     margin-bottom: 5px;
     color: $secondary_text_color;
+    font-size: $font_size;
   }
 
   img {
-    margin-bottom: 5px;
     border: 2px solid #fff;
     @include thumb_dimensions;
   }
 
-  h2, h2 a {
+  h2 {
     font-size: $font_size + 2;
-    text-decoration: none;
-    color: $text_color;
     margin-bottom: 3px;
+    line-height: $font_size + 7;
+
+    a {
+      text-decoration: none;
+      color: $text_color;
+    }
   }
 
   h2 a:hover {
