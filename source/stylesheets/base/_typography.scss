@@ -83,6 +83,11 @@ ul.tags {
       &:after {
         content: ',';
       }
+
+      &:hover {
+        color: $link_color;
+        text-decoration: underline;
+      }
     }
 
     &.last a:after {

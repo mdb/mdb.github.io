@@ -20,6 +20,10 @@ ul.gallery li.item {
     color: $text_color;
     margin-bottom: 3px;
   }
+
+  h2 a:hover {
+    text-decoration: underline;
+  }
 }
 
 article, .project-details {
