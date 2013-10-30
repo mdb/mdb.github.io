@@ -9,4 +9,4 @@ images:
   - tedx_2.png
 ---
 
-The organizers of <a href="http://tedxphilly.com/">TEDxPhilly</a> contacted me to create a seem-less, infinitely tiling illustration to be used as a background image throughout the conference&#8217;s web collateral. The illustration is type-based and inspired by &#8220;the city,&#8221; the 2011 conference theme.
+The organizers of <a href="http://tedxphilly.com/">TEDxPhilly</a> contacted me to create a seam-less, infinitely tiling illustration to be used as a background image throughout the conference&#8217;s web collateral. The illustration is type-based and inspired by &#8220;the city,&#8221; the 2011 conference theme.
