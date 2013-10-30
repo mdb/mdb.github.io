@@ -51,8 +51,14 @@ article {
     margin-bottom: 17px;
   }
 
-  ul li {
-    list-style-type: disc;
-    list-style-position: outside;
+  ul {
+    li {
+      list-style-type: disc;
+      list-style-position: outside;
+    }
+
+    &.tags li {
+      font-size: $font_size + 1;
+    }
   }
 }

@@ -83,12 +83,10 @@ ul.tags {
       &:after {
         content: ',';
       }
+    }
 
-      &.last {
-        &:after {
-          content: '';
-        }
-      }
+    &.last a:after {
+      content: '';
     }
   }
 }
