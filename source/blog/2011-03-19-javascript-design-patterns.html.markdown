@@ -142,11 +142,11 @@ someModule.getData();
 * provides ability to reveal private functions with more specific names if you wish
 
 ```javascript
-/*
-The idea here is that you have private methods which you want to expose as public methods.
+// The idea here is that you have private methods
+// which you want to expose as public methods.
 
-Below we are defining we a self-executing function and immediately returning the object.
-*/
+// Below we are defining we a self-executing function
+// and immediately returning the object.
 
 var myRevealingModule = function() {
  var name = 'John Smith';
