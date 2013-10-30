@@ -5,7 +5,7 @@ tags: git, metrics
 thumbnail: waves_thumb.png
 ---
 
-Per recent co-worker interest in metrics surrounding team performance, the following offer a few simple techniques for extracting team-health-oriented metrics from a Git repository. Note that these are just a few basic solutions which require minimal tooling. Many alternative and more-developed solutions exist too
+Per recent co-worker interest in metrics surrounding team performance, the following offer a few simple techniques for extracting team-health-oriented metrics from a git repository. Note that these are just a few basic solutions which require minimal tooling. Many alternative and more-developed solutions exist too.
 
 ##View the Total Number of Commits Per Developer within the Codebase
 
