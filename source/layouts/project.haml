@@ -9,3 +9,7 @@
         %date="#{current_article.data.date_completed}"
         = yield
         = partial :tags, :locals => {:item => current_article, :path_prefix => "projects"}
+  %div.content-wrap.secondary
+    %div.content
+      %h1.divider More Recent Projects
+      = partial :project_gallery, :locals => {:exclude => current_article}

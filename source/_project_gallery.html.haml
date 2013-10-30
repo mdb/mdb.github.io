@@ -1,8 +1,10 @@
+- exclude = exclude or nil
 %ul.gallery
   - blog('projects').articles.each do |project|
-    %li.item
-      %a{:href => project.url}
-        %img{:src => project_thumb_path(project.data.thumbnail)}
-      %h2
-        %a{:href => project.url}=project.title
-      = partial :tags, :locals => {:item => project, :path_prefix => "projects"}
+    - unless project == exclude
+      %li.item
+        %a{:href => project.url}
+          %img{:src => project_thumb_path(project.data.thumbnail)}
+        %h2
+          %a{:href => project.url}=project.title
+        = partial :tags, :locals => {:item => project, :path_prefix => "projects"}
