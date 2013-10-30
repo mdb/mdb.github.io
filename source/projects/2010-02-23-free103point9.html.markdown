@@ -8,6 +8,6 @@ images:
   - free103_1.png
 ---
 
-<a href="http://github.com/gsf">Gabe Farrell</a> and I developed this site for the New York-based transmission arts advocacy organization free103point9. I served as front-end developer while Gabe worked on the server-side programming. Although we were provided design comps for much of the site, I am responsible for designing a few of the site’s final features, including an event calendar.
+<a href="http://github.com/gsf">Gabe Farrell</a> and I developed this site for the New York-based transmission arts advocacy organization free103point9. Although we were provided design comps for much of the site, I am responsible for designing a few of the site’s final features, including an event calendar.
 
-The site is built with Django, CSS, and Javascript. In addition to brochuring free103point9, the site also serves as a transmission arts digital archive, hosts an event calendar, and houses free103′s online radio station.
+The site is built on Django. In addition to brochuring free103point9, the site also serves as a transmission arts digital archive, hosts an event calendar, and houses free103′s online radio station.
