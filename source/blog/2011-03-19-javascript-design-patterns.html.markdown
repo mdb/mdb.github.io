@@ -12,7 +12,7 @@ Addy Osmani offers Essential [JavaScript & jQuery Design Patterns For Beginners]
 * used in creating objects within in application
 * define a class and instantiate it later when you need it
 
-```
+```javascript
 var newObject = new MyClass();
 ```
 
@@ -22,7 +22,7 @@ var newObject = new MyClass();
 * native constructors in JavaScript include Array and Object
 * constructor functions often capitalized to distinguish them from normal functions
 
-```
+```javascript
 function Car(model, year, miles){
   this.model = model;
   this.year = year;
@@ -45,7 +45,7 @@ var mondeo = new Car("Ford Mondeo", 2010, 5000);
 * it is not the object or class that’s returned by a singleton, it's a structure
 * useful when exactly one object is needed to coordinate patterns across the system
 
-```
+```javascript
 var SingletonTester = (function() {
 
   //args: an object containing arguments for the singleton
@@ -104,7 +104,7 @@ console.log(singletonTest.pointX); // outputs 5
 * as you access both public and private members differently, when you wish to change visibility, you actually have to make changes to each place the member was used
 * You also can’t access private members in methods that are added to the object at a later point.
 
-```
+```javascript
 var someModule = (function() {
 
   //private attributes
@@ -141,7 +141,7 @@ someModule.getData();
 * makes it very clear at the end which of your functions and variables may be accessed publicly
 * provides ability to reveal private functions with more specific names if you wish
 
-```
+```javascript
 /*
 The idea here is that you have private methods which you want to expose as public methods.
 
@@ -179,7 +179,7 @@ myRevealingModule.get();
 * easy way to implement inheritance
 * performance boost
 
-```
+```javascript
 // No need for capitalization as it's not a constructor
 var someCar = {
   drive: function() {};
@@ -196,7 +196,7 @@ anotherCar.name = 'Toyota Camry';
 * simplifies the interface of a class and it also decouples the class from the code that utilizes it
 * provide us with an ability to indirectly interact with subsystems in a way that may be less prone to error than accessing the subsystem directly
 
-```
+```javascript
 //simplifying an interface for attaching events
 var addMyEvent = function(el,ev,fn) {
   if (el.addEventListener) {
@@ -215,7 +215,7 @@ var addMyEvent = function(el,ev,fn) {
 * suggests defining an interface for creating an object where you allow the subclasses to decide which class to instantiate
 * defines a completely separate method for the creation of objects and which sub-classes are able to override so they can specify ‘type’ of factory product created
 
-```
+```javascript
 var Car = (function() {
   var Car = function (model, year, miles){
    this.model = model;
@@ -238,7 +238,7 @@ var mondeo = new Car("Ford Mondeo", 2010, 5000);
 * used when you need to keeping adding new functionality to overridden methods
 * subclassing adds behaviour that affects all the instances of the original class, whilst decorating can add new behavior for individual objects
 
-```
+```javascript
 //The class we're going to decorate
 function Macbook(){
   this.cost = function() {
