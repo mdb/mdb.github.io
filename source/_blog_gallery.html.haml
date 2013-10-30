@@ -1,9 +1,11 @@
+- exclude = exclude or nil
 %ul.gallery
   - blog('blog').articles.each do |article|
-    %li.item
-      %date="Posted #{article.date.strftime('%B %e, %Y')}"
-      %a{:href => article.url}
-        %img{:src => blog_thumb_path(article.data.thumbnail)}
-      %h2
-        %a{:href => article.url}=article.title
-      = partial :tags, :locals => {:item => article, :path_prefix => "blog"}
+    - unless article == exclude
+      %li.item
+        %date="Posted #{article.date.strftime('%B %e, %Y')}"
+        %a{:href => article.url}
+          %img{:src => blog_thumb_path(article.data.thumbnail)}
+        %h2
+          %a{:href => article.url}=article.title
+        = partial :tags, :locals => {:item => article, :path_prefix => "blog"}

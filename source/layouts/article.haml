@@ -9,4 +9,4 @@
   %div.content-wrap.secondary
     %div.content
       %h1.divider Recent Posts
-      = partial :blog_gallery
+      = partial :blog_gallery, :locals => {:exclude => current_article}
