@@ -2,6 +2,7 @@
 title: Setting up a Ruby on Rails Dev Environment
 published: false
 date: 2011/01/18
+published: false
 tags: ruby, ruby on rails, notes
 thumbnail: diamond_thumb.png
 ---
@@ -24,46 +25,60 @@ bash < <( curl http://rvm.beginrescueend.com/releases/rvm-install-head )
   [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" 
 
 Reload your ~/.bash_profile:
-   source .bash_profile 
+
+   source .bash_profile
 
 Confirm that RVM installed correctly:
-   which rvm 
+
+   which rvm
+
 If RVM installed correctly, the above command should return something like the following:
 
-   /Users/your_username/.rvm/bin/rvm 
+   /Users/your_username/.rvm/bin/rvm
 
 Install the proper version of Ruby. We’ll be Ruby 1.8.7:
-   rvm install 1.8.7 
+
+   rvm install 1.8.7
 
 Set Ruby 1.8.7 as your default Ruby:
-   rvm --default 1.8.7 
+
+   rvm --default 1.8.7
 
 Confirm that Ruby 1.8.7 installed and is set to be your default Ruby:
-   which ruby 
+
+   which ruby
+
 If all is well, this should return something like the following:
 
    /Users/your_username/.rvm/rubies/ruby-1.8.7-p330/bin/ruby 
 
 Install Rails:
-   gem install rails 
+
+   gem install rails
+
 Note that Rails can be installed without its documentation like so:
 
-   gem install rails --no-rdoc --no-ri 
+   gem install rails --no-rdoc --no-ri
 
 Confirm that Rails installed correctly and is using Ruby 1.8.7:
-   which rails 
+
+   which rails
+
 If all is well, this should return something like:
 
-   /Users/your_username/.rvm/gems/ruby-1.8.7-p330/bin/rail 
+   /Users/your_username/.rvm/gems/ruby-1.8.7-p330/bin/rail
 
 cd to the directory of your choosing and make a new Rails app:
-   rails new your_app_name 
 
-cd to your_app_name
+   rails new your_app_name
+   cd to your_app_name
+
 Install all the dependencies specified in your Rails app’s Gemfile
-   bundle install 
+j
+   bundle install
 
 Run the Rails server:
-   rails s 
+
+   rails s
 
 Visit your Rails app in your browser at http://localhost:3000/
