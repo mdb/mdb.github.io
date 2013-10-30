@@ -12,4 +12,4 @@ images:
   - tj_card_close.jpg
 ---
 
-I created a simple brochure website and letter-pressed invite for my Taylor & Juliette's wedding. The website and invite feature original illustrations, as well as a hand-drawn typeface created for the wedding materials.
+I created a simple brochure website and letter-pressed invite for Taylor & Juliette's wedding. The website and invite feature original illustrations, as well as a hand-drawn typeface created for the wedding materials.
