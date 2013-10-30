@@ -5,38 +5,65 @@ tags: postgres, notes, mac osx
 thumbnail: computer_thumb.png
 ---
 
-<p>I ran into some challenges installing postgres via homebrew. I attempted to follow <a href="">these instruction</a>, as is advised by the postgres website but ran into further problems. The following steps outline how I was able to finally work around the problems. Note that I'm using Mac OSX 10.6.8.</p> 
+I ran into some challenges installing postgres via homebrew. I attempted to follow <a href="">these instruction</a>, as is advised by the postgres website but ran into further problems. The following steps outline how I was able to finally work around the problems. Note that I'm using Mac OSX 10.6.8.
 
-<ol>
-  <li>Uninstall old versions of postgres:
-    <pre class="highlight manual"><code>brew rm postgresql --force</code></pre>
-  </li>
-  <li>Update homebrew:
-    <pre class="highlight manual"><code>brew update</code></pre>
-  </li>
-  <li>Install postgres:
-    <pre class="highlight manual"><code>brew install postgresql</code></pre>
-  </li>
-  <li>Make a postgres directory:
-    <pre><code>sudo mkdir -p /usr/local/var/postgres</code></pre>
-  </li>
-  <li>Tweak its permissions (change "YOURUSERNAME" to your username:
-    <pre class="highlight manual"><code>sudo chown YOURUSERNAME:admin /usr/local/var/postgres/</code></pre>
-  </li>
-  <li>initdb:
-    <pre class="highlight manual"><code>initdb /usr/local/var/postgres/data</code></pre>
-  </li>
-  <li>Add postgres to LaunchAgents directory:
-    <pre class="highlight manual"><code>cp /usr/local/Cellar/postgresql/9.2.4/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents</code></pre>
-  </li>
-  <li>Load it:
-    <pre class="highlight manual"><code>launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgres.plist</code></pre>
-  </li>
-  <li>Start the server:
-    <pre class="highlight manual"><code>pg_ctl -D /usr/local/var/postgres/data -l /usr/local/var/postgres/data/server.log start</code></pre>
-  </li>
-</ol>
 
-<p>Note: If you receive a 'FATAL:  role "postgres" does not exist' message when doing something like <code>rake db:create</code>, you may be missing the default postres user, postgres. This can be fixed with the following command:</p>
+Uninstall old versions of postgres:
 
-<pre class="highlight manual"><code>createuser -s -U $USER</code></pre>
+```
+brew rm postgresql --force
+```
+
+Update homebrew:
+
+```
+brew update
+```
+
+Install postgres:
+
+```
+brew install postgresql
+```
+
+Make a postgres directory:
+
+```
+sudo mkdir -p /usr/local/var/postgres
+```
+
+Tweak its permissions (change "YOURUSERNAME" to your username:
+
+```
+sudo chown YOURUSERNAME:admin /usr/local/var/postgres/
+```
+
+initdb:
+
+```
+initdb /usr/local/var/postgres/data
+```
+
+Add postgres to LaunchAgents directory:
+
+```
+cp /usr/local/Cellar/postgresql/9.2.4/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents
+```
+
+Load it:
+
+```
+launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgres.plist
+```
+
+Start the server:
+
+```
+pg_ctl -D /usr/local/var/postgres/data -l /usr/local/var/postgres/data/server.log start
+```
+
+Note: If you receive a 'FATAL:  role "postgres" does not exist' message when doing something like <code>rake db:create</code>, you may be missing the default postres user, postgres. This can be fixed with the following command:
+
+```
+createuser -s -U $USER
+```
