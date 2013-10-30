@@ -1,0 +1,8 @@
+%div.content-wrap
+  %div.content
+    %h1.divider= "#{type} tagged '#{tag_name}'"
+    %ul
+      - items.each_with_index do |article, i|
+        %li
+          %a{ :href => article.url }=article.title
+          %span=article.date.strftime('%b %e')

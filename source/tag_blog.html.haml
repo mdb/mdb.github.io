@@ -1,6 +1,1 @@
-%h1= "Articles tagged #{tagname}"
-%ul
-  - page_articles.each_with_index do |article, i|
-    %li
-      %a{ :href => article.url }=article.title
-      %span=article.date.strftime('%b %e')
+= partial :tag, :locals => {:type => "Articles", :tag_name => tagname, :items => page_articles}
