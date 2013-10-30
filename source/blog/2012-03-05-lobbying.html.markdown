@@ -5,7 +5,7 @@ tags: code for america, ruby, sinatra, open data
 thumbnail: cfa_thumb.jpg
 ---
 
-<b>Update</b>: Casey Thomas has migrated our original Lobbing.ph to Django and extended its functionality.
+<b>Update</b>: Casey Thomas migrated our original Lobbing.ph to Django and extended its functionality.
 
 [Casey Thomas](http://twitter.com/caseypt), [Dan Freiman](http://twitter.com/dannyjf), [Adam Hinz](http://twitter.com/ahinz), and I build [Lobbying.ph](http://lobbying.ph) as an entry in Code for America's 2012 Civic Hackathon in Philadelphia. The project won first place.
 
