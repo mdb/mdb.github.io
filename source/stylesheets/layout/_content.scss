@@ -1,7 +1,18 @@
 .content {
+  h1 {
+    margin-bottom: $spacer;
+    line-height: 25px;
+  }
+
+  date {
+    margin-bottom: $spacer;
+    text-align: center;
+    color: $secondary_text_color;
+  }
+
   p, ul, ol {
     font-size: $font_size + 3;
     line-height: $font_size + 10;
-    margin-bottom: 17px;
+    margin-bottom: $spacer + 2;
   }
 }

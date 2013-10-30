@@ -44,10 +44,10 @@ h1, h2, h3, h4, h5 {
 
 h1 {
   letter-spacing: 0;
+  font-size: $font_size + 4;
 
   &.divider {
     text-align: center;
-    font-size: $font_size + 4;
 
     &:before, &:after {
       content: '.';
@@ -56,11 +56,11 @@ h1 {
       border-top: 1px solid $secondary_text_color;
       width: 300px;
       height: 1px;
-      margin: 0 auto 15px auto;
+      margin: 0 auto $spacer auto;
     }
 
     &:after {
-      margin-top: 15px;
+      margin-top: $spacer;
       margin-bottom: 35px;
     }
   }

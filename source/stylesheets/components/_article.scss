@@ -1,11 +1,10 @@
-article {
+.content article {
   display: block;
   width: 50%;
   margin: 0 auto 50px auto;
 
   h1 {
     margin-bottom: -15px;
-    font-size: 20px;
   }
 
   h2 {
@@ -13,18 +12,6 @@ article {
     font-weight: bold;
     margin-bottom: 17px;
     line-height: 22px;
-  }
-
-  date {
-    margin-bottom: 15px;
-    text-align: center;
-    color: $secondary_text_color;
-  }
-
-  p, ul, ol {
-    font-size: $font_size + 3;
-    line-height: $font_size + 10;
-    margin-bottom: 17px;
   }
 
   ul {
