@@ -5,10 +5,10 @@
         - current_article.data.images.each do |img|
           %img{:src => "/images/projects/work/#{img}"}
       %div.column.description
-        %h1=current_article.title
         %date="#{current_article.data.date_completed}"
-        = yield
+        %h1=current_article.title
         = partial :tags, :locals => {:item => current_article, :path_prefix => "projects"}
+        = yield
         = partial :post_navigation, :locals => {:label => "project"}
   %div.content-wrap.secondary
     %div.content
