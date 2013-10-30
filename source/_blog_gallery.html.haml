@@ -6,7 +6,4 @@
         %img{:src => blog_thumb_path(article.data.thumbnail)}
       %h2
         %a{:href => article.url}=article.title
-      %ul.tags
-        - article.tags.each do |tag|
-          %li
-            %a{:href => "/blog/tags/#{tag}"}=tag
+      = partial :tags, :locals => {:item => article, :path_prefix => "blog"}

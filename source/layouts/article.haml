@@ -5,11 +5,7 @@
         %h1.divider=current_article.title
         %date="Posted #{current_article.date.strftime('%B %e, %Y')}"
         = yield
-        - if current_article && current_article.tags
-          %ul.tags
-            - current_article.tags.each do |tag|
-              %li
-                %a{:href => tag_path(tag)}=tag
+        = partial :tags, :locals => {:item => current_article, :path_prefix => "blog"}
   %div.content-wrap.secondary
     %div.content
       %h1.divider Recent Posts

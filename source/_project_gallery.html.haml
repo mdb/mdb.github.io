@@ -5,7 +5,4 @@
         %img{:src => project_thumb_path(project.data.thumbnail)}
       %h2
         %a{:href => project.url}=project.title
-      %ul.tags
-        - project.tags.each do |tag|
-          %li
-            %a{:href => "/projects/tags/#{tag}"}=tag
+      = partial :tags, :locals => {:item => project, :path_prefix => "projects"}
