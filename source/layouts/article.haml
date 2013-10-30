@@ -6,6 +6,7 @@
         %date="Posted #{current_article.date.strftime('%B %e, %Y')}"
         = yield
         = partial :tags, :locals => {:item => current_article, :path_prefix => "blog"}
+        = partial :post_navigation, :locals => {:label => "post"}
   %div.content-wrap.secondary
     %div.content
       %h1.divider Recent Posts
