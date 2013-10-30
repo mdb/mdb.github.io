@@ -8,8 +8,4 @@
         %h1=current_article.title
         %date="#{current_article.data.date_completed}"
         = yield
-        - if current_article && current_article.tags
-          %ul
-          - current_article.tags.each do |tag|
-            %li
-              %a{:href => "/projects/tags/#{tag}"}=tag
+        = partial :tags, :locals => {:item => current_article, :path_prefix => "projects"}
