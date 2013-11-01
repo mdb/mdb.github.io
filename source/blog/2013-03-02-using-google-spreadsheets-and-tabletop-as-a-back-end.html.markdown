@@ -48,7 +48,7 @@ Set up the homepage by adding the following to index.html:
 </html>
 ```
 
-Retrieve the document key associated with your <code>tabletop_example</code> spreadsheet. This can be found in the document&#8217;s URL: https://docs.google.com/spreadsheet/ccc?key=<strong>YOUR_DOCUMENT_KEY_APPEARS_HERE</strong>#gid=0
+Retrieve the document key associated with your <code>tabletop\_example</code> spreadsheet. This can be found in the document&#8217;s URL: https://docs.google.com/spreadsheet/ccc?key=<strong>YOUR\_DOCUMENT\_KEY_APPEARS\_HERE</strong>
 
 ```javascript
 $(document).ready(function () {
