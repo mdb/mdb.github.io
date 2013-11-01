@@ -1,11 +1,14 @@
+$text_spacer: 5px;
+
 .content ul.gallery li.item {
   @include gallery_item_dimensions;
   float: left;
-  margin-right: 15px;
+  margin-right: $spacer;
   margin-bottom: 0;
 
   date {
-    margin-bottom: 5px;
+    text-align: left;
+    margin-bottom: $text_spacer;
     color: $secondary_text_color;
     font-size: $font_size;
   }
@@ -17,7 +20,7 @@
 
   h2 {
     font-size: $font_size + 2;
-    margin-bottom: 3px;
+    margin-bottom: $text_spacer;
     line-height: $font_size + 7;
 
     a {
