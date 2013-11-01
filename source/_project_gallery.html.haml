@@ -3,7 +3,7 @@
   - blog('projects').articles.each do |project|
     - unless project == exclude
       %li.item
-        %a{:href => project.url}
+        %a{:class => "thumbnail", :href => project.url}
           %img{:src => project_thumb_path(project.data.thumbnail)}
         %h2
           %a{:href => project.url}=project.title
