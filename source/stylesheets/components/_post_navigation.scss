@@ -1,0 +1,21 @@
+ul.post-navigation {
+  margin-top: $spacer;
+
+  li {
+    display: inline-block;
+
+    a {
+      display: inline-block;
+      color: $secondary_text_color;
+      text-decoration: none;
+      border: 1px solid $secondary_text_color;
+      text-align: center;
+      padding: 5px;
+      font-size: $font_size;
+
+      &:hover {
+        color: $text_color;
+      }
+    }
+  }
+}
