@@ -19,8 +19,10 @@ $text_spacer: 5px;
     border: 2px solid #fff;
     margin-bottom: $text_spacer;
     @include thumb_dimensions;
+    background: url('/images/loading_indicator.gif') no-repeat center;
 
     img {
+      display: none;
       @include thumb_dimensions;
     }
   }
