@@ -1,5 +1,6 @@
 ---
 title: British American Business Council
+published: false
 date: 2010/02/23
 date_completed: Winter 2009
 thumbnail: babc_thumb.png
