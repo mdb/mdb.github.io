@@ -3,13 +3,4 @@
     %h1.divider= "#{type} tagged '#{tag_name}'"
     %ul.gallery
       - items.each_with_index do |item, i|
-        %li.item
-          %date="Posted #{item.date.strftime('%B %e %Y')}"
-          %a{ :class => "thumbnail", :href => item.url }
-            - if type.downcase == 'articles'
-              - src = blog_thumb_path(item.data.thumbnail)
-            - else
-              - src = project_thumb_path(item.data.thumbnail)
-            %img{:src => src}
-          %h2
-            %a{ :href => item.url }=item.title
+        = partial :gallery_item, :locals => {:item => item, :type => post_type(item)}
