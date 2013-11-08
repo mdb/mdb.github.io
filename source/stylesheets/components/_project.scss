@@ -3,6 +3,10 @@
     width: 500px;
     margin-right: $spacer;
     float: left;
+
+    img {
+      margin-bottom: $spacer;
+    }
   }
 
   .column.description {
