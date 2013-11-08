@@ -14,4 +14,34 @@ module TemplateHelpers
   def project_thumb_path file_name
     image_path("projects/thumbnails/#{file_name}")
   end
+
+  def all_posts
+    blog_posts.concat(project_posts).sort_by{ |post| post.date }.reverse
+  end
+
+  def blog_posts
+    blog('blog').articles
+  end
+
+  def project_posts
+    blog('projects').articles
+  end
+
+  def is_blog_post(item)
+    post_type(item) == 'blog'
+  end
+
+  def is_project_post(item)
+    post_type(item) == 'projects'
+  end
+
+  def post_type(item)
+    if item.path.include? 'projects'
+      'projects'
+    elsif item.path.include? 'blog'
+      'blog'
+    else
+      'blog'
+    end
+  end
 end
