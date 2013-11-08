@@ -2,10 +2,4 @@
 %ul.gallery
   - blog('blog').articles.each do |article|
     - unless article == exclude
-      %li.item
-        %date="Posted #{article.date.strftime('%B %e, %Y')}"
-        %a{:class => "thumbnail", :href => article.url}
-          %img{:src => blog_thumb_path(article.data.thumbnail)}
-        %h2
-          %a{:href => article.url}=article.title
-        = partial :tags, :locals => {:item => article, :path_prefix => "blog"}
+      = partial :gallery_item, :locals => {:item => article, :type => "blog"}
