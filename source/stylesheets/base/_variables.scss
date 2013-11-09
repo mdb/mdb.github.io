@@ -40,3 +40,7 @@ $h1_font_size: 15px;
 // layout
 $container_width: 960px;
 $spacer: 15px;
+
+// breakpoints
+$break_point: 959px;
+$only_screen_and_max_width: "only screen and (max-width: #{$break_point})"

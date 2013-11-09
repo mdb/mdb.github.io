@@ -22,6 +22,14 @@ div.content-wrap {
 
   &.double {
     width: 50%;
+    @include responsive_width;
+    @media #{$only_screen_and_max_width} {
+      margin-bottom: $spacer;
+      &.double {
+        padding-right: 0;
+        padding-left: 0;
+      }
+    }
   }
 
   &.clear {
