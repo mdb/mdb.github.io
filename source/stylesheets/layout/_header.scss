@@ -1,9 +1,12 @@
+$mark_dimensions: 100px;
+
 header {
   @include center;
-  padding: 50px 0 $spacer 0;
-  text-align: center;
+  padding-top: 50px;
+  overflow: hidden;
 
   h1, h1 a, h1 a:visited, h1 a:focus {
+    float: left;
     font-size: $font_size + 4;
     color: $text_color;
     margin-bottom: $spacer - 5;
@@ -11,10 +14,9 @@ header {
 
   h1 a {
     text-indent: -5000px;
-    margin: 0 auto 10px auto;
     display: block;
-    width: 100px;
-    height: 100px;
+    width: $mark_dimensions;
+    height: $mark_dimensions;
     background: url('/images/mark_grayscale.png');
 
     &:hover {
@@ -26,12 +28,15 @@ header {
   }
 
   ul.nav {
+    float: right;
+    margin-top: $mark_dimensions - $spacer;
+
     li, li a {
       font-size: $font_size;
       display: inline-block;
       text-decoration: none;
       color: $secondary_text_color;
-      margin: 0 1px;
+      margin: 0 2px;
 
       &:hover {
         color: $text_color;
