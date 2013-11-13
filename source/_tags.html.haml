@@ -1,4 +1,9 @@
+- link = link or true
+
 %ul.tags
   - item.tags.each_with_index do |tag, i|
     %li{:class => last_class(item.tags, i)}
-      %a{:href => "/#{path_prefix}/tags/#{tag}"}=tag
+      - if link
+        %a{:href => "/#{path_prefix}/tags/#{tag}"}=tag
+      - else
+        %span=tag

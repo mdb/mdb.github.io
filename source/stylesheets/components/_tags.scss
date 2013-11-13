@@ -4,8 +4,9 @@
 
   li {
     display: inline;
+    color: $secondary_text_color;
 
-    a {
+    a, span {
       display: inline;
       text-decoration: none;
       font-style: italic;
@@ -14,14 +15,14 @@
       &:after {
         content: ',';
       }
-
-      &:hover {
-        color: $link_color;
-        text-decoration: underline;
-      }
     }
 
-    &.last a:after {
+    a &:hover {
+      color: $link_color;
+      text-decoration: underline;
+    }
+
+    &.last a:after, &.last span:after {
       content: '';
     }
   }
