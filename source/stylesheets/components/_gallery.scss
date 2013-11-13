@@ -1,62 +1,64 @@
 $text_spacer: 5px;
 
-.content ul.gallery li.item {
-  @include gallery_item_dimensions;
-  float: left;
-  margin-right: $spacer;
-  margin-bottom: $spacer;
-  position: relative;
+.content ul.gallery {
+  li.item {
+    @include gallery_item_dimensions;
+    float: left;
+    margin-right: $spacer;
+    margin-bottom: $spacer;
+    position: relative;
 
-  date {
-    text-align: left;
-    margin-bottom: $text_spacer;
-    color: $secondary_text_color;
-    font-size: $font_size;
-  }
-
-  a.thumbnail {
-    display: block;
-    border: 2px solid #fff;
-    margin-bottom: $text_spacer;
-    @include thumb_dimensions;
-    background: url('/images/loading_indicator.gif') no-repeat center;
-
-    img {
-      display: none;
-      @include thumb_dimensions;
+    date {
+      text-align: left;
+      margin-bottom: $text_spacer;
+      color: $secondary_text_color;
+      font-size: $font_size;
     }
-  }
 
-  div.details {
-    @include thumb_dimensions;
-    background: #000;
-    opacity: 0.85;
-    border: 2px solid #fff;
-    display: none;
-    position: absolute;
-    top: 0;
+    a.thumbnail {
+      display: block;
+      border: 2px solid #fff;
+      margin-bottom: $text_spacer;
+      @include thumb_dimensions;
+      background: url('/images/loading_indicator.gif') no-repeat center;
 
-    div {
-      margin: $spacer - 5;
+      img {
+        display: none;
+        @include thumb_dimensions;
+      }
+    }
 
-      h2 {
-        font-size: $font_size + 2;
-        margin-bottom: $text_spacer;
-        line-height: $font_size + 7;
+    div.details {
+      @include thumb_dimensions;
+      background: #000;
+      opacity: 0.85;
+      border: 2px solid #fff;
+      display: none;
+      position: absolute;
+      top: 0;
 
-        a {
-          text-decoration: none;
-          color: $inverse_text_color;
+      div {
+        margin: $spacer - 5;
+
+        h2 {
+          font-size: $font_size + 2;
+          margin-bottom: $text_spacer;
+          line-height: $font_size + 7;
+
+          a {
+            text-decoration: none;
+            color: $inverse_text_color;
+          }
+        }
+
+        h2 a:hover {
+          text-decoration: underline;
         }
       }
-
-      h2 a:hover {
-        text-decoration: underline;
-      }
     }
-  }
 
-  &:hover div.details {
-    display: block;
+    &:hover div.details {
+      display: block;
+    }
   }
 }

@@ -37,7 +37,7 @@
 
 @mixin responsive_gallery_item {
   @media #{$only_screen_and_max_width} {
-    width: 300px;
-    height: 225px;
+    width: 125px;
+    height: 100px;
   }
 }
