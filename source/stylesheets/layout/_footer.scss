@@ -7,6 +7,10 @@ footer {
 
   section {
     @include center;
+    @media #{$only_screen_and_max_width} {
+      padding-left: $spacer;
+      padding-right: $spacer;
+    }
   }
 
   h2 {

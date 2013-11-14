@@ -3,6 +3,10 @@ div.content-wrap {
   background: #eee;
   overflow: hidden;
 
+  @media #{$only_screen_and_max_width} {
+    padding: 0 10px;
+  }
+
   &.secondary {
     background: #ddd;
   }

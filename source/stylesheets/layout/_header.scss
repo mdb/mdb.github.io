@@ -1,5 +1,14 @@
 $mark_dimensions: 100px;
 
+@mixin responsive_header_elem {
+  @media #{$only_screen_and_max_width} {
+    float: none;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: $spacer;
+  }
+}
+
 header {
   @include center;
   padding-top: 50px;
@@ -10,6 +19,8 @@ header {
     font-size: $font_size + 2;
     color: $text_color;
     margin-bottom: $spacer - 5;
+    @include responsive_header_elem;
+
   }
 
   h1 a {
@@ -32,6 +43,7 @@ header {
   ul.nav {
     float: right;
     margin-top: $mark_dimensions - $spacer;
+    @include responsive_header_elem;
 
     li, li a {
       font-size: $font_size;

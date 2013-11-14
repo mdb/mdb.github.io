@@ -30,8 +30,6 @@
 @mixin responsive_width {
   @media #{$only_screen_and_max_width} {
     width: 100%;
-    padding-left: 2%;
-    padding-right: 2%;
   }
 }
 
