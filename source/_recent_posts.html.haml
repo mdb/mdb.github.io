@@ -1,0 +1,12 @@
+- exclude = exclude or nil
+
+%h1 Recent Posts
+%ul.recent-posts
+  - blog('blog').articles.first(15).each do |article|
+    - unless article == exclude
+      %li
+        %a{:href => article.url}
+          %img{:src => blog_thumb_path(article.data.thumbnail)}
+          %div
+            %h2=article.title
+            %date="Posted #{current_article.date.strftime('%B %e, %Y')}"
