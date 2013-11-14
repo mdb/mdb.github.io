@@ -9,7 +9,3 @@
         = partial :post_navigation, :locals => {:label => "post"}
       %div.sidebar
         = partial :recent_posts, :locals => {:exclude => current_article}
-  %div.content-wrap.secondary
-    %div.content
-      %h1.divider Recent Posts
-      = partial :blog_gallery, :locals => {:exclude => current_article}
