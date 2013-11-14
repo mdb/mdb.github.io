@@ -1,6 +1,6 @@
 %div.content-wrap
   %div.content
-    %h1.divider= "#{type} tagged '#{tag_name}'"
+    %h1.divider= "#{type} / #{tag_name}"
     %ul.gallery
       - items.each_with_index do |item, i|
         = partial :gallery_item, :locals => {:item => item, :type => post_type(item)}
