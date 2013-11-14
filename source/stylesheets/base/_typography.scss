@@ -36,6 +36,7 @@ ol li {
 h1, h2, h3, h4, h5 {
   font-weight: normal;
   clear: both;
+  font-size: $font_size + 4;
 }
 
 h1 {
@@ -43,20 +44,8 @@ h1 {
   font-size: $font_size + 4;
 
   &.divider {
-
-    &:before, &:after {
-      content: '.';
-      display: block;
-      text-indent: -5000px;
-      border-top: 1px solid $secondary_text_color;
-      height: 1px;
-      margin: 0 auto $spacer auto;
-    }
-
-    &:after {
-      margin-top: $spacer;
-      margin-bottom: 35px;
-    }
+    border-bottom: 1px solid $secondary_text_color;
+    padding-bottom: $spacer - 5;
   }
 
   a {

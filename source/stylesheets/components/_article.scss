@@ -1,12 +1,8 @@
 .content {
   article {
     display: block;
-    width: 50%;
+    width: 60%;
     float: left;
-
-    h1 {
-      margin-bottom: -$spacer;
-    }
 
     h2 {
       font-size: 15px;
@@ -28,7 +24,7 @@
   }
 
   .sidebar {
-    width: 45%;
+    width: 35%;
     float: right;
   }
 }
