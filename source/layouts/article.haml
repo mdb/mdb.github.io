@@ -7,6 +7,8 @@
         = yield
         = partial :tags, :locals => {:item => current_article, :path_prefix => "blog"}
         = partial :post_navigation, :locals => {:label => "post"}
+      %div.sidebar
+        = partial :recent_posts, :locals => {:exclude => current_article}
   %div.content-wrap.secondary
     %div.content
       %h1.divider Recent Posts
