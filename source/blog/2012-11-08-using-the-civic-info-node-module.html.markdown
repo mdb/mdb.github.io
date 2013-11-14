@@ -1,5 +1,5 @@
 ---
-title: Using the civid-info Node.js Module to Get Voter and Election Info
+title: Using the civic-info Node.js Module to Get Voter and Election Info
 date: 2012/11/08
 tags: javascript, node.js, civi-info, opendata
 thumbnail: vote_thumb.png
