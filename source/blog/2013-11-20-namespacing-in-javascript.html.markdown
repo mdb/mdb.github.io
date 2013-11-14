@@ -3,7 +3,5 @@ title: Namespacing in JavaScript
 date: 2013/11/20
 tags: javascript
 published: false
-humbnail: default_thumb.gif
+thumbnail: default_thumb.gif
 ---
-
-
