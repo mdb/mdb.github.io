@@ -16,6 +16,8 @@ platforms :mri_18 do
 end
 
 gem "middleman-blog"
+gem "builder"
+gem "nokogiri"
 gem "redcarpet"
 gem "middleman-syntax"
 gem "middleman-livereload", "~> 3.1.0"
