@@ -43,14 +43,12 @@ h1 {
   font-size: $font_size + 4;
 
   &.divider {
-    text-align: center;
 
     &:before, &:after {
       content: '.';
       display: block;
       text-indent: -5000px;
       border-top: 1px solid $secondary_text_color;
-      width: 300px;
       height: 1px;
       margin: 0 auto $spacer auto;
     }
