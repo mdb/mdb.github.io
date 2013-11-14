@@ -6,7 +6,7 @@
           %img{:src => "/images/projects/work/#{img}"}
       %div.column.description
         %date="#{current_article.data.date_completed}"
-        %h1=current_article.title
+        %h1.divider=current_article.title
         = partial :tags, :locals => {:item => current_article, :path_prefix => "projects"}
         = yield
         = partial :post_navigation, :locals => {:label => "project"}
