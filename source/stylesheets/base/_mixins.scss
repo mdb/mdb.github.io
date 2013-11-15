@@ -9,19 +9,6 @@
   @include responsive_width;
 }
 
-@mixin thumb_dimensions {
-  width: $thumb_width;
-  height: $thumb_height;
-  @include responsive_gallery_item;
-
-}
-
-@mixin gallery_item_dimensions {
-  width: $thumb_width;
-  height: $gallery_item_height;
-  @include responsive_gallery_item;
-}
-
 @mixin instagram_item_dimensions {
   width: $instagram_thumb;
   height: $instagram_thumb;
@@ -30,12 +17,5 @@
 @mixin responsive_width {
   @media #{$only_screen_and_max_width} {
     width: 100%;
-  }
-}
-
-@mixin responsive_gallery_item {
-  @media #{$only_screen_and_max_width} {
-    width: 125px;
-    height: 100px;
   }
 }

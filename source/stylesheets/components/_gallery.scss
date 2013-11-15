@@ -1,67 +1,61 @@
-$text_spacer: 5px;
+$gallery_spacer: $spacer - 10;
 
 .content ul.gallery {
-  li.item {
-    @include gallery_item_dimensions;
-    float: left;
-    margin-right: $spacer;
-    margin-bottom: $spacer;
-    position: relative;
+  overflow: hidden;
 
-    date {
-      text-align: left;
-      margin-bottom: $text_spacer;
-      color: $secondary_text_color;
-      font-size: $font_size;
-    }
+  li.item {
+    float: left;
+    position: relative;
+    width: 20%;
+    padding-bottom: 15%;
 
     a.thumbnail {
       display: block;
-      border: 2px solid #fff;
-      margin-bottom: $text_spacer;
-      @include thumb_dimensions;
-      background: url('/images/loading_indicator.gif') no-repeat center;
+      position: absolute;
+      left: $gallery_spacer;
+      right: $gallery_spacer;
+      top: $gallery_spacer;
+      bottom: $gallery_spacer;
+      overflow: hidden;
 
       img {
-        display: none;
-        @include thumb_dimensions;
+        width: 100%;
       }
     }
 
     div.details {
-      @include thumb_dimensions;
-      background: #000;
-      opacity: 0.85;
-      border: 2px solid #fff;
-      display: none;
+      height: 100%;
       position: absolute;
-      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      top: -150px;
+      background: #000;
+      opacity: 0.8;
+      color: #fff;
+      padding: $gallery_spacer;
+      @include transition-property(all);
+      @include transition-duration(0.2s);
+      @include transition-timing-function(ease-out);
 
-      a {
-        display: inline-block;
-        width: 100%;
-        height: 100%;
-        color: #fff;
-        text-decoration: none;
+      h2 {
+        font-size: $font_size + 1;
+        line-height: $font_size * 1.6;
+        margin-bottom: $gallery_spacer;
+      }
 
-        div {
-          padding: $spacer - 5;
+      date {
+        font-size: $font_size - 1;
+        margin-bottom: $gallery_spacer;
+      }
 
-          h2 {
-            font-size: $font_size + 1;
-            margin-bottom: $text_spacer;
-            line-height: $font_size + 7;
-          }
-        }
-
-        h2 a:hover {
-          text-decoration: underline;
-        }
+      ul.tags {
+        font-size: $font_size - 1;
       }
     }
 
     &:hover div.details {
-      display: block;
+      top: 0;
     }
   }
 }
