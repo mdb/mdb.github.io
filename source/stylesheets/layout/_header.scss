@@ -44,6 +44,9 @@ header {
     float: right;
     margin-top: $mark_dimensions - $spacer;
     @include responsive_header_elem;
+    @media #{$only_screen_and_max_width} {
+      margin-bottom: $spacer * 2;
+    }
 
     li, li a {
       font-size: $font_size;
