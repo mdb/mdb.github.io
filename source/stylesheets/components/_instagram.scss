@@ -1,16 +1,27 @@
 .instagram {
-  .instagram-placeholder {
-    float: left;
-    margin-right: 7px;
-    margin-bottom: 7px;
-    padding: 3px;
-    border: 1px solid #999;
-    @include instagram_item_dimensions;
+  ul {
+    overflow: hidden;
 
+    li {
+      float: left;
+      position: relative;
+      width: 25%;
+      padding-bottom: 24%;
 
-    a {
-      img {
-        @include instagram_item_dimensions;
+      a {
+        border: 1px solid #999;
+        padding: 4%;
+        display: block;
+        position: absolute;
+        right: $spacer - 5;
+        left: 0;
+        top: 0;
+        bottom: 5px;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+        }
       }
     }
   }

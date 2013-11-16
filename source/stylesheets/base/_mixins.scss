@@ -9,11 +9,6 @@
   @include responsive_width;
 }
 
-@mixin instagram_item_dimensions {
-  width: $instagram_thumb;
-  height: $instagram_thumb;
-}
-
 @mixin responsive_width {
   @media #{$only_screen_and_max_width} {
     width: 100%;
