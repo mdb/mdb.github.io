@@ -7,15 +7,6 @@
     %title= "Mike Ball"
     = stylesheet_link_tag "all"
     = javascript_include_tag  "all"
-    :javascript
-      $(document).ready(function () {
-        $('.instagram').instagram({
-          userId: '34976175',
-          accessToken: '34976175.bb5f688.2b944bea0640423eb24ce7b10af031f0',
-          show: 8
-        });
-      });
-
   %body{:class => page_classes}
     %header
       %h1
@@ -86,3 +77,17 @@
               %a{:href => "http://twitter.com/clapexcitement"}Twitter
             %li
               %a{:href => "TODO"}LinkedIn
+    %script{:type => "text/html", :id => "instagram-template"}
+      %ul
+        {[ _.each(items, function(item, key, list) { ]}
+        %li
+          %a{:href => "{{ item.url }}"}
+            %img{:src => "{{ item.imgSrc }}"}
+        {[ }); ]}
+    :javascript
+      $(document).ready(function () {
+        $('.instagram').instagram({
+          userId: '34976175',
+          accessToken: '34976175.bb5f688.2b944bea0640423eb24ce7b10af031f0'
+        });
+      });

@@ -1,4 +1,8 @@
-//= require requirejs/require
 //= require jquery/jquery
-//= require jquery-instagram/jquery.instagram
-//= require_tree .
+//= require underscore/underscore
+//= require_tree
+
+_.templateSettings = {
+  evaluate : /\{\[([\s\S]+?)\]\}/g,
+  interpolate : /\{\{([\s\S]+?)\}\}/g
+};
