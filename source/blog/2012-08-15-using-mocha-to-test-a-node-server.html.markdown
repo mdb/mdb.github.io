@@ -5,7 +5,9 @@ tags: javascript, node.js, mocha, tdd
 thumbnail: pattern_thumb.png
 ---
 
-How do you write Mocha tests against a Node.js server and run the tests during development? Solution: Leverage fork to run the server code as a child process of the Mocha test. The following is a quick example of what this could look like.</p>
+How do you write Mocha tests against a Node.js server and run the tests during development, presumably while your server is already running?
+
+<b>Solution</b>: Leverage <code>fork</code> to run the server code as a child process of the Mocha test. The following is a quick example of what this could look like.
 
 ## The Server Code
 
