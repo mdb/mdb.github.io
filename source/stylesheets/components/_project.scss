@@ -3,18 +3,43 @@
     width: 500px;
     margin-right: $spacer;
     float: left;
+    @media #{$only_screen_and_max_width} {
+      @include responsive_width;
+      margin: 0 auto;
+    }
 
     img {
       margin-bottom: $spacer;
+      @media #{$only_screen_and_max_width} {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      @media only screen and (max-width: 500px) {
+        width: 100%;
+      }
     }
   }
 
   .column.description {
     width: 440px;
     float: left;
+    @media #{$only_screen_and_max_width} {
+      @include responsive_width;
+      margin: 0 auto;
+    }
 
-    date {
+    p, date, ul.tags {
       text-align: left;
+      width: 100%;
+      @media #{$only_screen_and_max_width} {
+        text-align: center;
+      }
+    }
+    p {
+      @media #{$only_screen_and_max_width} {
+        text-align: left;
+      }
     }
   }
 }
