@@ -38,7 +38,7 @@ Set up the homepage by adding the following to index.html:
   </head>
   <body>
     <header>
-      <h1><a href="/">Some Site Title&</a></h1>
+      <h1><a href="/">Some Site Title</a></h1>
     </header>
     <ul id="politicians"></ul>
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
@@ -48,7 +48,7 @@ Set up the homepage by adding the following to index.html:
 </html>
 ```
 
-Retrieve the document key associated with your <code>tabletop\_example</code> spreadsheet. This can be found in the document&#8217;s URL: https://docs.google.com/spreadsheet/ccc?key=<strong>YOUR\_DOCUMENT\_KEY_APPEARS\_HERE</strong>
+Retrieve the document key associated with your <code>tabletop\_example</code> spreadsheet. This can be found in the document&#8217;s URL: docs.google.com/spreadsheet/ccc?key=<strong>YOUR\_DOCUMENT\_KEY\_APPEARS\_HERE</strong>
 
 ```javascript
 $(document).ready(function () {
