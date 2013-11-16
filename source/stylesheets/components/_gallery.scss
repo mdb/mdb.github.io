@@ -6,10 +6,15 @@ $gallery_spacer: $spacer - 10;
   li.item {
     float: left;
     position: relative;
-    width: 20%;
-    padding-bottom: 15%;
+    width: 25%;
+    padding-bottom: 19%;
+    @media #{$only_screen_and_max_width} {
+      width: 33%;
+      padding-bottom: 25%;
+    }
 
     a.thumbnail {
+      border: 1px solid #fff;
       display: block;
       position: absolute;
       left: $gallery_spacer;
@@ -30,7 +35,7 @@ $gallery_spacer: $spacer - 10;
       bottom: 0;
       left: 0;
       right: 0;
-      top: -150px;
+      top: -180px;
       background: #000;
       opacity: 0.8;
       color: #fff;
@@ -38,6 +43,9 @@ $gallery_spacer: $spacer - 10;
       @include transition-property(all);
       @include transition-duration(0.2s);
       @include transition-timing-function(ease-out);
+      @media #{$only_screen_and_max_width} {
+        top: -300px;
+      }
 
       h2 {
         font-size: $font_size + 1;
