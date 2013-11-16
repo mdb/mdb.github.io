@@ -4,9 +4,10 @@ date: 2012/10/10
 tags: compass, scss, css
 thumbnail: scallops_thumb.png
 ---
-The manual creation of sprite images is time-consuming and subject to human error. The corresponding CSS is often verbose and largely repetitive.
 
-Solution: Leverage <a href="http://compass-style.org/">Compass</a>&#8216;s spriting and looping features.
+Manually creating sprite images is time-consuming and subject to human error. The corresponding CSS is often verbose and largely repetitive.
+
+<b>Solution</b>: Leverage <a href="http://compass-style.org/">Compass</a>'s spriting and looping features.
 
 Example: You have an icon set of 20 10x10px individual .png files. Their file names follow the convention icon_1.png, icon_2.png, and icon_3.png through icon_20.png.
 
