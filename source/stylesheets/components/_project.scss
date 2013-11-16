@@ -15,7 +15,7 @@
         margin-right: auto;
       }
 
-      @media only screen and (max-width: 500px) {
+      @media only screen and (max-width: #{$content_image_width}) {
         width: 100%;
       }
     }
