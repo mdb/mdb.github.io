@@ -4,7 +4,7 @@ div.content-wrap {
   overflow: hidden;
 
   @media #{$only_screen_and_max_width} {
-    padding: 0 10px;
+    padding: 10px;
   }
 
   &.secondary {
