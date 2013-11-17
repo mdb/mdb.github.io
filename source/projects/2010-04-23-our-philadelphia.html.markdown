@@ -8,8 +8,8 @@ images:
   - our_phila_1.png
 ---
 
-I recently partnered with Gabriel Farrell and Cecily Anderson to design and build <a href="http://ourphiladelphia.org">ourphiladelphia.org</a> for Common Cause, a nonprofit, nonpartisan citizen&#8217;s lobbying organization working to promote open, honest, and accountable government.
+I partnered with Gabriel Farrell and Cecily Anderson to design and build <a href="http://ourphiladelphia.org">ourphiladelphia.org</a> for Common Cause, a nonprofit, nonpartisan citizen&#8217;s lobbying organization working to promote open, honest, and accountable government.
 
 Our Philadelphia is a community website designed to provide information to Philadelphians about the role of money in local politics. The site features an address-based representative search tool, a news publishing platform, RSS feeds, user accounts and profiles, as well as an extensive database of local campaign donor information. The project was made possible by the Samuel S. Fels Fund.
 
-Working under the art direction and project management of Cecily Anderson, I was responsible for logo design and branding, user interface design, information architecture, and front end development. Gabriel Farrell served as lead developer. The site is built on Django and is an open source project. Feel free to download is <a title="OurCity on Google Code" href="http://code.google.com/p/ourcity/">source code</a> or <a title="Email Mike Ball" href="mailto:mikedball@gmail.com">contact me</a> about using this software in your own city.
+I was responsible for logo design and branding, user interface design, information architecture, and front end development. The site is built on Django.
