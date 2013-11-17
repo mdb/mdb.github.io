@@ -9,6 +9,7 @@
     }
 
     img {
+      border: 1px solid #fff;
       margin-bottom: $spacer;
       @media #{$only_screen_and_max_width} {
         margin-left: auto;
