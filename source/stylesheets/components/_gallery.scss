@@ -22,6 +22,11 @@ $gallery_spacer: $spacer - 10;
       top: $gallery_spacer;
       bottom: $gallery_spacer;
       overflow: hidden;
+      background: url('/images/loading_indicator.gif') no-repeat center;
+
+      &.loaded {
+        background: none;
+      }
 
       img {
         width: 100%;
