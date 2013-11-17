@@ -16,7 +16,7 @@ platforms :mri_18 do
 end
 
 gem "middleman-blog"
-gem "builder"
+gem "middleman-sync"
 gem "nokogiri"
 gem "redcarpet"
 gem "middleman-syntax"

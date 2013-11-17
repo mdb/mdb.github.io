@@ -55,3 +55,16 @@ configure :build do
   # Or use a different image path
   # set :http_prefix, "/Content/images/"
 end
+
+# Deployment
+activate :sync do |sync|
+  sync.fog_provider = 'AWS'
+  sync.fog_directory = 'mikeball'
+  sync.fog_region = 'us-east-1'
+  sync.aws_access_key_id = ENV['AWS_ACCESS_KEY_ID']
+  sync.aws_secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
+  sync.existing_remote_files = 'delete'
+  # sync.gzip_compression = false # Automatically replace files with their equivalent gzip compressed version
+  # sync.after_build = false # Disable sync to run after Middleman build ( defaults to true )
+end
+
