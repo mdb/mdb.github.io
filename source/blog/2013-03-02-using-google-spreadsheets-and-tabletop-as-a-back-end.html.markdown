@@ -5,11 +5,11 @@ tags: javascript, nicar
 thumbnail: pyramid_thumb.png
 ---
 
-At <a href="http://ire.org/events-and-training/event/315">NICAR 2013</a>, I attended <a href="http://tasneemraja.com">Tasneem Raja</a>&#8216;s talk on <a href="http://ire.org/events-and-training/event/315/623">Smarter interactive Web projects with Google Spreadsheets and Tabletop.js</a>. Tasneem Raja is <em>Mother Jones</em>&#8216;s Interactive Editor. Tasneem outlined how <em>Mother Jones</em> uses Google Spreadsheets to power some of its interactive features.
+At <a href="http://ire.org/events-and-training/event/315">NICAR 2013</a>, <a href="http://tasneemraja.com">Tasneem Raja</a> spoke on <a href="http://ire.org/events-and-training/event/315/623">Smarter interactive Web projects with Google Spreadsheets and Tabletop.js</a>. Tasneem is <em>Mother Jones</em>&#8216;s Interactive Editor; she outlined how <em>Mother Jones</em> uses Google Spreadsheets to power some of its interactive features.
 
-Beyond serving as a simple, easy-to-maintain datastore and CMS, Google Spreadsheets &mdash; used in concert with <a href="https://github.com/jsoma/tabletop">Tabletop.js</a> &mdash; allows for the creation of dynamic web content in absence of  server-side processing and an application server, in effect empowering a highly scalable and remarkably simple architecture.
+Beyond serving as a simple, easy-to-maintain datastore and CMS, Google Spreadsheets &mdash; used in concert with <a href="https://github.com/jsoma/tabletop">Tabletop.js</a> &mdash; allows for the creation of dynamic web content in absence of server-side processing, in effect empowering a highly scalable and simple architecture.
 
-The following offers a simple example.
+The following offers a basic example.
 
 <b>1.</b> Sign into <a href="https://drive.google.com">Google Drive</a> with your Google credentials and create a new Spreadsheet titled <code>tabletop_example</code> with the following content:</p>
 
