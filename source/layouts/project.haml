@@ -2,8 +2,9 @@
   %div.content-wrap
     %div.content.project
       %div.column.images
-        - current_article.data.images.each do |img|
-          %img{:src => "/images/projects/work/#{img}"}
+        - if current_article.data.images
+          - current_article.data.images.each do |img|
+            %img{:src => "/images/projects/work/#{img}"}
       %div.column.description
         %date="#{current_article.data.date_completed}"
         %h1.divider=current_article.title
