@@ -19,6 +19,7 @@ set :haml, { ugly: true }
 activate :blog do |blog|
   blog.name = "blog"
   blog.prefix = "blog"
+  blog.permalink = ":title.html"
   blog.tag_template  = "tag_blog.html"
 end
 
