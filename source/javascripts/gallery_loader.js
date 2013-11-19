@@ -1,7 +1,13 @@
 $(document).ready(function () {
   var imgs = $('ul.gallery li a.thumbnail img');
 
-  $(imgs).on('load', function() {
-    $(this).fadeIn().parent().addClass('loaded');
+  imgs.each(function() {
+    if (this.complete) {
+      $(this).fadeIn();
+    } else {
+      $(this).load(function() {
+        $(this).fadeIn();
+      });
+    }
   });
 });
