@@ -38,7 +38,8 @@ end
 page "projects/*", :layout => :project
 page "projects", :layout => :layout
 page "projects/tags/*", :layout => :layout
-page "/feed.xml", :layout => false
+page "/atom.xml", :layout => false
+page "/rss.xml", :layout => false
 
 activate :directory_indexes
 activate :syntax, :line_numbers => true
