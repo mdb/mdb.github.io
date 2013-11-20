@@ -1,5 +1,5 @@
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     activemodel (3.2.15)
       activesupport (= 3.2.15)
@@ -120,7 +120,6 @@ GEM
     rouge (0.3.10)
       thor
     ruby-hmac (0.4.0)
-    ruby18_source_location (0.2)
     sass (3.2.12)
     slop (3.4.7)
     sprockets (2.10.0)
@@ -152,5 +151,3 @@ DEPENDENCIES
   nokogiri
   pry
   redcarpet
-  ruby18_source_location
-  wdm (~> 0.1.0)
