@@ -1,4 +1,10 @@
 module TemplateHelpers
+  # Temporary workaround for this issue:
+  # https://github.com/middleman/middleman-blog/issues/145
+  def tag_url_path path_prefix, tag
+    "/#{path_prefix}/tags/#{tag.gsub(/ /, '-')}"
+  end
+
   def last_class array, index
     if index + 1 == array.length
       "last"
