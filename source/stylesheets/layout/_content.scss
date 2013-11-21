@@ -1,24 +1,2 @@
 .content {
-  h1 {
-    margin-bottom: $spacer;
-
-    @media #{$only_screen_and_max_width} {
-      text-align: center;
-    }
-  }
-
-  date {
-    margin-bottom: $spacer;
-    color: $secondary_text_color;
-  }
-
-  p, ul, ol {
-    font-size: $font_size + 3;
-    line-height: $font_size + 10;
-    margin-bottom: $spacer + 2;
-  }
-
-  img {
-    display: block;
-  }
 }

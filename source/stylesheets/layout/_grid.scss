@@ -1,42 +1,11 @@
 div.content-wrap {
-  padding-top: $spacer + 10px;
-  background: #eee;
-  overflow: hidden;
-
-  @media #{$only_screen_and_max_width} {
-    padding: 10px;
-  }
-
-  &.secondary {
-    background: #ddd;
-  }
-
-  div.content {
-    @include center;
-  }
 }
 
 .column {
-  float: left;
-  width: 100%;
-
-  h3, p, ul {
-    width: 90%;
-  }
 
   &.double {
-    width: 50%;
-    @include responsive_width;
-    @media #{$only_screen_and_max_width} {
-      margin-bottom: $spacer;
-      &.double {
-        padding-right: 0;
-        padding-left: 0;
-      }
-    }
   }
 
   &.clear {
-    clear: both;
   }
 }

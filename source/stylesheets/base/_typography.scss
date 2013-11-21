@@ -23,39 +23,13 @@ a, a:visited, a:focus {
 }
 
 pre {
-  margin-bottom: 17px;
   overflow: auto;
 }
 
 ol li {
   list-style-type: decimal;
   list-style-position: outside;
-  margin-bottom: 5px;
 }
 
 h1, h2, h3, h4, h5 {
-  font-weight: normal;
-  clear: both;
-  font-size: $font_size + 4;
-}
-
-h1 {
-  letter-spacing: 0;
-
-  &.title {
-    font-size: $font_size * 2.5;
-    line-height: $font_size * 3;
-  }
-
-  &.divider {
-    @include primary_heading;
-  }
-
-  a {
-    text-decoration: none;
-  }
-}
-
-small.divider, h2.divider {
-  @include primary_heading;
 }

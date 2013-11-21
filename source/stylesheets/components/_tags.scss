@@ -1,25 +1,16 @@
 .content ul.tags {
-  font-size: $font_size;
-  line-height: $font_size + 4;
 
   li {
     display: inline;
     color: $secondary_text_color;
 
     a, span {
-      display: inline;
-      text-decoration: none;
-      font-style: italic;
-      color: $secondary_text_color;
-
       &:after {
         content: ',';
       }
     }
 
     a:hover {
-      color: $link_color;
-      text-decoration: underline;
     }
 
     &.last a:after, &.last span:after {

@@ -1,19 +1,2 @@
 @mixin primary_heading {
-  border-bottom: $text_divider;
-  padding-bottom: $spacer - 5;
-  font-size: $font_size + 4;
-  line-height: $spacer + 10;
-  margin-bottom: $spacer;
-}
-
-@mixin center {
-  width: $container_width;
-  margin: 0 auto;
-  @include responsive_width;
-}
-
-@mixin responsive_width {
-  @media #{$only_screen_and_max_width} {
-    width: 100%;
-  }
 }

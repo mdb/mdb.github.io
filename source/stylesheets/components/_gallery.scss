@@ -53,28 +53,15 @@ $gallery_spacer: $spacer - 10;
       }
 
       small {
-        font-family: $secondary_font_family;
-        text-transform: uppercase;
-        color: $secondary_text_color;
-        font-size: $font_size - 2;
-        letter-spacing: .1em;
-        display: block;
-        margin-bottom: $gallery_spacer;
       }
 
       h2 {
-        font-size: $font_size + 1;
-        line-height: $font_size * 1.6;
-        margin-bottom: $gallery_spacer;
       }
 
       date {
-        font-size: $font_size - 1;
-        margin-bottom: $gallery_spacer;
       }
 
       ul.tags {
-        font-size: $font_size - 1;
       }
     }
 
