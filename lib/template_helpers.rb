@@ -13,12 +13,24 @@ module TemplateHelpers
     end
   end
 
+  def default_thumb_path
+    image_path("blog/thumbnails/default_thumb.gif")
+  end
+
   def blog_thumb_path file_name
-    image_path("blog/thumbnails/#{file_name}")
+    if file_name.nil?
+      default_thumb_path
+    else
+      image_path("blog/thumbnails/#{file_name}")
+    end
   end
 
   def project_thumb_path file_name
-    image_path("projects/thumbnails/#{file_name}")
+    if file_name.nil?
+      default_thumb_path
+    else
+      image_path("projects/thumbnails/#{file_name}")
+    end
   end
 
   def all_posts

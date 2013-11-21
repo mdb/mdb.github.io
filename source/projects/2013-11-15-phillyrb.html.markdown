@@ -2,7 +2,6 @@
 title: Philly.rb
 date: 2013/11/15
 date_completed: November 2013
-thumbnail: phillyrb_thumb.png
 published: false
 tags: ruby, javascript, google maps, gis
 ---
