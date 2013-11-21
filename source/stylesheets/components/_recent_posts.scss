@@ -1,5 +1,4 @@
 ul.recent-posts {
-  border-top: 1px solid $secondary_text_color;
   margin-top: -5px;
   padding-top: $spacer;
 
@@ -27,7 +26,7 @@ ul.recent-posts {
         top: 0;
         position: absolute;
 
-        h2 {
+        h3 {
           font-size: $font_size + 1;
           line-height: $font_size + 5;
           color: $text_color;

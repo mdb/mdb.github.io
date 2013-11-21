@@ -1,0 +1,10 @@
+---
+title: Philly.rb
+date: 2013/11/15
+date_completed: November 2013
+thumbnail: phillyrb_thumb.png
+published: false
+tags: ruby, javascript, google maps, gis
+---
+
+[Thoughtbot](http://thoughtbot.com) designed the new [phillyrb.org](http://phillyrb.org), but organizers needed to auto-update the static site with the latest event information. Using JavaScript and Google Maps, I leveraged the Meetup.com API to auto-publish the next Philly.rb event to the site's homepage.

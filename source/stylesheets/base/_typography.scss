@@ -41,14 +41,16 @@ h1, h2, h3, h4, h5 {
 
 h1 {
   letter-spacing: 0;
-  font-size: $font_size + 4;
 
   &.divider {
-    border-bottom: 1px solid $secondary_text_color;
-    padding-bottom: $spacer - 5;
+    @include primary_heading;
   }
 
   a {
     text-decoration: none;
   }
+}
+
+h2.divider {
+  @include primary_heading;
 }
