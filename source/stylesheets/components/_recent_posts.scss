@@ -1,9 +1,9 @@
 ul.recent-posts {
-  margin-top: -5px;
+  margin-top: -$spacer;
   padding-top: $spacer;
 
   li {
-    border-bottom: 1px solid $secondary_text_color;
+    border-bottom: $text_divider;
     position: relative;
 
     a {

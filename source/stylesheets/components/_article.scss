@@ -1,7 +1,7 @@
 .content {
   article {
     display: block;
-    width: 60%;
+    width: 55%;
     float: left;
     @media #{$only_screen_and_max_width} {
       @include responsive_width;
@@ -40,7 +40,7 @@
   }
 
   .sidebar {
-    width: 35%;
+    width: 40%;
     float: right;
     @media #{$only_screen_and_max_width} {
       @include responsive_width;

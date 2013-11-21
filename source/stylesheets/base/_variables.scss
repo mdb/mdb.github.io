@@ -10,14 +10,7 @@ $link_color_reverse: #2ca4e3;
 
 // Misc UI Elements
 $text_separator_color: #dbdbdb;
-$module_separator_color: #dbdbdb;
-$panel_border_color: #e1e1e1;
-$text_separator: 1px dotted $text_separator_color;
-$module_separator: 1px solid $module_separator_color;
-$component_separator: 4px solid $module_separator_color;
-$component_shadow: 1px solid #cccccc;
-$module_bg_color: white;
-$dotted_border: 1px dotted $text_separator_color;
+$text_divider: 1px solid $text_separator_color;
 $content_image_width: 500px;
 
 // Thumbnails

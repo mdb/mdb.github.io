@@ -14,7 +14,7 @@ ul, li {
   list-style-type: none;
 }
 
-date {
+date, small {
   display: block;
 }
 
@@ -42,6 +42,11 @@ h1, h2, h3, h4, h5 {
 h1 {
   letter-spacing: 0;
 
+  &.title {
+    font-size: $font_size * 2.5;
+    line-height: $font_size * 3;
+  }
+
   &.divider {
     @include primary_heading;
   }
@@ -51,6 +56,6 @@ h1 {
   }
 }
 
-h2.divider {
+small.divider, h2.divider {
   @include primary_heading;
 }

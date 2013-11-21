@@ -2,7 +2,8 @@
   %div.content-wrap
     %div.content
       %article
-        %h1.divider=current_article.title
+        %small.divider Blog
+        %h1.title=current_article.title
         %date="Posted #{current_article.date.strftime('%B %e, %Y')}"
         = yield
         = partial :tags, :locals => {:item => current_article, :path_prefix => "blog"}

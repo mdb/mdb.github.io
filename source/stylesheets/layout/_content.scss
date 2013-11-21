@@ -1,7 +1,6 @@
 .content {
   h1 {
     margin-bottom: $spacer;
-    line-height: 25px;
 
     @media #{$only_screen_and_max_width} {
       text-align: center;

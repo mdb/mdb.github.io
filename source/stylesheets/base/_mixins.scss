@@ -1,8 +1,9 @@
 @mixin primary_heading {
-  border-bottom: 1px solid $secondary_text_color;
+  border-bottom: $text_divider;
   padding-bottom: $spacer - 5;
   font-size: $font_size + 4;
   line-height: $spacer + 10;
+  margin-bottom: $spacer;
 }
 
 @mixin center {
