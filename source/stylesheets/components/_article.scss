@@ -1,4 +1,21 @@
-.content {
-  article {
+article {
+  small {
+    @include small_text;
+    margin-bottom: $spacer;
+  }
+
+  h1 {
+    @include large_heading;
+  }
+
+  h2 {
+    margin-bottom: $spacer;
+    font-weight: bold;
+    font-size: $font-size + 7;
+    line-height: $font-size + 7 * 2.8;
+  }
+
+  pre {
+    margin-bottom: $spacer;
   }
 }
