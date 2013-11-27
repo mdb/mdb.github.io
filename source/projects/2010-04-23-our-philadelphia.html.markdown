@@ -5,7 +5,8 @@ date_completed: Summer 2010
 thumbnail: our_phila_thumb.png
 tags: django, opensource, opendata, civic technology
 images:
-  - our_phila_1.png
+  - nested:
+    - our_phila_1.png
 ---
 
 I partnered with Gabriel Farrell and Cecily Anderson to design and build <a href="http://ourphiladelphia.org">ourphiladelphia.org</a> for Common Cause, a nonprofit, nonpartisan citizen&#8217;s lobbying organization working to promote open, honest, and accountable government.
