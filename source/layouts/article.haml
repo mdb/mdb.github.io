@@ -1,12 +1,10 @@
 - wrap_layout :layout do
-  %div.content-wrap
-    %div.content
-      %article
-        %small.divider Blog
-        %h1.title=current_article.title
-        %date="Posted #{current_article.date.strftime('%B %e, %Y')}"
-        = yield
-        = partial :tags, :locals => {:item => current_article, :path_prefix => "blog"}
-        = partial :post_navigation, :locals => {:label => "post"}
-      %div.sidebar
-        = partial :recent_posts, :locals => {:exclude => current_article}
+  %div.content
+    %div.column.one-quarter
+      = partial :tags, :locals => {:item => current_article, :path_prefix => "blog"}
+      = partial :post_navigation, :locals => {:label => "post"}
+    %article.column.three-quarters
+      %small Blog
+      %h1.title=current_article.title
+      %date="Posted #{current_article.date.strftime('%B %e, %Y')}"
+      = yield
