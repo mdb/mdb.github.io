@@ -1,11 +1,16 @@
 ul.post-navigation {
+  margin-bottom: $spacer;
 
   li {
     display: inline-block;
 
     a {
-      &:hover {
-      }
+      @include small_text;
+    }
+
+    &.prev:after {
+      content: '/';
+      @include small_text;
     }
   }
 }
