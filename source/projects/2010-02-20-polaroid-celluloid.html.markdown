@@ -5,7 +5,8 @@ date_completed: Summer 2006
 tags: illustration, zine
 thumbnail: polaroid_thumb.gif
 images:
-  - polaroid.gif
+  - nested:
+    - polaroid.gif
 ---
 
 Hand drawn illustration for the zine <i>Polaroid Celluloid</i>.
