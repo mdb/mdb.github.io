@@ -5,7 +5,7 @@ date_completed: November 2011
 thumbnail: tedx_thumb.png
 tags: illustration, design
 images:
-  - tedx_1.png
+  - tedx_1_large.png
   - tedx_2.png
 ---
 
