@@ -16,6 +16,8 @@ ul, li {
 
 date, small {
   display: block;
+  @include small_text;
+  margin-bottom: $spacer;
 }
 
 a, a:visited, a:focus {
@@ -32,4 +34,17 @@ ol li {
 }
 
 h1, h2, h3, h4, h5 {
+  font-weight: normal;
+  font-size: $font_size;
+
+  &.divider {
+    @include small_text;
+    border-bottom: $divider;
+    padding: $spacer $gallery_spacer;
+    margin-bottom: $spacer;
+  }
+}
+
+p {
+  margin-bottom: $spacer;
 }
