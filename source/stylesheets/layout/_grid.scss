@@ -1,11 +1,22 @@
 div.content-wrap {
 }
 
-.column {
+.clear {
+  clear: both;
+}
 
-  &.double {
-  }
+.column-content {
+  padding: $gallery_spacer;
+}
 
-  &.clear {
-  }
+.column.one-quarter {
+  @include quarter_column;
+}
+
+.column.two-quarters {
+  @include two_quarters_column;
+}
+
+.column.three-quarters {
+  @include three_quarters_column;
 }
