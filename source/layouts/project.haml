@@ -1,17 +1,24 @@
 - wrap_layout :layout do
-  %div.content-wrap
-    %div.content.project
-      %div.column.images
-        - if current_article.data.images
-          - current_article.data.images.each do |img|
+  %div.content.project
+    %div.images
+      - if current_article.data.images
+        - current_article.data.images.each do |img|
+          - if img.is_a? String
             %img{:src => "/images/projects/work/#{img}"}
-      %div.column.description
-        %date="#{current_article.data.date_completed}"
-        %h1.divider=current_article.title
-        = partial :tags, :locals => {:item => current_article, :path_prefix => "projects"}
-        = yield
+          - else
+            %div.image-column
+              - img.nested.each_with_index do |nested_img, i|
+                %div{:class => "image #{last_class(img.nested, i)}"}
+                  %img{:src => "/images/projects/work/#{nested_img}"}
+    %div.details
+      %div.column.one-quarter
         = partial :post_navigation, :locals => {:label => "project"}
-  %div.content-wrap.secondary
-    %div.content
-      %h1.divider More Recent Projects
-      = partial :project_gallery, :locals => {:exclude => current_article}
+        = partial :tags, :locals => {:item => current_article, :path_prefix => "projects"}
+      %div.column.description.three-quarters
+        %div.column-content
+          %date="#{current_article.data.date_completed}"
+          %h1=current_article.title
+          = yield
+  %div.content.clear
+    %h1.divider More Recent Projects
+    = partial :project_gallery, :locals => {:exclude => current_article}
