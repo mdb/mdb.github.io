@@ -5,7 +5,7 @@ date_completed: April 2013
 thumbnail: pac_complaint_thumb.png
 tags: open data, civic technology, data journalism, backbone, node.js
 images:
-  - pac_complaint_browser.png
+  - pac_complaints_large.jpg
 ---
 
 My map of 2009 &ndash; 2012 complaints filed with the Philadelphia Police Advisory Commission won first place at the 2013 Barcamp News Innovation Hackathon.
