@@ -1,12 +1,19 @@
-.content ul.tags {
+ul.tags {
+  margin-bottom: $spacer;
 
   li {
     display: inline;
-    color: $secondary_text_color;
 
     a, span {
+      font-style: italic;
+      @include small_text;
+
       &:after {
         content: ',';
+      }
+
+      &:hover {
+        text-decoration: underline;
       }
     }
 
