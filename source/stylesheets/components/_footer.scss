@@ -1,32 +1,47 @@
 footer {
-  padding: 50px 0;
+  font-size: $font_size + 1;
+  line-height: $font_size * 1.8;
+  padding: $spacer * 2 0;
   clear: both;
   background: #000;
   color: $inverse_text_color;
   overflow: hidden;
+  @media #{$only_screen_and_max_width} {
+    padding: $spacer;
+  }
 
   section {
+    padding-top: $spacer;
+  }
+
+  .column {
+    min-height: 300px;
+    margin-bottom: $spacer;
     @media #{$only_screen_and_max_width} {
-      padding-left: $spacer;
-      padding-right: $spacer;
+      min-height: 0;
+    }
+
+    h3, p, ul {
+      width: 90%;
+      @media #{$only_screen_and_max_width} {
+        width: 100%;
+      }
+    }
+
+    &.full {
+      h3, p, ul {
+        width: 100%;
+      }
     }
   }
 
   h2 {
-    margin-bottom: 25px;
+    margin-bottom: $spacer + 10;
   }
 
-  .column {
-    float: left;
-    height: 300px;
-    @media #{$only_screen_and_max_width} {
-      height: auto;
-    }
-
-    h3 {
-      border-bottom: 1px solid #999;
-      padding-bottom: 5px;
-      margin-bottom: 15px;
-    }
+  h3 {
+    border-bottom: 1px solid #555;
+    padding-bottom: $spacer - 5;
+    margin-bottom: $spacer;
   }
 }
