@@ -13,18 +13,24 @@
         %h1
           %a{:href => "/"}
             Mike Ball
-        %nav.main
+        %nav.main.column.one-quarter
           %ul.nav
             %li
               %a{:href => '/blog'} Blog
             %li
               %a{:href => '/projects'} Recent Projects
-        %nav.secondary
+        %nav.secondary.column.one-quarter
           %ul.nav
             %li
               %a{:href => '#info'} About
             %li
               %a{:href => '#info'} Contact
+        %nav.tertiary.column.one-quarter
+          %ul.nav
+            %li
+              %a{:href => 'http://github.com/mdb'} GitHub
+            %li
+              %a{:href => 'http://instagram.com/clapclapexcitement'} Instagram
     %section
       = yield
     %footer
