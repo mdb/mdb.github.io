@@ -1,2 +1,53 @@
 @mixin primary_heading {
 }
+
+@mixin responsive_width {
+  @media #{$only_screen_and_max_width} {
+    width: 100%;
+  }
+}
+
+@mixin column {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  float: left;
+}
+
+@mixin three_quarters_column {
+  @include column;
+  width: 75%;
+  @include responsive_width;
+}
+
+@mixin two_quarters_column {
+  @include column;
+  width: 50%;
+  @include responsive_width;
+}
+
+@mixin quarter_column {
+  @include column;
+  width: 25%;
+  @include responsive_width;
+}
+
+@mixin small_text {
+  font-size: $small_font_size;
+  color: $secondary_text_color;
+  text-decoration: none;
+  font-family: $secondary_font_family;
+}
+
+@mixin standard_heading {
+  font-size: $font_size + 2;
+  color: $text_color;
+  text-decoration: none;
+  margin-bottom: $spacer;
+}
+
+@mixin large_heading {
+  font-size: $font_size + 10;
+  line-height: $font_size + 10 * 1.5;
+  margin-bottom: $spacer;
+}
