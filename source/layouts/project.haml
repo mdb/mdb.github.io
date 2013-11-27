@@ -2,14 +2,11 @@
   %div.content.project
     %div.images
       - if current_article.data.images
-        - current_article.data.images.each do |img|
-          - if img.is_a? String
-            %img{:src => "/images/projects/work/#{img}"}
+        - current_article.data.images.each do |img_data|
+          - if img_data.is_a? String
+            %img{:src => "/images/projects/work/#{img_data}"}
           - else
-            %div.image-column
-              - img.nested.each_with_index do |nested_img, i|
-                %div{:class => "image #{first_or_last_class(img.nested, i)}"}
-                  %img{:src => "/images/projects/work/#{nested_img}"}
+            = partial :nested_images, :locals => {:image_data => img_data}
     %div.details
       %div.column.one-quarter
         = partial :post_navigation, :locals => {:label => "project"}
