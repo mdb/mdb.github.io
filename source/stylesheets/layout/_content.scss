@@ -1,2 +1,29 @@
+section {
+  padding-top: ($spacer * 4) + $mark_dimensions;
+  margin: 0 auto;
+  width: $desktop_width;
+  @media #{$only_screen_and_max_width} {
+    width: 100%;
+  }
+}
+
 .content {
+
+  p {
+    font-size: $font-size + 5;
+    line-height: $font-size + 5 * 2.8;
+    margin-bottom: $spacer + $spacer/2;
+    color: #444;
+  }
+}
+
+body {
+  &.blog_index,
+  &.projects_index,
+  &.blog_tags,
+  &.projects_tags {
+    h1.divider {
+      padding-top: 0;
+    }
+  }
 }
