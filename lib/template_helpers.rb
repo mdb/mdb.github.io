@@ -5,8 +5,12 @@ module TemplateHelpers
     "/#{path_prefix}/tags/#{tag.gsub(/ /, '-')}"
   end
 
-  def last_class array, index
-    if index + 1 == array.length
+  def first_or_last_class array, index
+    if array.length == 1
+      "first last"
+    elsif index == 0
+      "first"
+    elsif index + 1 == array.length
       "last"
     else
       ""

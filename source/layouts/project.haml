@@ -8,7 +8,7 @@
           - else
             %div.image-column
               - img.nested.each_with_index do |nested_img, i|
-                %div{:class => "image #{last_class(img.nested, i)}"}
+                %div{:class => "image #{first_or_last_class(img.nested, i)}"}
                   %img{:src => "/images/projects/work/#{nested_img}"}
     %div.details
       %div.column.one-quarter
