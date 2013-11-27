@@ -1,4 +1,3 @@
-$mark_dimensions: 100px;
 
 @mixin responsive_header_elem {
   @media #{$only_screen_and_max_width} {
@@ -10,52 +9,72 @@ $mark_dimensions: 100px;
 }
 
 header {
-  padding-top: 50px;
-  overflow: hidden;
+  margin: 0 auto;
+  width: $desktop_width;
+  margin: 0 auto;
+  @include responsive_width;
 
-  h1, h1 a, h1 a:visited, h1 a:focus {
-    float: left;
-    font-size: $font_size + 2;
-    color: $text_color;
-    margin-bottom: $spacer - 5;
-    @include responsive_header_elem;
-
+  .header-content {
+    height: $spacer + $mark_dimensions;
+    padding-top: $spacer+ 10;
+    position: fixed;
+    width: $desktop_width;
+    border-bottom: $divider;
+    background: #fff;
+    z-index: 1000;
   }
 
-  h1 a {
-    text-indent: -5000px;
-    display: block;
-    width: $mark_dimensions;
-    height: $mark_dimensions;
-    background: url('/images/mark_grayscale.png');
+  h1 {
+    @include quarter_column;
 
-    &:hover {
-      @include border-radius($mark_dimensions, $mark_dimensions);
-      text-align: center;
-      background: #000;
-      text-indent: 0;
-      color: #fff;
-      line-height: 100px;
-    }
-  }
-
-  ul.nav {
-    float: right;
-    margin-top: $mark_dimensions - $spacer;
-    @include responsive_header_elem;
-    @media #{$only_screen_and_max_width} {
-      margin-bottom: $spacer * 2;
-    }
-
-    li, li a {
-      font-size: $font_size;
-      display: inline-block;
-      text-decoration: none;
-      color: $secondary_text_color;
-      margin: 0 2px;
+    a {
+      text-indent: -5000px;
+      display: block;
+      width: $mark_dimensions;
+      height: $mark_dimensions;
+      background: url('/images/mark_grayscale.png');
+      float: left;
+      @include responsive_header_elem;
 
       &:hover {
-        color: $text_color;
+        text-decoration: none;
+        @include border-radius($mark_dimensions, $mark_dimensions);
+        text-align: center;
+        background: #000;
+        text-indent: 0;
+        color: #fff;
+        line-height: 100px;
+      }
+    }
+  }
+
+  nav {
+    @include quarter_column;
+    height: $mark_dimensions;
+    position: relative;
+    @media #{$only_screen_and_max_width} {
+      height: auto;
+      text-align: center;
+    }
+
+    ul.nav {
+      margin-left: $gallery_spacer;
+      position: absolute;
+      bottom: $spacer;
+      @media #{$only_screen_and_max_width} {
+        display: inline;
+        position: static;
+        text-align: center;
+      }
+
+      li {
+        @media #{$only_screen_and_max_width} {
+          display: inline;
+        }
+
+        a {
+          @include small_text;
+        }
       }
     }
   }
