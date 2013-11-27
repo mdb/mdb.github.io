@@ -21,6 +21,11 @@
         &:nth-child(odd) {
           float: right;
         }
+
+        &.first.last {
+          float: none;
+          margin: 0 auto;
+        }
       }
     }
   }
