@@ -1,5 +1,3 @@
-$gallery_spacer: $spacer - 10;
-
 .content ul.gallery {
   overflow: hidden;
 
@@ -7,6 +5,7 @@ $gallery_spacer: $spacer - 10;
     float: left;
     position: relative;
     width: 25%;
+    height: 125px;
     padding-bottom: 19%;
     @media #{$only_screen_and_max_width} {
       width: 33%;
@@ -14,13 +13,8 @@ $gallery_spacer: $spacer - 10;
     }
 
     a.thumbnail {
-      border: 1px solid #fff;
       display: block;
-      position: absolute;
-      left: $gallery_spacer;
-      right: $gallery_spacer;
-      top: $gallery_spacer;
-      bottom: $gallery_spacer;
+      margin: $gallery_spacer;
       overflow: hidden;
       background: url('/images/loading_indicator.gif') no-repeat center;
 
@@ -29,33 +23,33 @@ $gallery_spacer: $spacer - 10;
       }
 
       img {
+        border: $divider;
         width: 100%;
         display: none;
       }
     }
 
     div.details {
-      height: 100%;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      top: -180px;
-      background: #000;
-      opacity: 0.8;
-      color: #fff;
-      padding: $gallery_spacer;
-      @include transition-property(all);
-      @include transition-duration(0.2s);
-      @include transition-timing-function(ease-out);
-      @media #{$only_screen_and_max_width} {
-        top: -300px;
-      }
+      margin: $gallery_spacer;
 
-      small {
+      small, date {
+        display: inline-block;
+        margin-bottom: $spacer - 10;
+
+        &.blog:after {
+          content: '/';
+          margin-left: .5em;
+          display: inline-block;
+          @include small_text;
+        }
       }
 
       h2 {
+        margin-bottom: $spacer - 10;
+
+        a {
+          @include standard_heading;
+        }
       }
 
       date {
