@@ -1,7 +1,40 @@
 .project {
-  .column.images {
+  .images {
+    img {
+      width: 100%;
+      margin-bottom: $spacer * 2;
+    }
+
+    .image-column {
+      overflow: hidden;
+
+      .image {
+        float: left;
+        width: 49%;
+        overflow: hidden;
+
+        img {
+          float: left;
+          margin-right: $gallery_spacer;
+        }
+
+        &:nth-child(odd) {
+          float: right;
+        }
+      }
+    }
   }
 
-  .column.description {
+  .details {
+    border-top: $divider;
+    border-bottom: $divider;
+    padding: $spacer 0;
+    overflow: hidden;
+
+    .column.description {
+      h1 {
+        @include large_heading;
+      }
+    }
   }
 }
