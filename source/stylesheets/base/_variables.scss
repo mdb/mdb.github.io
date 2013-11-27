@@ -2,25 +2,7 @@
 $text_color: #313131;
 $inverse_text_color: #fff;
 $link_color: #0473ad;
-$heading_color: #cc191f;
-$highlight_color: #fecb00;
 $secondary_text_color: #8a8a8a;
-$text_color_reverse: #eee;
-$link_color_reverse: #2ca4e3;
-
-// Misc UI Elements
-$text_separator_color: #dbdbdb;
-$text_divider: 1px solid $text_separator_color;
-$content_image_width: 500px;
-
-// Thumbnails
-$thumb_width: 25%;
-$thumb_height: 25%;
-$gallery_item_height: $thumb_height;
-
-// Gradients
-$universal_nav_gradient_color1: #343434;
-$universal_nav_gradient_color2: #2a2a2a;
 
 // Font Styles
 $font_family: Georgia, 'Times New Roman', serif;
@@ -31,9 +13,23 @@ $small_font_size: 11px;
 // Heading Styles
 $h1_font_size: 15px;
 
+// Misc UI Elements
+$mark_dimensions: 100px;
+$divider_color: #dbdbdb;
+$divider: 1px solid $divider_color;
+$inverse_divider_color: #555;
+$inverse_divider: 1px solid $inverse_divider_color;
+$content_image_width: 500px;
+
+// Thumbnails
+$thumb_width: 25%;
+$thumb_height: 25%;
+$gallery_item_height: $thumb_height;
+
 // layout
-$container_width: 960px;
+$desktop_width: 960px;
 $spacer: 15px;
+$gallery_spacer: $spacer - 10;
 
 // breakpoints
 $break_point: 959px;
