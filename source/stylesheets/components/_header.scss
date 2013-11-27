@@ -15,6 +15,7 @@ header {
   @include responsive_width;
 
   .header-content {
+    overflow: hidden;
     height: $spacer + $mark_dimensions;
     padding-top: $spacer+ 10;
     position: fixed;
@@ -22,6 +23,12 @@ header {
     border-bottom: $divider;
     background: #fff;
     z-index: 1000;
+    @include responsive_width;
+
+    @media #{$only_screen_and_max_width} {
+      position: static;
+      height: auto;
+    }
   }
 
   h1 {
@@ -49,7 +56,6 @@ header {
   }
 
   nav {
-    @include quarter_column;
     height: $mark_dimensions;
     position: relative;
     @media #{$only_screen_and_max_width} {
@@ -75,6 +81,16 @@ header {
         a {
           @include small_text;
         }
+      }
+    }
+
+    &.tertiary {
+      ul.nav li a {
+        color: $tertiary_text_color;
+      }
+
+      @media #{$only_screen_and_max_width} {
+        display: none;
       }
     }
   }
