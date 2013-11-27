@@ -5,7 +5,8 @@ date_completed: Spring 2009
 thumbnail: brainworms_thumb.png
 tags: tshirt, illustration, collage
 images:
-  - brainworms.gif
+  - nested:
+    - brainworms.gif
 ---
 
 T-shirt design.
