@@ -24,6 +24,11 @@ section {
       font-size: $font_size + 5;
       line-height: $font_size + 5 * 2.8;
       color: $content_text_color;
+
+      @include breakpoint(mobile) {
+        font-size: $font_size + 4;
+        line-height: $font_size + 4 * 2.8;
+      }
     }
 
     p, ul {
