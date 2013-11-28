@@ -1,16 +1,22 @@
 section {
   padding-top: ($spacer * 4) + $mark_dimensions;
-  margin: 0 auto;
-  width: $desktop_width;
   @include breakpoint {
-    width: 100%;
-    padding-top: $spacer;
+    padding: $spacer;
   }
 }
 
 .content {
+  width: $desktop_width;
+  margin: 0 auto;
+
+  @include breakpoint {
+    width: 100%;
+  }
 
   article, .description {
+    @include breakpoint {
+    }
+
     p, li {
       font-size: $font_size + 5;
       line-height: $font_size + 5 * 2.8;
