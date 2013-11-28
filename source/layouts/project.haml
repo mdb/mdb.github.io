@@ -8,7 +8,7 @@
           - else
             = partial :nested_images, :locals => {:image_data => img_data}
     %div.details
-      %div.column.one-quarter
+      %div.column.one-quarter.metadata
         = partial :post_navigation, :locals => {:label => "project"}
         = partial :tags, :locals => {:item => current_article, :path_prefix => "projects"}
       %div.column.description.three-quarters

@@ -1,6 +1,6 @@
 - wrap_layout :layout do
   %div.content
-    %div.column.one-quarter
+    %div.column.one-quarter.metadata
       = partial :tags, :locals => {:item => current_article, :path_prefix => "blog"}
       = partial :post_navigation, :locals => {:label => "post"}
     %article.column.three-quarters
@@ -8,3 +8,6 @@
       %h1.title=current_article.title
       %date="Posted #{current_article.date.strftime('%B %e, %Y')}"
       = yield
+      %div.metadata
+        = partial :tags, :locals => {:item => current_article, :path_prefix => "blog"}
+        = partial :post_navigation, :locals => {:label => "post"}

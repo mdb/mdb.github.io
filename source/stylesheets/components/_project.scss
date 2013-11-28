@@ -42,25 +42,9 @@
     padding: $spacer 0;
     overflow: hidden;
 
-    .column.one-quarter {
-      @include breakpoint {
-        display: none;
-      }
-    }
-
     .column.description {
       h1 {
         @include large_heading;
-      }
-
-      .metadata {
-        display: none;
-        ul li {
-          margin-left: 0;
-        }
-        @include breakpoint {
-          display: block;
-        }
       }
     }
   }

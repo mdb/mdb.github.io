@@ -13,10 +13,13 @@ section {
     width: 100%;
   }
 
-  article, .description {
+  .column.metadata {
     @include breakpoint {
+      display: none;
     }
+  }
 
+  article, .description {
     p, li {
       font-size: $font_size + 5;
       line-height: $font_size + 5 * 2.8;
@@ -31,6 +34,18 @@ section {
       list-style-type: disc;
       list-style-position: outside;
       margin-left: $font_size + 5;
+    }
+
+    .metadata {
+      display: none;
+
+      ul li {
+        margin-left: 0;
+      }
+
+      @include breakpoint {
+        display: block;
+      }
     }
   }
 }
