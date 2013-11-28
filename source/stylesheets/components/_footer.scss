@@ -6,9 +6,6 @@ footer {
   background: #000;
   color: $inverse_text_color;
   overflow: hidden;
-  @include breakpoint {
-    padding: $spacer;
-  }
 
   section {
     padding-top: $spacer;
