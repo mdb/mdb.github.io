@@ -2,18 +2,30 @@ section {
   padding-top: ($spacer * 4) + $mark_dimensions;
   margin: 0 auto;
   width: $desktop_width;
-  @media #{$only_screen_and_max_width} {
+  @include breakpoint {
     width: 100%;
+    padding-top: $spacer;
   }
 }
 
 .content {
 
-  p {
-    font-size: $font-size + 5;
-    line-height: $font-size + 5 * 2.8;
-    margin-bottom: $spacer + $spacer/2;
-    color: #444;
+  article, .description {
+    p, li {
+      font-size: $font_size + 5;
+      line-height: $font_size + 5 * 2.8;
+      color: $content_text_color;
+    }
+
+    p, ul {
+      margin-bottom: $spacer + $spacer/2;
+    }
+
+    li {
+      list-style-type: disc;
+      list-style-position: outside;
+      margin-left: $font_size + 5;
+    }
   }
 }
 
