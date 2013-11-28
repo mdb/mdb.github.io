@@ -1,6 +1,6 @@
 
 @mixin responsive_header_elem {
-  @media #{$only_screen_and_max_width} {
+  @include breakpoint {
     float: none;
     margin: 0 auto;
     text-align: center;
@@ -25,7 +25,7 @@ header {
     z-index: 1000;
     @include responsive_width;
 
-    @media #{$only_screen_and_max_width} {
+    @include breakpoint {
       position: static;
       height: auto;
     }
@@ -58,7 +58,7 @@ header {
   nav {
     height: $mark_dimensions;
     position: relative;
-    @media #{$only_screen_and_max_width} {
+    @include breakpoint {
       height: auto;
       text-align: center;
     }
@@ -67,14 +67,14 @@ header {
       margin-left: $gallery_spacer;
       position: absolute;
       bottom: $spacer;
-      @media #{$only_screen_and_max_width} {
+      @include breakpoint {
         display: inline;
         position: static;
         text-align: center;
       }
 
       li {
-        @media #{$only_screen_and_max_width} {
+        @include breakpoint {
           display: inline;
         }
 
@@ -89,7 +89,7 @@ header {
         color: $tertiary_text_color;
       }
 
-      @media #{$only_screen_and_max_width} {
+      @include breakpoint {
         display: none;
       }
     }

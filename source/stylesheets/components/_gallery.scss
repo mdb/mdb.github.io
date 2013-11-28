@@ -7,7 +7,7 @@
     width: 25%;
     height: 125px;
     padding-bottom: 19%;
-    @media #{$only_screen_and_max_width} {
+    @include breakpoint {
       width: 33%;
       padding-bottom: 25%;
     }
@@ -50,12 +50,6 @@
         a {
           @include standard_heading;
         }
-      }
-
-      date {
-      }
-
-      ul.tags {
       }
     }
 

@@ -6,7 +6,7 @@ footer {
   background: #000;
   color: $inverse_text_color;
   overflow: hidden;
-  @media #{$only_screen_and_max_width} {
+  @include breakpoint {
     padding: $spacer;
   }
 
@@ -17,13 +17,13 @@ footer {
   .column {
     min-height: 300px;
     margin-bottom: $spacer;
-    @media #{$only_screen_and_max_width} {
+    @include breakpoint {
       min-height: 0;
     }
 
     h3, p, ul {
       width: 90%;
-      @media #{$only_screen_and_max_width} {
+      @include breakpoint {
         width: 100%;
       }
     }
