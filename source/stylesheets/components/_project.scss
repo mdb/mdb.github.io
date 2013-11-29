@@ -3,6 +3,7 @@
     img {
       width: 100%;
       margin-bottom: $spacer * 2;
+
       @include breakpoint {
         margin-bottom: $spacer;
       }
@@ -16,6 +17,10 @@
         float: left;
         width: 49%;
         overflow: hidden;
+
+        @include breakpoint {
+          width: 100%;
+        }
 
         img {
           float: left;
@@ -31,8 +36,17 @@
           margin-left: 25%;
           width: 75%;
 
+          @include breakpoint {
+            width: 100%;
+            margin-left: 0;
+          }
+
           img {
             width: auto;
+
+            @include breakpoint {
+              width: 100%;
+            }
           }
         }
       }
