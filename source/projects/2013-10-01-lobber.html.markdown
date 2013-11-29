@@ -2,8 +2,8 @@
 title: Lobber
 date: 2013/10/01
 date_completed: September 2013
-published: false
 tags: ruby, gem, aws
+thumbnail: lobber_thumb.png
 images:
   - lobber_github.png
 ---
