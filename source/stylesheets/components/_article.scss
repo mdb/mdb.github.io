@@ -9,10 +9,15 @@ article {
   }
 
   h2 {
-    margin-bottom: $spacer;
+    margin-bottom: $spacer + $spacer/2;
     font-weight: bold;
-    font-size: $font-size + 7;
-    line-height: $font-size + 7 * 2.8;
+    font-size: $font-size + 6;
+    line-height: ($font-size + 6) * 1.4;
+
+    @include breakpoint(mobile) {
+      font-size: $font-size + 3;
+      line-height: ($font-size + 3) * 1.4;
+    }
   }
 
   pre {
