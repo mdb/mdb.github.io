@@ -25,6 +25,10 @@ header {
     z-index: 1000;
     @include responsive_width;
 
+    &.unfix {
+      position: static;
+    }
+
     @include breakpoint {
       position: static;
       height: auto;
@@ -68,9 +72,10 @@ header {
       position: absolute;
       bottom: $spacer;
       @include breakpoint {
-        display: inline;
+        display: inline-block;
         position: static;
         text-align: center;
+        margin-bottom: $spacer/2;
       }
 
       li {
