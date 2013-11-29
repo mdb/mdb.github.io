@@ -21,7 +21,7 @@ This example assumes that the sprint began on July 1st and ended July 14th.
 git shortlog -sne --after=2012-07-23 --until=today
 ```
 
-##Who is Made Commits Related to Tests Within a Sprint?</h4>
+## Who Made Commits Related to Tests Within a Sprint?</h4>
 
 This example assumes that the sprint began on July 1st and ended July 14th, and that tests are contained within a <code>spec</code> directory.
 
