@@ -41,6 +41,7 @@ page "projects", :layout => :layout
 page "projects/tags/*", :layout => :layout
 page "/atom.xml", :layout => false
 page "/rss.xml", :layout => false
+page "/404.html"
 
 activate :directory_indexes
 activate :syntax, :line_numbers => true
