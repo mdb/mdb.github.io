@@ -28,9 +28,9 @@ header {
 
   h1 {
     @include quarter_column;
-    @include border-radius($mark_dimensions, $mark_dimensions);
 
     @include breakpoint {
+      @include border-radius($mark_dimensions, $mark_dimensions);
       margin-left: $spacer;
       margin-bottom: $spacer;
       display: inline-block;
