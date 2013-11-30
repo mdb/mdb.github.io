@@ -20,19 +20,8 @@ section {
   }
 
   article, .description {
-    p, li {
-      font-size: $font_size + 5;
-      line-height: ($font_size + 5) * 1.7;
-      color: $content_text_color;
-
-      @include breakpoint(mobile) {
-        font-size: $font_size + 3;
-        line-height: ($font_size + 3) * 1.6;
-      }
-    }
-
     p, ul {
-      margin-bottom: $spacer + $spacer/2;
+      @include body_type;
     }
 
     li {
@@ -51,6 +40,16 @@ section {
       @include breakpoint {
         display: block;
       }
+    }
+  }
+
+  &.fof {
+    h1 {
+      @include large_heading;
+    }
+
+    p {
+      @include body_type;
     }
   }
 }

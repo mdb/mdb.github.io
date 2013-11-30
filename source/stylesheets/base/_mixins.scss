@@ -1,6 +1,3 @@
-@mixin primary_heading {
-}
-
 @mixin responsive_width {
   @include breakpoint(desktop) {
     width: 100%;
@@ -63,5 +60,17 @@
 
   @else if $point == mobile {
     @media (max-width: $mobile_break_point)  { @content; }
+  }
+}
+
+@mixin body_type {
+  font-size: $font_size + 5;
+  line-height: ($font_size + 5) * 1.7;
+  color: $content_text_color;
+  margin-bottom: $spacer + $spacer/2;
+
+  @include breakpoint(mobile) {
+    font-size: $font_size + 3;
+    line-height: ($font_size + 3) * 1.6;
   }
 }
