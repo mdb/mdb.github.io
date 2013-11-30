@@ -1,5 +1,6 @@
 require 'redcarpet'
 require 'lib/template_helpers'
+require 'fog'
 
 helpers TemplateHelpers
 
@@ -57,6 +58,10 @@ configure :build do
   # Or use a different image path
   # set :http_prefix, "/Content/images/"
 end
+
+# Make middleman-sync work with AWS bucket name containing dots
+# https://github.com/karlfreeman/middleman-sync/issues/29
+Fog.credentials = {:path_style => true}
 
 # Deployment
 activate :sync do |sync|
