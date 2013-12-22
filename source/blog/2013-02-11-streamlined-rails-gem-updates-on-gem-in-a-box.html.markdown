@@ -22,7 +22,7 @@ activesupport
 railties
 ```
 
-<b>2.</b> Create a bash script in a <code>get_gems.sh</code> file to retrieve the gems from Rubygems.org. Note that I&#8217;ve specified a <code>VERSION</code> variable specifying the desired gems&#8217; version.
+<b>2.</b> Create a bash script in a <code>get_gems.sh</code> file to retrieve the gems from Rubygems.org. Note that I&#8217;ve created a <code>VERSION</code> variable specifying the desired gems&#8217; version.
 
 ```bash
 #!/bin/bash
@@ -34,7 +34,7 @@ for ARG in `cat $1`; do
 done
 ```
 
-<b>3.</b> Create a bash script in a <code>post_gems.sh</code> file to post the downloaded gems to your Gem in a Box. Note that I&#8217;ve specified a <code>VERSION</code> variable specifying the desired gems&#8217; version here too.
+<b>3.</b> Create a bash script in a <code>post_gems.sh</code> file to post the downloaded gems to your Gem in a Box. Note that I&#8217;ve created a <code>VERSION</code> variable specifying the desired gems&#8217; version here too.
 
 ```bash
 #!/bin/bash
