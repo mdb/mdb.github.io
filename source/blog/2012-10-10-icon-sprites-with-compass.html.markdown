@@ -9,7 +9,7 @@ Manually creating sprite images is time-consuming and subject to human error. Th
 
 <b>Solution</b>: Leverage <a href="http://compass-style.org/">Compass</a>'s spriting and looping features.
 
-Example: You have an icon set of 20 10x10px individual .png files. Their file names follow the convention icon_1.png, icon_2.png, and icon_3.png through icon_20.png.
+Example: You have an icon set of 20 10x10px individual .png files. Their file names follow the convention icon\_1.png, icon\_2.png, and icon\_3.png through icon\_20.png.
 
 ## Step 1: Install compass
 
@@ -34,7 +34,7 @@ Create and/or edit your compass project&#8217;s <code>scss/_sprite.scss</code> f
 ```scss
 $bit24-layout: smart
 $bit24-sprite-dimensions: true
-@import "images/sprites/icons/*.png"</code></pre>
+@import "images/sprites/icons/*.png"
 ```
 
 ## Step 4: Write SCSS
