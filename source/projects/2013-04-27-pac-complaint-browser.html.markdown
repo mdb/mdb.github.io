@@ -14,4 +14,4 @@ The map plots the details surrounding complaints filed with the Police Advisory 
 
 The map was built in an afternoon and uses Leaflet, Node.js, and Backbone. Its source code is available on [Github](https://github.com/mdb/phl-pac-complaint-browser).
 
-[View the map &raquo;](clapclapexcitement.s3-website-us-east-1.amazonaws.com/pac-complaint-browser/)
+[View the map &raquo;](http://clapclapexcitement.s3-website-us-east-1.amazonaws.com/pac-complaint-browser/)
