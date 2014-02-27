@@ -22,7 +22,7 @@ What does this look like? Generally, such tests take the form of what are called
 ## Why write tests?
 
 + Tests ensure that code works exactly as it should. A robust test suite can help identify the bugs an engineer failed to consider. How does the code perform if data is malformed? Is there a memory leak? Tests assist in identifying such problems before the code reaches users.
-+ Tests serve to document the software's assumptions and intent, as well as its business logic and requirements. Well-written tests help explain code; tests help facilitate better understanding across a team, now and in the future.
++ Tests serve to document the software's assumptions and intent, as well as its business logic and requirements. Well-written tests help explain code; tests facilitate better understanding across a team, now and in the future.
 + Tests make it easier to edit to the software's source code. Healthy software can easily accomodate rapid change to features and business requirements. When a source code edit produces test failures, an engineer is given the necessary insight to assess the edit's implications. Maybe the test failure prompts the engineer to reconsider her logic in making the edit, or maybe the test failure helps the developer identify exactly what additional edits must be made to fix the tests and accomodate the change.
 + Tests save time. Automated tests can rapidly assert software's health such that software can more confidently and more frequently be released to users.
 
