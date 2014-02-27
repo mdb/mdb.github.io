@@ -15,7 +15,9 @@ Recently, I ran into a colleague on the West Philly Route 34 trolley. We discuss
 
 ## High level definition
 
-What do I have in mind when I say "automated testing"? At a high level, I'm referring to some process through which software's source code can be executed and its quality verified. What does this look like? Generally, such tests take the form of what are called functional, integration, and/or unit tests and can be executed via a build tool, task manager, or some easy-to-start process. Popular build tools include [Rake](http://rake.rubyforge.org/) in the Ruby world, [Grunt](http://gruntjs.com/) and [Gulp](http://gulpjs.com/) for Node.js JavaScript, and [Maven](http://maven.apache.org/what-is-maven.html) in the Java world. Plain old [shell scripts](http://en.wikipedia.org/wiki/Shell_script) are fine too. Ideally, the automated tests are run by individual developers in development, as well as in [continuous integration](http://en.wikipedia.org/wiki/Continuous_integration). See [Travis CI](https://travis-ci.org/) and [Jenkins](http://jenkins-ci.org/) for go-to continuous integration solutions.
+What do I have in mind when I say "automated testing"? At a high level, I'm referring to some process through which software's source code can be executed and its quality verified.
+
+What does this look like? Generally, such tests take the form of what are called functional, integration, and/or unit tests and can be executed via a build tool, task manager, or some easy-to-start process. Popular build tools include [Rake](http://rake.rubyforge.org/) in the Ruby world, [Grunt](http://gruntjs.com/) and [Gulp](http://gulpjs.com/) for Node.js JavaScript, and [Maven](http://maven.apache.org/what-is-maven.html) in the Java world. Plain old [shell scripts](http://en.wikipedia.org/wiki/Shell_script) are fine too. Ideally, the automated tests are run by individual developers in development, as well as in [continuous integration](http://en.wikipedia.org/wiki/Continuous_integration). See [Travis CI](https://travis-ci.org/) and [Jenkins](http://jenkins-ci.org/) for go-to continuous integration solutions.
 
 ## Why write tests?
 
