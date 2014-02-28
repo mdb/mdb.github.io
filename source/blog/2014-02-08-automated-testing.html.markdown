@@ -24,7 +24,7 @@ What does this look like? Generally, such tests take the form of what are called
 + Tests ensure that code works exactly as it should. A robust test suite can help identify the bugs an engineer failed to consider. How does the code perform if data is malformed? Is there a memory leak? Tests assist in identifying such problems before the code reaches users.
 + Tests serve to document the software's assumptions and intent, as well as its business logic and requirements. Well-written tests help explain code; tests facilitate better understanding across a team, now and in the future.
 + Tests make it easier to edit to the software's source code. Healthy software can easily accomodate rapid change to features and business requirements. When a source code edit produces test failures, an engineer is given the necessary insight to assess the edit's implications. Maybe the test failure prompts the engineer to reconsider her logic in making the edit, or maybe the test failure helps the developer identify exactly what additional edits must be made to fix the tests and accomodate the change.
-+ Tests save time. Automated tests can rapidly assert software's health such that software can more confidently and more frequently be released to users.
++ Tests save time. Automated tests can rapidly assert software's health such that code can more confidently and more frequently be released to users.
 
 ## Where can I learn more?
 
@@ -40,7 +40,7 @@ I like [Rspec](http://rspec.info/) for testing Ruby; tools like [VCR](https://ww
 
 To test JavaScript, I most often use [Jasmine](http://jasmine.github.io/), though I've also turned to [Mocha](http://visionmedia.github.io/mocha/) and [Chai](http://chaijs.com/). [Phantomjs](http://phantomjs.org/) is a headless webkit; it allows you to run your tests without a GUI web browser and works well with the aforementioned frameworks. If you're using Ruby on Rails, [teaspoon](https://github.com/modeset/teaspoon) is a flexible test runner that elegantly integrates these tools with consideration for the Rails Asset Pipeline. To measure code coverage, [istanbul](http://gotwarlost.github.io/istanbul/) leads the way.
 
-Functional tests that simulate end-user behavior are a bit more tricky in my experience, though a combination of [cucumber](http://cukes.info/), [selenium](http://docs.seleniumhq.org/), and [capybara](http://jnicklas.github.io/capybara/) provides a powerful ecosystem. Here again, [phantomjs](http://phantomjs.org/) can be helpful in providing a headless environment. If you prefer to write such functional tests in JavaScript, [Zombie](http://zombie.labnotes.org/) and similar tools seem promising.
+Functional tests that simulate end-user behavior are a bit more tricky in my experience, though a combination of [Cucumber](http://cukes.info/), [Selenium](http://docs.seleniumhq.org/), and [Capybara](http://jnicklas.github.io/capybara/) provides a powerful ecosystem. Here again, [Phantomjs](http://phantomjs.org/) can be helpful in providing a headless environment. If you prefer to write such functional tests in JavaScript, [Zombie](http://zombie.labnotes.org/) and similar tools seem promising.
 
 ## Some more specific resources
 
