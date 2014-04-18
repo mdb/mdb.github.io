@@ -6,7 +6,7 @@
       userId: null,
       accessToken: null,
       template: "#instagram-template",
-      show: 8,
+      count: 8,
     }, options);
 
     this.get = function () {
@@ -28,7 +28,7 @@
 
     this._getItems = function (data) {
       var items = [],
-          length = data.data.length < this.config.show ? data.data.length : this.config.show,
+          length = data.data.length,
           i;
 
       for(i=0; i<length; i++) {
@@ -49,7 +49,7 @@
       var params = {};
 
       params.access_token = this.config.accessToken;
-      params.show = this.config.show;
+      params.count = this.config.count;
 
       return params;
     };
