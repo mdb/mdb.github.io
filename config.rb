@@ -41,6 +41,7 @@ page "projects", :layout => :layout
 page "projects/tags/*", :layout => :layout
 page "/atom.xml", :layout => false
 page "/rss.xml", :layout => false
+page "/posts.json", :layout => false
 page "/404.html"
 
 activate :directory_indexes
