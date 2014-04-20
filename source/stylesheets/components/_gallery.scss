@@ -28,7 +28,6 @@
       }
 
       img {
-        @include box-shadow($secondary_text_color 0px 0px 10px);
         width: 100%;
         display: none;
       }
