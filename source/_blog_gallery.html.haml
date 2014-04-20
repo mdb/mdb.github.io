@@ -1,7 +1,8 @@
 - exclude = exclude || nil
 - limit = limit || nil
+- display_teaser = display_teaser || nil
 - articles = blog_posts({exclude: exclude, limit: limit})
 
-%ul.gallery
+%ul.gallery.blog
   - articles.each do |article|
-    = partial :gallery_item, :locals => {:item => article, :type => "blog"}
+    = partial :gallery_item, :locals => {item: article, type: "blog", display_teaser: display_teaser}

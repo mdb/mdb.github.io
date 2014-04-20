@@ -1,4 +1,5 @@
-- type = type or 'blog'
+- type = type || 'blog'
+- display_teaser = display_teaser || nil
 
 %li.item
   %a{:class => "thumbnail", :href => item.url}
@@ -14,4 +15,6 @@
       %small Project
     %h2
       %a{:href => item.url}=item.title
+    - if display_teaser
+      %p.teaser=item.data.teaser
     = partial :tags, :locals => {:item => item, :path_prefix => type}

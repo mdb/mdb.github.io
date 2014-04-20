@@ -3,6 +3,7 @@ title: Nicar 2013 Conference
 date: 2013/03/04
 tags: nicar, journalism
 thumbnail: ire_thumb.png
+teaser: A few NICAR 2013 highlights and reflections.
 ---
 
 <em>On February 27 &ndash; March 2, I attended NICAR 2013 in Louisville, Kentucky. My attendance was generously funded through a Temple University Center for Public Interest Journalism sponsorship.</em>

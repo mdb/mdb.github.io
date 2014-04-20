@@ -3,6 +3,7 @@ title: Using Google Spreadsheets and Tabletop.js as a Web Application Back-end
 date: 2013/03/02
 tags: javascript, nicar
 thumbnail: pyramid_thumb.png
+teaser: How to use Tabletop.js as your JavaScript app's datastore.
 ---
 
 At <a href="http://ire.org/events-and-training/event/315">NICAR 2013</a>, <a href="http://tasneemraja.com">Tasneem Raja</a> spoke on <a href="http://ire.org/events-and-training/event/315/623">Smarter interactive Web projects with Google Spreadsheets and Tabletop.js</a>. Tasneem is <em>Mother Jones</em>&#8216;s Interactive Editor; she outlined how <em>Mother Jones</em> uses Google Spreadsheets to power some of its interactive features.

@@ -59,6 +59,25 @@
           @include standard_heading;
         }
       }
+
+      p.teaser {
+        margin-bottom: $spacer - 10;
+        font-style: italic;
+        color: $secondary_text_color;
+      }
+    }
+  }
+}
+
+body.index {
+  ul.gallery.blog {
+    li.item {
+      height: 200px;
+
+      // TODO: mobile blog posts should not be thumbnail gallery
+      @include breakpoint(mobile) {
+        height: 5px;
+      }
     }
   }
 }

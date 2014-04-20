@@ -3,6 +3,7 @@ title: A Simple Ruby Class Example
 date: 2014/03/30
 tags: ruby, rspec, TDD, HTTP
 thumbnail: beach_chair_thumb.png
+teaser: A basic Ruby class example to illustrate a few of the language's features.
 ---
 
 Some colleagues asked about basic Ruby examples. The following RemoteConfig class makes an HTTP request and provides an object-oriented interface to XML served at the URL requested. The class serves as simple intro to some common needs and Ruby-oriented language features:

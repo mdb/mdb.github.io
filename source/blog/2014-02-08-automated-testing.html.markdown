@@ -3,6 +3,7 @@ title: 'Automated Tests: What, Why, How?'
 date: 2014/02/08
 tags: TDD, jasmine, Rspec, automation
 thumbnail: trianglescape_thumb.png
+teaser: An overview of automated tests for the uninitiated.
 ---
 
 In recent years, automated testing has gained significant traction as a software development best practice. But not everyone's sold or fully understands where to begin in developing such tests.
