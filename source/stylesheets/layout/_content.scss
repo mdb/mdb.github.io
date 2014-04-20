@@ -64,3 +64,14 @@ body {
     }
   }
 }
+
+h1.divider {
+  &.homepage-projects {
+    padding-top: 0;
+  }
+
+  &.homepage-blog-posts {
+    border-top: $divider;
+  }
+
+}

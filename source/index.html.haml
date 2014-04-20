@@ -1,3 +1,6 @@
 %div.content-wrap
   %div.content
-    = partial :mixed_gallery
+    %h1.divider.homepage-projects Recent Projects | <a href="/projects">View all</a>
+    = partial :project_gallery, :locals => { limit: 12 }
+    %h1.divider.homepage-blog-posts Blog | <a href="/blog">View all</a>
+    = partial :blog_gallery, :locals => { limit: 4 }

@@ -41,12 +41,12 @@ module TemplateHelpers
     blog_posts.concat(project_posts).sort_by{ |post| post.date }.reverse
   end
 
-  def blog_posts
-    blog('blog').articles
+  def blog_posts(options = {})
+    fetch_posts('blog', options)
   end
 
-  def project_posts
-    blog('projects').articles
+  def project_posts(options = {})
+    fetch_posts('projects', options)
   end
 
   def is_blog_post(item)
@@ -64,6 +64,22 @@ module TemplateHelpers
       'blog'
     else
       'blog'
+    end
+  end
+
+  # private-by-convention helper
+  def fetch_posts(type, options)
+    opts = {
+      exclude: nil,
+      limit: nil
+    }.merge(options)
+
+    posts = blog(type).articles.reject { |post| post == opts[:exclude] }
+
+    if opts[:limit].nil?
+      posts
+    else
+      posts.first(opts[:limit])
     end
   end
 end

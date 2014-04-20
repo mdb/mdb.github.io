@@ -1,5 +1,7 @@
-- exclude = exclude or nil
+- limit = limit || nil
+- exclude = exclude || nil
+- projects = project_posts({limit: limit, exclude: exclude})
+
 %ul.gallery
-  - blog('projects').articles.each do |project|
-    - unless project == exclude
-      = partial :gallery_item, :locals => {:item => project, :type => "projects"}
+  - projects.each do |project|
+    = partial :gallery_item, :locals => {:item => project, :type => "projects"}
