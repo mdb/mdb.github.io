@@ -8,3 +8,4 @@ gem "redcarpet"
 gem "middleman-syntax"
 gem "middleman-livereload", "~> 3.1.0"
 gem "pry"
+gem 'rb-readline'
