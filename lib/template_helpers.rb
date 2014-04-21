@@ -17,6 +17,14 @@ module TemplateHelpers
     end
   end
 
+  def gallery_item_classes(display_teaser = false)
+    if display_teaser
+      "item teaser"
+    else
+      "item"
+    end
+  end
+
   def default_thumb_path
     image_path("blog/thumbnails/default_thumb.gif")
   end

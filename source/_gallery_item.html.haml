@@ -1,7 +1,7 @@
 - type = type || 'blog'
 - display_teaser = display_teaser || nil
 
-%li.item
+%li{:class => gallery_item_classes(display_teaser)}
   %a{:class => "thumbnail", :href => item.url}
     - if type == 'blog'
       %img{:src => blog_thumb_path(item.data.thumbnail)}
