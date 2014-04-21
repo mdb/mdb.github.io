@@ -3,6 +3,7 @@ title: Using Mocha to Test a Node.js Server
 date: 2012/08/15
 tags: javascript, node.js, mocha, tdd
 thumbnail: pattern_thumb.png
+teaser: Using Node.js's fork to write tests against a server.
 ---
 
 How do you write Mocha tests against a Node.js server and run the tests during development, presumably while your server is already running?

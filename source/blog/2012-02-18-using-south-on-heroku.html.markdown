@@ -3,6 +3,7 @@ title: Using South on a Heroku-hosted Django Project
 date: 2012/02/18
 tags: django, heroku, south
 thumbnail: cloud_thumb.png
+teaser: How to add new fields to an existing, Heroku-hosted Django project's database.
 ---
 
 <b>Problem</b>: You need to add new fields to the admin of a Django project hosted on Heroku but don't want to destroy data by running <code>syncdb</code> on your Heroku-hosted database.

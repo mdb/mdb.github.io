@@ -3,6 +3,7 @@ title: Collecting Basic Team and Sprint Metrics with Git
 date: 2012/08/11
 tags: git, metrics
 thumbnail: waves_thumb.png
+teaser: Leveraging git in collecting team performance metrics. Management likes numbers.
 ---
 
 Per recent co-worker interest in metrics surrounding team performance, the following offer a few simple techniques for extracting team-health-oriented metrics from a git repository. Note that these are just a few basic solutions which require minimal tooling. Many alternative and more-developed solutions exist too.

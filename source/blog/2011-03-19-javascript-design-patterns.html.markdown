@@ -3,6 +3,7 @@ title: JavaScript Design Patterns
 date: 2011/03/19
 tags: javascript, notes
 thumbnail: pink_pattern_thumb.png
+teaser: My notes on Addy Osmani's JavaScript design patterns ebook.
 ---
 
 Addy Osmani offers Essential [JavaScript & jQuery Design Patterns For Beginners](http://www.addyosmani.com/resources/essentialjsdesignpatterns/book/) as a free guide to some solutions "that can be applied to commonly occurring problems" throughout JavaScript. Here are a few of my notes on Osmani’s book, mostly for my own reference:

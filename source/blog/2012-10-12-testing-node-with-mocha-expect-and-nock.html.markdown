@@ -3,6 +3,7 @@ title: Testing Node.js with Mocha, Expect.js, and Nock
 date: 2012/10/12
 tags: javascript, node.js, mocha, tdd
 thumbnail: yellow_spark_thumb.png
+teaser: A technique for mocking HTTP requests in your Node.js tests.
 ---
 
 <strong>Problem</strong>: Your Node.js code uses <a href="https://github.com/voxpelli/node-request">request</a> or <a href="http://nodejs.org/api/http.html">http</a> to make http requests to URLs. You don&#8217;t want to make actual http calls, nor do you want to test request and/or http. How can you test that your code works as intended and interfaces properly with request and http?

@@ -3,13 +3,14 @@ title: Rails API Integration Tests
 date: 2014/04/17
 tags: ruby, rspec, continuous integration
 published: false
+teaser: A simple patterns for authoring integration tests for a Rails app.
 ---
 
-The web services model encourages the development of small, modular applications rather than monolithic all-in-one applications. Often, this paradigm involves the development of client applications that rely upon third party, upstream Rest web services. Labor and responsibilities are divided and conquered across smaller, more manageable codebases and teams. But how can the client application verify graceful integration?
+The web services model encourages the development of small, modular applications rather than monolithic all-in-one applications. Often, this paradigm involves the development of clients that rely upon third party, upstream RESTful web services. Labor and responsibilities are divided and conquered across smaller, more manageable codebases and teams. But how can the client application verify graceful integration? With a large user-base, such insight is increasingly critical.
 
-<b>Example</b>: You're deploying a Rails application that consumes a third party Rest API, massages its data, and serves JSON. Unit tests stub HTTP requests with webmock; they verify that the application behaves as expected given prescribed data scenarios. But how do you ensure that both the upstream service, as well as your application, <i>actually</i> integrate as expected in a production scenario with real HTTP transactions, not just the stubbed responses you anticipate? How will you know in advance if your release candidate fails to gracefully handle an unnoticed third party API change?
+<b>Example</b>: You're deploying a Rails application that consumes a third party Rest API, massages its data, and serves JSON. Unit tests stub HTTP requests with webmock; they verify that the application behaves as expected given prescribed data scenarios. But how do you ensure that both the upstream service, as well as your application, <i>actually</i> integrate as expected in a production scenario with real HTTP transactions, not just the stubbed responses you anticipate? How will you know in advance if your release candidate fails to gracefully handle an unnoticed third party API change? Or if you've introduced a bug in consuming third party data?
 
-API versioning and hypermedia standards such as [HAL](http://stateless.co/hal_specification.html) promise non-breaking changes; from this perspective such verification is arguably unnecessary. But what about human error and unanticipated problems? What about services that don't promise non-breaking changes?
+API versioning and hypermedia standards such as [HAL](http://stateless.co/hal_specification.html) promise non-breaking changes; from this perspective such verification is arguably unnecessary. But what about human error and unanticipated problems? Mistakes happen. And what about services that don't promise non-breaking changes?
 
 <b>Solution</b>: Simple Rspec integration tests ensure your application appropriately handles real HTTP requests against the third party service. The following offers a basic pattern in Rails. I assume you're using [Rspec](http://rspec.info/) and that your unit tests stub HTTP request with [webmock](https://github.com/bblimke/webmock).
 

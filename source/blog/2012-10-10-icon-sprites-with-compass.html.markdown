@@ -3,6 +3,7 @@ title: Icon Sprites with Compass
 date: 2012/10/10
 tags: compass, scss, css
 thumbnail: scallops_thumb.png
+teaser: CSS authoring can hurt. Compass abstracts away the pain.
 ---
 
 Manually creating sprite images is time-consuming and subject to human error. The corresponding CSS is often verbose and largely repetitive.

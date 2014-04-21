@@ -3,6 +3,7 @@ title: Using the civic-info Node.js Module to Get Voter and Election Info
 date: 2012/11/08
 tags: javascript, node.js, civi-info, opendata
 thumbnail: vote_thumb.png
+teaser: A quick tutorial in using a simple NPM module I built.
 ---
 
 <p>Inspired by election apps like <a href="https://github.com/joannecheng/vote">vote</a>, I wrote <a href="http://github.com/mdb/civic-info.js">civic-info.js</a>, a simple Node.js module to interface with Google&#8217;s <a href="https://developers.google.com/civic-information">Civic Info API</a>.<br />

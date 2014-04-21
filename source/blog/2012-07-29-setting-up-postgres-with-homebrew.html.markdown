@@ -3,6 +3,7 @@ title: Setting Up Postgres on Mac OSX with Homebrew
 date: 2012/07/29
 tags: postgres, notes, mac osx
 thumbnail: computer_thumb.png
+teaser: My notes on getting postgres running on Mac OS via a homebrew installation.
 ---
 
 I ran into some challenges installing postgres via homebrew. I attempted to follow <a href="">these instruction</a>, as is advised by the postgres website but ran into further problems. The following steps outline how I was able to finally work around the problems. Note that I'm using Mac OSX 10.6.8.

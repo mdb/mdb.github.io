@@ -3,6 +3,7 @@ title: OurPhiladelphia.org Launched
 date: 2010/02/28
 tags: django, open source
 thumbnail: our_phila_thumb.png
+teaser: Some colleagues and I recently released ourphiladelphia.org.
 ---
 
 Last month, Gabriel Farrell, Cecily Anderson, and I launched [OurPhiladelphia.org](http://ourphiladelphia.org) for our client, Common Cause, a nonprofit, nonpartisan citizen’s lobbying organization working to promote open, honest, and accountable government. While we plan to enhance and grow its functionality in the future, we hope this initial iteration of the site proves useful in helping Philadelphians access information about local politics. Our goal is to help create an open, honest, and accountable local government that serves the public interest.

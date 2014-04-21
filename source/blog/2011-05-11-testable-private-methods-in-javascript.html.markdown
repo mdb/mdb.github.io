@@ -3,6 +3,7 @@ title: How to Make Testable Private Methods in JavaScript
 date: 2011/05/11
 tags: javascript, notes, tdd
 thumbnail: lock_thumb.png
+teaser: A controversial technique for writing unit tests against private methods.
 ---
 
 <b>Problem</b>: how to write unit tests for private functions?

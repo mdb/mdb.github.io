@@ -3,6 +3,7 @@ title: Using the phl_geocode Ruby Gem
 date: 2012/12/17
 tags: ruby, philadelphia, gem
 thumbnail: default_thumb.gif
+teaser: An overview of a small Ruby gem I built on Philadelphia's public geodata.
 ---
 
 I recently released <a href="http://github.com/mdb/phl_geocode.rb">phl_geocode</a>, a simple Ruby gem which gets latitude and longitude coordinates for a Philadelphia address.

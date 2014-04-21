@@ -5,6 +5,7 @@ date: 2011/01/18
 published: false
 tags: ruby, ruby on rails, notes
 thumbnail: diamond_thumb.png
+teaser: Some old instructions collected for a team of Rails newcomers.
 ---
 
 <b>NOTE:</b> These instructions are a bit old and were documented in 2011 for a few CIM colleagues.

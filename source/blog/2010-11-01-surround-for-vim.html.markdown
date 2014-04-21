@@ -3,6 +3,7 @@ title: Basic Overview of the Surround Plugin for Vim
 date: 2010/11/01
 tags: vim, notes
 thumbnail: blocks_thumb.png
+teaser: My notes on using Vim's surround plugin.
 ---
 
 Surround is a useful Vim plugin when hand-editing HTML or XML. The plugin can be downloaded via Github or the Vim website and installed by copying the /plugin/surround.vim file to your ~/.vim/plugin/ directory. A few of its basic commands are as follows. Note that each command is entered from within the text to be surrounded:

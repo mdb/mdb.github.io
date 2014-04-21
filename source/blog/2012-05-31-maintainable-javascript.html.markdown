@@ -3,6 +3,7 @@ title: "Fluent 2012 Notes: Nicholas Zakas on Maintainable JavaScript"
 date: 2012/05/31
 tags: javascript, fluent
 thumbnail: glasses_thumb.png
+teaser: My notes on Nichalas Zakas' Fluent 2012 talk.
 ---
 
 <p><em>My notes from <a href="http://www.nczonline.net/">Nicholas Zakas</a>' 2012 Fluent talk on Maintainable JavaScript.</em></p>

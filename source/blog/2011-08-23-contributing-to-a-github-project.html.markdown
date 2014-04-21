@@ -3,6 +3,7 @@ title: How to Contribute to a Project on GitHub
 date: 2011/08/23
 tags: github, git, open source
 thumbnail: github_thumb.png
+teaser: A simple how-to outlining the Github fork, branch, and PR workflow.
 ---
 
 A quick how-to in contributing to an open source project hosted on GitHub. These instructions assume you've already created a GitHub account and properly [set up your machine](https://help.github.com/articles/set-up-git). For more details, GitHub also publishes [similar instructions](https://help.github.com/articles/fork-a-repo).

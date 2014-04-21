@@ -3,6 +3,7 @@ title: Basic Command Line Tools
 date: 2011/08/30
 tags: bash, command line, notes
 thumbnail: prompt_thumb.png
+teaser: Some beginner's notes; collected for a recently-hired junior developer.
 ---
 
 A co-worker expressed interest in learning more Unix command line operations. This collection seeks to supplement his basic knowledge with some additional tips and tools.

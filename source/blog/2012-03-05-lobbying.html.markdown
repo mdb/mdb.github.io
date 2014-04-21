@@ -3,6 +3,7 @@ title: "Lobbying.ph"
 date: 2012/03/05
 tags: code for america, ruby, sinatra, open data
 thumbnail: cfa_thumb.jpg
+teaser: Leveraging open data to track Philly lobbying efforts.
 ---
 
 <i><b>Update</b>: Casey Thomas migrated the original Lobbing.ph to Django and extended its functionality.</i>

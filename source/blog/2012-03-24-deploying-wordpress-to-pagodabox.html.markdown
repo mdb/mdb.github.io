@@ -3,6 +3,7 @@ title: Deploying Wordpress to Pagodabox
 date: 2012/03/24
 tags: wordpress, cloud, pagodabox
 thumbnail: pagodabox_thumb.png
+teaser: A beginner's guide to deploying a Wordpress app to Pagodabox's cloud service.
 ---
 
 Services such as [Heroku](http://www.heroku.com/) provide cloud deployment options for Rails, Sinatra, Django, and Node.js applications, but what about Wordpress? Pagodabox seems promising. Here's how to set up a Wordpress Pagodabox deployment workflow.

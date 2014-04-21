@@ -3,6 +3,7 @@ title: How to Exclude Files from SVN Commits
 date: 2010/12/09
 tags: subversion, notes, bash
 thumbnail: hand_thumb.png
+teaser: A bash function for working around a Subversion annoyance.
 ---
 
 In Subversion, <code>svn commit</code> will commit all edited files to the central repository. In the event that I want to selectively commit only a few of my edited files, it's necessary to specify the full path to each file with <code>svn commit /full/path/to/filename1 /full/path/to/filename2 /full/path/to/filename3</code>. This can be time-consuming. Plus, it's often easier to selectively exclude files from a given commit, but Subversion doesn't offer this feature.

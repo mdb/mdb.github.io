@@ -3,6 +3,7 @@ title: "Quiet Logger: HTML5 WordPress Theme"
 date: 2010/03/26
 tags: HTML5, open source, wordpress
 thumbnail: quiet_logger_thumb.png
+teaser: An overview of a basic Wordpress theme I was tasked in creating.
 ---
 
 Given increasing enthusiasm for HTML5, as well as an interest in light-weight Wordpress themes, I created Quiet Logger, a minimal WordPress theme typeset in Baskerville and coded with HTML5.

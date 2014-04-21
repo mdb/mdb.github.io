@@ -4,6 +4,7 @@ date: 2010/10/26
 tags: git, notes
 published: false
 thumbnail: default_thumb.gif
+teaser: My notes on how I set up git repo hosting on Webfaction.
 ---
 
 <b>NOTE</b>: This documentation is old; I don't know if these instructions still work. These days, I recommend [BitBucket](https://bitbucket.org) if you need free, private Git repositories.

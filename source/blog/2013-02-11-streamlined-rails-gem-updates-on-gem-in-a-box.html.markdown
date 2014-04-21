@@ -3,6 +3,7 @@ title: Streamlined Rails Gem Updates on Gem in a Box
 date: 2013/02/11
 tags: ruby, gems, shell
 thumbnail: jumble_thumb.png
+teaser: Some small shell scripts to automate manual gem downloads & uploads.
 ---
 
 <strong>Problem</strong>: Per recent Ruby on Rails security patches, you need to update your Rails applications. However, because you host Rails and its related gems on a private <a href="https://github.com/cwninja/geminabox">Gem in a Box</a> gem server, it&#8217;s a bit cumbersome to manually download the necessary gems from <a href="http://rubygems.org">Rubygems.org</a>, and then upload them to your Gem in a Box gem server.

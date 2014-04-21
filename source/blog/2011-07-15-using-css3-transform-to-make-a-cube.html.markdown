@@ -3,6 +3,7 @@ title: "CSS3: Using Transform to Make a Cube"
 date: 2011/07/15
 tags: css3
 thumbnail: cube_thumb.png
+teaser: My quick solution to a CSS challenge.
 ---
 
 CSS transforms! The following works in IE9 and above, as well as modern versions of Firefox, Safari, Chrome, and Opera. There's probably a trickier way this could be done with less markup, leveraging the <code>:before</code> and <code>:after</code> pseudo classes.
