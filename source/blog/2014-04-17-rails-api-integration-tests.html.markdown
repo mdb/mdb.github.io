@@ -2,7 +2,7 @@
 title: Rails API Integration Tests
 date: 2014/04/17
 tags: ruby, rspec, continuous integration
-published: false
+thumbnail: legos_thumb.png
 teaser: A simple patterns for authoring integration tests for a Rails app.
 ---
 
@@ -36,7 +36,13 @@ end
 WebMock.disable_net_connect!
 ```
 
-Add an integration test to `spec/integration/:
+Create an integration test file:
+
+```bash
+$ touch spec/integration/api/user_spec.rb
+```
+
+And add the following test code:
 
 ```ruby
 require 'spec_helper'
@@ -62,6 +68,12 @@ end
 ```
 
 Create a Rake task to run the integration tests:
+
+```bash
+$ touch lib/tasks/integration.rake
+```
+
+With the following code:
 
 ```ruby
 require 'rspec/core/rake_task'
