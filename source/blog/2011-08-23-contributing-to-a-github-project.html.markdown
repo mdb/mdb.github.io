@@ -59,6 +59,12 @@ git add someFile.js
 git commit -m "Your commit message."
 ```
 
+Push your new branch to GitHub:
+
+```
+git push origin branchName
+```
+
 Visit your forked project on GitHub and switch to your branchName branch.
 
 Click “Pull Request” to request that your features be merged to the “upstream” master.
