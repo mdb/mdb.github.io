@@ -8,7 +8,6 @@ teaser: A beginner's tutorial in deploying a Node.js app to Heroku.
 
 Some coworkers expressed interest in deploying <a href="http://expressjs.com">Express</a> apps to <a href="http://heroku.com">Heroku</a>. These instructions seek to provide a basic overview, though Heroku offers much more robust documentation in its <a href="https://devcenter.heroku.com">dev center</a>.
 
-
 Step 1: Create a <a href="https://api.heroku.com/signup">Heroku</a> account.
 
 Step 2: Install the <a href="https://toolbelt.herokuapp.com">Heroku Toolbelt</a>, which includes the Heroku command line client, Git, and Foreman.</li>
@@ -105,7 +104,7 @@ heroku create
 Deploy the code to Heroku:
 
 ```
-git push heroku master</code></pre>
+git push heroku master
 ```
 
 Step 9: View your Heroku-hosted app in your web browser:
