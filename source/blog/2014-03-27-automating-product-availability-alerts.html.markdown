@@ -2,10 +2,11 @@
 title: Automating Product Availability Alerts
 date: 2014/03/27
 published: false
-tags: twilio, sinatra, capybara, automation
+tags: heroku, twilio, sinatra, capybara, automation
+teaser: Too much internet. Automate your web browsing.
 ---
 
-<strong>Problem</strong>: I'm renovating my kitchen. The Ikea sink I want is currently unavailable but may be back in stock any day, though the Ikea website requires its users to jump through some hoops in determining the sink's availabilty.
+<strong>Problem</strong>: I'm renovating my kitchen. The Ikea sink I want is currently unavailable but may be back in stock any day, though Ikea's website requires its users to jump through some hoops in determining the sink's availabilty.
 
 <strong>Solution</strong>: I made a web service that monitors the Ikea website and sends me a text message if the sink is suddenly in stock again.
 
