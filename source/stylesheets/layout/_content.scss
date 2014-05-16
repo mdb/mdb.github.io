@@ -28,6 +28,8 @@ section {
       list-style-type: disc;
       list-style-position: outside;
       margin-left: $font_size + 5;
+      @include body_type;
+      margin-bottom: $spacer/2;
     }
 
     .metadata {
