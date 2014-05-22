@@ -8,7 +8,7 @@ images:
   - times_grapher_1.png
 ---
 
-TimesGrapher seeks to shed light on what topis are covered by the New York Times from year-to-year. The simple application leverages the [New York Times API](http://developer.nytimes.com/docs) to visualize the differences in coverage offered to any two topics in any year between 1981 and 2013, in effect providing insight on the year-to-year relevancy of current events, as well as arguable editorial bias.
+TimesGrapher seeks to shed light on what topics are covered by the New York Times from year-to-year. The simple application leverages the [New York Times API](http://developer.nytimes.com/docs) to visualize the differences in coverage offered to any two topics in any year between 1981 and 2013, in effect providing insight on the year-to-year relevancy of current events, as well as arguable editorial bias.
 
 The application is built with [Rails](http://rubyonrails.org) and [Backbone.js](http://backbonejs.org).
 
