@@ -75,4 +75,26 @@
       }
     }
   }
+
+  &.blog {
+
+    li.item {
+      width: 100%;
+      height: auto;
+      padding: ($spacer - 10) 0;
+      border-bottom: $divider;
+
+      a.thumbnail {
+        @include breakpoint(mobile) {
+          display: none;
+        }
+      }
+
+      div.details {
+        @include breakpoint(mobile) {
+          display: block;
+        }
+      }
+    }
+  }
 }
