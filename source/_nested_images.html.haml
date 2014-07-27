@@ -1,4 +1,4 @@
 %ul.image-column
   - image_data.nested.each_with_index do |nested_img, i|
-    %li{:class => "image #{first_or_last_class(image_data.nested, i)}"}
-      %img{:src => "/images/projects/work/#{nested_img}"}
+    %li{class: "image #{first_or_last_class(image_data.nested, i)}"}
+      %img{src: "/images/projects/work/#{nested_img}"}

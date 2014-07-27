@@ -16,26 +16,26 @@
     %header
       %div.header-content
         %h1
-          %a{:href => "/", :title => 'Home'}
+          %a{href: "/", title: 'Home'}
             Mike Ball
         %nav.primary.column.one-quarter
           %ul.nav
             %li
-              %a{:href => '/blog'} Blog
+              %a{href: '/blog'} Blog
             %li
-              %a{:href => '/projects'} Recent Projects
+              %a{href: '/projects'} Recent Projects
         %nav.secondary.column.one-quarter
           %ul.nav
             %li
-              %a{:href => '#info'} About
+              %a{href: '#info'} About
             %li.contact
-              %a{:href => '#info'} Contact
+              %a{href: '#info'} Contact
         %nav.tertiary.column.one-quarter
           %ul.nav
             %li
-              %a{:href => 'http://github.com/mdb'} GitHub
+              %a{href: 'http://github.com/mdb'} GitHub
             %li
-              %a{:href => 'http://instagram.com/clapclapexcitement'} Instagram
+              %a{href: 'http://instagram.com/clapclapexcitement'} Instagram
     %section
       = yield
     %footer
@@ -86,19 +86,19 @@
             %h3 Etc.
             %ul
               %li
-                %a{:href => "atom.xml"}Atom Feed
+                %a{href: "/atom.xml"}Atom Feed
               %li
-                %a{:href => "rss.xml"}RSS Feed
+                %a{href: "/rss.xml"}RSS Feed
               %li
-                %a{:href => "http://github.com/mdb"}GitHub
+                %a{href: "http://github.com/mdb"}GitHub
               %li
-                %a{:href => "http://twitter.com/clapexcitement"}Twitter
-    %script{:type => "text/html", :id => "instagram-template"}
+                %a{href: "http://twitter.com/clapexcitement"}Twitter
+    %script{type: "text/html", id: "instagram-template"}
       %ul
         {[ _.each(items, function(item, key, list) { ]}
         %li
-          %a{:href => "{{ item.url }}"}
-            %img{:src => "{{ item.imgSrc }}"}
+          %a{href: "{{ item.url }}"}
+            %img{src: "{{ item.imgSrc }}"}
         {[ }); ]}
     :javascript
       $(document).ready(function () {

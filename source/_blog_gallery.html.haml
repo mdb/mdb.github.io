@@ -5,4 +5,4 @@
 
 %ul.gallery.blog
   - articles.each do |article|
-    = partial :gallery_item, :locals => {item: article, type: "blog", display_teaser: display_teaser}
+    = partial :gallery_item, locals: {item: article, type: "blog", display_teaser: display_teaser}

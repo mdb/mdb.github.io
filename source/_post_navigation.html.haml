@@ -2,8 +2,8 @@
   - prev_article = current_article.previous_article
   - if prev_article
     %li.prev
-      %a{ :rel => "prev", :href => prev_article.url }= "previous #{label}"
+      %a{ rel: "prev", href: prev_article.url }= "previous #{label}"
   - next_article = current_article.next_article
   - if next_article
     %li.next
-      %a{ :rel => "next", :href => next_article.url }= "next #{label}"
+      %a{ rel: "next", href: next_article.url }= "next #{label}"
