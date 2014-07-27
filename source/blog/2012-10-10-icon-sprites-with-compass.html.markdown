@@ -51,7 +51,7 @@ The SCSS:
   text-indent: -5000px;
 
   @for $i from 0 through 20 {
-    &#038;.icon-#{$i} {
+    &.icon-#{$i} {
       @include icons-sprite(icon_#{$i});
     }
   }
