@@ -3,12 +3,12 @@ title: Rails API Integration Tests
 date: 2014/04/17
 tags: ruby, rspec, continuous integration
 thumbnail: legos_thumb.png
-teaser: A simple patterns for authoring integration tests for a Rails app.
+teaser: A simple pattern for authoring integration tests for a Rails app.
 ---
 
 A web-services-oriented architecture encourages the development of multiple, modular applications over maintaining a single large, all-in-one monolithic piece of software. Often, the web services paradigm involves the development of clients apps that rely upon third party RESTful web services. Labor and responsibilities are divided and conquered across smaller, more manageable codebases and teams. But how can such a client application verify graceful integration? With a large user-base, such insight is increasingly critical.
 
-<b>Example</b>: You're deploying a Rails application that consumes a third party Rest API, massages its data, and serves JSON. Unit tests stub HTTP requests with webmock; they verify that the application behaves as expected given prescribed data scenarios. But how do you ensure that both the upstream service, as well as your application, <i>actually</i> integrate as expected in a production scenario with real HTTP transactions, not just the stubbed responses you anticipate? How will you know in advance if your release candidate fails to gracefully handle an unnoticed third party API change? Or if you've introduced a bug in consuming third party data?
+<b>Example</b>: You're deploying a Rails application that consumes a third party REST API, massages its data, and serves JSON. Unit tests stub HTTP requests with webmock; they verify that the application behaves as expected given prescribed data scenarios. But how do you ensure that both the upstream service, as well as your application, <i>actually</i> integrate as expected in a production scenario with real HTTP transactions, not just the stubbed responses you anticipate? How will you know in advance if your release candidate fails to gracefully handle an unnoticed third party API change? Or if you've introduced a bug in consuming third party data?
 
 API versioning and hypermedia standards such as [HAL](http://stateless.co/hal_specification.html) promise non-breaking changes. From this perspective such verification is arguably unnecessary. But what about human error and unanticipated problems? Mistakes happen. And what about services that don't promise non-breaking changes?
 
