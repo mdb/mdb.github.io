@@ -28,6 +28,11 @@ pre {
   overflow: auto;
   font-size: $font_size + 3;
   line-height: $font_size + 10;
+
+  @include breakpoint {
+    font-size: $font_size + 1;
+    line-height: $font_size + 4;
+  }
 }
 
 ol li {
