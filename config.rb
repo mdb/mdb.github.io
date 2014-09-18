@@ -16,6 +16,10 @@ set :js_dir, 'javascripts'
 set :images_dir, 'images'
 set :haml, { ugly: true }
 
+set :site_title, 'Mike Ball'
+set :url, 'http://www.mikeball.info'
+set :description, 'Recent projects, blog, and information'
+
 # Blog
 activate :blog do |blog|
   blog.name = "blog"

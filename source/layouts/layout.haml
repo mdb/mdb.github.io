@@ -1,17 +1,16 @@
 <!doctype html>
 %html
   %head
-    %meta{:charset => "utf-8"}/
-    %meta{:'http-equiv' => "Content-Language", :content => "en-us"}
+    %meta{charset: "utf-8"}/
+    %meta{:'http-equiv' => "Content-Language", content: "en-us"}
     / Always force latest IE rendering engine or request Chrome Frame
-    %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}
-    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"}
-    %meta{:name => "copyright", :content =>"Mike Ball"}
-    %meta{:name => "description", :content => "Portfolio, Blog, and Information"}
-    %meta{:name => "keywords", :content => "philadelphia, design, illustration, web development, software development, art, mike ball"}
+    %meta{content: "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"}
+    %meta{name: "copyright", content: config.site_title}
+    %meta{name: "description", content: config.description}
+    %meta{name: "keywords", content: "philadelphia, design, illustration, web development, software development, art, mike ball"}
     %link{rel: "shortcut icon", href: "/favicon.ico", type: "image/x-icon"}
-    %link{rel: "icon", href: "/favicon.ico", type:"image/x-icon"}
-    %title= "Mike Ball"
+    %title= config.site_title
     = stylesheet_link_tag "all"
     = javascript_include_tag  "all"
   %body{:class => page_classes}
@@ -19,7 +18,7 @@
       %div.header-content
         %h1
           %a{href: "/", title: 'Home'}
-            Mike Ball
+            = config.site_title
         %nav.primary.column.one-quarter
           %ul.nav
             %li

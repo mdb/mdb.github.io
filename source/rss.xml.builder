@@ -1,9 +1,9 @@
 xml.instruct! :xml, version: '1.0'
 xml.rss version: "2.0" do
   xml.channel do
-    xml.title "Mike Ball"
-    xml.description "Recent projects, blog, and information"
-    xml.link "http://mikeball.info"
+    xml.title config.site_title
+    xml.description config.description
+    xml.link config.url
 
     blog('blog').articles[0..20].each do |post|
       xml.item do
