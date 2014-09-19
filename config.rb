@@ -5,11 +5,11 @@ require 'fog'
 helpers TemplateHelpers
 
 set :markdown,
-  :tables => true,
-  :autolink => true,
-  :gh_blockcode => true,
-  :fenced_code_blocks => true,
-  :with_toc_data => true
+  tables: true,
+  autolink: true,
+  gh_blockcode: true,
+  fenced_code_blocks: true,
+  with_toc_data: true
 set :markdown_engine, :redcarpet
 set :css_dir, 'stylesheets'
 set :js_dir, 'javascripts'
@@ -28,9 +28,9 @@ activate :blog do |blog|
   blog.tag_template  = "tag_blog.html"
 end
 
-page "blog/*", :layout => :article
-page "blog", :layout => :layout
-page "blog/tags/*", :layout => :layout
+page "blog/*", layout: :article
+page "blog", layout: :layout
+page "blog/tags/*", layout: :layout
 
 # Portfolio
 activate :blog do |blog|
@@ -40,16 +40,16 @@ activate :blog do |blog|
   blog.tag_template  = "tag_projects.html"
 end
 
-page "projects/*", :layout => :project
-page "projects", :layout => :layout
-page "projects/tags/*", :layout => :layout
-page "/atom.xml", :layout => false
-page "/rss.xml", :layout => false
-page "/posts.json", :layout => false
+page "projects/*", layout: :project
+page "projects", layout: :layout
+page "projects/tags/*", layout: :layout
+page "/atom.xml", layout: false
+page "/rss.xml", layout: false
+page "/posts.json", layout: false
 page "/404.html"
 
 activate :directory_indexes
-activate :syntax, :line_numbers => true
+activate :syntax, line_numbers: true
 
 # Add bower_components directory to asset pipeline
 sprockets.append_path File.join "#{root}", "bower_components"
@@ -67,7 +67,7 @@ end
 
 # Make middleman-sync work with AWS bucket name containing dots
 # https://github.com/karlfreeman/middleman-sync/issues/29
-Fog.credentials = {:path_style => true}
+Fog.credentials = { path_style: true }
 
 # Deployment
 activate :sync do |sync|
@@ -80,4 +80,3 @@ activate :sync do |sync|
   # sync.gzip_compression = false # Automatically replace files with their equivalent gzip compressed version
   # sync.after_build = false # Disable sync to run after Middleman build ( defaults to true )
 end
-
