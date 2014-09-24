@@ -50,6 +50,7 @@ page "/404.html"
 
 activate :directory_indexes
 activate :syntax, line_numbers: true
+activate :build_reporter
 
 # Add bower_components directory to asset pipeline
 sprockets.append_path File.join "#{root}", "bower_components"
