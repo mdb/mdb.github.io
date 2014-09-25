@@ -6,7 +6,7 @@ thumbnail: eyeball_hand_thumb.png
 teaser: How to create a Windows app installer on the Mac OS command line using makensis.
 ---
 
-[node-webkit](https://github.com/rogerwang/node-webkit) provides a powerful path through which Linux, Windows, and Mac OS desktop applications can be authored using HTML5 and Node.js web technologies. [grunt-node-webkit-builder](https://github.com/mllrsohn/grunt-node-webkit-builder) offers a tool through which a node-webkit application can be compiled to distributable directories, but how can an automated build process bundle the MS Windows files in an application installer in a headless continuous integration environment, or from the command line?
+[node-webkit](https://github.com/rogerwang/node-webkit) provides a powerful path through which Linux, Windows, and Mac OS desktop applications can be authored using HTML5 and Node.js web technologies. [grunt-node-webkit-builder](https://github.com/mllrsohn/grunt-node-webkit-builder) offers a tool through which a node-webkit application can be compiled to distributable directories. But how can an automated build process bundle the MS Windows files in an application installer in a headless continuous integration environment, or from the command line?
 
 [makensis](http://nsis.sourceforge.net/Main_Page) provides a solution. The tool can be used on Linux, though this overview focuses on Mac OS.
 
