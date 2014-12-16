@@ -16,6 +16,7 @@ teaser: Some small shell scripts to automate manual gem downloads & uploads.
 rails
 actionmailer
 activemodel
+actionview
 actionpack
 activerecord
 activeresource
@@ -28,7 +29,7 @@ railties
 ```bash
 #!/bin/bash
 
-VERSION=3.2.12
+VERSION=4.1.8
 
 for ARG in `cat $1`; do
   curl -L "http://rubygems.org/downloads/$ARG-$VERSION.gem" > "$ARG-$VERSION.gem"
@@ -40,7 +41,7 @@ done
 ```bash
 #!/bin/bash
 
-VERSION=3.2.12
+VERSION=4.1.8
 
 for ARG in `cat $1`; do
   curl -v -X POST -F file=@$ARG-$VERSION.gem http://YOUR_GEM_IN_A_BOX_USERNAME:YOUR_PASSWORD@YOUR_GEM_IN_A_BOX.com/upload
