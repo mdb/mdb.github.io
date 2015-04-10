@@ -22,10 +22,13 @@ section {
   article, .description {
     p, ul {
       @include body_type;
+
+      li {
+        list-style-type: disc;
+      }
     }
 
     li {
-      list-style-type: disc;
       list-style-position: outside;
       margin-left: $font_size + 5;
       @include body_type;
