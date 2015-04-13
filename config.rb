@@ -1,6 +1,5 @@
 require 'redcarpet'
 require 'lib/template_helpers'
-require 'fog'
 
 helpers TemplateHelpers
 
@@ -66,18 +65,17 @@ configure :build do
   # set :http_prefix, "/Content/images/"
 end
 
-# Make middleman-sync work with AWS bucket name containing dots
-# https://github.com/karlfreeman/middleman-sync/issues/29
-Fog.credentials = { path_style: true }
-
-# Deployment
-activate :sync do |sync|
-  sync.fog_provider = 'AWS'
-  sync.fog_directory = 'www.mikeball.info'
-  sync.fog_region = 'us-east-1'
-  sync.aws_access_key_id = ENV['AWS_ACCESS_KEY_ID']
-  sync.aws_secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
-  sync.existing_remote_files = 'delete'
-  # sync.gzip_compression = false # Automatically replace files with their equivalent gzip compressed version
-  # sync.after_build = false # Disable sync to run after Middleman build ( defaults to true )
+activate :s3_sync do |s3_sync|
+  s3_sync.bucket                     = 'www.mikeball.info'
+  s3_sync.region                     = 'us-east-1'
+  s3_sync.aws_access_key_id          = ENV['AWS_ACCESS_KEY_ID']
+  s3_sync.aws_secret_access_key      = ENV['AWS_SECRET_ACCESS_KEY']
+  s3_sync.after_build                = false
+  s3_sync.prefer_gzip                = true
+  s3_sync.path_style                 = true
+  s3_sync.reduced_redundancy_storage = false
+  s3_sync.acl                        = 'public-read'
+  s3_sync.encryption                 = false
+  s3_sync.prefix                     = ''
+  s3_sync.version_bucket             = false
 end
