@@ -5,8 +5,10 @@
         - current_article.data.images.each do |img_data|
           - if img_data.is_a? String
             %img{:src => "/images/projects/work/#{img_data}"}
+          - elsif img_data[:nested]
+            = partial :nested_images, locals: {image_data: img_data}
           - else
-            = partial :nested_images, :locals => {:image_data => img_data}
+            = partial :slideshow, locals: {image_data: img_data}
     %div.details
       %div.column.one-quarter.metadata
         = partial :post_navigation, :locals => {:label => "project"}

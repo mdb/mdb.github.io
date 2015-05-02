@@ -90,4 +90,10 @@ module TemplateHelpers
       posts.first(opts[:limit])
     end
   end
+
+  def slideshow_input(index)
+    checked = index == 0 ? 'checked' : ''
+
+    "<input type='radio', id='slide-#{index+1}', name='slide' #{checked} />"
+  end
 end
