@@ -39,6 +39,8 @@ Example manifest:
 
 In Mac OS, an application built via the preceding manifest will store cookie/local storage data in `SOME_NW_APP.app/data`, thus ensuring that the `data` directory is deleted when `SOME_NW_APP.app` is trashed.
 
+Note, though, this assumes the user running `SOME_NW_APP.app` has the necessary write permissions. Permissions can be a problem when `/Applications` is owned by root, `SOME_NW_APP.app` lives in `/Applications`, and the user running `SOME_NW_APP.app` does not have write permissions, as is often the case on Mac OS. Such a scenario prevents cookies and local storage items from being properly saved. See [my comment here](https://github.com/nwjs/nw.js/issues/1175#issuecomment-112122560) for more information.
+
 ## Windows
 
 In Windows, a tool such as [nsis](/blog/node-webkit-app-windows-installer/) can be used to build an installer as well as an uninstaller; the uninstaller can ensure that all `data` files are deleted.
