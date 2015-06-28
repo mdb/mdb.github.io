@@ -1,6 +1,7 @@
 header {
   h1 {
     a {
+      @include border-radius($mark_dimensions, $mark_dimensions);
       text-indent: -5000px;
       display: block;
       width: $mark_dimensions;
@@ -10,7 +11,6 @@ header {
 
       &:hover {
         text-decoration: none;
-        @include border-radius($mark_dimensions, $mark_dimensions);
         text-align: center;
         background: #000;
         text-indent: 0;
