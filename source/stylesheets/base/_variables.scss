@@ -7,8 +7,8 @@ $secondary_text_color: #8a8a8a;
 $tertiary_text_color: #bbb;
 
 // Font Styles
-$font_family: Georgia, 'Times New Roman', serif;
-$secondary_font_family: Helvetica, Arial, sans-serif;
+$font_family: "Courier New", Courier, monospace;
+$secondary_font_family: "Courier New", Courier, monospace;
 $font_size: 12px;
 $small_font_size: 11px;
 
@@ -16,6 +16,7 @@ $small_font_size: 11px;
 $h1_font_size: 15px;
 
 // Misc UI Elements
+$background: #eee;
 $mark_dimensions: 100px;
 $responsive_mark_dimensions: 95px;
 $divider_color: #dbdbdb;

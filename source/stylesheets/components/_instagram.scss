@@ -1,28 +1,2 @@
 .instagram {
-  ul {
-    overflow: hidden;
-
-    li {
-      float: left;
-      position: relative;
-      width: 25%;
-      padding-bottom: 24%;
-
-      a {
-        border: 1px solid #999;
-        padding: 4%;
-        display: block;
-        position: absolute;
-        right: $spacer - 5;
-        left: 0;
-        top: 0;
-        bottom: 5px;
-        overflow: hidden;
-
-        img {
-          width: 100%;
-        }
-      }
-    }
-  }
 }

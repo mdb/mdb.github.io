@@ -1,42 +1,5 @@
 header {
-  margin: 0 auto;
-  width: $desktop_width;
-  margin: 0 auto;
-  @include responsive_width;
-
-  .header-content {
-    overflow: hidden;
-    height: $spacer + $mark_dimensions;
-    padding-top: $spacer+ 10;
-    position: fixed;
-    width: $desktop_width;
-    border-bottom: $divider;
-    background: #fff;
-    z-index: 1000;
-    @include responsive_width;
-
-    &.unfix {
-      position: static;
-    }
-
-    @include breakpoint {
-      position: static;
-      height: auto;
-      background: #999;
-    }
-  }
-
   h1 {
-    @include quarter_column;
-
-    @include breakpoint {
-      @include border-radius($mark_dimensions, $mark_dimensions);
-      margin-left: $spacer;
-      margin-bottom: $spacer;
-      display: inline-block;
-      width: $responsive_mark_dimensions;
-    }
-
     a {
       text-indent: -5000px;
       display: block;
@@ -44,12 +7,6 @@ header {
       height: $mark_dimensions;
       background: url('/images/mark_grayscale.png') center center;
       float: left;
-
-      @include breakpoint {
-        width: $responsive_mark_dimensions;
-        height: $responsive_mark_dimensions;
-        display: inline-block;
-      }
 
       &:hover {
         text-decoration: none;
@@ -59,67 +16,6 @@ header {
         text-indent: 0;
         color: #fff;
         line-height: 100px;
-      }
-    }
-  }
-
-  nav {
-    height: $mark_dimensions;
-    position: relative;
-
-    @include breakpoint {
-      height: auto;
-      float: left;
-      &.column.one-quarter {
-        &.tertiary {
-          display: none;
-        }
-      }
-    }
-
-    ul.nav {
-      margin-left: $gallery_spacer;
-      position: absolute;
-      bottom: $spacer;
-      @include breakpoint {
-        position: static;
-        margin-bottom: 0;
-        margin-left: 0;
-      }
-
-      li {
-        @include breakpoint {
-          &.contact {
-            display: none;
-          }
-        }
-
-        a {
-          @include small_text;
-
-          @include breakpoint {
-            display: inline-block;
-            width: 100%;
-            border-top: $divider;
-            padding: ($spacer - 7) 0;
-            padding-left: $spacer + 5;
-            color: #fff;
-
-            &:hover, &:focus {
-              background: #000;
-            }
-          }
-        }
-      }
-    }
-
-    &.tertiary {
-      ul.nav li a {
-        color: $tertiary_text_color;
-      }
-
-      @include breakpoint {
-        display: none;
       }
     }
   }
