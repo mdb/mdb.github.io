@@ -1,4 +1,6 @@
 header {
+  width: $desktop_width;
+
   h1 {
     a {
       @include border-radius($mark_dimensions, $mark_dimensions);
@@ -7,7 +9,6 @@ header {
       width: $mark_dimensions;
       height: $mark_dimensions;
       background: url('/images/mark_grayscale.png') center center;
-      float: left;
 
       &:hover {
         text-decoration: none;
