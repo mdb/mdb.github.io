@@ -1,2 +1,90 @@
-.content ul.gallery {
+ul.gallery {
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: $spacer;
+
+  h2,
+  h2 a,
+  h2 a:visited {
+    color: $text_color;
+    padding: 0;
+    border: 0;
+    clear: none;
+    margin: 5px 0;
+    line-height: 15px;
+  }
+
+  small, date, p.teaser {
+    color: $secondary_text_color;
+    font-size: 11px;
+    line-height: 14px;
+    margin-bottom: 5px;
+  }
+
+  a.thumbnail {
+    border: $divider;
+    padding: 5px 5px 0 5px;
+    display: block;
+
+    img {
+      width: 100%;
+      border: none;
+    }
+  }
+
+  &.projects {
+    li {
+      &.item {
+        float: left;
+        width: 31%;
+        margin-right: $spacer - 5;
+        margin-bottom: $spacer - 5;
+      }
+
+      .details {
+        display: none;
+      }
+    }
+  }
+
+  &.blog {
+    margin-top: -$spacer;
+
+    li.item {
+      overflow: hidden;
+      border-bottom: $divider;
+      padding: $spacer 0;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      a.thumbnail {
+        width: 29%;
+        float: left;
+        margin-right: $spacer - 5;
+      }
+
+      ul.tags {
+        li {
+          display: inline-block;
+
+          a {
+            font-style: italic;
+            font-size: 11px;
+            color: $secondary_text_color;
+            display: inline-block;
+
+            &:after {
+              content: ',';
+            }
+          }
+
+          &.last a:after {
+            content: '';
+          }
+        }
+      }
+    }
+  }
 }

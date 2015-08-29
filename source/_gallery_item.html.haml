@@ -9,8 +9,7 @@
       %img{src: project_thumb_path(item.data.thumbnail)}
   %div.details
     - if type == 'blog'
-      %small.blog Blog
-      %date="Posted #{item.date.strftime('%B %e, %Y')}"
+      %date="#{item.date.strftime('%B %e, %Y')}"
     - else
       %small Project
     %h2

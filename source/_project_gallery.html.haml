@@ -2,6 +2,6 @@
 - exclude = exclude || nil
 - projects = project_posts({limit: limit, exclude: exclude})
 
-%ul.gallery
+%ul.gallery.projects
   - projects.each do |project|
     = partial :gallery_item, locals: {item: project, type: "projects"}
