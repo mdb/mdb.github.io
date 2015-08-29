@@ -1,23 +1,3 @@
 header {
   width: $desktop_width;
-
-  h1 {
-    a {
-      @include border-radius($mark_dimensions, $mark_dimensions);
-      text-indent: -5000px;
-      display: block;
-      width: $mark_dimensions;
-      height: $mark_dimensions;
-      background: url('/images/mark_grayscale.png') center center;
-
-      &:hover {
-        text-decoration: none;
-        text-align: center;
-        background: #000;
-        text-indent: 0;
-        color: #fff;
-        line-height: 100px;
-      }
-    }
-  }
 }
