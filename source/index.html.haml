@@ -3,4 +3,6 @@
     %h1.divider.homepage-projects <a href="/projects">Recent Projects</a>
     = partial :project_gallery, :locals => { limit: 6 }
     %h1.divider.homepage-blog-posts <a href="/blog">Blog</a>
-    = partial :blog_gallery, :locals => { limit: 4, display_teaser: true }
+    = partial :blog_gallery, :locals => { limit: 3, display_teaser: true }
+    %h1.divider <a href="/projects">Instagram</a>
+    %div.instagram

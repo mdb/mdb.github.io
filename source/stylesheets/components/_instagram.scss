@@ -1,2 +1,25 @@
 .instagram {
+  margin-bottom: $spacer * 2;
+
+  ul {
+    overflow: hidden;
+
+    li {
+      float: left;
+      position: relative;
+      width: 31%;
+      margin-right: $spacer - 5;
+      margin-bottom: $spacer - 5;
+
+      a {
+        border: $divider;
+        padding: 5px 5px 0 5px;
+        display: block;
+
+        img {
+          width: 100%;
+        }
+      }
+    }
+  }
 }
