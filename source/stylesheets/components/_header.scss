@@ -1,3 +1,15 @@
 header {
   width: $desktop_width;
+
+  .header-content {
+    overflow: hidden;
+    margin-bottom: $spacer * 2;
+
+    nav ul li {
+      a, a:visited {
+        color: $text_color;
+        text-decoration: none;
+      }
+    }
+  }
 }

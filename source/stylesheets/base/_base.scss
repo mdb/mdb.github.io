@@ -8,3 +8,12 @@ body {
   padding-top: $body_padding;
   padding-left: $body_padding;
 }
+
+.column {
+  float: left;
+
+  &.one-third {
+    width: 31%;
+    margin-right: 10px;
+  }
+}

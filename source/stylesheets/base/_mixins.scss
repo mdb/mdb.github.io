@@ -4,31 +4,6 @@
   }
 }
 
-@mixin column {
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-  float: left;
-}
-
-@mixin three_quarters_column {
-  @include column;
-  width: 75%;
-  @include responsive_width;
-}
-
-@mixin two_quarters_column {
-  @include column;
-  width: 50%;
-  @include responsive_width;
-}
-
-@mixin quarter_column {
-  @include column;
-  width: 25%;
-  @include responsive_width;
-}
-
 @mixin small_text {
   font-size: $small_font_size;
   color: $secondary_text_color;
