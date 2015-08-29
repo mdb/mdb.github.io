@@ -45,13 +45,13 @@ h1, h2, h3, h4, h5 {
   font-size: $font_size;
 
   &.divider {
-    @include small_text;
     border-bottom: $divider;
-    padding: $spacer $gallery_spacer;
     margin-bottom: $spacer;
+    padding-bottom: 5px;
 
     a {
-      color: $secondary_text_color;
+      color: $text_color;
+      text-decoration: none;
     }
   }
 }
