@@ -1,3 +1,12 @@
 footer {
   width: $desktop_width;
+
+  .column.one-half {
+    width: 50%;
+    margin: 0;
+  }
+
+  h2 {
+    border-bottom: $divider;
+  }
 }

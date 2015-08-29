@@ -11,9 +11,14 @@ body {
 
 .column {
   float: left;
+  margin-right: 10px;
 
   &.one-third {
     width: 31%;
-    margin-right: 10px;
+  }
+
+  &.one-half {
+    width: 40%;
+    margin-right: $spacer * 2;
   }
 }
