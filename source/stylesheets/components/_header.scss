@@ -1,6 +1,26 @@
 header {
   width: $desktop_width;
 
+  a.mark {
+    margin: 0 0 15px -20px;
+    @include border-radius($mark_dimensions, $mark_dimensions);
+    text-indent: -5000px;
+    display: block;
+    width: $mark_dimensions;
+    height: $mark_dimensions;
+    background: url('/images/mark_grayscale.png') center center;
+
+    &:hover {
+      text-decoration: none;
+      @include border-radius($mark_dimensions, $mark_dimensions);
+      text-align: center;
+      background: #000;
+      text-indent: 0;
+      color: #fff;
+      line-height: 100px;
+    }
+  }
+
   .header-content {
     overflow: hidden;
     margin-bottom: $spacer * 2;
