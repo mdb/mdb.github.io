@@ -34,7 +34,7 @@
       for(i=0; i<length; i++) {
         items.push({
           url: data.data[i].link,
-          imgSrc: data.data[i].images.thumbnail.url
+          imgSrc: data.data[i].images.standard_resolution.url
         });
       }
 
