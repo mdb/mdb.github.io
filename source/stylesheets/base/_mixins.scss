@@ -11,11 +11,11 @@
   font-family: $secondary_font_family;
 }
 
-@mixin standard_heading {
-  font-size: $font_size + 2;
-  color: $text_color;
-  text-decoration: none;
+@mixin divider_heading {
+  padding-bottom: 5px;
+  border-bottom: $divider;
   margin-bottom: $spacer;
+  color: $secondary_text_color;
 }
 
 @mixin large_heading {

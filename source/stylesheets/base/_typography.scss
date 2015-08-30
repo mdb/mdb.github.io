@@ -45,10 +45,7 @@ h1, h2, h3, h4, h5 {
   font-size: $font_size;
 
   &.divider {
-    border-bottom: $divider;
-    margin-bottom: $spacer;
-    padding-bottom: 5px;
-    color: $secondary_text_color;
+    @include divider_heading;
 
     a {
       color: $secondary_text_color;
