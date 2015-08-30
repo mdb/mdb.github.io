@@ -1,7 +1,6 @@
 article {
   small {
-    @include small_text;
-    margin-bottom: $spacer;
+    @include divider_heading;
   }
 
   h1 {
