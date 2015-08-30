@@ -4,12 +4,25 @@
   ul {
     overflow: hidden;
 
+    footer & {
+      width: 100%;
+    }
+
     li {
       float: left;
       position: relative;
       width: 31%;
       margin-right: $spacer - 5;
       margin-bottom: $spacer - 5;
+
+      footer & {
+        width: 46%;
+        display: none;
+
+        &:nth-child(-n+4) {
+          display: block;
+        }
+      }
 
       a {
         border: $divider;

@@ -6,7 +6,10 @@
 body {
   background: $background;
   padding-top: $body_padding/2;
-  padding-left: $body_padding;
+}
+
+section.content {
+  margin-left: $body_padding;
 }
 
 .column {
@@ -21,4 +24,12 @@ body {
     width: 40%;
     margin-right: $spacer * 2;
   }
+
+  &.two-thirds {
+    width: 63%;
+  }
+}
+
+.full {
+  clear: both;
 }
