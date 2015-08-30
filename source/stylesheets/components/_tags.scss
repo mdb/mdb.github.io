@@ -1,2 +1,27 @@
 ul.tags {
+  margin-bottom: $spacer;
+
+  li {
+    display: inline;
+
+    a, span {
+      font-style: italic;
+      @include small_text;
+
+      &:after {
+        content: ',';
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    a:hover {
+    }
+
+    &.last a:after, &.last span:after {
+      content: '';
+    }
+  }
 }
