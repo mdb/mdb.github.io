@@ -12,12 +12,13 @@ ul.gallery {
     clear: none;
     margin: 5px 0;
     line-height: 15px;
+    text-decoration: none;
   }
 
   small, date, p.teaser {
     color: $secondary_text_color;
     font-size: 11px;
-    line-height: 14px;
+    line-height: 15px;
     margin-bottom: 5px;
   }
 
