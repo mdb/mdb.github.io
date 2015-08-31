@@ -15,5 +15,5 @@
     = yield
     = partial :tags, :locals => {:item => current_article, :path_prefix => "projects"}
     = partial :post_navigation, :locals => {:label => "project"}
-  %h1.divider More Recent Projects
+  %h1.divider <a href="/projects">More Recent Projects</a>
   = partial :project_gallery, :locals => {:exclude => current_article}
