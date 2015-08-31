@@ -1,2 +1,45 @@
 .project {
+  margin-bottom: $spacer * 2;
+
+  h2 {
+    @include large_heading;
+  }
+
+  .images {
+    margin-bottom: $spacer * 2;
+    width: 960px;
+
+    img {
+      margin-bottom: $spacer;
+      width: 100%;
+
+      @include breakpoint {
+        margin-bottom: $spacer;
+      }
+    }
+
+    .image-column {
+      clear: both;
+      overflow: hidden;
+
+      .image {
+        float: left;
+        width: 49%;
+        overflow: hidden;
+
+        @include breakpoint {
+          width: 100%;
+        }
+
+        img {
+          float: left;
+          margin-right: $gallery_spacer;
+        }
+
+        &:nth-child(even) {
+          float: right;
+        }
+      }
+    }
+  }
 }
