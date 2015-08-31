@@ -3,7 +3,7 @@ title: 'JSConf 2015: Headless Testing Against Real Web Browsers'
 date: 2015/05/27
 tags: nwjs, node-webkit, polymer, ansible, xvfb, vagrant
 thumbnail: jsconf_thumb.png
-teaser: I spoke at JSConf 2015 about a technique I developed for headlessly testing against real web browsers.
+teaser: An overview of my JSConf 2015 talk on headlessly testing against real web browsers.
 ---
 
 I spoke at [JSConf 2015](http://2015.jsconf.us) about how to test Google Polymer web components against real web browsers in a headless Linux using Xvfb.
