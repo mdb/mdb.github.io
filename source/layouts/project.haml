@@ -1,26 +1,19 @@
 = wrap_layout :layout do
-  %div.content.project
-    %div.images
-      - if current_article.data.images
-        - current_article.data.images.each do |img_data|
-          - if img_data.is_a? String
-            %img{:src => "/images/projects/work/#{img_data}"}
-          - elsif img_data[:nested]
-            = partial :nested_images, locals: {image_data: img_data}
-          - else
-            = partial :slideshow, locals: {image_data: img_data}
-    %div.details
-      %div.column.one-quarter.metadata
-        = partial :post_navigation, :locals => {:label => "project"}
-        = partial :tags, :locals => {:item => current_article, :path_prefix => "projects"}
-      %div.column.description.three-quarters
-        %div.column-content
-          %date="#{current_article.data.date_completed}"
-          %h1=current_article.title
-          = yield
-          %div.metadata
-            = partial :tags, :locals => {:item => current_article, :path_prefix => "projects"}
-            = partial :post_navigation, :locals => {:label => "project"}
+  %h1.divider Projects
+  %h2=current_article.title
+  %date="#{current_article.data.date_completed}"
+  %div.images
+    - if current_article.data.images
+      - current_article.data.images.each do |img_data|
+        - if img_data.is_a? String
+          %img{:src => "/images/projects/work/#{img_data}"}
+        - elsif img_data[:nested]
+          = partial :nested_images, locals: {image_data: img_data}
+        - else
+          = partial :slideshow, locals: {image_data: img_data}
+  = yield
+  = partial :tags, :locals => {:item => current_article, :path_prefix => "projects"}
+  = partial :post_navigation, :locals => {:label => "project"}
   %div.content.clear
     %h1.divider More Recent Projects
     = partial :project_gallery, :locals => {:exclude => current_article}
