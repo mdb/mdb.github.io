@@ -7,4 +7,66 @@
 }
 
 ul.image-slideshow {
+  height: 880px;
+
+  li {
+    position: absolute;
+    width: 960px;
+
+    @include breakpoint {
+      width: 95%;
+    }
+
+    input {
+      display: none;
+
+      &:checked + label {
+        background: $inverse_divider_color;
+      }
+
+      &:checked ~ img {
+        @include animation(fade-in 1s 1);
+        @include animation-fill-mode(forwards);
+      }
+
+      &:not(:checked) ~ img {
+        display: none;
+      }
+    }
+
+    label {
+      background: $divider_color;
+      border-radius: 100%;
+      cursor: pointer;
+      display: block;
+      height: 20px;
+      width: 20px;
+      position: absolute;
+      z-index: 10;
+      top: 20px;
+
+      @for $i from 1 through 20 {
+        &.slide-#{$i} {
+          margin-left: $i * 25px;
+
+          @include breakpoint {
+            margin-left: $i * 20px;
+          }
+        }
+      }
+
+      @include breakpoint {
+        width: 10px;
+        height: 10px;
+      }
+    }
+
+    img {
+      opacity: 0;
+    }
+
+    &.first img {
+      opacity: 1;
+    }
+  }
 }
