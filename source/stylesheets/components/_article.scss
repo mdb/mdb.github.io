@@ -8,8 +8,7 @@ article {
   }
 
   h2 {
-    margin-bottom: $spacer + $spacer/2;
-    font-weight: bold;
+    margin: $spacer 0;
     font-size: $font-size + 6;
     line-height: ($font-size + 6) * 1.4;
 
@@ -19,7 +18,8 @@ article {
     }
   }
 
-  pre {
-    margin-bottom: $spacer;
+  li {
+    margin-bottom: 4px;
+    list-style-type: disc;
   }
 }
