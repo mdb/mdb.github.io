@@ -1,2 +1,33 @@
 .modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 99999;
+  opacity: 0;
+  @include transition-property(opacity);
+  @include transition-duration(400ms);
+  @include transition-timing-function(ease-in);
+  pointer-events: none;
+
+  &:target {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  a.close {
+    position: absolute;
+    right: 10px;
+  }
+
+  div.modal-content {
+    padding: 10px;
+    position: relative;
+    margin: 5% auto 0 auto;
+    width: 60%;
+    overflow: hidden;
+    background: #fff;
+  }
 }
