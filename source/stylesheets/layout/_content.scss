@@ -1,6 +1,7 @@
 section {
   width: $desktop_width;
-}
 
-.content {
+  @include breakpoint {
+    width: $mobile_width;
+  }
 }

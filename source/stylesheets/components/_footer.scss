@@ -6,11 +6,19 @@ footer {
 
   section {
     margin-left: $body_padding;
+
+    @include breakpoint {
+      margin-left: $mini_spacer * 2;
+    }
   }
 
   .column.one-half {
     width: 50%;
     margin: 0 0 $spacer 0;
+
+    @include breakpoint(mobile) {
+      width: 100%;
+    }
   }
 
   h1 {

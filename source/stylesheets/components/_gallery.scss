@@ -27,6 +27,11 @@ ul.gallery {
     padding: 5px 5px 0 5px;
     display: block;
 
+    @include breakpoint(mobile) {
+      border: none;
+      padding: 0;
+    }
+
     img {
       width: 100%;
       border: none;
@@ -40,6 +45,10 @@ ul.gallery {
         width: 31%;
         margin-right: $spacer - 5;
         margin-bottom: $spacer - 5;
+
+        @include breakpoint(mobile) {
+          margin: 0;
+        }
       }
 
       .details {
@@ -64,6 +73,10 @@ ul.gallery {
         width: 29%;
         float: left;
         margin-right: $spacer - 5;
+
+        @include breakpoint(mobile) {
+          display: none;
+        }
       }
 
       ul.tags {

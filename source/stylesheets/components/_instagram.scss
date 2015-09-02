@@ -15,6 +15,10 @@
       margin-right: $spacer - 5;
       margin-bottom: $spacer - 5;
 
+      @include breakpoint(mobile) {
+        margin: 0;
+      }
+
       footer & {
         width: 46%;
         display: none;
@@ -28,6 +32,12 @@
         border: $divider;
         padding: 5px 5px 0 5px;
         display: block;
+
+        @include breakpoint(mobile) {
+          border: none;
+          margin: 0;
+          padding: 0;
+        }
 
         img {
           width: 100%;

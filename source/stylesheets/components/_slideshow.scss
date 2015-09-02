@@ -9,12 +9,16 @@
 ul.image-slideshow {
   height: 880px;
 
+  @include breakpoint {
+    height: 450px;
+  }
+
   li {
     position: absolute;
     width: 960px;
 
     @include breakpoint {
-      width: 95%;
+      width: 500px;
     }
 
     input {

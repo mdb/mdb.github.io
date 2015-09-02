@@ -2,6 +2,11 @@ header {
   width: $desktop_width;
   margin-left: $body_padding;
 
+  @include breakpoint {
+    margin-left: $mini_spacer * 2;
+    width: $mobile_width;
+  }
+
   a.mark {
     margin: 0 0 15px -20px;
     @include border-radius($mark_dimensions, $mark_dimensions);
@@ -19,6 +24,10 @@ header {
       text-indent: 0;
       color: #fff;
       line-height: 100px;
+    }
+
+    @include breakpoint {
+      display: none;
     }
   }
 

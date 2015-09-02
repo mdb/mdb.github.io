@@ -9,13 +9,14 @@
     margin-bottom: $spacer * 2;
     width: 960px;
 
+    @include breakpoint {
+      width: 500px;
+      margin-bottom: $spacer;
+    }
+
     img {
       margin-bottom: $spacer;
       width: 100%;
-
-      @include breakpoint {
-        margin-bottom: $spacer;
-      }
     }
 
     .image-column {
