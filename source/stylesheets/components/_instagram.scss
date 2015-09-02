@@ -1,6 +1,12 @@
 .instagram {
   margin-bottom: $spacer * 2;
 
+  body.index footer & {
+    @include breakpoint(mobile) {
+      display: none;
+    }
+  }
+
   ul {
     overflow: hidden;
 
@@ -30,7 +36,7 @@
 
       a {
         border: $divider;
-        padding: 5px 5px 0 5px;
+        padding: $mini_spacer;
         display: block;
 
         @include breakpoint(mobile) {
