@@ -22,6 +22,7 @@
   font-size: $font_size + 10;
   line-height: $font_size + 10 * 1.5;
   margin-bottom: $spacer;
+  color: $inverse_text_color;
 }
 
 @mixin breakpoint($point: desktop) {
