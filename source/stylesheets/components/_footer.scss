@@ -18,6 +18,10 @@ footer {
 
     @include breakpoint(mobile) {
       width: 100%;
+
+      body.index &.instagram-container {
+        display: none;
+      }
     }
   }
 
