@@ -10,7 +10,8 @@
     width: 960px;
 
     @include breakpoint {
-      width: 500px;
+      width: 100%;
+      margin-left: -$mini_spacer * 2;
       margin-bottom: $spacer;
     }
 
