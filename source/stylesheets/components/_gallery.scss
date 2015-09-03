@@ -17,8 +17,6 @@ ul.gallery {
 
   small, date, p.teaser {
     color: $secondary_text_color;
-    font-size: 11px;
-    line-height: 15px;
     margin-bottom: 5px;
   }
 
@@ -77,27 +75,6 @@ ul.gallery {
 
         @include breakpoint(mobile) {
           display: none;
-        }
-      }
-
-      ul.tags {
-        li {
-          display: inline-block;
-
-          a {
-            font-style: italic;
-            font-size: 11px;
-            color: $secondary_text_color;
-            display: inline-block;
-
-            &:after {
-              content: ',';
-            }
-          }
-
-          &.last a:after {
-            content: '';
-          }
         }
       }
     }

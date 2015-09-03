@@ -3,6 +3,11 @@ article {
     @include divider_heading;
   }
 
+  p, li {
+    font-size: $font_size + 1;
+    line-height: 1.6em;
+  }
+
   h1 {
     @include large_heading;
   }
@@ -22,5 +27,9 @@ article {
   li {
     margin-bottom: 4px;
     list-style-type: disc;
+  }
+
+  .metadata {
+    margin-top: $spacer * 2;
   }
 }
