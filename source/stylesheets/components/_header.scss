@@ -34,13 +34,12 @@ header {
   }
 
   a.mark {
-    margin: 0 0 15px $body_padding - 20;
-    @include border-radius($mark_dimensions, $mark_dimensions);
+    margin: -160px 0 $spacer -150px;
     text-indent: -5000px;
     display: block;
-    width: $mark_dimensions;
-    height: $mark_dimensions;
-    background: url('/images/mark_grayscale.png') center center;
+    width: 750px;
+    height: 357px;
+    background: url('/images/mark_pool.png') 0 0;
 
     &:hover {
       text-decoration: none;

@@ -1,3 +1,4 @@
+/*
 $(document).ready(function () {
   var imgs = $('ul.gallery li a.thumbnail img');
 
@@ -11,3 +12,4 @@ $(document).ready(function () {
     }
   });
 });
+*/
