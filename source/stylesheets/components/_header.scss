@@ -5,6 +5,34 @@ header {
     background: #fff;
   }
 
+  button {
+    border: 0;
+    text-indent: -5000px;
+    width: 40px;
+    height: 34px;
+    position: absolute;
+    right: $mini_spacer * 3;
+    top: $spacer + 10;
+    background: none;
+    border-top: 8px solid #000;
+    border-bottom: 8px solid #000;
+
+    &:focus {
+      outline: 0;
+    }
+
+    &:before {
+      width: 40px;
+      height: 34px;
+      content: '.';
+      text-indent: -5000px;
+      border-top: 8px solid #000;
+      position: absolute;
+      right: 0;
+      top: 4px;
+    }
+  }
+
   a.mark {
     margin: 0 0 15px $body_padding - 20;
     @include border-radius($mark_dimensions, $mark_dimensions);
@@ -36,21 +64,54 @@ header {
     margin-left: $body_padding;
 
     @include breakpoint {
-      width: $mobile_width;
       margin-left: $mini_spacer * 2;
       width: $mobile_width;
     }
 
-    nav ul li {
-      a, a:visited {
-        color: $text_color;
-        text-decoration: none;
+    @include breakpoint(mobile) {
+      margin-left: 0;
+    }
+
+    .nav-container {
+      &.expanded {
+        nav {
+          display: block;
+        }
+      }
+
+      nav {
+        @include breakpoint(mobile) {
+          display: none;
+
+          &.column.one-third {
+            float: none;
+            width: 100%;
+          }
+        }
+
+        ul {
+          li {
+            a, a:visited {
+              color: $text_color;
+              text-decoration: none;
+
+              @include breakpoint(mobile) {
+                display: block;
+                padding: $spacer - 5 0;
+                padding-left: $mini_spacer * 2;
+                border-bottom: $divider;
+              }
+            }
+          }
+        }
       }
     }
 
     h1.divider {
       @include breakpoint(mobile) {
-        border-bottom: none;
+        //border-bottom: none;
+        margin-bottom: 0;
+        padding-left: $mini_spacer * 2;
       }
     }
   }

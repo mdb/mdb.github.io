@@ -21,24 +21,26 @@
         %h1.divider
           %a{href: "/", title: 'Home'}
             = config.site_title
-        %nav.primary.column.one-third
-          %ul.nav
-            %li
-              %a{href: '/blog'} Blog
-            %li
-              %a{href: '/projects'} Recent Projects
-        %nav.secondary.column.one-third
-          %ul.nav
-            %li
-              %a{href: '#info'} About
-            %li.contact
-              %a{href: '#info'} Contact
-        %nav.tertiary.column.one-third
-          %ul.nav
-            %li
-              %a{href: 'http://github.com/mdb'} GitHub
-            %li
-              %a{href: 'http://instagram.com/clapclapexcitement'} Instagram
+        %button Toggle
+        %div.nav-container
+          %nav.primary.column.one-third
+            %ul.nav
+              %li
+                %a{href: '/blog'} Blog
+              %li
+                %a{href: '/projects'} Recent Projects
+          %nav.secondary.column.one-third
+            %ul.nav
+              %li
+                %a{href: '#info'} About
+              %li.contact
+                %a{href: '#info'} Contact
+          %nav.tertiary.column.one-third
+            %ul.nav
+              %li
+                %a{href: 'http://github.com/mdb'} GitHub
+              %li
+                %a{href: 'http://instagram.com/clapclapexcitement'} Instagram
     %section.content
       = yield
     %footer
