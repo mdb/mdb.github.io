@@ -1,12 +1,12 @@
 header {
   padding-top: $body_padding/2;
 
-  @include breakpoint {
+  @include breakpoint(mobile) {
     background: #fff;
   }
 
   a.mark {
-    margin: 0 0 15px -20px;
+    margin: 0 0 15px $body_padding - 20;
     @include border-radius($mark_dimensions, $mark_dimensions);
     text-indent: -5000px;
     display: block;
@@ -36,6 +36,7 @@ header {
     margin-left: $body_padding;
 
     @include breakpoint {
+      width: $mobile_width;
       margin-left: $mini_spacer * 2;
       width: $mobile_width;
     }
@@ -48,7 +49,7 @@ header {
     }
 
     h1.divider {
-      @include breakpoint {
+      @include breakpoint(mobile) {
         border-bottom: none;
       }
     }
