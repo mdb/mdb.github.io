@@ -7,10 +7,10 @@
 }
 
 ul.image-slideshow {
-  height: 880px;
+  height: 840px;
 
-  @include breakpoint {
-    height: 450px;
+  @include breakpoint(mobile) {
+    height: 375px;
   }
 
   li {
@@ -18,7 +18,7 @@ ul.image-slideshow {
     width: 960px;
 
     @include breakpoint {
-      width: 500px;
+      width: 100%;
     }
 
     input {
@@ -39,7 +39,7 @@ ul.image-slideshow {
     }
 
     label {
-      background: $divider_color;
+      background: $background;
       border-radius: 100%;
       cursor: pointer;
       display: block;
