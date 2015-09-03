@@ -64,6 +64,10 @@ ul.gallery {
       border-bottom: $divider;
       padding: $spacer 0;
 
+      @include breakpoint(mobile) {
+        padding-right: $mini_spacer * 2;
+      }
+
       &:last-child {
         border-bottom: none;
       }

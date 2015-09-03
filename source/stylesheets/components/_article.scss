@@ -1,4 +1,8 @@
 article {
+  @include breakpoint {
+    padding-right: $spacer;
+  }
+
   small {
     @include divider_heading;
   }
