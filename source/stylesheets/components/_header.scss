@@ -1,10 +1,8 @@
 header {
-  width: $desktop_width;
-  margin-left: $body_padding;
+  padding-top: $body_padding/2;
 
   @include breakpoint {
-    margin-left: $mini_spacer * 2;
-    width: $mobile_width;
+    background: #fff;
   }
 
   a.mark {
@@ -32,13 +30,26 @@ header {
   }
 
   .header-content {
+    width: $desktop_width;
     overflow: hidden;
     margin-bottom: $spacer * 2;
+    margin-left: $body_padding;
+
+    @include breakpoint {
+      margin-left: $mini_spacer * 2;
+      width: $mobile_width;
+    }
 
     nav ul li {
       a, a:visited {
         color: $text_color;
         text-decoration: none;
+      }
+    }
+
+    h1.divider {
+      @include breakpoint {
+        border-bottom: none;
       }
     }
   }
