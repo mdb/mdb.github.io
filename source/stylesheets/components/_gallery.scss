@@ -10,14 +10,14 @@ ul.gallery {
     padding: 0;
     border: 0;
     clear: none;
-    margin: 5px 0;
+    margin: $mini_spacer 0;
     line-height: 15px;
     text-decoration: none;
   }
 
   small, date, p.teaser {
     color: $secondary_text_color;
-    margin-bottom: 5px;
+    margin-bottom: $mini_spacer;
   }
 
   a.thumbnail {
