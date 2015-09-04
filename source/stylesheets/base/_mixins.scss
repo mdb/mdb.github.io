@@ -13,6 +13,7 @@
 
 @mixin divider_heading {
   padding-bottom: 5px;
+  font-size: $font_size;
   border-bottom: $divider;
   margin-bottom: $spacer;
   color: $secondary_text_color;
