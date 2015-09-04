@@ -8,7 +8,6 @@
   font-size: $small_font_size;
   color: $secondary_text_color;
   text-decoration: none;
-  font-family: $secondary_font_family;
 }
 
 @mixin divider_heading {
@@ -37,17 +36,5 @@
 
   @else if $point == mobile {
     @media (max-width: $mobile_break_point)  { @content; }
-  }
-}
-
-@mixin body_type {
-  font-size: $font_size + 5;
-  line-height: ($font_size + 5) * 1.7;
-  color: $content_text_color;
-  margin-bottom: $spacer + $spacer/2;
-
-  @include breakpoint(mobile) {
-    font-size: $font_size + 3;
-    line-height: ($font_size + 3) * 1.6;
   }
 }

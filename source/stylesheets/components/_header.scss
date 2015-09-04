@@ -95,6 +95,10 @@ header {
                 padding-left: $mini_spacer * 2;
                 border-bottom: $divider;
               }
+
+              &:hover {
+                color: #fff;
+              }
             }
           }
         }
