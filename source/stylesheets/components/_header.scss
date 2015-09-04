@@ -6,6 +6,7 @@ header {
   }
 
   button {
+    display: none;
     border: 0;
     text-indent: -5000px;
     width: 40px;
@@ -16,6 +17,10 @@ header {
     background: none;
     border-top: 8px solid #000;
     border-bottom: 8px solid #000;
+
+    @include breakpoint(mobile) {
+      display: block;
+    }
 
     &:focus {
       outline: 0;
@@ -34,22 +39,12 @@ header {
   }
 
   a.mark {
-    margin: -160px 0 $spacer -150px;
+    margin: -160px 0 $spacer * 2 -150px;
     text-indent: -5000px;
     display: block;
     width: 750px;
     height: 357px;
     background: url('/images/mark_pool.png') 0 0;
-
-    &:hover {
-      text-decoration: none;
-      @include border-radius($mark_dimensions, $mark_dimensions);
-      text-align: center;
-      background: #000;
-      text-indent: 0;
-      color: #fff;
-      line-height: 100px;
-    }
 
     @include breakpoint {
       display: none;
