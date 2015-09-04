@@ -11,7 +11,7 @@ describe 'index', type: :feature do
 
   context 'the projects gallery it displays' do
     it 'displays the proper section heading' do
-      expect(page).to have_selector('h1.divider', text: 'Recent Projects | View all')
+      expect(page).to have_selector('h1.divider', text: 'Recent Projects')
     end
 
     it 'displays the proper gallery markup' do
