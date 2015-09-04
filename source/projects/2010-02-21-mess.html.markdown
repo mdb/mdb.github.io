@@ -4,6 +4,7 @@ date: 2010/02/21
 date_completed: 2007 &ndash; Present
 tags: django, logo, open source
 thumbnail: mess_thumb.gif
+published: false
 images:
   - mess_github.png
 ---
