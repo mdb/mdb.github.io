@@ -4,6 +4,7 @@ date: 2013/10/02
 date_completed: January 2012
 thumbnail: 31_dream_homes_thumb.png
 tags: illustration, print
+featured: true
 images:
   - 31_dream_homes.png
 ---

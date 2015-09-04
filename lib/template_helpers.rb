@@ -79,10 +79,15 @@ module TemplateHelpers
   def fetch_posts(type, options)
     opts = {
       exclude: nil,
-      limit: nil
+      limit: nil,
+      only_featured: false
     }.merge(options)
 
     posts = blog(type).articles.reject { |post| post == opts[:exclude] }
+
+    if options[:only_featured]
+      posts = posts.reject { |post| post.data.featured != true }
+    end
 
     if opts[:limit].nil?
       posts

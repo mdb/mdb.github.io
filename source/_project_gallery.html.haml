@@ -1,6 +1,7 @@
 - limit = limit || nil
 - exclude = exclude || nil
-- projects = project_posts({limit: limit, exclude: exclude})
+- only_featured = only_featured || nil
+- projects = project_posts({only_featured: only_featured, limit: limit, exclude: exclude})
 
 %ul.gallery.projects
   - projects.each do |project|

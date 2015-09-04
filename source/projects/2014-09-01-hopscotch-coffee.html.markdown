@@ -4,6 +4,7 @@ date: 2014/09/01
 date_completed: Summer 2014
 tags: illustration, design
 thumbnail: hopscotch_coffee_thumb.jpg
+featured: true
 images:
   - hopscotch_townscape_full.jpg
 ---
