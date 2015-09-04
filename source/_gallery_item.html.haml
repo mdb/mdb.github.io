@@ -2,7 +2,7 @@
 - display_teaser = display_teaser || nil
 
 %li{class: gallery_item_classes(display_teaser)}
-  %a{class: "thumbnail", href: item.url}
+  %a{class: "thumbnail", title: item.title, href: item.url}
     - if type == 'blog'
       %img{src: blog_thumb_path(item.data.thumbnail)}
     - else
