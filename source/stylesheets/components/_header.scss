@@ -98,6 +98,10 @@ header {
 
               &:hover {
                 color: #fff;
+
+                @include breakpoint(mobile) {
+                  color: #000;
+                }
               }
             }
           }
