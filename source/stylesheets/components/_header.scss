@@ -107,7 +107,6 @@ header {
 
     h1.divider {
       @include breakpoint(mobile) {
-        border-bottom: none;
         margin-bottom: 0;
         padding-left: $mini_spacer * 2;
       }
