@@ -15,8 +15,8 @@ header {
     right: $mini_spacer * 3;
     top: $spacer + 10;
     background: none;
-    border-top: 8px solid #000;
-    border-bottom: 8px solid #000;
+    border-top: 8px solid $hamburger_color;
+    border-bottom: 8px solid $hamburger_color;
 
     @include breakpoint(mobile) {
       display: block;
@@ -31,7 +31,7 @@ header {
       height: 34px;
       content: '.';
       text-indent: -5000px;
-      border-top: 8px solid #000;
+      border-top: 8px solid $hamburger_color;
       position: absolute;
       right: 0;
       top: 4px;
@@ -103,7 +103,7 @@ header {
 
     h1.divider {
       @include breakpoint(mobile) {
-        //border-bottom: none;
+        border-bottom: none;
         margin-bottom: 0;
         padding-left: $mini_spacer * 2;
       }

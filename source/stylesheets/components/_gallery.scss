@@ -41,7 +41,7 @@ ul.gallery {
     li {
       &.item {
         float: left;
-        width: 31%;
+        width: $thumb_width;
         margin-right: $spacer - 5;
         margin-bottom: $spacer - 5;
 

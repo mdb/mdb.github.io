@@ -16,22 +16,19 @@ $h1_font_size: 15px;
 
 // Misc UI Elements
 $background: #111;
-$mark_dimensions: 100px;
-$responsive_mark_dimensions: 95px;
 $divider_color: #444;
 $divider: 1px solid $divider_color;
 $inverse_divider_color: #555;
 $inverse_divider: 1px solid $inverse_divider_color;
 $content_image_width: 500px;
+$hamburger_color: #000;
 
 // Thumbnails
-$thumb_width: 25%;
-$thumb_height: 25%;
-$gallery_item_height: $thumb_height;
+$thumb_width: 31%;
 
 // layout
 $body_padding: 100px;
-$desktop_width: 500px;
+$desktop_width: $content_image_width;
 $mobile_width: 100%;
 $spacer: 15px;
 $mini_spacer: 5px;
