@@ -3,6 +3,7 @@ ul.post-navigation {
 
   li {
     display: inline-block;
+    margin-left: 0;
 
     a {
       @include small_text;
