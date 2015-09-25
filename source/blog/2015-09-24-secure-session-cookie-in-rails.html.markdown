@@ -1,6 +1,6 @@
 ---
 title: Secure Session Cookie in Rails over HTTPS
-date: 2015/09/25
+date: 2015/09/24
 tags: rails, apache, https
 teaser: How to ensure the secure flag is present in your Apache-fronted Rails app's session cookies.
 ---
