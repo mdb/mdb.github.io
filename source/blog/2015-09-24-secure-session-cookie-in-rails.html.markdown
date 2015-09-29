@@ -13,7 +13,7 @@ However, many web applications redirect `http://` to `https://`, and many Ruby o
 1. user types `http://example.com` into browser address bar
 2. browser makes request to `http://example.com`
 3. browser receives 301 response w/ `https://example.com` specified as `Location` header; no session cookie is present/set
-4. browser makes request to `https://example.com` request
+4. browser makes request to `https://example.com`
 5. browser receives response with session cookie present/set; the secure flag is absent from the cookie
 6. user types `http://example.com` into browser address bar
 7. browser makes request to `http://example.com`
