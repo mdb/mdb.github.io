@@ -2,6 +2,7 @@
 title: Secure Session Cookie in Rails over HTTPS
 date: 2015/09/24
 tags: rails, apache, https
+thumbnail: impossible_shape.gif
 teaser: How to ensure the secure flag is present in your Apache-fronted Rails app's session cookies.
 ---
 
@@ -20,8 +21,18 @@ However, many web applications redirect `http://` to `https://`, and many Ruby o
 
 In Rails, calling `Rails.application.config.session_store` with `secure: true` in `config/initializers/session_store.rb` informs the Rails application to add the secure flag, but Rails will only do so if SSL is terminated at the application _or_ if the Rails-fronting web server at which SSL is terminated &ndash; Nginx or Apache in the above example &mdash; adds an `X-Forwarded-Proto` header whose value is `https`.
 
-For example, to do so in Apache:
+For example, to do so in Apache, add the following to the Apache config file controlling your site:
 
 ```
 RequestHeader set X-Forwarded-Proto "https"
 ```
+
+And add the following to your Rails app's `config/initializers/session_store.rb`:
+
+```
+Rails.application.config.session_store :cookie_store,
+                                       :key => '_your_app_name_session',
+                                       :secure => ENV['RAILS_ENV'] != 'development'
+```
+
+Note that this requires an application restart to take effect.
