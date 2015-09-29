@@ -32,14 +32,22 @@ article {
     margin-bottom: 4px;
   }
 
-  ul li {
-    list-style-type: disc;
-    margin-left: 1.3em;
+  ul {
+    margin-bottom: $spacer;
+
+    li {
+      list-style-type: disc;
+      margin-left: 1.3em;
+    }
   }
 
-  ol li {
-    list-style-type: decimal;
-    margin-left: 2.2em;
+  ol {
+    margin-bottom: $spacer;
+
+    li {
+      list-style-type: decimal;
+      margin-left: 2.2em;
+    }
   }
 
   .metadata {
