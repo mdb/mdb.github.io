@@ -17,7 +17,7 @@ article {
   }
 
   h2 {
-    margin: $spacer 0;
+    margin: $spacer*2 0 $spacer 0;
     font-size: $font-size + 6;
     line-height: ($font-size + 6) * 1.4;
     color: $inverse_text_color;
