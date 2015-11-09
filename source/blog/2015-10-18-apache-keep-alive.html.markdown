@@ -1,6 +1,7 @@
 ---
 title: Apache Persistant Connection Problems
 date: 2015/10/18
+thumbnail: texture_thumb.png
 tags: apache, operations, performance
 ---
 
@@ -22,6 +23,6 @@ Apache offers three settings through which HTTP keep-alive can be tuned:
 
 ## The Apache problem
 
-The Apache web server offers a `KeepAliveTimeout` default of 15 seconds. However, when individual clients don't require 15 seconds of connection persistance, the lengthy timeout is unnecessarily server memory-intensive. In such a problematic scenario, the creation of many Apache processes &mdash; one per connection &mdash; occupies RAM waiting for subsequent client requests inside a too-generous 15 second window. This can result in Apache worker thread exhaustion under moderate traffic.
+The Apache web server offers a `KeepAliveTimeout` default of 15 seconds. However, when individual clients don't require 15 seconds of connection persistance, the lengthy timeout is unnecessarily memory-intensive for the server. In such a problematic scenario, the creation of many Apache processes &mdash; one per connection &mdash; occupies RAM waiting for subsequent client requests inside a too-generous 15 second window. This can result in Apache worker thread exhaustion under moderate traffic.
 
 Access log analysis should offer insight. How frequently do individual clients perform requests? How much traffic is Apache serving? If worker thread usage consistently exceeds the request count inside a given window of time, `KeepAliveTimeout` may be too high. This is further substantiated if individual clients rarely perform multiple requests inside a 15 second window or if, for example, clients perform multiple requests inside an initial 5 seconds and don't perform subsequent requests for more than 10 seconds.
