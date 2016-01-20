@@ -5,6 +5,7 @@ date_completed: January 2012
 thumbnail: 31_dream_homes_thumb.png
 tags: illustration, print
 featured: true
+teaser: 1 house drawing each day for a month
 images:
   - 31_dream_homes.png
 ---

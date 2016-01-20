@@ -6,3 +6,5 @@
     %date="#{item.date.strftime('%B %e, %Y')}"
   %h2
     %a{href: item.url}=item.title
+  - if display_teaser == true
+    %p.teaser=item.data.teaser

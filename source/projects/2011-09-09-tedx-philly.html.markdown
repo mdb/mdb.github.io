@@ -5,6 +5,7 @@ date_completed: November 2011
 thumbnail: tedx_thumb.png
 tags: illustration, design
 featured: true
+teaser: An infinitely tiling illustration
 images:
   - tedx_1_large.png
   - tedx_2.png

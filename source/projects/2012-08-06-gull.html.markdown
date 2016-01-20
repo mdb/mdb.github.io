@@ -5,6 +5,7 @@ date_completed: August 2012
 thumbnail: gull_thumb.png
 tags: illustration, collage, design, print
 featured: true
+teaser: A postcard collage series
 images:
   - nested:
     - gull_gif.gif

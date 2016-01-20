@@ -1,10 +1,11 @@
 ---
-title: Hopscotch Coffee Illustration
+title: Hopscotch Coffee
 date: 2014/09/01
 date_completed: Summer 2014
 tags: illustration, design
 thumbnail: hopscotch_coffee_thumb.jpg
 featured: true
+teaser: Silk screened illustration commissioned for Hopscotch Coffee
 images:
   - hopscotch_townscape_full.jpg
 ---

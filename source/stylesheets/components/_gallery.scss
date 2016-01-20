@@ -19,8 +19,14 @@ ul.gallery {
   &.projects {
     li {
       h2 {
+        display: inline-block;
         text-align: right;
         width: $left_col_width;
+        margin-right: $left_col_buffer;
+      }
+
+      p.teaser {
+        display: inline-block;
       }
     }
   }
