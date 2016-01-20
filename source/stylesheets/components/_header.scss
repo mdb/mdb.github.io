@@ -1,2 +1,6 @@
 header {
+  h1 {
+    margin-left: $left_col_width + $left_col_buffer + 4;
+    margin-bottom: $spacer * 2;
+  }
 }

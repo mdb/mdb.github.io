@@ -1,2 +1,22 @@
 .instagram {
+  margin-bottom: $spacer * 2;
+
+  ul {
+    width: 700px;
+    overflow: hidden;
+
+    li {
+      float: left;
+      margin-right: $left_col_buffer;
+
+      a {
+        display: block;
+        border: none;
+
+        img {
+          width: $left_col_width;
+        }
+      }
+    }
+  }
 }

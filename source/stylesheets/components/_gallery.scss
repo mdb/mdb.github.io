@@ -1,3 +1,27 @@
 ul.gallery {
-  margin-bottom: $spacer;
+  margin-bottom: $spacer * 2;
+
+  li {
+    margin-bottom: 15px;
+
+    date,
+    h2 {
+      display: inline-block;
+    }
+
+    date {
+      text-align: right;
+      margin-right: $left_col_buffer;
+      width: $left_col_width;
+    }
+  }
+
+  &.projects {
+    li {
+      h2 {
+        text-align: right;
+        width: $left_col_width;
+      }
+    }
+  }
 }
