@@ -16,31 +16,9 @@
     = javascript_include_tag  "all"
   %body{:class => page_classes}
     %header
-      %a.mark{href: '/', title: 'Home'}
-      %div.header-content
-        %h1.divider
-          %a{href: "/", title: 'Home'}
-            = config.site_title
-        %button Toggle
-        %div.nav-container
-          %nav.primary.column.one-third
-            %ul.nav
-              %li
-                %a{href: '/blog'} Blog
-              %li
-                %a{href: '/projects'} Recent Projects
-          %nav.secondary.column.one-third
-            %ul.nav
-              %li
-                %a{href: '#info'} About
-              %li.contact
-                %a{href: '#info'} Contact
-          %nav.tertiary.column.one-third
-            %ul.nav
-              %li
-                %a{href: 'http://github.com/mdb'} GitHub
-              %li
-                %a{href: 'http://instagram.com/clapclapexcitement'} Instagram
+      %h1
+        %a{href: "/", title: 'Home'}
+          = config.site_title
     %section.content
       = yield
     %footer
