@@ -1,2 +1,19 @@
 footer {
+  section {
+    margin-bottom: $spacer * 2;
+
+    p {
+      margin-left: $left_col_width + $left_col_buffer + 4;
+      width: 475px;
+      margin-bottom: 15px;
+    }
+
+    ul {
+      margin-left: $left_col_width + $left_col_buffer + 4;
+
+      li {
+        margin-bottom: 15px;
+      }
+    }
+  }
 }

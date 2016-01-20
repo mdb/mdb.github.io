@@ -22,19 +22,21 @@
     %section.content
       = yield
     %footer
-      %h1.divider Info
-      %p I live in Philadelphia and work as a software developer and designer.
-      %p I am especially excited to work with journalists, artists, and nonprofits. I like to work in JavaScript, Ruby, new technologies, and on open source projects. I want to use technology to make cities more livable.</p>
-      %h1.divider Etc.
-      %ul
-        %li
-          %a{href: "/atom.xml"}Atom Feed
-        %li
-          %a{href: "/rss.xml"}RSS Feed
-        %li
-          %a{href: "http://github.com/mdb"}GitHub
-        %li
-          %a{href: "http://twitter.com/clapexcitement"}Twitter
+      %section
+        %h1.divider Info
+        %p I live in Philadelphia and work as a software developer and designer.
+        %p I am especially excited to work with journalists, artists, and nonprofits. I like to work in JavaScript, Ruby, new technologies, and on open source projects. I want to use technology to make cities more livable.</p>
+      %section
+        %h1.divider Etc.
+        %ul
+          %li
+            %a{href: "/atom.xml"}Atom Feed
+          %li
+            %a{href: "/rss.xml"}RSS Feed
+          %li
+            %a{href: "http://github.com/mdb"}GitHub
+          %li
+            %a{href: "http://twitter.com/clapexcitement"}Twitter
     %script{type: "text/html", id: "instagram-template"}
       %ul
         {[ _.each(items, function(item, key, list) { ]}
