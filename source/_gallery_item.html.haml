@@ -2,18 +2,7 @@
 - display_teaser = display_teaser || nil
 
 %li{class: gallery_item_classes(display_teaser)}
-  %a{class: "thumbnail", title: item.title, href: item.url}
-    - if type == 'blog'
-      %img{src: blog_thumb_path(item.data.thumbnail)}
-    - else
-      %img{src: project_thumb_path(item.data.thumbnail)}
-  %div.details
-    - if type == 'blog'
-      %date="#{item.date.strftime('%B %e, %Y')}"
-    - else
-      %small Project
-    %h2
-      %a{href: item.url}=item.title
-    - if display_teaser
-      %p.teaser=item.data.teaser
-    = partial :tags, locals: {item: item, path_prefix: type}
+  - if type == 'blog'
+    %date="#{item.date.strftime('%B %e, %Y')}"
+  %h2
+    %a{href: item.url}=item.title
