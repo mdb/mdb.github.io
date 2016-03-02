@@ -1,2 +1,16 @@
 ul.tags {
+  li {
+    display: inline-block;
+    font-style: italic;
+
+    &:after {
+      content: ',';
+    }
+
+    &.last {
+      &:after {
+        content: '';
+      }
+    }
+  }
 }
