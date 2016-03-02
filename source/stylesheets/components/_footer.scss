@@ -1,6 +1,22 @@
 footer {
+  background: #000;
+  margin: -$body_padding;
+  margin-top: 0;
+  overflow: hidden;
+  padding-top: $spacer * 2;
+
   section {
+    color: #fff;
+    margin-left: $body_padding;
     margin-bottom: $spacer * 2;
+
+    h1, a {
+      color: #fff;
+    }
+
+    a {
+      border-bottom: 1px solid #fff;
+    }
 
     p {
       margin-left: $left_col_width + $left_col_buffer + 4;
