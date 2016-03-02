@@ -16,6 +16,16 @@ ul.gallery {
     }
   }
 
+  &.blog {
+    li {
+      p.teaser {
+        margin-left: $left_col_buffer + $left_col_width;
+        margin-top: 5px;
+        width: 500px;
+      }
+    }
+  }
+
   &.projects {
     li {
       h2 {
