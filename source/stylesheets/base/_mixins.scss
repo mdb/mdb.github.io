@@ -17,3 +17,29 @@
     @media (max-width: $mobile_break_point)  { @content; }
   }
 }
+
+@mixin column {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  float: left;
+}
+
+@mixin quarter_column {
+  @include column;
+  width: 25%;
+  @include responsive_width;
+}
+
+@mixin container_section {
+  margin: 0 auto;
+  width: $desktop_width;
+  @include responsive_width;
+}
+
+@mixin small_text {
+  font-size: $small_font_size;
+  color: $secondary_text_color;
+  font-family: $secondary_font_family;
+  text-decoration: none;
+}

@@ -1,1 +1,3 @@
-
+.column.one-quarter {
+  @include quarter_column;
+}

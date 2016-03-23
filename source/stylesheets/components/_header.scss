@@ -1,2 +1,51 @@
 header {
+  @include container_section;
+
+  button {
+    display: none;
+  }
+
+  div.mark {
+    @include quarter_column;
+
+    a {
+      text-indent: -5000px;
+      display: block;
+      width: $mark_dimensions;
+      height: $mark_dimensions;
+      background: image-url('/images/mark_grayscale.png') center center;
+      float: left;
+
+      &:hover {
+        text-decoration: none;
+        @include border-radius($mark_dimensions, $mark_dimensions);
+        text-align: center;
+        background: #000;
+        text-indent: 0;
+        color: #fff;
+        line-height: 100px;
+      }
+    }
+  }
+
+  nav {
+    height: $mark_dimensions;
+
+    ul.nav {
+      margin-left: $gallery_spacer;
+      bottom: $spacer;
+
+      li {
+        a {
+          @include small_text;
+        }
+      }
+    }
+
+    &.tertiary {
+      ul.nav li a {
+        color: $tertiary_text_color;
+      }
+    }
+  }
 }

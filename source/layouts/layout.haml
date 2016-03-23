@@ -17,8 +17,9 @@
   %body{class: page_classes}
     %header
       %div.header-content
-        %a{class: "mark", href: "/", title: "Home"}
-          = config.site_title
+        %div.mark
+          %a{href: "/", title: "Home"}
+            = config.site_title
         %button Toggle
         %nav.primary.column.one-quarter
           %ul.nav
