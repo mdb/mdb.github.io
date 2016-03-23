@@ -14,12 +14,6 @@ ul, li {
   list-style-type: none;
 }
 
-date, small {
-  display: block;
-  @include small_text;
-  margin-bottom: $spacer;
-}
-
 a, a:visited, a:focus {
   color: $link_color;
 }
@@ -33,27 +27,4 @@ pre {
     font-size: $font_size + 1;
     line-height: $font_size + 4;
   }
-}
-
-ol li {
-  list-style-type: decimal;
-  list-style-position: outside;
-}
-
-h1, h2, h3, h4, h5 {
-  font-weight: normal;
-  font-size: $font_size;
-
-  &.divider {
-    @include divider_heading;
-
-    a {
-      color: $secondary_text_color;
-      text-decoration: none;
-    }
-  }
-}
-
-p {
-  margin-bottom: $spacer;
 }

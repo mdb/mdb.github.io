@@ -8,29 +8,7 @@ body {
 }
 
 section.content {
-  margin-left: $body_padding;
 
-  @include breakpoint {
-    margin-left: $mini_spacer * 2;
-  }
-}
-
-.column {
-  float: left;
-  margin-right: 10px;
-
-  &.one-third {
-    width: 31%;
-  }
-
-  &.one-half {
-    width: 40%;
-    margin-right: $spacer * 2;
-  }
-
-  &.two-thirds {
-    width: 63%;
-  }
 }
 
 img {

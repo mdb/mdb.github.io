@@ -16,22 +16,4 @@
     opacity: 1;
     pointer-events: auto;
   }
-
-  h2 {
-    color: #000;
-  }
-
-  a.close {
-    position: absolute;
-    right: 10px;
-  }
-
-  div.modal-content {
-    padding: $mini_spacer * 2;
-    position: relative;
-    margin: 5% auto 0 auto;
-    width: 60%;
-    overflow: hidden;
-    background: #fff;
-  }
 }

@@ -1,34 +1,29 @@
 // Text Colors
-$text_color: #777;
+$text_color: #313131;
 $inverse_text_color: #fff;
 $link_color: #0473ad;
-$content_text_color: #666;
-$secondary_text_color: #999;
+$content_text_color: #444;
+$secondary_text_color: #bbb;
 
 // Font Styles
-$font_family: "Fira Mono", monospace;
-$secondary_font_family: "Courier New", Courier, monospace;
+$font_family: Georgia, 'Times New Roman', serif;
+$secondary_font_family: Helvetica, Arial, sans-serif;
 $font_size: 12px;
 $small_font_size: 11px;
 
 // Misc UI Elements
-$background: #111;
-$divider_color: #444;
+$background: #fff;
+$divider_color: #dbdbdb;
 $divider: 1px solid $divider_color;
 $inverse_divider_color: #555;
 $inverse_divider: 1px solid $inverse_divider_color;
-$content_image_width: 500px;
-$hamburger_color: #000;
 
 // Thumbnails
-$thumb_width: 31%;
+$thumb_width: 25%;
 
 // layout
-$body_padding: 100px;
-$desktop_width: $content_image_width;
-$mobile_width: 100%;
+$desktop_width: 960px;
 $spacer: 15px;
-$mini_spacer: 5px;
 $gallery_spacer: $spacer - 10;
 
 // breakpoints
