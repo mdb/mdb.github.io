@@ -14,33 +14,30 @@
     = stylesheet_link_tag "all"
     = stylesheet_link_tag "http://fonts.googleapis.com/css?family=Fira+Mono:400,700"
     = javascript_include_tag  "all"
-  %body{:class => page_classes}
+  %body{class: page_classes}
     %header
-      %a.mark{href: '/', title: 'Home'}
       %div.header-content
-        %h1.divider
-          %a{href: "/", title: 'Home'}
-            = config.site_title
+        %a{class: "mark", href: "/", title: "Home"}
+          = config.site_title
         %button Toggle
-        %div.nav-container
-          %nav.primary.column.one-third
-            %ul.nav
-              %li
-                %a{href: '/blog'} Blog
-              %li
-                %a{href: '/projects'} Recent Projects
-          %nav.secondary.column.one-third
-            %ul.nav
-              %li
-                %a{href: '#info'} About
-              %li.contact
-                %a{href: '#info'} Contact
-          %nav.tertiary.column.one-third
-            %ul.nav
-              %li
-                %a{href: 'http://github.com/mdb'} GitHub
-              %li
-                %a{href: 'http://instagram.com/clapclapexcitement'} Instagram
+        %nav.primary.column.one-quarter
+          %ul.nav
+            %li
+              %a{href: '/blog'} Blog
+            %li
+              %a{href: '/projects'} Recent Projects
+        %nav.secondary.column.one-quarter
+          %ul.nav
+            %li
+              %a{href: '#info'} About
+            %li.contact
+              %a{href: '#info'} Contact
+        %nav.tertiary.column.one-quarter
+          %ul.nav
+            %li
+              %a{href: 'http://github.com/mdb'} GitHub
+            %li
+              %a{href: 'http://instagram.com/clapclapexcitement'} Instagram
     %section.content
       = yield
     %footer
