@@ -1,7 +1,7 @@
 %div.content-wrap
   %div.content
     %h1.divider.homepage-projects <a href="/projects">Recent Projects</a>
-    = partial :project_gallery, :locals => { limit: 6, only_featured: true }
+    = partial :project_gallery, :locals => { limit: 8, only_featured: true }
     %h1.divider.homepage-blog-posts <a href="/blog">Blog</a>
     = partial :blog_gallery, :locals => { limit: 3, display_teaser: true }
     %h1.divider <a href="/projects">Instagram</a>

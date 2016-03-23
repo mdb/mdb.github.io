@@ -1,2 +1,56 @@
 ul.gallery {
+  overflow: hidden;
+
+  li.item {
+    float: left;
+    position: relative;
+    width: $thumb_width;
+    height: 125px;
+    padding-bottom: 19%;
+
+    a.thumbnail {
+      display: block;
+      margin: $gallery_spacer;
+      overflow: hidden;
+      background: image-url('/images/loading_indicator.gif') no-repeat center;
+
+      &.loaded {
+        background: none;
+      }
+
+      img {
+        width: 100%;
+      }
+    }
+
+    div.details {
+      margin: $gallery_spacer;
+
+      @include breakpoint(mobile) {
+        display: none;
+      }
+
+      small, date {
+        display: inline-block;
+        margin-bottom: $spacer - 10;
+
+        &.blog:after {
+          content: '/';
+          margin-left: .5em;
+          display: inline-block;
+          @include small_text;
+        }
+      }
+
+      h2 {
+        margin-bottom: $spacer - 10;
+      }
+
+      p.teaser {
+        margin-bottom: $spacer - 10;
+        font-style: italic;
+        color: $secondary_text_color;
+      }
+    }
+  }
 }
