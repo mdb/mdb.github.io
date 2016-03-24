@@ -1,5 +1,8 @@
 header {
   @include container_section;
+  border-bottom: $divider;
+  padding: 50px 0 25px 0;
+
 
   button {
     display: none;
@@ -29,11 +32,13 @@ header {
   }
 
   nav {
-    height: $mark_dimensions;
+    height: $spacer + $mark_dimensions !important;
+    position: relative;
 
     ul.nav {
       margin-left: $gallery_spacer;
       bottom: $spacer;
+      position: absolute;
 
       li {
         a {

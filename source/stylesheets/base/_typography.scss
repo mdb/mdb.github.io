@@ -29,8 +29,19 @@ pre {
   }
 }
 
-h2 {
+h1, h2 {
   font-weight: normal;
+
+  &.divider {
+    @include small_text;
+    border-bottom: $divider;
+    padding: $spacer $gallery_spacer;
+    margin-bottom: $spacer;
+
+    a {
+      color: $secondary_text_color;
+    }
+  }
 }
 
 small, date {

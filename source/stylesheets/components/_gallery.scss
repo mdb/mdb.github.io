@@ -1,5 +1,7 @@
 ul.gallery {
   overflow: hidden;
+  border-bottom: $divider;
+  padding-bottom: 50px;
 
   li.item {
     float: left;
