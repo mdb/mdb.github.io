@@ -43,7 +43,14 @@ ul.gallery {
       }
 
       h2 {
+        font-size: $font_size + 2;
+        text-decoration: none;
         margin-bottom: $spacer - 10;
+
+        a {
+          color: $text_color;
+          text-decoration: none;
+        }
       }
 
       p.teaser {

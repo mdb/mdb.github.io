@@ -28,3 +28,11 @@ pre {
     line-height: $font_size + 4;
   }
 }
+
+h2 {
+  font-weight: normal;
+}
+
+small, date {
+  @include small_text;
+}
