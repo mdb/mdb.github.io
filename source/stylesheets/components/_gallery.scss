@@ -4,12 +4,16 @@ ul.gallery {
   padding: 25px 0;
 
   &.blog {
-    padding-bottom: 75px;
+    li.item {
+      height: 200px;
+    }
   }
 
   &.projects {
-    li.item {
-      height: 100px;
+    .index & {
+      li.item {
+        height: 100px;
+      }
     }
   }
 
