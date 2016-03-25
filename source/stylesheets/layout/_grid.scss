@@ -1,3 +1,10 @@
-.column.one-quarter {
-  @include quarter_column;
+.column {
+  &.one-quarter {
+    @include quarter_column;
+  }
+
+  &.one-half {
+    float: left;
+    width: 50%;
+  }
 }

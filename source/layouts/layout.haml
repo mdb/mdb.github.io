@@ -45,25 +45,26 @@
       %section
         %div.content
           %h1#info Info
-          %div.column.one-half
+          %div.column.one-quarter
             %h2 Mike Ball
-            %p I live in Philadelphia and work as a software developer and designer.
-            %p I am especially excited to work with journalists, artists, and nonprofits. I like to work in JavaScript, Ruby, new technologies, and on open source projects. I want to use technology to make cities more livable. Interested in working with me? <a href="mailto:&#109;&#105;&#107;&#101;&#100;&#98;&#97;&#108;&#108;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">Get in touch</a>.</p>
+            %p I live in Philadelphia and work as a multi-disciplinary software developer and designer.
+            %p I am especially excited to work with journalists, artists, and nonprofits. I like to work in JavaScript, Ruby, Golang, new technologies, and on open source projects. Interested in working with me? <a href="mailto:&#109;&#105;&#107;&#101;&#100;&#98;&#97;&#108;&#108;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">Get in touch</a>.</p>
           %div.column.one-half.instagram-container
             %h2 Instagram
             %div.instagram
-          %div.full
+          %div.column.one-quarter
             %h2 Etc.
-            %ul.column.one-half
-              %li
-                %a{href: "/atom.xml"}Atom Feed
-              %li
-                %a{href: "/rss.xml"}RSS Feed
-            %ul.column.one-half
+            %ul
               %li
                 %a{href: "http://github.com/mdb"}GitHub
               %li
+                %a{href: "https://instagram.com/clapclapexcitement"}Instagram
+              %li
                 %a{href: "http://twitter.com/clapexcitement"}Twitter
+              %li
+                %a{href: "/rss.xml"}RSS Feed
+              %li
+                %a{href: "/atom.xml"}Atom Feed
     %script{type: "text/html", id: "instagram-template"}
       %ul.gallery.instagram
         {[ _.each(items, function(item, key, list) { ]}

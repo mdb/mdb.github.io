@@ -16,8 +16,17 @@ ul.gallery {
   &.instagram {
     padding-bottom: 50px;
 
+    footer & {
+      border-bottom: 0;
+      padding: 0;
+    }
+
     li.item {
       height: 60px;
+
+      footer & {
+        height: 30px;
+      }
     }
   }
 
