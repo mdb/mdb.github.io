@@ -1,9 +1,10 @@
 = wrap_layout :layout do
   %small.divider Blog
+  %date.column.one-quarter="Posted #{current_article.date.strftime('%B %e, %Y')}"
   %article
     %h1.title=current_article.title
-    %date="Posted #{current_article.date.strftime('%B %e, %Y')}"
-    = yield
+    %div.blog-content
+      = yield
     %div.metadata
       = partial :tags, locals: {item: current_article, path_prefix: "blog"}
       = partial :post_navigation, locals: {label: "post"}

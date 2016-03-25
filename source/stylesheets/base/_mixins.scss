@@ -54,7 +54,7 @@
 @mixin large_heading {
   font-size: $font_size + 15;
   line-height: $font_size + 15 * 1.5;
-  margin-bottom: $spacer;
+  margin-bottom: $spacer + 10;
 }
 
 @mixin body_type {

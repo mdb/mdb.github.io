@@ -1,16 +1,29 @@
 article {
   @include two_thirds_column;
+  padding-bottom: 50px;
 
   h1 {
-    margin-top: 25px;
+    margin-top: 15px;
     @include large_heading;
   }
 
-  date {
-    margin-bottom: 25px;
-  }
+  .blog-content {
+    h2 {
+      margin-bottom: $spacer + 10;
+      margin-top: 50px;
+      font-size: $font_size + 10;
+    }
 
-  p {
-    @include body_type;
+    p, li {
+      @include body_type;
+    }
+
+    ul {
+      li {
+        margin-bottom: 10px;
+        margin-left: 1.3em;
+        list-style-type: disc;
+      }
+    }
   }
 }
