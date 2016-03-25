@@ -4,7 +4,6 @@ date: 2012/08/06
 date_completed: August 2012
 thumbnail: gull_thumb.png
 tags: illustration, collage, design, print
-featured: true
 images:
   - nested:
     - gull_gif.gif

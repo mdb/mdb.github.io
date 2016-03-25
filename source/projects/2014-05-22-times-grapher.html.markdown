@@ -4,7 +4,6 @@ date: 2014/05/22
 date_completed: Spring 2012
 tags: rails, backbone, journalism, open data
 thumbnail: times_grapher_thumb.png
-featured: true
 images:
   - times_grapher_1.png
 ---
