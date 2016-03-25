@@ -1,2 +1,16 @@
 article {
+  @include two_thirds_column;
+
+  h1 {
+    margin-top: 25px;
+    @include large_heading;
+  }
+
+  date {
+    margin-bottom: 25px;
+  }
+
+  p {
+    @include body_type;
+  }
 }

@@ -33,10 +33,7 @@ h1, h2 {
   font-weight: normal;
 
   &.divider {
-    @include small_text;
-    border-bottom: $divider;
-    padding: $spacer $gallery_spacer;
-    margin-bottom: $spacer;
+    @include divider;
 
     a {
       color: $secondary_text_color;
@@ -45,5 +42,10 @@ h1, h2 {
 }
 
 small, date {
+  display: block;
   @include small_text;
+
+  &.divider {
+    @include divider;
+  }
 }

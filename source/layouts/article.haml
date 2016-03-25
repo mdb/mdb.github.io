@@ -1,6 +1,6 @@
 = wrap_layout :layout do
+  %small.divider Blog
   %article
-    %small Blog
     %h1.title=current_article.title
     %date="Posted #{current_article.date.strftime('%B %e, %Y')}"
     = yield

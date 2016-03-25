@@ -31,6 +31,12 @@
   @include responsive_width;
 }
 
+@mixin two_thirds_column {
+  @include column;
+  width: 75%;
+  @include responsive_width;
+}
+
 @mixin container_section {
   margin: 0 auto;
   width: $desktop_width;
@@ -43,4 +49,24 @@
   color: $secondary_text_color;
   font-family: $secondary_font_family;
   text-decoration: none;
+}
+
+@mixin large_heading {
+  font-size: $font_size + 15;
+  line-height: $font_size + 15 * 1.5;
+  margin-bottom: $spacer;
+}
+
+@mixin body_type {
+  font-size: $font_size + 5;
+  line-height: ($font_size + 5) * 1.7;
+  color: $content_text_color;
+  margin-bottom: $spacer + $spacer/2;
+}
+
+@mixin divider {
+  @include small_text;
+  border-bottom: $divider;
+  padding: $spacer $gallery_spacer;
+  margin-bottom: $spacer;
 }
