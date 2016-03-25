@@ -65,10 +65,10 @@
               %li
                 %a{href: "http://twitter.com/clapexcitement"}Twitter
     %script{type: "text/html", id: "instagram-template"}
-      %ul
+      %ul.gallery.instagram
         {[ _.each(items, function(item, key, list) { ]}
-        %li
-          %a{href: "{{ item.url }}"}
+        %li.item
+          %a{class: "thumbnail", href: "{{ item.url }}"}
             %img{src: "{{ item.imgSrc }}"}
         {[ }); ]}
     :javascript

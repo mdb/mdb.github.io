@@ -1,7 +1,25 @@
 ul.gallery {
   overflow: hidden;
   border-bottom: $divider;
-  padding-bottom: 50px;
+  padding: 25px 0;
+
+  &.blog {
+    padding-bottom: 75px;
+  }
+
+  &.projects {
+    li.item {
+      height: 100px;
+    }
+  }
+
+  &.instagram {
+    padding-bottom: 50px;
+
+    li.item {
+      height: 60px;
+    }
+  }
 
   li.item {
     float: left;

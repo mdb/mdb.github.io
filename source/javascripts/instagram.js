@@ -6,7 +6,7 @@
       userId: null,
       accessToken: null,
       template: "#instagram-template",
-      count: 9,
+      count: 8,
     }, options);
 
     this.get = function () {
