@@ -1,2 +1,67 @@
 .project {
+  overflow: hidden;
+  border-bottom: 1px solid $divider_color;
+  padding-bottom: $spacer * 2;
+
+  .images {
+    padding-bottom: $spacer * 2;
+    margin-bottom: $spacer * 2;
+    border-bottom: 1px solid $divider_color;
+
+    img {
+      margin-bottom: $spacer;
+      width: 100%;
+    }
+
+    .image-column {
+      clear: both;
+      overflow: hidden;
+
+      .image {
+        float: left;
+        width: 49%;
+        overflow: hidden;
+
+        @include breakpoint {
+          width: 100%;
+        }
+
+        img {
+          float: left;
+          margin-right: $gallery_spacer;
+        }
+
+        &:nth-child(even) {
+          float: right;
+        }
+
+        &.first.last {
+          float: none;
+          margin-left: 25%;
+          width: 75%;
+
+          @include breakpoint {
+            width: 100%;
+            margin-left: 0;
+          }
+
+          img {
+            width: auto;
+
+            @include breakpoint {
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  h2 {
+    @include large_heading;
+  }
+
+  p {
+    @include body_type;
+  }
 }
