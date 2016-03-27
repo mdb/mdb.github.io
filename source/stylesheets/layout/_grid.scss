@@ -3,6 +3,10 @@
     @include quarter_column;
   }
 
+  &.three-quarters {
+    @include three_quarters_column;
+  }
+
   &.one-half {
     float: left;
     width: 50%;
