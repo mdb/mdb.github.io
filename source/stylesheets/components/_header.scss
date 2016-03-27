@@ -1,11 +1,41 @@
+$hamburger_color: #000;
+
 header {
   @include container_section;
   border-bottom: $divider;
   padding: 50px 0 25px 0;
 
-
   button {
     display: none;
+    border: 0;
+    text-indent: -5000px;
+    width: 40px;
+    height: 34px;
+    position: absolute;
+    right: 0;
+    top: $spacer + 10;
+    background: none;
+    border-top: 8px solid $hamburger_color;
+    border-bottom: 8px solid $hamburger_color;
+
+    @include breakpoint(mobile) {
+      display: block;
+    }
+
+    &:focus {
+      outline: 0;
+    }
+
+    &:before {
+      width: 40px;
+      height: 34px;
+      content: '.';
+      text-indent: -5000px;
+      border-top: 8px solid $hamburger_color;
+      position: absolute;
+      right: 0;
+      top: 4px;
+    }
   }
 
   div.mark {
@@ -32,17 +62,37 @@ header {
   }
 
   nav {
-    height: $spacer + $mark_dimensions !important;
     position: relative;
+
+    &.column.one-quarter {
+      padding-top: 60px;
+
+      @include breakpoint(mobile) {
+        //display: none;
+
+        float: none;
+        padding: 0;
+        width: 100%;
+      }
+    }
 
     ul.nav {
       margin-left: $gallery_spacer;
-      bottom: $spacer;
-      position: absolute;
+
+      @include breakpoint(mobile) {
+        width: 100%;
+      }
 
       li {
-        a {
+        a, a:visited {
           @include small_text;
+
+          @include breakpoint(mobile) {
+            width: 100%;
+            display: block;
+            padding: $spacer - 5 0;
+            border-bottom: $divider;
+          }
         }
       }
     }
