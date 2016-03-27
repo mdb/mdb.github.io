@@ -11,6 +11,6 @@ images:
 
 wp2middleman is a Ruby gem that migrates the Wordpress posts in a Wordpress XML export file to [middleman-style](http://middlemanapp.com) markdown files.
 
-wp2middleman provides a 'wp2mm' commandline executable, as well as a WP2Middleman module.
+wp2middleman provides a `wp2mm` commandline executable, as well as a WP2Middleman module.
 
 [View source and documentation on Github &raquo;](http://github.com/mdb/wp2middleman)

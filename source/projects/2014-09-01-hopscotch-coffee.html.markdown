@@ -9,4 +9,4 @@ images:
   - hopscotch_townscape_full.jpg
 ---
 
-Hopscotch Coffee contacted me about using my illustrations in their new Bloomington, Indiana retail location. I created an 18" x 24" micron pen drawing for the storefront.
+18" x 24" micron pen drawing for Hopscotch Coffee's Bloomington, IN shop.
