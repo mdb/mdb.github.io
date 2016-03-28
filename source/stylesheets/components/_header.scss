@@ -7,7 +7,6 @@ header {
 
   @include breakpoint(mobile) {
     padding-top: $spacer;
-    border-bottom: none;
     padding-bottom: 0;
   }
 
@@ -74,6 +73,14 @@ header {
 
   nav {
     position: relative;
+
+    @include breakpoint(mobile) {
+      display: none;
+
+      &.expanded {
+        display: block;
+      }
+    }
 
     &.column.one-quarter {
       padding-top: 60px;

@@ -1,5 +1,5 @@
 $(document).ready(function() {
   $('button').click(function() {
-    $(this).toggleClass('expanded').siblings('div.nav-container').toggleClass('expanded');
+    $(this).toggleClass('expanded').siblings('nav').toggleClass('expanded');
   });
 });
