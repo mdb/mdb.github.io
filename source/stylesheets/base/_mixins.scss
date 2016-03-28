@@ -59,8 +59,12 @@
 
 @mixin large_heading {
   font-size: $font_size + 20;
-  line-height: $font_size + 15 * 1.5;
+  line-height: $font_size + 15 * 1.75;
   margin-bottom: $spacer * 2;
+
+  @include breakpoint(mobile) {
+    margin-bottom: $spacer;
+  }
 }
 
 @mixin body_type {
@@ -68,6 +72,10 @@
   line-height: ($font_size + 5) * 1.7;
   color: $content_text_color;
   margin-bottom: $spacer + $spacer/2;
+
+  @include breakpoint(mobile) {
+    width: 92%;
+  }
 }
 
 @mixin divider {

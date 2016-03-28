@@ -3,10 +3,26 @@
   border-bottom: 1px solid $divider_color;
   padding-bottom: $spacer * 2;
 
+  @include breakpoint(mobile) {
+    padding-bottom: $spacer;
+  }
+
+  .column {
+    @include breakpoint(mobile) {
+      padding-left: $spacer;
+    }
+  }
+
   .images {
     padding-bottom: $spacer * 2;
     margin-bottom: $spacer * 2;
     border-bottom: 1px solid $divider_color;
+
+    @include breakpoint(mobile) {
+      border-bottom: 0;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
 
     img {
       margin-bottom: $spacer;
@@ -63,5 +79,11 @@
 
   p {
     @include body_type;
+  }
+
+  date {
+    @include breakpoint(mobile) {
+      margin-bottom: $spacer;
+    }
   }
 }
