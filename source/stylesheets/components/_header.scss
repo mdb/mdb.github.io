@@ -5,6 +5,12 @@ header {
   border-bottom: $divider;
   padding: 50px 0 25px 0;
 
+  @include breakpoint(mobile) {
+    padding-top: $spacer;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
   button {
     display: none;
     border: 0;
@@ -20,6 +26,7 @@ header {
 
     @include breakpoint(mobile) {
       display: block;
+      margin: 50px $spacer 0 0;
     }
 
     &:focus {
@@ -40,6 +47,10 @@ header {
 
   div.mark {
     @include quarter_column;
+
+    @include breakpoint(mobile) {
+      margin: 0 0 $spacer $spacer;
+    }
 
     a {
       text-indent: -5000px;
@@ -76,9 +87,13 @@ header {
       }
     }
 
-    ul.nav {
-      margin-left: $gallery_spacer;
+    &.primary {
+      @include breakpoint(mobile) {
+        border-top: 1px solid $divider_color;
+      }
+    }
 
+    ul.nav {
       @include breakpoint(mobile) {
         width: 100%;
       }
@@ -88,10 +103,11 @@ header {
           @include small_text;
 
           @include breakpoint(mobile) {
+            background: #000;
             width: 100%;
             display: block;
-            padding: $spacer - 5 0;
-            border-bottom: $divider;
+            padding: 10px 0 10px $spacer;
+            border-bottom: $inverse_divider;
           }
         }
       }
