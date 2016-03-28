@@ -3,9 +3,23 @@ ul.gallery {
   border-bottom: $divider;
   padding: 25px 0;
 
+  @include breakpoint(mobile) {
+    padding: 0;
+  }
+
   &.blog {
     li.item {
       height: 200px;
+
+      @include breakpoint(mobile) {
+        height: auto;
+        padding: 0;
+        border-bottom: $divider;
+
+        a.thumbnail {
+          display: none;
+        }
+      }
     }
   }
 
@@ -13,12 +27,25 @@ ul.gallery {
     .index & {
       li.item {
         height: 100px;
+
+        @include breakpoint(mobile) {
+          height: 100%;
+          padding: 0;
+
+          .details {
+            display: none;
+          }
+        }
       }
     }
   }
 
   &.instagram {
     padding-bottom: 50px;
+
+    @include breakpoint(mobile) {
+      padding-bottom: 0;
+    }
 
     footer & {
       border-bottom: 0;
@@ -27,6 +54,11 @@ ul.gallery {
 
     li.item {
       height: 60px;
+
+      @include breakpoint(mobile) {
+        height: 100%;
+        padding: 0;
+      }
 
       footer & {
         height: 30px;
@@ -41,6 +73,11 @@ ul.gallery {
     height: 125px;
     padding-bottom: 19%;
 
+    @include breakpoint(mobile) {
+      float: none;
+      width: 100%;
+    }
+
     a.thumbnail {
       display: block;
       margin: $gallery_spacer;
@@ -49,6 +86,10 @@ ul.gallery {
 
       &.loaded {
         background: none;
+      }
+
+      @include breakpoint(mobile) {
+        margin: 0;
       }
 
       img {
@@ -60,7 +101,8 @@ ul.gallery {
       margin: $gallery_spacer;
 
       @include breakpoint(mobile) {
-        display: none;
+        margin: 0;
+        padding-left: $spacer;
       }
 
       small, date {

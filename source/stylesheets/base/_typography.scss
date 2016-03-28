@@ -37,6 +37,7 @@ h1, h2 {
 
     @include breakpoint(mobile) {
       padding-left: $spacer;
+      margin-bottom: 0;
     }
 
     a {
