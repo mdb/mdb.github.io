@@ -4,10 +4,29 @@ footer {
   line-height: $font_size * 1.8;
   padding: 50px 0 100px 0;
 
+  @include breakpoint(mobile) {
+    padding-bottom: $spacer * 2;
+  }
+
+  .column {
+    @include breakpoint(mobile) {
+      margin-bottom: $spacer * 2;
+    }
+  }
 
   h2, p, ul {
     width: 95%;
     font-size: $font_size + 1;
+
+    @include breakpoint(mobile) {
+      padding-left: $spacer;
+    }
+  }
+
+  h2, ul {
+    @include breakpoint(mobile) {
+      width: 100%;
+    }
   }
 
   p {
@@ -17,11 +36,21 @@ footer {
   h1 {
     font-size: $font_size + 1;
     margin-bottom: 25px;
+
+    @include breakpoint(mobile) {
+      padding-left: $spacer;
+    }
   }
 
   h2 {
     border-bottom: 1px solid #555;
     padding-bottom: $spacer - 5;
     margin-bottom: $spacer;
+  }
+
+  .instagram-container {
+    @include breakpoint(mobile) {
+      display: none;
+    }
   }
 }

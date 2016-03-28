@@ -37,6 +37,12 @@
   @include responsive_width;
 }
 
+@mixin one_half_column {
+  @include column;
+  width: 50%;
+  @include responsive_width;
+}
+
 @mixin container_section {
   margin: 0 auto;
   width: $desktop_width;

@@ -8,7 +8,6 @@
   }
 
   &.one-half {
-    float: left;
-    width: 50%;
+    @include one_half_column;
   }
 }
