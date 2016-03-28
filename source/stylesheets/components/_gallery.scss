@@ -1,3 +1,14 @@
+@mixin responsive_project_gallery_item {
+  @include breakpoint(mobile) {
+    height: 100%;
+    padding: 0;
+
+    .details {
+      display: none;
+    }
+  }
+}
+
 ul.gallery {
   overflow: hidden;
   border-bottom: $divider;
@@ -24,18 +35,14 @@ ul.gallery {
   }
 
   &.projects {
-    .index & {
-      li.item {
+    li.item {
+      .index & {
         height: 100px;
+        @include responsive_project_gallery_item;
+      }
 
-        @include breakpoint(mobile) {
-          height: 100%;
-          padding: 0;
-
-          .details {
-            display: none;
-          }
-        }
+      @include breakpoint(mobile) {
+        @include responsive_project_gallery_item;
       }
     }
   }
