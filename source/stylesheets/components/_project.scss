@@ -21,12 +21,16 @@
     @include breakpoint(mobile) {
       border-bottom: 0;
       padding-bottom: 0;
-      margin-bottom: 0;
+      margin-bottom: $spacer;
     }
 
     img {
       margin-bottom: $spacer;
       width: 100%;
+
+      @include breakpoint(mobile) {
+        margin-bottom: 0;
+      }
     }
 
     .image-column {
