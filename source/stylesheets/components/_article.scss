@@ -1,6 +1,14 @@
 article {
   padding-bottom: 50px;
 
+  .column,
+  &.column {
+    @include breakpoint(mobile) {
+      padding-left: $spacer;
+      padding-bottom: $spacer;
+    }
+  }
+
   h1 {
     margin-top: 15px;
     @include large_heading;
