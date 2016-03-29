@@ -9,14 +9,22 @@
   }
 }
 
+@mixin responsive_gallery {
+  @include breakpoint(desktop) {
+    padding: 0 $spacer;
+    padding-bottom: $spacer * 2;
+  }
+
+  @include breakpoint(mobile) {
+    padding: 0;
+  }
+}
+
 ul.gallery {
   overflow: hidden;
   border-bottom: $divider;
   padding: 25px 0;
-
-  @include breakpoint {
-    padding: 0;
-  }
+  @include responsive_gallery;
 
   body.blog_tags &,
   &.blog {
@@ -52,9 +60,7 @@ ul.gallery {
   &.instagram {
     padding-bottom: 50px;
 
-    @include breakpoint(mobile) {
-      padding-bottom: 0;
-    }
+    @include responsive_gallery;
 
     footer & {
       border-bottom: 0;
@@ -64,13 +70,17 @@ ul.gallery {
     li.item {
       height: 60px;
 
-      @include breakpoint(mobile) {
+      @include breakpoint {
         height: 100%;
         padding: 0;
       }
 
       footer & {
         height: 30px;
+
+        @include breakpoint {
+          height: 100%;
+        }
       }
     }
   }
