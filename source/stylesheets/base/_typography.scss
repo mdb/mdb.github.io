@@ -39,11 +39,6 @@ h1, h2 {
   &.divider {
     @include divider;
 
-    @include breakpoint(mobile) {
-      padding-left: $spacer;
-      margin-bottom: 0;
-    }
-
     a {
       color: $secondary_text_color;
     }

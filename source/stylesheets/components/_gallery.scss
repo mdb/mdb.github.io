@@ -14,7 +14,7 @@ ul.gallery {
   border-bottom: $divider;
   padding: 25px 0;
 
-  @include breakpoint(mobile) {
+  @include breakpoint {
     padding: 0;
   }
 

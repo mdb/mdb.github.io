@@ -84,7 +84,9 @@
   padding: $spacer $gallery_spacer;
   margin-bottom: $spacer;
 
-  @include breakpoint(mobile) {
+  @include breakpoint {
+    margin-bottom: 0;
     padding-left: $spacer;
+    border-bottom: none;
   }
 }
