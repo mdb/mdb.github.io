@@ -5,7 +5,7 @@ header {
   border-bottom: $divider;
   padding: 50px 0 25px 0;
 
-  @include breakpoint(mobile) {
+  @include breakpoint {
     padding-top: $spacer;
     padding-bottom: 0;
   }
@@ -23,7 +23,7 @@ header {
     border-top: 8px solid $hamburger_color;
     border-bottom: 8px solid $hamburger_color;
 
-    @include breakpoint(mobile) {
+    @include breakpoint {
       display: block;
       margin: 50px $spacer 0 0;
     }
@@ -47,7 +47,7 @@ header {
   div.mark {
     @include quarter_column;
 
-    @include breakpoint(mobile) {
+    @include breakpoint {
       margin: 0 0 $spacer $spacer;
     }
 
@@ -74,7 +74,7 @@ header {
   nav {
     position: relative;
 
-    @include breakpoint(mobile) {
+    @include breakpoint {
       display: none;
 
       &.expanded {
@@ -85,7 +85,7 @@ header {
     &.column.one-quarter {
       padding-top: 60px;
 
-      @include breakpoint(mobile) {
+      @include breakpoint {
         //display: none;
 
         float: none;
@@ -95,13 +95,13 @@ header {
     }
 
     &.primary {
-      @include breakpoint(mobile) {
+      @include breakpoint {
         border-top: 1px solid $divider_color;
       }
     }
 
     ul.nav {
-      @include breakpoint(mobile) {
+      @include breakpoint {
         width: 100%;
       }
 
@@ -109,7 +109,7 @@ header {
         a, a:visited {
           @include small_text;
 
-          @include breakpoint(mobile) {
+          @include breakpoint {
             background: #000;
             width: 100%;
             display: block;
