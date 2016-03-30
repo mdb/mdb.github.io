@@ -3,6 +3,7 @@ title: Apache Persistent Connection Problems
 date: 2015/10/18
 thumbnail: texture_thumb.png
 tags: apache, operations, performance
+teaser: Debugging an exhausted Apache worker thread pool.
 ---
 
 Problem: Apache worker thread pool is exhausted; server CPU consumption is high.
