@@ -2,7 +2,9 @@
 title: Using wget over Ansible's get_url
 date: 2015/12/23
 tags: ansible, operations
-published: false
+published: true
+thumbnail: wget_thumb.png
+teaser: Authenticated downloads with Ansible
 ---
 
 Problem: In provisioning a server, your Ansible playbook needs to download files from a URL behinded authentication, such as a private GitHub repository. In Ansible 2.0, Ansible's [get_url]() supports custom headers &mdash; such as `Authorization` &mdash; but pre-2.0 Ansible does not.
