@@ -7,4 +7,9 @@
 }
 
 ul.image-slideshow {
+  li {
+    input {
+      display: none;
+    }
+  }
 }
