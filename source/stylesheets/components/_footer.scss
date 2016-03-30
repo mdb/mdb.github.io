@@ -9,8 +9,13 @@ footer {
   }
 
   .column {
-    @include breakpoint(mobile) {
+    @include breakpoint {
+      margin-left: $spacer;
       margin-bottom: $spacer * 2;
+    }
+
+    @include breakpoint(mobile) {
+      margin-left: 0;
     }
   }
 
@@ -37,7 +42,7 @@ footer {
     font-size: $font_size + 1;
     margin-bottom: 25px;
 
-    @include breakpoint(mobile) {
+    @include breakpoint {
       padding-left: $spacer;
     }
   }
