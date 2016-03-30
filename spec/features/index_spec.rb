@@ -6,7 +6,7 @@ describe 'index', type: :feature do
   end
 
   it "displays the correct title header" do
-    expect(page).to have_selector('header h1 a[href="/"]', text: 'Mike Ball')
+    expect(page).to have_selector('header div a[href="/"]', text: 'Mike Ball')
   end
 
   context 'the projects gallery it displays' do
@@ -20,7 +20,7 @@ describe 'index', type: :feature do
 
     context 'each gallery item' do
       it 'displays the proper thumbnail link' do
-        expect(page).to have_selector('ul.gallery li.item a[href="/projects/times-grapher/"] img')
+        expect(page).to have_selector('ul.gallery li.item a[href="/projects/hopscotch-coffee/"] img')
       end
 
       it 'reports project details label' do
@@ -28,11 +28,11 @@ describe 'index', type: :feature do
       end
 
       it 'reports project details heading' do
-        expect(page).to have_selector('ul.gallery li.item div.details h2 a[href="/projects/times-grapher/"]', text: 'TimesGrapher')
+        expect(page).to have_selector('ul.gallery li.item div.details h2 a[href="/projects/hopscotch-coffee/"]', text: 'Hopscotch Coffee Illustration')
       end
 
       it 'reports project details tags' do
-        expect(page).to have_selector('ul.gallery li.item div.details ul.tags li.first a[href="/projects/tags/rails"]', text: 'rails')
+        expect(page).to have_selector('ul.gallery li.item div.details ul.tags li.first a[href="/projects/tags/illustration"]', text: 'illustration')
       end
     end
   end
