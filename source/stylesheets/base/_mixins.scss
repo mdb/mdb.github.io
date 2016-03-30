@@ -73,7 +73,7 @@
   color: $content_text_color;
   margin-bottom: $spacer + $spacer/2;
 
-  @include breakpoint(mobile) {
+  @include breakpoint {
     width: 92%;
   }
 }

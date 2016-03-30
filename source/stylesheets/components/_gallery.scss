@@ -28,13 +28,17 @@ ul.gallery {
 
   body.blog_tags &,
   &.blog {
+    @include breakpoint(mobile) {
+      border-top: $divider;
+    }
+
     li.item {
       height: 200px;
 
       @include breakpoint(mobile) {
         height: auto;
-        padding: 0;
         border-bottom: $divider;
+        padding: $spacer 0;
 
         a.thumbnail {
           display: none;

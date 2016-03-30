@@ -3,7 +3,7 @@ article {
 
   .column,
   &.column {
-    @include breakpoint(mobile) {
+    @include breakpoint {
       padding-left: $spacer;
       padding-bottom: $spacer;
     }

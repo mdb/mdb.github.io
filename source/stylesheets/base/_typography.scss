@@ -49,20 +49,17 @@ small, date {
   display: block;
   @include small_text;
 
+  .blog & {
+    margin-top: $spacer;
+  }
+
   &.divider {
     @include divider;
-
   }
 
   &.column {
-    @include breakpoint(mobile) {
+    @include breakpoint {
       padding-left: $spacer;
     }
-  }
-}
-
-date {
-  body.blog & {
-    margin-top: 15px;
   }
 }
