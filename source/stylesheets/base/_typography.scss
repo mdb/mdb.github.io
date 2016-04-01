@@ -49,10 +49,6 @@ small, date {
   display: block;
   @include small_text;
 
-  .blog & {
-    margin-top: $spacer;
-  }
-
   &.divider {
     @include divider;
   }
@@ -61,5 +57,9 @@ small, date {
     @include breakpoint {
       padding-left: $spacer;
     }
+  }
+
+  &.blog-post {
+    margin-top: $spacer;
   }
 }
