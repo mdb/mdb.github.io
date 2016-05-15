@@ -2,7 +2,6 @@ $hamburger_color: #000;
 
 header {
   @include container_section;
-  border-bottom: $divider;
   padding: 50px 0 25px 0;
 
   @include breakpoint {

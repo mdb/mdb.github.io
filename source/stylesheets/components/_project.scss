@@ -1,12 +1,6 @@
 .project {
   overflow: hidden;
-  border-bottom: 1px solid $divider_color;
   padding-bottom: $spacer * 2;
-
-  .divider {
-    border-bottom: 0;
-    margin-bottom: 0;
-  }
 
   @include breakpoint(mobile) {
     padding-bottom: $spacer;

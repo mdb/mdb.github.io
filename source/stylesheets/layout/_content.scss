@@ -1,3 +1,8 @@
-section {
+section.content {
+  padding-top: $spacer * 2;
+  background: #F7F7F7;
+}
+
+div.content-container {
   @include container_section;
 }

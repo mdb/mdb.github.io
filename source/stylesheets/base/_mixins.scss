@@ -80,12 +80,9 @@
 
 @mixin divider {
   @include small_text;
-  border-bottom: $divider;
-  padding: $spacer $gallery_spacer;
   margin-bottom: $spacer;
 
   @include breakpoint {
-    margin-bottom: 0;
     padding-left: $spacer;
     border-bottom: none;
   }

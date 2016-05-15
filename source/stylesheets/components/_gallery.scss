@@ -22,8 +22,7 @@
 
 ul.gallery {
   overflow: hidden;
-  border-bottom: $divider;
-  padding: 25px 0;
+  padding-bottom: 25px;
   @include responsive_gallery;
 
   body.blog_tags &,
