@@ -11,7 +11,7 @@ teaser: How to verify a Docker image pull request in ConcourseCI.
 
 **Problem**: [TravisCI](https://travis-ci.org) can be configured to run CI against a docker image's [source code repository](https://travis-ci.org/mdb/docker-wct). But how can Concourse's `pull-request` resource be configured to test that `docker build` of a `Dockerfile` works as expected in a repo that houses such a `Dockerfile`?
 
-**Solution**: Configure the Concourse's pull request verification job to use the `docker-image` resource type, thus performing a `docker build` using the `Dockerfile` during a pull request's continuous integration.
+**Solution**: Configure the Concourse's pull request verification job to use the `docker-image` resource type, thus performing a `docker build` using the `Dockerfile` during a pull request's continuous integration. Note line 41 in the `pipeline.yml`.
 
 # The pipeline.yml
 
