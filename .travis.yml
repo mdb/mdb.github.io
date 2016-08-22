@@ -3,6 +3,9 @@ language: ruby
 rvm:
   - 2.1.5
 
+env:
+  - secure: 'OJqtFCkJt5q1NVqcnSuZlN0WQxk7/tGxjzAo9cf/6kbtj+Yx1J0WbEES39zQYYa1Abry6geHGb+FYC/Rx+uwWvgAfMazl0yCImrRD1wGQv1n5GwU8UnCiO6JBpZkR7CPkdrSzCNsqBwF4Uh45i0lvXN/B09trbPu92rcnNvvQwE='
+
 before_install:
   - npm install bower -g
 
@@ -16,7 +19,7 @@ script:
 
 deploy:
   provider: script
-  script: ci/deploy.sh
+  script: .ci/deploy.sh
   skip_cleanup: true
   on:
     repo: mdb/mikeball.info
