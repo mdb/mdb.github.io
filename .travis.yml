@@ -8,6 +8,7 @@ before_install:
 
 install:
   - bower install
+  - bundle install
 
 script:
   - bundle exec rake
