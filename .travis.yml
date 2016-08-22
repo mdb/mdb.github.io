@@ -5,7 +5,7 @@ rvm:
 
 env:
   global:
-    - secure: 'OJqtFCkJt5q1NVqcnSuZlN0WQxk7/tGxjzAo9cf/6kbtj+Yx1J0WbEES39zQYYa1Abry6geHGb+FYC/Rx+uwWvgAfMazl0yCImrRD1wGQv1n5GwU8UnCiO6JBpZkR7CPkdrSzCNsqBwF4Uh45i0lvXN/B09trbPu92rcnNvvQwE='
+    - secure: 'L6aCMFS3RUhbGwA0TdiOjXYAvtEWkQeX+p4jxU0kmyIjf6xVERNN3za2JuDL/3dkBPbgBskTbK766zP4k8tjuboTVQ1DkpZrc0HFy4bpBAxKNApNfVduQEb7uY3nnfaAdQLp1gse+Cv9GHEhLUNJIPnbAUjxVFGOY1cvUlwV5wI='
 
 before_install:
   - npm install bower -g
