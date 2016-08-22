@@ -19,7 +19,7 @@ script:
 
 deploy:
   provider: script
-  script: .ci/deploy.sh
+  script: 'bundle exec middleman s3_sync'
   skip_cleanup: true
   on:
     repo: mdb/mikeball.info

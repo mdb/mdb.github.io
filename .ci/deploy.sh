@@ -1,3 +1,3 @@
 #!/bin/bash
 
-middleman s3_sync
+bundle exec middleman s3_sync
