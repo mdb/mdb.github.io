@@ -3,6 +3,12 @@ language: ruby
 rvm:
   - 2.1.5
 
+before_install:
+  - npm install bower -g
+
+install:
+  - bower install
+
 script:
   - bundle exec rake
   - bundle exec middleman build
