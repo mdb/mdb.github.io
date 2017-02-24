@@ -1,11 +1,11 @@
 (function ($) {
   $.fn.instagram = function (options) {
-    this.api = "https://api.instagram.com/v1",
+    this.api = 'https://api.instagram.com/v1',
 
     this.config = $.extend({
       userId: null,
       accessToken: null,
-      template: "#instagram-template",
+      template: '#instagram-template',
       count: 8,
     }, options);
 
@@ -13,8 +13,8 @@
       var self = this;
 
       $.ajax({
-        type: "GET",
-        dataType: "jsonp",
+        type: 'GET',
+        dataType: 'jsonp',
         cache: false,
         url: self._buildRequestURL(),
         success: function (res) {
