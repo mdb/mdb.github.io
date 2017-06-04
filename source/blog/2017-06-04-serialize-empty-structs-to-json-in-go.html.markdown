@@ -7,7 +7,7 @@ thumbnail: skate_dog_thumb.png
 teaser: How to avoid serializing an empty struct to JSON in Go?
 ---
 
-**Problem**: How to avoid serializing a Golang struct to JSON _without_ including an empty object representing an empty struct within the parent struct?
+**Problem**: How can a Golang struct be serialized to JSON _without_ including an empty object representing an empty struct within the parent struct?
 
 For example, given a `MyStruct` struct such as the following:
 
@@ -30,7 +30,7 @@ j, _ := json.Marshal(str)
 Println(string(j))
 ```
 
-Yields the following JSON, the `"data": {}` within which may be problematic, depending on usage:
+The yielded JSON contains an empty `"data": {}`, which may be problematic, depending on usage:
 
 ```json
 {
