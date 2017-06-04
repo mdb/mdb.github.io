@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 gem 'rake'
 gem 'middleman'
@@ -12,6 +12,6 @@ gem 'pry'
 gem 'rb-readline'
 gem 'rspec'
 gem 'capybara'
-gem 'capybara-webkit'
+gem 'capybara-webkit', '1.14.0'
 gem 'fog'
 gem 'middleman-s3_sync'
