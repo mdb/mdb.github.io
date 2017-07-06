@@ -65,6 +65,18 @@
                 %a{href: "/rss.xml"}RSS Feed
               %li
                 %a{href: "/atom.xml"}Atom Feed
+    %script{type: "text/html", id: "tiendah-template"}
+      %ul.gallery.tiendah
+        {[ _.each(items, function(item, key, list) { ]}
+        %li.item
+          %a{class: "thumbnail", href: "{{ item.url }}"}
+            %img{src: "{{ item.imgSrc }}"}
+          %div{class: "details"}
+            %small="${{ item.price }}"
+            %h2
+              %a{href: "{{ item.url }}"}{{ item.name }}
+            %p{class: "teaser"}{{ item.description }}
+        {[ }); ]}
     %script{type: "text/html", id: "instagram-template"}
       %ul.gallery.instagram
         {[ _.each(items, function(item, key, list) { ]}

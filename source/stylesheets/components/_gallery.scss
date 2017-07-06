@@ -47,6 +47,17 @@ ul.gallery {
     }
   }
 
+  &.tiendah {
+    li.item {
+      height: 175px;
+      @include responsive_project_gallery_item;
+
+      a.thumbnail {
+        border: $divider;
+      }
+    }
+  }
+
   body.projects_tags &,
   &.projects {
     li.item {
