@@ -9,7 +9,9 @@ document.addEventListener('DOMContentLoaded', function(event) {
               price: item.price/100,
               description: item.description,
               url: item.store_url + '/product/' + item.slug,
-              imgSrc: item.images.filter((image) => { return image.original_height === image.original_width })[0].url
+              imgSrc: item.images.filter(function(image) {
+                return image.original_height === image.original_width;
+              })[0].url
             };
           }),
           html = _.template(document.querySelector('script#tiendah-template').innerHTML, { items: items });
