@@ -1,10 +1,9 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 gem 'rake'
 gem 'middleman'
 gem 'middleman-blog'
 gem 'middleman-build-reporter'
-gem 'nokogiri'
 gem 'redcarpet'
 gem 'middleman-syntax'
 gem 'middleman-livereload', '~> 3.1.0'

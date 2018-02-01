@@ -1,16 +1,11 @@
 language: ruby
 
 rvm:
-  - 2.1.5
+  - 2.2.2
 
 env:
   global:
     - secure: 'L6aCMFS3RUhbGwA0TdiOjXYAvtEWkQeX+p4jxU0kmyIjf6xVERNN3za2JuDL/3dkBPbgBskTbK766zP4k8tjuboTVQ1DkpZrc0HFy4bpBAxKNApNfVduQEb7uY3nnfaAdQLp1gse+Cv9GHEhLUNJIPnbAUjxVFGOY1cvUlwV5wI='
-
-addons:
-  apt:
-    packages:
-      - libqtwebkit-dev
 
 before_install:
   - npm install bower -g
@@ -20,12 +15,11 @@ install:
   - bundle install
 
 script:
-  - bundle exec rake
   - bundle exec middleman build
 
 deploy:
   provider: script
-  script: 'rvm 2.1.5 do bundle exec middleman s3_sync'
+  script: 'rvm 2.2.2 do bundle exec middleman s3_sync'
   skip_cleanup: true
   on:
     repo: mdb/mikeball.info
