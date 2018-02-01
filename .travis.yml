@@ -7,11 +7,6 @@ env:
   global:
     - secure: 'L6aCMFS3RUhbGwA0TdiOjXYAvtEWkQeX+p4jxU0kmyIjf6xVERNN3za2JuDL/3dkBPbgBskTbK766zP4k8tjuboTVQ1DkpZrc0HFy4bpBAxKNApNfVduQEb7uY3nnfaAdQLp1gse+Cv9GHEhLUNJIPnbAUjxVFGOY1cvUlwV5wI='
 
-addons:
-  apt:
-    packages:
-      - libqtwebkit-dev
-
 before_install:
   - npm install bower -g
 
