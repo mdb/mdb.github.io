@@ -20,7 +20,6 @@ install:
   - bundle install
 
 script:
-  - bundle exec rake
   - bundle exec middleman build
 
 deploy:
