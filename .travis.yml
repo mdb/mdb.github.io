@@ -1,7 +1,7 @@
 language: ruby
 
 rvm:
-  - 2.4.1
+  - 2.5.1
 
 env:
   global:
@@ -19,7 +19,7 @@ script:
 
 deploy:
   provider: script
-  script: 'rvm 2.4.1 do bundle exec middleman s3_sync'
+  script: 'rvm 2.5.1 do bundle exec middleman s3_sync'
   skip_cleanup: true
   on:
     repo: mdb/mikeball.info
