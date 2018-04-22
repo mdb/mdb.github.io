@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'rake'
 gem 'middleman'
 gem 'middleman-blog'
 gem 'middleman-build-reporter'
