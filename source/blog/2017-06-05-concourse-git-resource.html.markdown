@@ -6,7 +6,7 @@ thumbnail: faces_thumb.png
 teaser: How to commit to a git repo from Concourse using the git resource.
 ---
 
-A [Concourse](http://concourse.ci) _resource_ is any entity that can be checked for new versions, fetched at a specific version, and/or pushed up to idempotently create new versions. [Concourse](http://concourse.ci)'s built-in [git-resource](https://github.com/concourse/git-resource) is a Concourse resource for working with git repositories.
+A [Concourse](http://concourse-ci.org) _resource_ is any entity that can be checked for new versions, fetched at a specific version, and/or pushed up to idempotently create new versions. [Concourse](http://concourse-ci.org)'s built-in [git-resource](https://github.com/concourse/git-resource) is a Concourse resource for working with git repositories.
 
 Pulling down a git repository for use in a pipeline job using the `git-resource` is fairly straight forward:
 
@@ -18,7 +18,7 @@ resources:
   source:
     branch: master
     uri: git@github.com:my-org/my-repo.git
-    private_key: {{private_github_private_key}}
+    private_key: ((private_github_private_key))
 
 jobs:
 
@@ -43,7 +43,7 @@ jobs:
             - git --no-pager log
 ```
 
-But how can Concourse's `git-resource` functionality be leveraged to make and push commits to a repository? The following offers an example pipeline job executing a `put` on a modified git resource:
+But how can Concourse's `git-resource` be leveraged to make and push commits to a repository? The following offers an example pipeline job executing a `put` on a modified git resource:
 
 ```yaml
 resources:
@@ -53,7 +53,7 @@ resources:
   source:
     branch: master
     uri: git@github.com:my-org/my-repo.git
-    private_key: {{private_github_private_key}}
+    private_key: ((github_private_key))
 
 jobs:
 
@@ -77,7 +77,7 @@ jobs:
           args:
             - -exc
             - git clone my-repo my-repo-modified
-            - cd akamai-gtm-archive-modified
+            - cd my-repo-modified
             - echo $(date) > date_file.txt
             - git add .
             - git commit -m "add new date_file.txt date"
