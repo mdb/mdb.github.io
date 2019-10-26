@@ -1,8 +1,10 @@
 #!/bin/sh
 
 docker run \
-  -v $(PWD):/workdir \
-  -w /workdir \
+  --volume "$(pwd):/workdir" \
+  --workdir "/workdir" \
   --rm \
-  -ti timbru31/ruby-node:2.5 \
-  /bin/bash -c 'npm install -g bower; bower install --allow-root; bundle install; bundle exec middleman build'
+  --tty \
+  --interactive \
+  timbru31/ruby-node:2.5 \
+    /bin/bash -c 'npm install -g bower; bower install --allow-root; bundle install; bundle exec middleman build'
