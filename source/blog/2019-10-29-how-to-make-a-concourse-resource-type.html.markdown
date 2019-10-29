@@ -1,8 +1,8 @@
 ---
 title: How to Make a Concourse Resource Type
-date: 2019/10/14
+date: 2019/10/29
 tags: concourse, ci, cd
-thumbnail: TODO
+thumbnail: night_waves_thumb.png
 teaser: How to implement a custom Concourse resource type.
 ---
 
@@ -52,7 +52,7 @@ At its core, implementing a custom Concourse resource type requires publishing a
 
 In the case of `concourse-consul-kv-resource`, its Docker image is published to [hub.docker.com/r/clapclapexcitement/concourse-consul-kv-resource](https://hub.docker.com/r/clapclapexcitement/concourse-consul-kv-resource). Provided a resource type Docker image properly implements the `check`, `in`, and `out` executibles (more on this to follow), the source code itself can be authored in any programming language. `concourse-consul-kv-resource` is written in Node.js.
 
-A very basic pipeline configuration using `concourse-consul-kv-resource` might look like this (If you're unfamiliar with authoring Concourse pipelines, [concoursetutorial.com](https://concoursetutorial.com) is a great start):
+A very basic [pipeline configuration](https://concourse-ci.org/pipelines.html) using `concourse-consul-kv-resource` might look like this (If you're unfamiliar with authoring Concourse pipelines, [concoursetutorial.com](https://concoursetutorial.com) is a great place to start learning):
 
 ```yaml
 resources_types:
@@ -92,7 +92,7 @@ jobs:
 
 `/opt/resource/check` is run to detect new versions of the resource. Resource type authors determine what constitutes a resource "version" on a per-implementation basis. In the case of `concourse-consul-kv-resource`, a version is a unique value of the Consul key specified in the resource's [source configuration](https://concourse-ci.org/resources.html#resource-source).
 
-A resource source configuration allows users to declare data such as URLs, credentials, and other details confuring the resource to interact with third party providers, such as GitHub or the AWS API. The configurable source fields vary depending on a resource type's implementation and needs. As exemplified in the pipeline `yaml` above, a `concourse-consul-kv-resource` instance's source configuration contains data on a Consul's domain name and the specific K/V key of interest (other [source config options](https://github.com/mdb/concourse-consul-kv-resource#source-configuration) are available as well):
+A resource `source` configuration allows users to declare data such as URLs, credentials, and other details confuring the resource to interact with third party providers, such as GitHub or the AWS API. The configurable `source` fields vary depending on a resource type's implementation and needs. As exemplified in the pipeline `yaml` above, a `concourse-consul-kv-resource` instance's `source` configuration contains data on a Consul's domain name and the specific K/V key of interest (other [source config options](https://github.com/mdb/concourse-consul-kv-resource#source-configuration) are available as well):
 
 ```yaml
 ...
@@ -509,7 +509,7 @@ my-new-value-from-file-params
 
 It's common to offer two levels of automated testing against a Concourse custom resource type:
 
-1. Unit tests that exercise the `check`, `in`, and `out` business logic. `concourse-consul-kv-resource`'s source code is written in Nodel.js. A suite of [Mocha](https://mochajs.org/) tests run using mock Consul endpoints as part of its `docker build` process.
+1. Unit tests that exercise the `check`, `in`, and `out` business logic. `concourse-consul-kv-resource`'s source code is written in Node.js. A suite of [Mocha](https://mochajs.org/) tests run using mock Consul endpoints as part of its `docker build` process.
 2. Acceptance tests that exercise the end-to-end functionality against the compiled resource type. `concourse-consul-kv-resource`'s acceptance tests are authored in [bats-core](https://github.com/bats-core/bats-core) and use a local `docker-compose`'d Consul and `jq` to validate the behavior of the end-result `concourse-consul-kv-resource` Docker image.
 
 In addition to its automated tests, `concourse-consul-kv-resource` contains a `docker-compose.yml` that can be used by curious users to start a local Concourse, Consul, and Docker registry to test drive the resource type within a real Concourse pipeline. [Read more &raquo;](https://github.com/mdb/concourse-consul-kv-resource#functional-testing)
