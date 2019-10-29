@@ -6,9 +6,9 @@ thumbnail: night_waves_thumb.png
 teaser: How to implement a custom Concourse resource type.
 ---
 
-## Context and backgrond
+## Context and background
 
-_Resources_ are a core concept in [Concourse](https://concourse-ci.org) CI/CD pipelines. A [resource](https://concourse-ci.org/resources.html) is any entity that Concourse can check for new versions, fetch at a specific version, and/or push up changes to idempotently create new versions. In this sense, a resource "version" is a specific form of a resource that differs from earlier forms, such as a particular commit on a git repository or a particular build artifact object in an AWS S3 bucket. This may sound vague, but it's an arguably compelling feature. Because Concourse's notion of resources offers users a generic way to extend Concourse functionality -- and because Concourse supports the use of custom [resource-type implementations](https://concourse-ci.org/implementing-resource-types.html) -- resources serve as a useful tool in building Concourse CI/CD pipelines. Pipeline authors can leverage Concourse's built-in resource types, use community-maintained resource types, or create new functionality through their own, custom resource types. And each implementation -- whether it's a built-in resource type, a community-maintained resource type, or a custom, in-house resource type -- is itself packaged and versioned software with its own build/test/release CI/CD lifecycle. In this sense, resource types emerge as an interesting model through which the the units of CI/CD pipeline functionality can be maintained and distributed as first class software projects, and not just ad hoc scripts and un-tested glue code, as has been historically common.
+_Resources_ are a core concept in [Concourse](https://concourse-ci.org) CI/CD pipelines. A [resource](https://concourse-ci.org/resources.html) is any entity that Concourse can check for new versions, fetch at a specific version, and/or push up changes to idempotently create new versions. In this sense, a resource "version" is a specific form of a resource that differs from earlier forms, such as a particular commit on a git repository or a particular build artifact object in an AWS S3 bucket. This may sound vague, but it's an arguably compelling feature. Because Concourse's notion of resources offers users a generic way to extend Concourse functionality -- and because Concourse supports the use of custom [resource-type implementations](https://concourse-ci.org/implementing-resource-types.html) -- resources serve as a useful tool in building Concourse CI/CD pipelines. Pipeline authors can leverage Concourse's built-in resource types, use community-maintained resource types, or create new functionality through their own, custom resource types. And each implementation -- whether it's a built-in resource type, a community-maintained resource type, or a custom, in-house resource type -- is itself packaged and versioned software with its own build/test/release CI/CD lifecycle. In this sense, resource types emerge as an interesting model through which the the units of CI/CD pipeline functionality can be maintained and distributed as first class software projects, and not just ad hoc scripts and untested glue code, as has been historically common.
 
 ## Built-in resource types
 
@@ -50,7 +50,7 @@ At its core, implementing a custom Concourse resource type requires publishing a
 2. `/opt/resource/in` - responsible for fetching specific versions of your resource
 3. `/opt/resource/out` - responsible for outputting new versions of your resource
 
-In the case of `concourse-consul-kv-resource`, its Docker image is published to [hub.docker.com/r/clapclapexcitement/concourse-consul-kv-resource](https://hub.docker.com/r/clapclapexcitement/concourse-consul-kv-resource). Provided a resource type Docker image properly implements the `check`, `in`, and `out` executibles (more on this to follow), the source code itself can be authored in any programming language. `concourse-consul-kv-resource` is written in Node.js.
+In the case of `concourse-consul-kv-resource`, its Docker image is published to [hub.docker.com/r/clapclapexcitement/concourse-consul-kv-resource](https://hub.docker.com/r/clapclapexcitement/concourse-consul-kv-resource). Provided a resource type Docker image properly implements the `check`, `in`, and `out` executables (more on this to follow), the source code itself can be authored in any programming language. `concourse-consul-kv-resource` is written in Node.js.
 
 A very basic [pipeline configuration](https://concourse-ci.org/pipelines.html) using `concourse-consul-kv-resource` might look like this (If you're unfamiliar with authoring Concourse pipelines, [concoursetutorial.com](https://concoursetutorial.com) is a great place to start learning):
 
@@ -92,7 +92,7 @@ jobs:
 
 `/opt/resource/check` is run to detect new versions of the resource. Resource type authors determine what constitutes a resource "version" on a per-implementation basis. In the case of `concourse-consul-kv-resource`, a version is a unique value of the Consul key specified in the resource's [source configuration](https://concourse-ci.org/resources.html#resource-source).
 
-A resource `source` configuration allows users to declare data such as URLs, credentials, and other details confuring the resource to interact with third party providers, such as GitHub or the AWS API. The configurable `source` fields vary depending on a resource type's implementation and needs. As exemplified in the pipeline `yaml` above, a `concourse-consul-kv-resource` instance's `source` configuration contains data on a Consul's domain name and the specific K/V key of interest (other [source config options](https://github.com/mdb/concourse-consul-kv-resource#source-configuration) are available as well):
+A resource `source` configuration allows users to declare data such as URLs, credentials, and other details informing the resource how to interact with third party providers, such as GitHub or the AWS API. The configurable `source` fields vary depending on a resource type's implementation and needs. As exemplified in the pipeline `yaml` above, a `concourse-consul-kv-resource` instance's `source` configuration contains data on a Consul's domain name and the specific K/V key of interest (other [source config options](https://github.com/mdb/concourse-consul-kv-resource#source-configuration) are available as well):
 
 ```yaml
 ...
@@ -252,7 +252,7 @@ services:
 EOF
 ```
 
-Next, use the newly-created `docker-compose.yml` to start the local `docker-compose`'d Consul on a network named `kv-resource_default` (`docker-compose` networks are always named `${prjoect-name}_default`):
+Next, use the newly created `docker-compose.yml` to start the local `docker-compose`'d Consul on a network named `kv-resource_default` (`docker-compose` networks are named `${project-name}_default`):
 
 ```bash
 docker-compose \
@@ -274,7 +274,7 @@ curl \
 
 ## An example `/opt/resource/check` invocation
 
-Store the `stdin` JSON in a file for convenience:
+Store the `stdin` JSON in a file for convenience by pasting the following into your terminal:
 
 ```bash
 cat <<EOF > check_request.json
