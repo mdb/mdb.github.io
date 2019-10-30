@@ -507,10 +507,10 @@ my-new-value-from-file-params
 
 ## Automated testing
 
-It's common to offer two levels of automated testing against a Concourse custom resource type:
+Testing practices and patterns vary throughout the ecosystem of Concourse resource types, in part because resource types can be authored in any programming or scripting language. Personally, I like to offer two levels of automated testing against a Concourse custom resource type:
 
-1. Unit tests that exercise the `check`, `in`, and `out` business logic. `concourse-consul-kv-resource`'s source code is written in Node.js. A suite of [Mocha](https://mochajs.org/) tests run using mock Consul endpoints as part of its `docker build` process.
-2. Acceptance tests that exercise the end-to-end functionality against the compiled resource type. `concourse-consul-kv-resource`'s acceptance tests are authored in [bats-core](https://github.com/bats-core/bats-core) and use a local `docker-compose`'d Consul and `jq` to validate the behavior of the end-result `concourse-consul-kv-resource` Docker image.
+1. Unit tests that exercise the `check`, `in`, and `out` source code business logic. `concourse-consul-kv-resource`'s source code is written in Node.js. In its case, a suite of [Mocha](https://mochajs.org/) tests are run against mock Consul endpoints as part of its `docker build` process. These tests are most concerned with the Node.js source code.
+2. Acceptance tests that exercise the end-to-end functionality against the end-result compiled resource type Docker image. `concourse-consul-kv-resource`'s acceptance tests are authored in [bats-core](https://github.com/bats-core/bats-core) and use a local `docker-compose`'d Consul and `jq` to validate the behavior of the end-result `concourse-consul-kv-resource` Docker image. While the unit and acceptance tests overlap a bit in their responsibilities, the acceptance tests are most concerned that the compiled `concourse-consul-kv-resource` behaves as expected in an end-to-end fashion when interacting with a real Consul and real-world-like invocations.
 
 In addition to its automated tests, `concourse-consul-kv-resource` contains a `docker-compose.yml` that can be used by curious users to start a local Concourse, Consul, and Docker registry to test drive the resource type within a real Concourse pipeline. [Read more &raquo;](https://github.com/mdb/concourse-consul-kv-resource#functional-testing)
 
