@@ -1,6 +1,0 @@
-%ul.image-slideshow
-  - image_data.slideshow.each_with_index do |slideshow_img, i|
-    %li{class: "image #{first_or_last_class(image_data.slideshow, i)}"}
-      = slideshow_input(i)
-      %label{class: "slide-#{i+1}", for: "slide-#{i+1}"}
-      %img{src: "/images/projects/work/#{slideshow_img}"}

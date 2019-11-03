@@ -1,9 +1,0 @@
-- link = true unless !link.nil?
-
-%ul.tags
-  - item.tags.each_with_index do |tag, i|
-    %li{:class => first_or_last_class(item.tags, i)}
-      - if link == true
-        %a{:href => tag_url_path(path_prefix, tag)}=tag
-      - else
-        %span=tag
