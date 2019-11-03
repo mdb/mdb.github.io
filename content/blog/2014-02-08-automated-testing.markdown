@@ -1,7 +1,11 @@
 ---
 title: 'Automated Tests: What, Why, How?'
 date: 2014/02/08
-tags: TDD, jasmine, Rspec, automation
+tags:
+- TDD
+- jasmine
+- Rspec
+- automation
 thumbnail: trianglescape_thumb.png
 teaser: An overview of automated tests for the uninitiated.
 ---

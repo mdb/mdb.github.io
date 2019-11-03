@@ -1,7 +1,9 @@
 ---
 title: Using Google Spreadsheets and Tabletop.js as a Web Application Back-end
 date: 2013/03/02
-tags: javascript, nicar
+tags:
+- javascript
+- nicar
 thumbnail: pyramid_thumb.png
 teaser: How to use Tabletop.js as your JavaScript app's datastore.
 ---

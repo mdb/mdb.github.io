@@ -1,7 +1,9 @@
 ---
 title: Nicar 2013 Conference
 date: 2013/03/04
-tags: nicar, journalism
+tags:
+- nicar
+- journalism
 thumbnail: ire_thumb.png
 teaser: A few NICAR 2013 highlights and reflections.
 ---

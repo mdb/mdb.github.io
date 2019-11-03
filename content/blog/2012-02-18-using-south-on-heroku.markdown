@@ -1,7 +1,10 @@
 ---
 title: Using South on a Heroku-hosted Django Project
 date: 2012/02/18
-tags: django, heroku, south
+tags:
+- django
+- heroku
+- south
 thumbnail: cloud_thumb.png
 teaser: How to add new fields to an existing, Heroku-hosted Django project's database.
 ---

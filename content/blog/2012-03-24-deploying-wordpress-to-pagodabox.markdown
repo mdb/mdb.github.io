@@ -1,7 +1,10 @@
 ---
 title: Deploying Wordpress to Pagodabox
 date: 2012/03/24
-tags: wordpress, cloud, pagodabox
+tags:
+- wordpress
+- cloud
+- pagodabox
 thumbnail: pagodabox_thumb.png
 teaser: A beginner's guide to deploying a Wordpress app to Pagodabox's cloud service.
 ---

@@ -1,7 +1,10 @@
 ---
 title: How to Contribute to a Project on GitHub
 date: 2011/08/23
-tags: github, git, open source
+tags:
+- github
+- git
+- open source
 thumbnail: github_thumb.png
 teaser: A simple how-to outlining the Github fork, branch, and PR workflow.
 ---

@@ -1,7 +1,10 @@
 ---
 title: All CSS Modal Dialogs
 date: 2014/08/08
-tags: css, css3, ui
+tags:
+- css
+- css3
+- ui
 thumbnail: noise_collage_thumb.png
 teaser: A simple example demonstrating all-CSS, no-JavaScript modal dialogs.
 ---

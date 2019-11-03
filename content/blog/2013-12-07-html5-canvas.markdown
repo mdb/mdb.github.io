@@ -1,7 +1,9 @@
 ---
 title: HTML5 Canvas
 date: 2013/12/07
-tags: javascript, html5
+tags:
+- javascript
+- html5
 published: false
 thumbnail: default_thumb.gif
 ---

@@ -1,7 +1,10 @@
 ---
 title: "CSS3: An All-CSS, Image-less Play Button"
 date: 2011/07/16
-tags: css, css3, notes
+tags:
+- css
+- css3
+- notes
 thumbnail: play_thumb.jpg
 teaser: I wondered if it could be done; here's a quick and dirty technique.
 ---

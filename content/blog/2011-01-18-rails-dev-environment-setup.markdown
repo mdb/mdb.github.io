@@ -2,7 +2,10 @@
 title: Setting up a Ruby on Rails Dev Environment
 published: false
 date: 2011/01/18
-tags: ruby, ruby on rails, notes
+tags:
+- ruby
+- ruby on rails
+- notes
 thumbnail: diamond_thumb.png
 teaser: Some old instructions collected for a team of Rails newcomers.
 ---

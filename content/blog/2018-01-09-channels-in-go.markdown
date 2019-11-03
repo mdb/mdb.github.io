@@ -1,7 +1,10 @@
 ---
 title: Channels in Go
 date: 2018/01/09
-tags: golang, go, concurrency
+tags:
+- golang
+- go
+- concurrency
 thumbnail: roller_skating_thumb.png
 teaser: A brief intro to Go concurrency through channels and goroutines.
 ---

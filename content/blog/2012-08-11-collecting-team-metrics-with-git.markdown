@@ -1,7 +1,9 @@
 ---
 title: Collecting Basic Team and Sprint Metrics with Git
 date: 2012/08/11
-tags: git, metrics
+tags:
+- git
+- metrics
 thumbnail: waves_thumb.png
 teaser: Leveraging git in collecting team performance metrics. Management likes numbers.
 ---

@@ -1,7 +1,9 @@
 ---
 title: Using the ConcourseCI pull request resource to verify Docker builds
 date: 2016/08/19
-tags: concourse, github
+tags:
+- concourse
+- github
 published: true
 thumbnail: concourse_thumb.png
 teaser: How to verify a Docker image pull request in ConcourseCI.

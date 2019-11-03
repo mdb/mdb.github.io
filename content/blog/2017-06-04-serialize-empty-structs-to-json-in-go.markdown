@@ -2,7 +2,8 @@
 title: Serialize Empty Structs to JSON in Go
 date: 2017-06-04 15:03 UTC
 published: true
-tags: golang
+tags:
+- golang
 thumbnail: skate_dog_thumb.png
 teaser: How to avoid serializing an empty struct to JSON in Go?
 ---

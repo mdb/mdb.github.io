@@ -1,7 +1,9 @@
 ---
 title: Simplified Find/Replace from the Command Line
 date: 2011/02/03
-tags: bash, notes
+tags:
+- bash
+- notes
 thumbnail: eyes_thumb.png
 teaser: An overview of a quick bash function I recently wrote.
 ---

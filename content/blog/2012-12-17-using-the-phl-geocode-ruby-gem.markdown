@@ -1,7 +1,10 @@
 ---
 title: Using the phl_geocode Ruby Gem
 date: 2012/12/17
-tags: ruby, philadelphia, gem
+tags:
+- ruby
+- philadelphia
+- gem
 thumbnail: default_thumb.gif
 teaser: An overview of a small Ruby gem I built on Philadelphia's public geodata.
 ---

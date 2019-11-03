@@ -2,7 +2,12 @@
 title: Automating Product Availability Alerts
 date: 2014/03/27
 published: false
-tags: heroku, twilio, sinatra, capybara, automation
+tags:
+- heroku
+- twilio
+- sinatra
+- capybara
+- automation
 teaser: Too much internet. Automate your web browsing.
 ---
 

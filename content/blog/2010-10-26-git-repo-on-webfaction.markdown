@@ -1,7 +1,9 @@
 ---
 title: How to Set Up a Git Repository on Webfaction
 date: 2010/10/26
-tags: git, notes
+tags:
+- git
+- notes
 published: false
 thumbnail: default_thumb.gif
 teaser: My notes on how I set up git repo hosting on Webfaction.

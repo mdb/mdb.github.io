@@ -1,7 +1,8 @@
 ---
 title: JavaScript Modules
 date: 2014/07/07
-tags: javascript
+tags:
+- javascript
 thumbnail: default.png
 published: false
 teaser: A few notes on JavaScript modules.

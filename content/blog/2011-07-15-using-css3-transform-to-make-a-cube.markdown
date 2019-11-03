@@ -1,7 +1,8 @@
 ---
 title: "CSS3: Using Transform to Make a Cube"
 date: 2011/07/15
-tags: css3
+tags:
+- css3
 thumbnail: cube_thumb.png
 teaser: My quick solution to a CSS challenge.
 ---

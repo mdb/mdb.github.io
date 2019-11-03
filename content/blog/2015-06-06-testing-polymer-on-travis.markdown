@@ -1,7 +1,12 @@
 ---
 title: How to Test Google Polymer elements on Travis CI
 date: 2015/06/06
-tags: ci, testing, travis, polymer, javascript
+tags:
+- ci
+- testing
+- travis
+- polymer
+- javascript
 thumbnail: polymer_thumb.png
 teaser: How to run a headless Firefox on Travis CI via Xvfb
 ---

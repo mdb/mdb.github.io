@@ -1,7 +1,9 @@
 ---
 title: Using wget over Ansible's get_url
 date: 2015/12/23
-tags: ansible, operations
+tags:
+- ansible
+- operations
 published: true
 thumbnail: wget_thumb.png
 teaser: Authenticated downloads with Ansible

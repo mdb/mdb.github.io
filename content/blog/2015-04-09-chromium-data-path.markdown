@@ -1,7 +1,11 @@
 ---
 title: NW.js Chromium data-path
 date: 2015/04/09
-tags: nwjs, node-webkit, nodejs, chromium
+tags:
+- nwjs
+- node-webkit
+- nodejs
+- chromium
 thumbnail: block_island_thumb.png
 teaser: How to ensure against persistant cookies and local storage data between installs of an nw.js app.
 ---

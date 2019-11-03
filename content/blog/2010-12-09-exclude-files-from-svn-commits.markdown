@@ -1,7 +1,10 @@
 ---
 title: How to Exclude Files from SVN Commits
 date: 2010/12/09
-tags: subversion, notes, bash
+tags:
+- subversion
+- notes
+- bash
 thumbnail: hand_thumb.png
 teaser: A bash function for working around a Subversion annoyance.
 ---

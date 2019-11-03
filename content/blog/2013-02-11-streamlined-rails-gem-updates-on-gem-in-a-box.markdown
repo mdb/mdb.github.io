@@ -1,7 +1,10 @@
 ---
 title: Streamlined Rails Gem Updates on Gem in a Box
 date: 2013/02/11
-tags: ruby, gems, shell
+tags:
+- ruby
+- gems
+- shell
 thumbnail: jumble_thumb.png
 teaser: Some small shell scripts to automate manual gem downloads & uploads.
 ---

@@ -1,7 +1,10 @@
 ---
 title: Commiting Via the Concourse Git Resource
 date: 2017/06/05
-tags: concourse, github, git
+tags:
+- concourse
+- github
+- git
 thumbnail: faces_thumb.png
 teaser: How to commit to a git repo from Concourse using the git resource.
 ---

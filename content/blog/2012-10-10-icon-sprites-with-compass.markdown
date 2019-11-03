@@ -1,7 +1,10 @@
 ---
 title: Icon Sprites with Compass
 date: 2012/10/10
-tags: compass, scss, css
+tags:
+- compass
+- scss
+- css
 thumbnail: scallops_thumb.png
 teaser: CSS authoring can hurt. Compass abstracts away the pain.
 ---

@@ -1,7 +1,11 @@
 ---
 title: Deploying an Express App to Heroku
 date: 2012/10/22
-tags: javascript, node.js, express, heroku
+tags:
+-javascript
+- node.js
+- express
+- heroku
 thumbnail: triangle_thumb.png
 teaser: A beginner's tutorial in deploying a Node.js app to Heroku.
 ---

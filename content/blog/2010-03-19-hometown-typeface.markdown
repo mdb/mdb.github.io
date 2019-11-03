@@ -1,7 +1,8 @@
 ---
 title: Hometown Typeface
 date: 2010/03/19
-tags: typography
+tags:
+- typography
 published: false
 thumbnail: hometown_thumb.png
 teaser: A typeface I created in illustrator.

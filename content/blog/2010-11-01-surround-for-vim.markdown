@@ -1,7 +1,9 @@
 ---
 title: Basic Overview of the Surround Plugin for Vim
 date: 2010/11/01
-tags: vim, notes
+tags:
+- vim
+- notes
 thumbnail: blocks_thumb.png
 teaser: My notes on using Vim's surround plugin.
 ---

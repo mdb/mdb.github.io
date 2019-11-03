@@ -1,7 +1,10 @@
 ---
 title: How to Make a Concourse Resource Type
 date: 2019/10/29
-tags: concourse, ci, cd
+tags:
+- concourse
+- ci
+- cd
 thumbnail: night_waves_thumb.png
 teaser: How to implement a custom Concourse resource type.
 ---
