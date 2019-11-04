@@ -1,14 +1,14 @@
-language: generic
+language: node_js
 
-services:
-- docker
+node_js:
+- 12.13.0
+
+script:
+- npm run build
 
 env:
   global:
     - secure: 'L6aCMFS3RUhbGwA0TdiOjXYAvtEWkQeX+p4jxU0kmyIjf6xVERNN3za2JuDL/3dkBPbgBskTbK766zP4k8tjuboTVQ1DkpZrc0HFy4bpBAxKNApNfVduQEb7uY3nnfaAdQLp1gse+Cv9GHEhLUNJIPnbAUjxVFGOY1cvUlwV5wI='
-
-script:
-- ./build.sh
 
 deploy:
   provider: script
