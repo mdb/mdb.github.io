@@ -60,7 +60,6 @@ export const pageQuery = graphql`
           }
           frontmatter {
             title
-            tags
             teaser
           }
         }
