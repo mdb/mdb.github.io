@@ -2,7 +2,7 @@
 title: Deploying an Express App to Heroku
 date: 2012/10/22
 tags:
--javascript
+- javascript
 - node.js
 - express
 - heroku
