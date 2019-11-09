@@ -3,7 +3,10 @@ title: Muscle Crap
 date: 2004/10/01
 date_completed: October 2004
 thumbnail: muscle_crap_thumb.jpg
-tags: illustration, book, print
+tags:
+- illustration
+- book
+- print
 images:
   - nested:
     - muscle_crap_1.jpg

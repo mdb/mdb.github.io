@@ -2,7 +2,9 @@
 title: Battles
 date: 2010/02/23
 date_completed: Summer 2006
-tags: zine, illustration
+tags:
+- zine
+- illustration
 thumbnail: battles_thumb.jpg
 images:
   - nested:

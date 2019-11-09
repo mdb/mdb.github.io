@@ -2,7 +2,11 @@
 title: TimesGrapher
 date: 2014/05/22
 date_completed: Spring 2012
-tags: rails, backbone, journalism, open data
+tags:
+- rails
+- backbone
+- journalism
+- opendata
 thumbnail: times_grapher_thumb.png
 images:
   - times_grapher_1.png

@@ -3,7 +3,12 @@ title: Philadelphia Police Advisory Commission Complaint Map
 date: 2013/04/27
 date_completed: April 2013
 thumbnail: pac_complaint_thumb.png
-tags: open data, civic technology, data journalism, backbone, node.js
+tags:
+- opendata
+- civictechnology
+- datajournalism
+- backbone
+- node.js
 images:
   - pac_complaints_large.jpg
 ---

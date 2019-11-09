@@ -4,7 +4,11 @@ date: 2010/02/23
 published: false
 date_completed: August 2007 &ndash; March 2010
 thumbnail: gpcc_thumb.png
-tags: css, html, javascript, design
+tags:
+- css
+- html
+- javascript
+- design
 images:
   - nested:
     - gpcc_1.png

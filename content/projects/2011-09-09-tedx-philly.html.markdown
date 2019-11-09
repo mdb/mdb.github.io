@@ -3,7 +3,9 @@ title: TEDxPhilly
 date: 2011/09/09
 date_completed: November 2011
 thumbnail: tedx_thumb.png
-tags: illustration, design
+tags:
+- illustration
+- design
 featured: true
 images:
   - tedx_1_large.png
