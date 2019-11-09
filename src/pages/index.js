@@ -1,16 +1,17 @@
 import React from 'react'
 import Layout from '../components/layout'
 import BlogPostList from '../components/blog-post-list'
+import ProjectList from '../components/blog-post-list'
 
 class Index extends React.Component {
   render() {
     const { data } = this.props
     const siteTitle = data.site.siteMetadata.title
-    const posts = data.allMarkdownRemark.edges
 
     return (
       <Layout location={this.props.location} title={siteTitle}>
-        <BlogPostList posts={posts} />
+        <BlogPostList posts={data.posts.edges} />
+        <ProjectList posts={data.projects.edges} />
       </Layout>
     )
   }
@@ -25,7 +26,7 @@ export const pageQuery = graphql`
         title
       }
     }
-    allMarkdownRemark(
+    posts: allMarkdownRemark(
       filter: {
         frontmatter: {
           published: { ne: false }
@@ -45,6 +46,30 @@ export const pageQuery = graphql`
           frontmatter {
             title
             teaser
+            tags
+          }
+        }
+      }
+    }
+    projects: allMarkdownRemark(
+      filter: {
+        frontmatter: {
+          published: { ne: false }
+        },
+        fields: {
+          slug: { glob: "/projects/*" }
+        }
+      },
+      sort: { fields: [frontmatter___date], order: DESC }
+    ) {
+      edges {
+        node {
+          excerpt
+          fields {
+            slug
+          }
+          frontmatter {
+            title
             tags
           }
         }
