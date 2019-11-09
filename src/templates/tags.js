@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link, graphql } from 'gatsby'
+
 const Tags = ({ pageContext, data }) => {
   const { tag } = pageContext
   const { edges, totalCount } = data.allMarkdownRemark
@@ -52,6 +53,7 @@ Tags.propTypes = {
 }
 
 export default Tags
+
 export const pageQuery = graphql`
   query($tag: String) {
     allMarkdownRemark(
