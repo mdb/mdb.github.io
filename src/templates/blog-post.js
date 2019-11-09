@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, graphql } from 'gatsby'
-
 import Layout from '../components/layout'
+import TagList from '../components/tag-list'
 import { rhythm, scale } from '../utils/typography'
 
 class BlogPostTemplate extends React.Component {
@@ -31,17 +31,7 @@ class BlogPostTemplate extends React.Component {
             >
               {post.frontmatter.date}
             </p>
-            <ul>
-            {post.frontmatter.tags.map(tag => {
-              return(
-                <li key={tag}>
-                  <Link to={`/tags/${tag}`}>
-                    {tag}
-                  </Link>
-                </li>
-              )
-            })}
-            </ul>
+            <TagList tags={post.frontmatter.tags} />
           </header>
           <section dangerouslySetInnerHTML={{ __html: post.html }} />
           <hr

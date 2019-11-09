@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import { rhythm } from '../utils/typography'
+import TagList from './tag-list'
 
 class BlogPostList extends React.Component {
   render() {
@@ -21,6 +22,7 @@ class BlogPostList extends React.Component {
                   </Link>
                 </h3>
                 <small>{node.frontmatter.date}</small>
+                <TagList tags={node.frontmatter.tags} />
               </header>
               <section>
                 <p>{node.frontmatter.teaser}</p>
