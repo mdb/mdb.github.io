@@ -54,7 +54,7 @@ export const pageQuery = graphql`
           published: { ne: false }
         },
         fields: {
-          slug: { ne: "/index.html/"}
+          slug: { glob: "/blog/*" }
         }
       },
       sort: { fields: [frontmatter___date], order: DESC }
