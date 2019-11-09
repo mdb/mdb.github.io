@@ -68,6 +68,7 @@ export const pageQuery = graphql`
           frontmatter {
             title
             teaser
+            tags
           }
         }
       }
