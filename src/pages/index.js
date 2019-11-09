@@ -1,8 +1,6 @@
 import React from 'react'
-import { Link, graphql } from 'gatsby'
-
 import Layout from '../components/layout'
-import { rhythm } from '../utils/typography'
+import BlogPostList from '../components/blog-post-list'
 
 class Index extends React.Component {
   render() {
@@ -12,28 +10,7 @@ class Index extends React.Component {
 
     return (
       <Layout location={this.props.location} title={siteTitle}>
-        {posts.map(({ node }) => {
-          const title = node.frontmatter.title || node.fields.slug
-          return (
-            <article key={node.fields.slug}>
-              <header>
-                <h3
-                  style={{
-                    marginBottom: rhythm(1 / 4),
-                  }}
-                >
-                  <Link style={{ boxShadow: `none` }} to={node.fields.slug}>
-                    {title}
-                  </Link>
-                </h3>
-                <small>{node.frontmatter.date}</small>
-              </header>
-              <section>
-                <p>{node.frontmatter.teaser}</p>
-              </section>
-            </article>
-          )
-        })}
+        <BlogPostList posts={posts} />
       </Layout>
     )
   }
