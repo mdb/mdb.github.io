@@ -33,7 +33,13 @@ class BlogPostTemplate extends React.Component {
             </p>
             <ul>
             {post.frontmatter.tags.map(tag => {
-              return(<li>{tag}</li>)
+              return(
+                <li>
+                  <Link to={`/tags/${tag}`}>
+                    {tag}
+                  </Link>
+                </li>
+              )
             })}
             </ul>
           </header>
