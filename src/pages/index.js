@@ -49,7 +49,14 @@ export const pageQuery = graphql`
       }
     }
     allMarkdownRemark(
-      filter: { frontmatter: { published: { ne: false } } },
+      filter: {
+        frontmatter: {
+          published: { ne: false }
+        },
+        fields: {
+          slug: { ne: "/index.html/"}
+        }
+      },
       sort: { fields: [frontmatter___date], order: DESC }
     ) {
       edges {
