@@ -13,4 +13,4 @@ images:
     - muscle_crap_2.jpg
 ---
 
- few of my illustrations were featured in <i>Muscle Crap</i>, a limited edition artists' book published by Salt Tooth Press in 2004.
+A few of my illustrations were featured in <i>Muscle Crap</i>, a limited edition artists' book published by Salt Tooth Press in 2004.
