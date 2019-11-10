@@ -1,7 +1,7 @@
 import React from 'react'
 import Layout from '../components/layout'
 import BlogPostList from '../components/blog-post-list'
-import ProjectList from '../components/blog-post-list'
+import ProjectList from '../components/project-list'
 
 class Index extends React.Component {
   render() {
