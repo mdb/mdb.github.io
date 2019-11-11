@@ -4,7 +4,9 @@ const { createFilePath } = require(`gatsby-source-filesystem`)
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
   const tagTemplate = path.resolve(`./src/templates/tags.js`)
+  const blogIndexTemplate = path.resolve(`./src/templates/blog-index.js`)
   const blogPostTemplate = path.resolve(`./src/templates/blog-post.js`)
+  const projectsIndexTemplate = path.resolve(`./src/templates/projects-index.js`)
   const projectTemplate = path.resolve(`./src/templates/project.js`)
   const result = await graphql(`
     {
@@ -62,6 +64,15 @@ exports.createPages = async ({ graphql, actions }) => {
     throw result.errors
   }
 
+  const postsIndex = result.data.postsRemark.edges
+  createPage({
+    path: `/blog`,
+    component: blogIndexTemplate,
+    context: {
+      posts: postsIndex
+    }
+  })
+
   const posts = result.data.postsRemark.edges
   posts.forEach((post, index) => {
     const previous = index === posts.length - 1 ? null : posts[index + 1].node
@@ -76,6 +87,15 @@ exports.createPages = async ({ graphql, actions }) => {
         next,
       },
     })
+  })
+
+  const projectsIndex = result.data.projectsRemark.edges
+  createPage({
+    path: `/projects`,
+    component: projectsIndexTemplate,
+    context: {
+      posts: projectsIndex
+    }
   })
 
   const projects = result.data.projectsRemark.edges
