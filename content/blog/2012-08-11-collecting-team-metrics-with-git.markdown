@@ -4,7 +4,7 @@ date: 2012/08/11
 tags:
 - git
 - metrics
-thumbnail: waves_thumb.png
+thumbnail: ./images/thumbnails/waves_thumb.png
 teaser: Leveraging git in collecting team performance metrics. Management likes numbers.
 ---
 

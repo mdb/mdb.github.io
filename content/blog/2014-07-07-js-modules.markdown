@@ -3,7 +3,7 @@ title: JavaScript Modules
 date: 2014/07/07
 tags:
 - javascript
-thumbnail: default.png
+thumbnail: ./images/thumbnails/default.png
 published: false
 teaser: A few notes on JavaScript modules.
 ---

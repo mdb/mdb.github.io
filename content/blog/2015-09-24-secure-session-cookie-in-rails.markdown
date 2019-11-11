@@ -5,7 +5,7 @@ tags:
 - rails
 - apache
 - https
-thumbnail: impossible_shape.png
+thumbnail: ./images/thumbnails/impossible_shape.png
 teaser: How to ensure the secure flag is present in your Apache-fronted Rails app's session cookies.
 ---
 

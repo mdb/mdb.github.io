@@ -5,7 +5,7 @@ tags:
 - github
 - git
 - open source
-thumbnail: github_thumb.png
+thumbnail: ./images/thumbnails/github_thumb.png
 teaser: A simple how-to outlining the Github fork, branch, and PR workflow.
 ---
 

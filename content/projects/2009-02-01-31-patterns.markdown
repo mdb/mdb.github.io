@@ -2,7 +2,7 @@
 title: 31 Patterns
 date: 2009/02/01
 date_completed: January 2009
-thumbnail: 31_patterns_thumb.gif
+thumbnail: ./images/thumbnails/31_patterns_thumb.gif
 tags:
 - illustration
 - design

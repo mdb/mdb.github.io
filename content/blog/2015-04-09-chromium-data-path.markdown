@@ -6,7 +6,7 @@ tags:
 - node-webkit
 - nodejs
 - chromium
-thumbnail: block_island_thumb.png
+thumbnail: ./images/thumbnails/block_island_thumb.png
 teaser: How to ensure against persistant cookies and local storage data between installs of an nw.js app.
 ---
 

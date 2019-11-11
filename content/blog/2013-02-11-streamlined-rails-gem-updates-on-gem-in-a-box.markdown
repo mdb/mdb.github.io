@@ -5,7 +5,7 @@ tags:
 - ruby
 - gems
 - shell
-thumbnail: jumble_thumb.png
+thumbnail: ./images/thumbnails/jumble_thumb.png
 teaser: Some small shell scripts to automate manual gem downloads & uploads.
 ---
 

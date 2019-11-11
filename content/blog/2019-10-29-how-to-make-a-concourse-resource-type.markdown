@@ -5,7 +5,7 @@ tags:
 - concourse
 - ci
 - cd
-thumbnail: night_waves_thumb.png
+thumbnail: ./images/thumbnails/night_waves_thumb.png
 teaser: How to implement a custom Concourse resource type.
 ---
 

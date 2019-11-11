@@ -1,7 +1,7 @@
 ---
 title: Apache Persistent Connection Problems
 date: 2015/10/18
-thumbnail: texture_thumb.png
+thumbnail: ./images/thumbnails/texture_thumb.png
 tags:
 - apache
 - operations

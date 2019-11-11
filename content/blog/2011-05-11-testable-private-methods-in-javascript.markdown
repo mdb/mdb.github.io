@@ -5,7 +5,7 @@ tags:
 - javascript
 - notes
 - tdd
-thumbnail: lock_thumb.png
+thumbnail: ./images/thumbnails/lock_thumb.png
 teaser: A controversial technique for writing unit tests against private methods.
 ---
 

@@ -6,7 +6,7 @@ tags:
 - node.js
 - express
 - heroku
-thumbnail: triangle_thumb.png
+thumbnail: ./images/thumbnails/triangle_thumb.png
 teaser: A beginner's tutorial in deploying a Node.js app to Heroku.
 ---
 

@@ -4,7 +4,7 @@ date: 2012/05/31
 tags:
 - javascript
 - fluent
-thumbnail: glasses_thumb.png
+thumbnail: ./images/thumbnails/glasses_thumb.png
 teaser: My notes on Nichalas Zakas' Fluent 2012 talk.
 ---
 

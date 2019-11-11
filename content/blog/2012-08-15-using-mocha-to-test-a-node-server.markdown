@@ -6,7 +6,7 @@ tags:
 - node.js
 - mocha
 - tdd
-thumbnail: pattern_thumb.png
+thumbnail: ./images/thumbnails/pattern_thumb.png
 teaser: Using Node.js's fork to write tests against a server.
 ---
 

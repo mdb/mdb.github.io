@@ -5,7 +5,7 @@ tags:
 - ansible
 - operations
 published: true
-thumbnail: wget_thumb.png
+thumbnail: ./images/thumbnails/wget_thumb.png
 teaser: Authenticated downloads with Ansible
 ---
 

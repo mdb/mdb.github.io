@@ -7,7 +7,7 @@ tags:
 - gem
 - wordpress
 - middleman
-thumbnail: wp2mm_thumb.png
+thumbnail: ./images/thumbnails/wp2mm_thumb.png
 images:
   - nested:
     - wp2mm_1.jpg

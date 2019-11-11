@@ -5,7 +5,7 @@ tags:
 - wordpress
 - cloud
 - pagodabox
-thumbnail: pagodabox_thumb.png
+thumbnail: ./images/thumbnails/pagodabox_thumb.png
 teaser: A beginner's guide to deploying a Wordpress app to Pagodabox's cloud service.
 ---
 

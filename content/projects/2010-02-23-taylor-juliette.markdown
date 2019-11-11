@@ -2,7 +2,7 @@
 title: Taylor & Juliette
 date: 2010/02/23
 date_completed: Spring 2009
-thumbnail: tj_thumb.png
+thumbnail: ./images/thumbnails/tj_thumb.png
 tags:
 - wedding
 - letterpress

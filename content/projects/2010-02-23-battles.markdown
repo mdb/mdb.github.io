@@ -5,7 +5,7 @@ date_completed: Summer 2006
 tags:
 - zine
 - illustration
-thumbnail: battles_thumb.jpg
+thumbnail: ./images/thumbnails/battles_thumb.jpg
 images:
   - nested:
     - battles_sea_8.jpg

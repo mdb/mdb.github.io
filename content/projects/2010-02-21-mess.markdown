@@ -6,7 +6,7 @@ tags:
 - django
 - logo
 - open source
-thumbnail: mess_thumb.gif
+thumbnail: ./images/thumbnails/mess_thumb.gif
 published: false
 images:
   - mess_github.png

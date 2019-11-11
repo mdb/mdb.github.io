@@ -5,7 +5,7 @@ tags:
 - javascript
 - html5
 published: false
-thumbnail: default_thumb.gif
+thumbnail: ./images/thumbnails/default_thumb.gif
 ---
 
 ## Drawing rectangles

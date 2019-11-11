@@ -5,7 +5,7 @@ tags:
 - postgres
 - notes
 - mac osx
-thumbnail: computer_thumb.png
+thumbnail: ./images/thumbnails/computer_thumb.png
 teaser: My notes on getting postgres running on Mac OS via a homebrew installation.
 ---
 

@@ -5,7 +5,7 @@ tags:
 - bash
 - command line
 - notes
-thumbnail: prompt_thumb.png
+thumbnail: ./images/thumbnails/prompt_thumb.png
 teaser: Some beginner's notes; collected for a recently-hired junior developer.
 ---
 

@@ -2,7 +2,7 @@
 title: Anthroapology
 date: 2010/02/22
 date_completed: Summer 2006
-thumbnail: anthroapology_thumb.jpg
+thumbnail: ./images/thumbnails/anthroapology_thumb.jpg
 tags:
 - zine
 - illustration

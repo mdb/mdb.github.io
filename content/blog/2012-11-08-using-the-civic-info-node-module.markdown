@@ -6,7 +6,7 @@ tags:
 - node.js
 - civi-info
 - opendata
-thumbnail: vote_thumb.png
+thumbnail: ./images/thumbnails/vote_thumb.png
 teaser: A quick tutorial in using a simple NPM module I built.
 ---
 

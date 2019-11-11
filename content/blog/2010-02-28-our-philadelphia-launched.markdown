@@ -4,7 +4,7 @@ date: 2010/02/28
 tags:
 - django
 - open source
-thumbnail: our_phila_thumb.png
+thumbnail: ./images/thumbnails/our_phila_thumb.png
 teaser: Some colleagues and I recently released ourphiladelphia.org.
 ---
 

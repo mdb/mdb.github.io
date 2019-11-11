@@ -6,7 +6,7 @@ tags:
 - rspec
 - TDD
 - HTTP
-thumbnail: beach_chair_thumb.png
+thumbnail: ./images/thumbnails/beach_chair_thumb.png
 teaser: A basic Ruby class example to illustrate a few of the language's features.
 ---
 

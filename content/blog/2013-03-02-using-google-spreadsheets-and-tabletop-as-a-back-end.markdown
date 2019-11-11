@@ -4,7 +4,7 @@ date: 2013/03/02
 tags:
 - javascript
 - nicar
-thumbnail: pyramid_thumb.png
+thumbnail: ./images/thumbnails/pyramid_thumb.png
 teaser: How to use Tabletop.js as your JavaScript app's datastore.
 ---
 

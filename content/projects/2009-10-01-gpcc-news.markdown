@@ -3,7 +3,7 @@ title: GPCC News
 date: 2009/10/01
 date_completed: October 2009
 published: false
-thumbnail: gpcc_news_thumb.jpg
+thumbnail: ./images/thumbnails/gpcc_news_thumb.jpg
 tags:
 - wordpress
 - UX

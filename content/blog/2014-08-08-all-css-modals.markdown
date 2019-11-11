@@ -5,7 +5,7 @@ tags:
 - css
 - css3
 - ui
-thumbnail: noise_collage_thumb.png
+thumbnail: ./images/thumbnails/noise_collage_thumb.png
 teaser: A simple example demonstrating all-CSS, no-JavaScript modal dialogs.
 ---
 

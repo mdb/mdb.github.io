@@ -5,7 +5,7 @@ date_completed: Summer 2006
 tags:
 - illustration
 - zine
-thumbnail: polaroid_thumb.gif
+thumbnail: ./images/thumbnails/polaroid_thumb.gif
 images:
   - nested:
     - polaroid.gif

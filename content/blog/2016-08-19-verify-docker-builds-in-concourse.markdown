@@ -5,7 +5,7 @@ tags:
 - concourse
 - github
 published: true
-thumbnail: concourse_thumb.png
+thumbnail: ./images/thumbnails/concourse_thumb.png
 teaser: How to verify a Docker image pull request in ConcourseCI.
 ---
 

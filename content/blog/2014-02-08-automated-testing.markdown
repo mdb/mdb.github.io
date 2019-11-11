@@ -6,7 +6,7 @@ tags:
 - jasmine
 - Rspec
 - automation
-thumbnail: trianglescape_thumb.png
+thumbnail: ./images/thumbnails/trianglescape_thumb.png
 teaser: An overview of automated tests for the uninitiated.
 ---
 

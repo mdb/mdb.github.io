@@ -5,7 +5,7 @@ tags:
 - ruby
 - rspec
 - continuous integration
-thumbnail: legos_thumb.png
+thumbnail: ./images/thumbnails/legos_thumb.png
 teaser: A simple pattern for authoring integration tests for a Rails app.
 ---
 

@@ -6,7 +6,7 @@ tags:
 - ruby
 - gem
 - aws
-thumbnail: lobber_thumb.png
+thumbnail: ./images/thumbnails/lobber_thumb.png
 images:
   - lobber_github.png
 ---

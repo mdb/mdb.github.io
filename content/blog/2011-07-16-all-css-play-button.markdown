@@ -5,7 +5,7 @@ tags:
 - css
 - css3
 - notes
-thumbnail: play_thumb.jpg
+thumbnail: ./images/thumbnails/play_thumb.jpg
 teaser: I wondered if it could be done; here's a quick and dirty technique.
 ---
 

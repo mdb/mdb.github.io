@@ -4,5 +4,5 @@ date: 2013/11/20
 tags:
 - javascript
 published: false
-thumbnail: default_thumb.gif
+thumbnail: ./images/thumbnails/default_thumb.gif
 ---

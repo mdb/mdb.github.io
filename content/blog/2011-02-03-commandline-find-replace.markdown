@@ -4,7 +4,7 @@ date: 2011/02/03
 tags:
 - bash
 - notes
-thumbnail: eyes_thumb.png
+thumbnail: ./images/thumbnails/eyes_thumb.png
 teaser: An overview of a quick bash function I recently wrote.
 ---
 

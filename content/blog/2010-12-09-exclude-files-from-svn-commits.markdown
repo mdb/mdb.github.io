@@ -5,7 +5,7 @@ tags:
 - subversion
 - notes
 - bash
-thumbnail: hand_thumb.png
+thumbnail: ./images/thumbnails/hand_thumb.png
 teaser: A bash function for working around a Subversion annoyance.
 ---
 

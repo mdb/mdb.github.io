@@ -5,7 +5,7 @@ tags:
 - django
 - heroku
 - south
-thumbnail: cloud_thumb.png
+thumbnail: ./images/thumbnails/cloud_thumb.png
 teaser: How to add new fields to an existing, Heroku-hosted Django project's database.
 ---
 

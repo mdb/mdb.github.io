@@ -8,7 +8,7 @@ tags:
 - php
 - nonprofit
 published: false
-thumbnail: books_thumb.png
+thumbnail: ./images/thumbnails/books_thumb.png
 images:
   - nested:
     - books_1.png

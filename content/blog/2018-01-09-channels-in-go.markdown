@@ -5,7 +5,7 @@ tags:
 - golang
 - go
 - concurrency
-thumbnail: roller_skating_thumb.png
+thumbnail: ./images/thumbnails/roller_skating_thumb.png
 teaser: A brief intro to Go concurrency through channels and goroutines.
 ---
 

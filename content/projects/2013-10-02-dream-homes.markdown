@@ -2,7 +2,7 @@
 title: 31 Dream Homes
 date: 2013/10/02
 date_completed: January 2012
-thumbnail: 31_dream_homes_thumb.png
+thumbnail: ./images/thumbnails/31_dream_homes_thumb.png
 tags:
 - illustration
 - print

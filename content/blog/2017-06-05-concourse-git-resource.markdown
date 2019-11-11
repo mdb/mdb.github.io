@@ -5,7 +5,7 @@ tags:
 - concourse
 - github
 - git
-thumbnail: faces_thumb.png
+thumbnail: ./images/thumbnails/faces_thumb.png
 teaser: How to commit to a git repo from Concourse using the git resource.
 ---
 

@@ -6,7 +6,7 @@ tags:
 - ruby
 - ruby on rails
 - notes
-thumbnail: diamond_thumb.png
+thumbnail: ./images/thumbnails/diamond_thumb.png
 teaser: Some old instructions collected for a team of Rails newcomers.
 ---
 

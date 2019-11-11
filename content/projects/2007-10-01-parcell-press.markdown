@@ -2,7 +2,7 @@
 title: Parcell Press
 date: 2007/10/01
 date_completed: October 2007
-thumbnail: parcell_press_thumb.jpg
+thumbnail: ./images/thumbnails/parcell_press_thumb.jpg
 tags:
 - php
 - ecommerce

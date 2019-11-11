@@ -2,7 +2,7 @@
 title: Gull
 date: 2012/08/06
 date_completed: August 2012
-thumbnail: gull_thumb.png
+thumbnail: ./images/thumbnails/gull_thumb.png
 tags:
 - illustration
 - collage

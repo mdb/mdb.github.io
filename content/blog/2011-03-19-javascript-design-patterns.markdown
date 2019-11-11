@@ -4,7 +4,7 @@ date: 2011/03/19
 tags:
 - javascript
 - notes
-thumbnail: pink_pattern_thumb.png
+thumbnail: ./images/thumbnails/pink_pattern_thumb.png
 teaser: My notes on Addy Osmani's JavaScript design patterns ebook.
 ---
 

@@ -6,7 +6,7 @@ tags:
 - node-webkit
 - installer
 - automation
-thumbnail: eyeball_hand_thumb.png
+thumbnail: ./images/thumbnails/eyeball_hand_thumb.png
 teaser: How to create a Windows app installer on the Mac OS command line using makensis.
 ---
 

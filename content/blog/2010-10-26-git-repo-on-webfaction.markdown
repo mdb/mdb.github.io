@@ -5,7 +5,7 @@ tags:
 - git
 - notes
 published: false
-thumbnail: default_thumb.gif
+thumbnail: ./images/thumbnails/default_thumb.gif
 teaser: My notes on how I set up git repo hosting on Webfaction.
 ---
 

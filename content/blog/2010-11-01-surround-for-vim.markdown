@@ -4,7 +4,7 @@ date: 2010/11/01
 tags:
 - vim
 - notes
-thumbnail: blocks_thumb.png
+thumbnail: ./images/thumbnails/blocks_thumb.png
 teaser: My notes on using Vim's surround plugin.
 ---
 

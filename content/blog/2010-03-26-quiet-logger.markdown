@@ -5,7 +5,7 @@ tags:
 - HTML5
 - open source
 - wordpress
-thumbnail: quiet_logger_thumb.png
+thumbnail: ./images/thumbnails/quiet_logger_thumb.png
 teaser: An overview of a basic Wordpress theme I was tasked in creating.
 ---
 

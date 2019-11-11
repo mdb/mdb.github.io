@@ -7,7 +7,7 @@ tags:
 - travis
 - polymer
 - javascript
-thumbnail: polymer_thumb.png
+thumbnail: ./images/thumbnails/polymer_thumb.png
 teaser: How to run a headless Firefox on Travis CI via Xvfb
 ---
 

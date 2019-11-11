@@ -8,7 +8,7 @@ tags:
 - ansible
 - xvfb
 - vagrant
-thumbnail: jsconf_thumb.png
+thumbnail: ./images/thumbnails/jsconf_thumb.png
 teaser: An overview of my JSConf 2015 talk on headlessly testing against real web browsers.
 ---
 

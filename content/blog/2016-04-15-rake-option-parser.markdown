@@ -5,7 +5,7 @@ tags:
 - rake
 - ruby
 published: true
-thumbnail: cage_thumb.png
+thumbnail: ./images/thumbnails/cage_thumb.png
 teaser: How to use Ruby OptionParser in Rake
 ---
 

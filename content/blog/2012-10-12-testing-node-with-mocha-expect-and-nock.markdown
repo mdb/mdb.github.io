@@ -6,7 +6,7 @@ tags:
 - node.js
 - mocha
 - tdd
-thumbnail: yellow_spark_thumb.png
+thumbnail: ./images/thumbnails/yellow_spark_thumb.png
 teaser: A technique for mocking HTTP requests in your Node.js tests.
 ---
 

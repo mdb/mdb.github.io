@@ -7,7 +7,7 @@ tags:
 - backbone
 - journalism
 - opendata
-thumbnail: times_grapher_thumb.png
+thumbnail: ./images/thumbnails/times_grapher_thumb.png
 images:
   - times_grapher_1.png
 ---

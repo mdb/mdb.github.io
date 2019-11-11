@@ -4,7 +4,7 @@ date: 2013/03/04
 tags:
 - nicar
 - journalism
-thumbnail: ire_thumb.png
+thumbnail: ./images/thumbnails/ire_thumb.png
 teaser: A few NICAR 2013 highlights and reflections.
 ---
 

@@ -5,7 +5,7 @@ tags:
 - compass
 - scss
 - css
-thumbnail: scallops_thumb.png
+thumbnail: ./images/thumbnails/scallops_thumb.png
 teaser: CSS authoring can hurt. Compass abstracts away the pain.
 ---
 

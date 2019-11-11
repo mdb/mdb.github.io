@@ -6,7 +6,7 @@ tags:
 - ruby
 - sinatra
 - open data
-thumbnail: cfa_thumb.jpg
+thumbnail: ./images/thumbnails/cfa_thumb.jpg
 teaser: Leveraging open data to track Philly lobbying efforts.
 ---
 
