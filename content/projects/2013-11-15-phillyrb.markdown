@@ -3,6 +3,7 @@ title: Philly.rb
 date: 2013/11/15
 date_completed: November 2013
 published: false
+thumbnail: ./images/thumbnails/default_thumb.gif
 tags:
 - ruby
 - javascript
