@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
+import Img from 'gatsby-image'
 import { rhythm } from '../utils/typography'
 
 class ProjectList extends React.Component {
@@ -8,6 +9,7 @@ class ProjectList extends React.Component {
       <div>
         {this.props.projects.map(({ node }) => {
           const title = node.frontmatter.title || node.fields.slug
+
           return (
             <article key={node.fields.slug}>
               <header>
@@ -21,6 +23,7 @@ class ProjectList extends React.Component {
                   </Link>
                 </h3>
                 <small>{node.frontmatter.date}</small>
+                <Img fluid={node.frontmatter.thumbnail.childImageSharp.fluid} />
               </header>
             </article>
           )

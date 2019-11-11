@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, graphql } from 'gatsby'
+import Img from 'gatsby-image'
 import Layout from '../components/layout'
 import TagList from '../components/tag-list'
 import { rhythm, scale } from '../utils/typography'
@@ -22,6 +23,7 @@ class BlogPostTemplate extends React.Component {
             >
               {post.frontmatter.title}
             </h1>
+            <Img fluid={post.frontmatter.thumbnail.childImageSharp.fluid} />
             <p
               style={{
                 ...scale(-1 / 5),
@@ -89,6 +91,13 @@ export const pageQuery = graphql`
         date
         teaser
         tags
+        thumbnail {
+          childImageSharp {
+            fluid(maxWidth: 800) {
+              ...GatsbyImageSharpFluid
+            }
+          }
+        }
       }
     }
   }

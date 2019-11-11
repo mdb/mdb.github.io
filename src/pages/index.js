@@ -11,7 +11,7 @@ class Index extends React.Component {
     return (
       <Layout location={this.props.location} title={siteTitle}>
         <BlogPostList posts={data.posts.edges} />
-        <ProjectList posts={data.projects.edges} />
+        <ProjectList projects={data.projects.edges} />
       </Layout>
     )
   }
@@ -47,6 +47,13 @@ export const pageQuery = graphql`
             title
             teaser
             tags
+            thumbnail {
+              childImageSharp {
+                fluid(maxWidth: 800) {
+                  ...GatsbyImageSharpFluid
+                }
+              }
+            }
           }
         }
       }
@@ -71,6 +78,13 @@ export const pageQuery = graphql`
           frontmatter {
             title
             tags
+            thumbnail {
+              childImageSharp {
+                fluid(maxWidth: 800) {
+                  ...GatsbyImageSharpFluid
+                }
+              }
+            }
           }
         }
       }

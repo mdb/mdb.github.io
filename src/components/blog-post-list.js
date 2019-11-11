@@ -1,4 +1,5 @@
 import React from 'react'
+import Img from 'gatsby-image'
 import { Link } from 'gatsby'
 import { rhythm } from '../utils/typography'
 import TagList from './tag-list'
@@ -23,6 +24,7 @@ class BlogPostList extends React.Component {
                 </h3>
                 <small>{node.frontmatter.date}</small>
                 <TagList tags={node.frontmatter.tags} />
+                <Img fluid={node.frontmatter.thumbnail.childImageSharp.fluid} />
               </header>
               <section>
                 <p>{node.frontmatter.teaser}</p>
