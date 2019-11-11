@@ -5,7 +5,7 @@ tags:
 - ruby
 - philadelphia
 - gem
-thumbnail: ./images/thumbnails/default_thumb.gif
+thumbnail: ./images/thumbnails/default_thumb.png
 teaser: An overview of a small Ruby gem I built on Philadelphia's public geodata.
 ---
 
