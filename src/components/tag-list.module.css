@@ -1,0 +1,17 @@
+.tags {
+  margin: 0;
+}
+
+li.tag {
+  display: inline-block;
+  list-style-type: none;
+}
+
+li.tag:after {
+  content: ',';
+  margin-right: .25em;
+}
+
+li.tag:last-of-type:after {
+  content: '';
+}
