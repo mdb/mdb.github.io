@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import Img from 'gatsby-image'
 import { rhythm } from '../utils/typography'
+import Thumbnail from './thumbnail'
 
 class ProjectList extends React.Component {
   render() {
@@ -23,7 +23,7 @@ class ProjectList extends React.Component {
                   </Link>
                 </h3>
                 <small>{node.frontmatter.date}</small>
-                <Img fluid={node.frontmatter.thumbnail.childImageSharp.fluid} />
+                <Thumbnail fields={node.fields} frontmatter={node.frontmatter} />
               </header>
             </article>
           )

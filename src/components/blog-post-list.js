@@ -1,8 +1,8 @@
 import React from 'react'
-import Img from 'gatsby-image'
 import { Link } from 'gatsby'
 import { rhythm } from '../utils/typography'
 import TagList from './tag-list'
+import Thumbnail from './thumbnail'
 
 class BlogPostList extends React.Component {
   render() {
@@ -10,6 +10,7 @@ class BlogPostList extends React.Component {
       <div>
         {this.props.posts.map(({ node }) => {
           const title = node.frontmatter.title || node.fields.slug
+
           return (
             <article key={node.fields.slug}>
               <header>
@@ -24,7 +25,7 @@ class BlogPostList extends React.Component {
                 </h3>
                 <small>{node.frontmatter.date}</small>
                 <TagList tags={node.frontmatter.tags} />
-                <Img fluid={node.frontmatter.thumbnail.childImageSharp.fluid} />
+                <Thumbnail fields={node.fields} frontmatter={node.frontmatter} />
               </header>
               <section>
                 <p>{node.frontmatter.teaser}</p>
