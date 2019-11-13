@@ -5,10 +5,9 @@ import ProjectList from '../components/project-list'
 class ProjectsIndex extends React.Component {
   render() {
     const { data } = this.props
-    const siteTitle = data.site.siteMetadata.title
 
     return (
-      <Layout location={this.props.location} title={siteTitle}>
+      <Layout location={data.location} title={data.site.siteMetadata.title}>
         <ProjectList projects={data.projects.edges} />
       </Layout>
     )
