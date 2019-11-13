@@ -36,7 +36,8 @@ export const pageQuery = graphql`
           slug: { glob: "/blog/*" }
         }
       },
-      sort: { fields: [frontmatter___date], order: DESC }
+      sort: { fields: [frontmatter___date], order: DESC },
+      limit: 4
     ) {
       edges {
         node {
@@ -68,7 +69,8 @@ export const pageQuery = graphql`
           slug: { glob: "/projects/*" }
         }
       },
-      sort: { fields: [frontmatter___date], order: DESC }
+      sort: { fields: [frontmatter___date], order: DESC },
+      limit: 4
     ) {
       edges {
         node {
