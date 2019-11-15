@@ -10,7 +10,7 @@ class Index extends React.Component {
     const siteTitle = data.site.siteMetadata.title
 
     return (
-      <Layout location={this.props.location} title={siteTitle}>
+      <Layout title={siteTitle}>
         <BlogPostList posts={data.posts.edges} />
         <ProjectList projects={data.projects.edges} />
       </Layout>
