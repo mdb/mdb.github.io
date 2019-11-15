@@ -4,6 +4,7 @@ const { createFilePath } = require(`gatsby-source-filesystem`)
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
   const tagTemplate = path.resolve(`./src/templates/tags.js`)
+  const tagsIndexTemplate = path.resolve(`./src/templates/tags-index.js`)
   const blogIndexTemplate = path.resolve(`./src/templates/blog-index.js`)
   const blogPostTemplate = path.resolve(`./src/templates/blog-post.js`)
   const projectsIndexTemplate = path.resolve(`./src/templates/projects-index.js`)
@@ -55,6 +56,35 @@ exports.createPages = async ({ graphql, actions }) => {
       tagsGroup: allMarkdownRemark(limit: 2000) {
         group(field: frontmatter___tags) {
           fieldValue
+          totalCount
+        }
+      }
+
+      blogTagsGroup: allMarkdownRemark(
+        limit: 2000,
+        filter: {
+          fields: {
+            slug: { glob: "/blog/*" }
+          }
+        }
+      ) {
+        group(field: frontmatter___tags) {
+          fieldValue
+          totalCount
+        }
+      }
+
+      projectTagsGroup: allMarkdownRemark(
+        limit: 2000,
+        filter: {
+          fields: {
+            slug: { glob: "/projects/*" }
+          }
+        }
+      ) {
+        group(field: frontmatter___tags) {
+          fieldValue
+          totalCount
         }
       }
     }
@@ -121,6 +151,50 @@ exports.createPages = async ({ graphql, actions }) => {
       component: tagTemplate,
       context: {
         tag: tag.fieldValue,
+      },
+    })
+  })
+
+  createPage({
+    path: `/blog/tags`,
+    component: tagsIndexTemplate,
+    context: {
+      tags: result.data.blogTagsGroup.group,
+      glob: '/blog/*'
+    }
+  })
+
+  const blogTags = result.data.blogTagsGroup.group
+  blogTags.forEach(tag => {
+    createPage({
+      path: `/blog/tags/${tag.fieldValue}/`,
+      component: tagTemplate,
+      context: {
+        tag: tag.fieldValue,
+        glob: '/blog/*',
+        allTagsUrl: '/blog/tags'
+      },
+    })
+  })
+
+  createPage({
+    path: `/projects/tags`,
+    component: tagsIndexTemplate,
+    context: {
+      tags: result.data.projectTagsGroup.group,
+      glob: '/projects/*'
+    }
+  })
+
+  const projectTags = result.data.projectTagsGroup.group
+  projectTags.forEach(tag => {
+    createPage({
+      path: `/projects/tags/${tag.fieldValue}/`,
+      component: tagTemplate,
+      context: {
+        tag: tag.fieldValue,
+        glob: '/projects/*',
+        allTagsUrl: '/projects/tags'
       },
     })
   })
