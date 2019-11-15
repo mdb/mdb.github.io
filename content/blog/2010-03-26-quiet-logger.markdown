@@ -2,7 +2,7 @@
 title: "Quiet Logger: HTML5 WordPress Theme"
 date: 2010/03/26
 tags:
-- HTML5
+- html5
 - open source
 - wordpress
 thumbnail: ./images/thumbnails/quiet_logger_thumb.png

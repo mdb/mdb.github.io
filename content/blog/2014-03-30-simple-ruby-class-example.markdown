@@ -4,8 +4,8 @@ date: 2014/03/30
 tags:
 - ruby
 - rspec
-- TDD
-- HTTP
+- tdd
+- http
 thumbnail: ./images/thumbnails/beach_chair_thumb.png
 teaser: A basic Ruby class example to illustrate a few of the language's features.
 ---
