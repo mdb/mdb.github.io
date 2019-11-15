@@ -6,7 +6,7 @@ thumbnail: ./images/thumbnails/parcell_press_thumb.jpg
 tags:
 - php
 - ecommerce
-- UX
+- ux
 images:
   - parcell_press_card_large.jpg
   - nested:

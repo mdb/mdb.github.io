@@ -6,7 +6,7 @@ published: false
 thumbnail: ./images/thumbnails/gpcc_news_thumb.jpg
 tags:
 - wordpress
-- UX
+- ux
 - ubuntu
 - css
 images:
