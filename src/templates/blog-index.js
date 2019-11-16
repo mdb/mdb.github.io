@@ -3,16 +3,12 @@ import { graphql } from 'gatsby'
 import Layout from '../components/layout'
 import BlogPostList from '../components/blog-post-list'
 
-class BlogIndex extends React.Component {
-  render() {
-    const { data } = this.props
-
-    return (
-      <Layout location={data.location} title={data.site.siteMetadata.title}>
-        <BlogPostList posts={data.posts.edges} />
-      </Layout>
-    )
-  }
+const BlogIndex = ({ pageContext, data }) => {
+  return (
+    <Layout location={data.location} title={data.site.siteMetadata.title}>
+      <BlogPostList posts={data.posts.edges} />
+    </Layout>
+  )
 }
 
 export default BlogIndex

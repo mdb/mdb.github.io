@@ -3,16 +3,12 @@ import { graphql } from 'gatsby'
 import Layout from '../components/layout'
 import ProjectList from '../components/project-list'
 
-class ProjectsIndex extends React.Component {
-  render() {
-    const { data } = this.props
-
-    return (
-      <Layout location={data.location} title={data.site.siteMetadata.title}>
-        <ProjectList projects={data.projects.edges} />
-      </Layout>
-    )
-  }
+const ProjectsIndex = ({ pageContext, data }) => {
+  return (
+    <Layout location={data.location} title={data.site.siteMetadata.title}>
+      <ProjectList projects={data.projects.edges} />
+    </Layout>
+  )
 }
 
 export default ProjectsIndex
