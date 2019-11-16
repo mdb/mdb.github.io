@@ -10,8 +10,7 @@ tags:
 - javascript
 - design
 images:
-  - nested:
-    - gpcc_1.png
+- ./images/work/gpcc_1.png
 ---
 
 From August 2007 through March 2010, I served as Web Designer/Developer for the Greater Philadelphia Chamber of Commerce. As Web Designer, I worked with the GPCC’s Web Team and Art Department to manage web presence, online branding, content architecture, and user experience. Throughout my time with the GPCC, I designed various web sites, web applications, features, functionality, and graphics for the GPCC and its affiliate organizations, working in XHTML, CSS, JavaScript, jQuery, WordPress, PHP, MySQL, ASP.NET, and Adobe CS4 software.

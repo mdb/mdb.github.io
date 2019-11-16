@@ -9,8 +9,7 @@ tags:
 - design
 - print
 images:
-  - nested:
-    - gull_gif.gif
+- ./images/work/gull_gif.gif
 ---
 
 A set of images for use by <a href="http://gullface.com/">Nate Rappole</a> as a postcard series.

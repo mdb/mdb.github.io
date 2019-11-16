@@ -8,7 +8,7 @@ tags:
 thumbnail: ./images/thumbnails/hopscotch_coffee_thumb.jpg
 featured: true
 images:
-  - hopscotch_townscape_full.jpg
+- ./images/work/hopscotch_townscape_full.jpg
 ---
 
-18" x 24" micron pen drawing for Hopscotch Coffee's Bloomington, IN shop.
+18" x 24" 2 color silk screen printed illustration for Hopscotch Coffee's Bloomington, IN shop.

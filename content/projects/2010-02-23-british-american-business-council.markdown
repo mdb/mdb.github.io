@@ -10,8 +10,7 @@ tags:
 - lamp
 - ux
 images:
-  - nested:
-    - babc_1.png
+- ./images/work/babc_1.png
 ---
 
 In the winter of 2009, I worked to redesign the BABC's website in conjunction with the organization’s new logo and branding. In addition to all UX, I was also tasked with full stack development and systems administration. The site features a blog, an event calendar, and social media integration.

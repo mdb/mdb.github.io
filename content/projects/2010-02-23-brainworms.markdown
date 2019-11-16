@@ -8,8 +8,7 @@ tags:
 - illustration
 - collage
 images:
-  - nested:
-    - brainworms.gif
+- ./images/work/brainworms.png
 ---
 
 T-shirt design.

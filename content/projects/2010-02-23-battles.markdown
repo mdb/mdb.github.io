@@ -7,9 +7,8 @@ tags:
 - illustration
 thumbnail: ./images/thumbnails/battles_thumb.jpg
 images:
-  - nested:
-    - battles_sea_8.jpg
-    - battles_land_cover.jpg
+- ./images/work/battles_sea_8.jpg
+- ./images/work/battles_land_cover.jpg
 ---
 
 Battles: Sea and Land are two illustration-based narrative zines made in the Summer of 2006.

@@ -10,8 +10,7 @@ tags:
 - css
 - web
 images:
-  - nested:
-    - ultra_dolphins_1.gif
+- ./images/work/ultra_dolphins_1.png
 ---
 
 One of my first web projects; this simple website was an extracurricular project for Richmond, VA friends, Ultra Dolphins.

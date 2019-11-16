@@ -8,10 +8,9 @@ tags:
 - ecommerce
 - ux
 images:
-  - parcell_press_card_large.jpg
-  - nested:
-    - parcell_press_1.png
-    - parcell_press_card_2.jpg
+- ./images/work/parcell_press_card_large.jpg
+- ./images/work/parcell_press_1.png
+- ./images/work/parcell_press_card_2.jpg
 ---
 
 I designed and developed the logo, identity, and ecommerce website for Parcell Press, an independent zine, art, and book distributor.

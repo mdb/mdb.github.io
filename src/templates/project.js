@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, graphql } from 'gatsby'
+import Img from 'gatsby-image'
 import Layout from '../components/layout'
 import TagList from '../components/tag-list'
 import { rhythm, scale } from '../utils/typography'
@@ -24,14 +25,17 @@ const Project = ({ pageContext, data }) => {
           <p
             style={{
               ...scale(-1 / 5),
-              display: `block`,
-              marginBottom: rhythm(1),
             }}
           >
-            {post.frontmatter.date}
           </p>
+          <p>{post.frontmatter.date_completed}</p>
           <TagList tags={post.frontmatter.tags} />
         </header>
+        {post.frontmatter.images.map(image => {
+          return (
+            <Img fluid={image.childImageSharp.fluid} />
+          )
+        })}
         <section dangerouslySetInnerHTML={{ __html: post.html }} />
         <hr
           style={{
@@ -86,6 +90,14 @@ export const pageQuery = graphql`
         title
         date
         tags
+        date_completed
+        images {
+          childImageSharp {
+            fluid(maxWidth: 800) {
+              ...GatsbyImageSharpFluid
+            }
+          }
+        }
       }
     }
   }

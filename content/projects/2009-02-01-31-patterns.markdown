@@ -7,11 +7,9 @@ tags:
 - illustration
 - design
 images:
-  - nested:
-    - 31_patterns_1.jpg
-  - nested:
-    - 31_patterns_4.gif
-    - 31_patterns_5.jpg
+- ./images/work/31_patterns_1.jpg
+- ./images/work/31_patterns_4.png
+- ./images/work/31_patterns_5.jpg
 ---
 
 Nate Johnson, Kara Schlindwein, and I collaborated on this book of 31 illustrated patterns for Artclash’s annual Fun-A-Day art show. We created one pattern each day throughout the month of January 2009 and compiled our finished work in a handmade book. The patterns are designed to tile infinitely.

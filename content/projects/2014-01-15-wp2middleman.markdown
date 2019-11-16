@@ -9,8 +9,7 @@ tags:
 - middleman
 thumbnail: ./images/thumbnails/wp2mm_thumb.png
 images:
-  - nested:
-    - wp2mm_1.jpg
+- ./images/work/wp2mm_1.jpg
 ---
 
 wp2middleman is a Ruby gem that migrates the Wordpress posts in a Wordpress XML export file to [middleman-style](http://middlemanapp.com) markdown files.

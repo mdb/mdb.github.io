@@ -8,7 +8,7 @@ tags:
 - aws
 thumbnail: ./images/thumbnails/lobber_thumb.png
 images:
-  - lobber_github.png
+- ./images/work/lobber_github.png
 ---
 
 Lobber is a simple command line utility used to quickly upload a directory to [Amazon S3](http://aws.amazon.com/s3/).

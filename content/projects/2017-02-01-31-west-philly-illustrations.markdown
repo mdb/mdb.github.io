@@ -9,8 +9,7 @@ tags:
 - design
 - print
 images:
-  - nested:
-    - fad_panels.gif
+- ./images/work/fad_panels.gif
 ---
 
 For Artclash’s 2017 West Philadelphia Fun-a-Day show, I drew 31 West Philadelphia-inspired illustrations, one each day through the month of January.

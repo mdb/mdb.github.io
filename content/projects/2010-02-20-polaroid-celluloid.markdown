@@ -7,8 +7,7 @@ tags:
 - zine
 thumbnail: ./images/thumbnails/polaroid_thumb.png
 images:
-  - nested:
-    - polaroid.gif
+- ./images/work/polaroid.png
 ---
 
 Hand drawn illustration for the zine <i>Polaroid Celluloid</i>.

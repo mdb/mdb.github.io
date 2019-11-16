@@ -10,7 +10,7 @@ tags:
 - backbone
 - node.js
 images:
-  - pac_complaints_large.jpg
+- ./images/work/pac_complaints_large.jpg
 ---
 
 My map of 2009 &ndash; 2012 complaints filed with the Philadelphia Police Advisory Commission won first place at the 2013 Barcamp News Innovation Hackathon.

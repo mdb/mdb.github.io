@@ -11,8 +11,7 @@ tags:
 - css
 - design
 images:
-  - nested:
-    - ypn_1.png
+- ./images/work/ypn_1.png
 ---
 
 Young Professionals Network of Greater Philadelphia is an affiliate organization of the Greater Philadelphia Chamber of Commerce. Throughout the summer of 2009, I worked to redesign and redevelop the organization’s website. The new site features an updated design that more clearly represents its affiliate brand relationship with the GPCC, and also more effectively serves as an online center of community for YPN’s active membership.

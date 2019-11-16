@@ -8,7 +8,7 @@ tags:
 - print
 featured: true
 images:
-  - 31_dream_homes.png
+- ./images/work/31_dream_homes.png
 ---
 
 For Artclash’s 2012 West Philadelphia Fun-a-Day show, I drew 31 dream homes, one each day through the month of January.

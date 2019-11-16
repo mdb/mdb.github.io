@@ -8,11 +8,11 @@ tags:
 - illustration
 - bangkok
 images:
-  - anthroapology_1_large.jpg
-  - anthroapology_2_large.jpg
-  - anthroapology_3_large.jpg
-  - anthroapology_4_large.jpg
-  - anthroapology_5_large.jpg
+- ./images/work/anthroapology_1_large.jpg
+- ./images/work/anthroapology_2_large.jpg
+- ./images/work/anthroapology_3_large.jpg
+- ./images/work/anthroapology_4_large.jpg
+- ./images/work/anthroapology_5_large.jpg
 ---
 
 This quarter-size zine is a collection of illustrations I made while living and teaching English in Bangkok, Thailand in 2005/2006.

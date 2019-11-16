@@ -9,11 +9,10 @@ tags:
 - wordpress
 - illustration
 images:
-  - tj_home_large.png
-  - tj_when_where_large.png
-  - nested:
-    - tj_card_vert_tall.jpg
-    - tj_card_close.jpg
+- ./images/work/tj_home_large.png
+- ./images/work/tj_when_where_large.png
+- ./images/work/tj_card_vert_tall.jpg
+- ./images/work/tj_card_close.jpg
 
 ---
 

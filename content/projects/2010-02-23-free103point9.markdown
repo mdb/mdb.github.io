@@ -9,8 +9,7 @@ tags:
 - javascript
 - design
 images:
-  - nested:
-    - free103_1.png
+- ./images/work/free103_1.png
 ---
 
 <a href="http://github.com/gsf">Gabe Farrell</a> and I developed this site for the New York-based transmission arts advocacy organization free103point9.

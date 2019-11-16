@@ -10,8 +10,7 @@ tags:
 - ubuntu
 - css
 images:
-  - nested:
-    - gpcc_news_1.png
+- ./images/work/gpcc_news_1.png
 ---
 
 In the fall of 2009, I worked to conceptualize, design, and develop a platform through which the Greater Philadelphia Chamber of Commerce could more effectively publish its online content. <a href="http://news.gpcc.com">News.GPCC.com</a> integrates the previously disparate and isolated elements of the GPCC&#8217;s web presence &mdash; Youtube videos, Twitter content, Flickr photos, blog posts, press releases, and HTML newsletters &mdash; in a centralized platform. News.gpcc.com also helps streamline content developers&#8217; work flow and affords the GPCC&#8217;s Communications staff increased editorial control over messaging. Additionally, the site offers automated archiving, improved navigation and information architecture, and integrates fluidly with the GPCC&#8217;s primary site, greaterphilachamber.com.

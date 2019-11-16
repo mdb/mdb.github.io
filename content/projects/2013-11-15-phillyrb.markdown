@@ -10,7 +10,7 @@ tags:
 - googlemaps
 - gis
 images:
-  - phillyrb.png
+- ./images/work/phillyrb.png
 ---
 
 My team at Comcast Interactive Media is a Phillyrb sponsor. [Thoughtbot](http://thoughtbot.com) designed a new [Philly.rb website](http://phillyrb.org), but organizers needed to auto-update the static site with the latest event information. Using JavaScript and Google Maps, I leveraged the Meetup.com API to auto-publish the next Philly.rb event to the site's homepage.
