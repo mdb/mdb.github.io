@@ -5,8 +5,8 @@ import Layout from '../components/layout'
 const Tags = ({ pageContext, data }) => {
   const { tag, allTagsUrl } = pageContext
   const { edges, totalCount } = data.allMarkdownRemark
-  const descriptor = allTagsUrl.includes('blog') ? 'blog post' : 'project'
-  const pathPrefix = allTagsUrl.includes('blog') ? '/blog' : '/projects'
+  const descriptor = allTagsUrl && allTagsUrl.includes('blog') ? 'blog post' : 'project'
+  const pathPrefix = allTagsUrl && allTagsUrl.includes('blog') ? '/blog' : '/projects'
 
   const tagHeader = `${totalCount} ${descriptor}${
     totalCount === 1 ? "" : "s"

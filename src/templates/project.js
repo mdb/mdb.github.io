@@ -32,6 +32,10 @@ const Project = ({ pageContext, data }) => {
           <TagList tags={post.frontmatter.tags} />
         </header>
         {post.frontmatter.images.map(image => {
+          if (!image.childImageSharp) {
+            return ''
+          }
+
           return (
             <Img fluid={image.childImageSharp.fluid} />
           )

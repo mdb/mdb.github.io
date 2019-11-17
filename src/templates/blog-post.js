@@ -11,7 +11,7 @@ const BlogPost = ({ pageContext, data }) => {
   const { previous, next } = pageContext
 
   return (
-    <Layout location={this.props.location} title={siteTitle}>
+    <Layout title={siteTitle}>
       <article>
         <header>
           <h1
@@ -22,7 +22,7 @@ const BlogPost = ({ pageContext, data }) => {
           >
             {post.frontmatter.title}
           </h1>
-          <Img fluid={post.frontmatter.thumbnail.childImageSharp.fluid} />
+          <Img fluid={post.frontmatter.thumbnail ? post.frontmatter.thumbnail.childImageSharp.fluid : ''} />
           <p
             style={{
               ...scale(-1 / 5),
