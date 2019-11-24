@@ -2,6 +2,7 @@ import React from 'react'
 import { graphql } from 'gatsby'
 import Layout from '../components/layout'
 import ProductList from '../components/product-list'
+import Instagram from '../components/instagram'
 import BlogPostList from '../components/blog-post-list'
 import ProjectList from '../components/project-list'
 
@@ -12,6 +13,7 @@ class Index extends React.Component {
 
     return (
       <Layout title={siteTitle}>
+        <Instagram />
         <ProductList />
         <BlogPostList posts={data.posts.edges} />
         <ProjectList projects={data.projects.edges} />
