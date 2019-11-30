@@ -1,4 +1,5 @@
 import React from 'react'
+import ExternalThumbnail from './external-thumbnail'
 
 class ProductList extends React.Component {
   constructor(props) {
@@ -31,9 +32,7 @@ class ProductList extends React.Component {
 
           return(
             <li key={prod.permalink}>
-              <a href={link}>
-                <img alt={prod.name} src={prod.images[0].url} />
-              </a>
+              <ExternalThumbnail link={link} alt={prod.name} imageUrl={prod.images[0].url} />
               <div className="details">
                 <h2><a href={link}>{prod.name}</a></h2>
                 <p>{prod.description}</p>

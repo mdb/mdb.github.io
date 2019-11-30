@@ -1,4 +1,5 @@
 import React from 'react'
+import ExternalThumbnail from './external-thumbnail'
 
 class Instagram extends React.Component {
   constructor(props) {
@@ -29,11 +30,9 @@ class Instagram extends React.Component {
         {items.map(item => {
           const text = item.caption ? item.caption.text : ''
 
-          return(
-            <li>
-              <a href={item.link}>
-                <img alt={text} src={item.images.standard_resolution.url} />
-              </a>
+          return (
+            <li key={item.link}>
+              <ExternalThumbnail link={item.link} alt={text} imageUrl={item.images.standard_resolution.url} />
             </li>
           )
         })}
