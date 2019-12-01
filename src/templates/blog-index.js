@@ -38,6 +38,7 @@ export const pageQuery = graphql`
             slug
           }
           frontmatter {
+            date(formatString: "MMMM DD, YYYY")
             title
             teaser
             tags
