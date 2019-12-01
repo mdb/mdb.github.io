@@ -13,23 +13,17 @@ class BlogPostList extends React.Component {
 
           return (
             <article key={node.fields.slug}>
+              <small>{node.frontmatter.date}</small>
+              <Thumbnail fields={node.fields} frontmatter={node.frontmatter} />
               <header>
-                <h3
-                  style={{
-                    marginBottom: rhythm(1 / 4),
-                  }}
-                >
-                  <Link style={{ boxShadow: `none` }} to={node.fields.slug}>
+                <h3>
+                  <Link to={node.fields.slug}>
                     {title}
                   </Link>
                 </h3>
-                <small>{node.frontmatter.date}</small>
-                <TagList tags={node.frontmatter.tags} />
-                <Thumbnail fields={node.fields} frontmatter={node.frontmatter} />
-              </header>
-              <section>
                 <p>{node.frontmatter.teaser}</p>
-              </section>
+                <TagList tags={node.frontmatter.tags} />
+              </header>
             </article>
           )
         })}
