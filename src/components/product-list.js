@@ -1,5 +1,6 @@
 import React from 'react'
 import ExternalThumbnail from './external-thumbnail'
+import productListStyles from './product-list.module.css'
 
 class ProductList extends React.Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class ProductList extends React.Component {
     }
 
     return (
-      <ul>
+      <ul className={productListStyles.gallery}>
         {products.map(prod => {
           const link = `https://tiendah.bigcartel.com/product/${prod.permalink}`
 
