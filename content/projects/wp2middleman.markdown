@@ -1,6 +1,6 @@
 ---
 title: wp2middleman
-date: 2014/01/15
+date: 2014-01-15
 date_completed: December 2013
 tags:
 - ruby

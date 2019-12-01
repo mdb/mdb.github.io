@@ -1,6 +1,6 @@
 ---
 title: 31 West Philly Illustrations
-date: 2017/02/01
+date: 2017-02-01
 date_completed: February 2017
 thumbnail: ./images/thumbnails/31_west_philly_illustrations_thumb.png
 tags:

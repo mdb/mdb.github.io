@@ -1,6 +1,6 @@
 ---
 title: Muscle Crap
-date: 2004/10/01
+date: 2004-10-01
 date_completed: October 2004
 thumbnail: ./images/thumbnails/muscle_crap_thumb.jpg
 tags:

@@ -1,6 +1,6 @@
 ---
 title: Hopscotch Coffee Illustration
-date: 2014/09/01
+date: 2014-09-01
 date_completed: Summer 2014
 tags:
 - illustration

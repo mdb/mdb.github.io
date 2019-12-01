@@ -1,6 +1,6 @@
 ---
 title: GPCC News
-date: 2009/10/01
+date: 2009-10-01
 date_completed: October 2009
 published: false
 thumbnail: ./images/thumbnails/gpcc_news_thumb.jpg

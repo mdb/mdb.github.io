@@ -1,6 +1,6 @@
 ---
 title: 31 Portraits
-date: 2010/02/01
+date: 2010-02-01
 date_completed: January 2010
 thumbnail: ./images/thumbnails/31_portraits_thumb.png
 tags:

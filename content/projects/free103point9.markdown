@@ -1,6 +1,6 @@
 ---
 title: free103point9
-date: 2010/02/23
+date: 2010-02-23
 date_completed: Fall 2007
 thumbnail: ./images/thumbnails/free103_thumb.png
 tags:

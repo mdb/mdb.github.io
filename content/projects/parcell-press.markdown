@@ -1,6 +1,6 @@
 ---
 title: Parcell Press
-date: 2007/10/01
+date: 2007-10-01
 date_completed: October 2007
 thumbnail: ./images/thumbnails/parcell_press_thumb.jpg
 tags:

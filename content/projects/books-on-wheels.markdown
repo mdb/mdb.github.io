@@ -1,6 +1,6 @@
 ---
 title: Books on Wheels
-date: 2010/02/23
+date: 2010-02-23
 date_completed: Fall 2007
 tags:
 - web

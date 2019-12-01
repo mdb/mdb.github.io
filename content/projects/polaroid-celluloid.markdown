@@ -1,6 +1,6 @@
 ---
 title: Polaroid Celluloid
-date: 2010/02/20
+date: 2010-02-20
 date_completed: Summer 2006
 tags:
 - illustration

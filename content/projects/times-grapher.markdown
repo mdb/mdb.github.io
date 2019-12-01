@@ -1,6 +1,6 @@
 ---
 title: TimesGrapher
-date: 2014/05/22
+date: 2014-05-22
 date_completed: Spring 2012
 tags:
 - rails

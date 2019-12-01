@@ -1,6 +1,6 @@
 ---
 title: TEDxPhilly
-date: 2011/09/09
+date: 2011-09-09
 date_completed: November 2011
 thumbnail: ./images/thumbnails/tedx_thumb.png
 tags:

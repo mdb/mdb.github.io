@@ -1,6 +1,6 @@
 ---
 title: Our Philadelphia
-date: 2010/04/23
+date: 2010-04-23
 date_completed: Summer 2010
 thumbnail: ./images/thumbnails/our_phila_thumb.png
 tags:

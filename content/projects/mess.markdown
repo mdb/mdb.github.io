@@ -1,6 +1,6 @@
 ---
 title: MESS
-date: 2010/02/21
+date: 2010-02-21
 date_completed: 2007 &ndash; 2010
 tags:
 - django
