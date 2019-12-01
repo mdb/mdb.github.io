@@ -1,5 +1,6 @@
 import React from 'react'
 import ExternalThumbnail from './external-thumbnail'
+import instagramStyles from './instagram.module.css'
 
 class Instagram extends React.Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class Instagram extends React.Component {
     }
 
     return (
-      <ul>
+      <ul className={instagramStyles.gallery}>
         {items.map(item => {
           const text = item.caption ? item.caption.text : ''
 

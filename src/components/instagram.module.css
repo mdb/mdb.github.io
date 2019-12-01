@@ -1,0 +1,16 @@
+.gallery {
+  margin: 0;
+}
+
+.gallery li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  float: left;
+  width: 25%;
+}
+
+.gallery li a {
+  display: block;
+  margin: 5px;
+}
