@@ -3,7 +3,6 @@ import { Link, graphql } from 'gatsby'
 import Img from 'gatsby-image'
 import Layout from '../components/layout'
 import TagList from '../components/tag-list'
-import { rhythm, scale } from '../utils/typography'
 
 const BlogPost = ({ pageContext, data }) => {
   const post = data.markdownRemark
@@ -14,55 +13,26 @@ const BlogPost = ({ pageContext, data }) => {
     <Layout title={siteTitle}>
       <article>
         <header>
-          <h1
-            style={{
-              marginTop: rhythm(1),
-              marginBottom: 0,
-            }}
-          >
-            {post.frontmatter.title}
-          </h1>
+          <h1>{post.frontmatter.title}</h1>
           <Img fluid={post.frontmatter.thumbnail ? post.frontmatter.thumbnail.childImageSharp.fluid : ''} />
-          <p
-            style={{
-              ...scale(-1 / 5),
-              display: `block`,
-              marginBottom: rhythm(1),
-            }}
-          >
-            {post.frontmatter.date}
-          </p>
+          <p>{post.frontmatter.date}</p>
           <TagList tags={post.frontmatter.tags} />
         </header>
         <section dangerouslySetInnerHTML={{ __html: post.html }} />
-        <hr
-          style={{
-            marginBottom: rhythm(1),
-          }}
-        />
       </article>
-
       <nav>
-        <ul
-          style={{
-            display: `flex`,
-            flexWrap: `wrap`,
-            justifyContent: `space-between`,
-            listStyle: `none`,
-            padding: 0,
-          }}
-        >
+        <ul>
           <li>
             {previous && (
               <Link to={previous.fields.slug} rel="prev">
-                ← {previous.frontmatter.title}
+                &laquo; {previous.frontmatter.title}
               </Link>
             )}
           </li>
           <li>
             {next && (
               <Link to={next.fields.slug} rel="next">
-                {next.frontmatter.title} →
+                {next.frontmatter.title} &raquo;
               </Link>
             )}
           </li>
