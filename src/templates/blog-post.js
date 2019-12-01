@@ -14,12 +14,11 @@ const BlogPost = ({ pageContext, data }) => {
       <article>
         <header>
           <h1>{post.frontmatter.title}</h1>
-          <Img fluid={post.frontmatter.thumbnail ? post.frontmatter.thumbnail.childImageSharp.fluid : ''} />
           <p>{post.frontmatter.date}</p>
-          <TagList tags={post.frontmatter.tags} />
         </header>
         <section dangerouslySetInnerHTML={{ __html: post.html }} />
       </article>
+      <TagList tags={post.frontmatter.tags} />
       <nav>
         <ul>
           <li>
