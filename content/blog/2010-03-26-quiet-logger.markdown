@@ -1,6 +1,6 @@
 ---
 title: "Quiet Logger: HTML5 WordPress Theme"
-date: 2010/03/26
+date: 2010-03-26
 tags:
 - html5
 - open source

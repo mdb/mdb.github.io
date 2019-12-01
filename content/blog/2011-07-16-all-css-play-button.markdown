@@ -1,6 +1,6 @@
 ---
 title: "CSS3: An All-CSS, Image-less Play Button"
-date: 2011/07/16
+date: 2011-07-16
 tags:
 - css
 - css3

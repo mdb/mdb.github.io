@@ -1,6 +1,6 @@
 ---
 title: Setting Up Postgres on Mac OSX with Homebrew
-date: 2012/07/29
+date: 2012-07-29
 tags:
 - postgres
 - notes

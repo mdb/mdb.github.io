@@ -1,6 +1,6 @@
 ---
 title: Streamlined Rails Gem Updates on Gem in a Box
-date: 2013/02/11
+date: 2013-02-11
 tags:
 - ruby
 - gems

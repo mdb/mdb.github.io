@@ -1,6 +1,6 @@
 ---
 title: Basic Command Line Tools
-date: 2011/08/30
+date: 2011-08-30
 tags:
 - bash
 - command line

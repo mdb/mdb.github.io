@@ -1,6 +1,6 @@
 ---
 title: Using Google Spreadsheets and Tabletop.js as a Web Application Back-end
-date: 2013/03/02
+date: 2013-03-02
 tags:
 - javascript
 - nicar

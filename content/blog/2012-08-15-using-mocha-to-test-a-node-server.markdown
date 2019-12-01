@@ -1,6 +1,6 @@
 ---
 title: Using Mocha to Test a Node.js Server
-date: 2012/08/15
+date: 2012-08-15
 tags:
 - javascript
 - node.js

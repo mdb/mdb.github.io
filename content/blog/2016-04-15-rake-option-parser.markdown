@@ -1,6 +1,6 @@
 ---
 title: Using OptionParser in Rake
-date: 2016/04/15
+date: 2016-04-15
 tags:
 - rake
 - ruby

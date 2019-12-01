@@ -1,6 +1,6 @@
 ---
 title: A Simple Ruby Class Example
-date: 2014/03/30
+date: 2014-03-30
 tags:
 - ruby
 - rspec

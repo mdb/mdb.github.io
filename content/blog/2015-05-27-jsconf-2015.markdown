@@ -1,6 +1,6 @@
 ---
 title: 'JSConf 2015: Headless Testing Against Real Web Browsers'
-date: 2015/05/27
+date: 2015-05-27
 tags:
 - nwjs
 - node-webkit

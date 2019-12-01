@@ -1,6 +1,6 @@
 ---
 title: All CSS Modal Dialogs
-date: 2014/08/08
+date: 2014-08-08
 tags:
 - css
 - css3

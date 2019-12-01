@@ -1,6 +1,6 @@
 ---
 title: Using South on a Heroku-hosted Django Project
-date: 2012/02/18
+date: 2012-02-11
 tags:
 - django
 - heroku

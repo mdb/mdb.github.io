@@ -1,6 +1,6 @@
 ---
 title: Nicar 2013 Conference
-date: 2013/03/04
+date: 2013-03-04
 tags:
 - nicar
 - journalism

@@ -1,6 +1,6 @@
 ---
 title: How to Test Google Polymer elements on Travis CI
-date: 2015/06/06
+date: 2015-06-06
 tags:
 - ci
 - testing

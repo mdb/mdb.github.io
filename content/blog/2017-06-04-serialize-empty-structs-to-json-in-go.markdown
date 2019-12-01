@@ -1,6 +1,6 @@
 ---
 title: Serialize Empty Structs to JSON in Go
-date: 2017-06-04 15:03 UTC
+date: 2017-06-04
 published: true
 tags:
 - golang

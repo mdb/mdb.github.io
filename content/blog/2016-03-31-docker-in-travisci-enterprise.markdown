@@ -1,6 +1,6 @@
 ---
 title: How to use Docker in TravisCI Enterprise
-date: 2016/03/31
+date: 2016-03-31
 tags:
 - docker
 - devops

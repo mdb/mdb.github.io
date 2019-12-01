@@ -1,6 +1,6 @@
 ---
 title: Simplified Find/Replace from the Command Line
-date: 2011/02/03
+date: 2011-02-03
 tags:
 - bash
 - notes

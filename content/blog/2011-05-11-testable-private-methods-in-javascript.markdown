@@ -1,6 +1,6 @@
 ---
 title: How to Make Testable Private Methods in JavaScript
-date: 2011/05/11
+date: 2011-05-11
 tags:
 - javascript
 - notes

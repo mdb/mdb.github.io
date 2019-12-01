@@ -1,6 +1,6 @@
 ---
 title: Automating Product Availability Alerts
-date: 2014/03/27
+date: 2014-03-27
 published: false
 tags:
 - heroku

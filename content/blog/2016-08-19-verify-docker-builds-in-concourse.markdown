@@ -1,6 +1,6 @@
 ---
 title: Using the ConcourseCI pull request resource to verify Docker builds
-date: 2016/08/19
+date: 2016-08-19
 tags:
 - concourse
 - github

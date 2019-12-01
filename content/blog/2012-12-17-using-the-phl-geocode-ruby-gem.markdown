@@ -1,6 +1,6 @@
 ---
 title: Using the phl_geocode Ruby Gem
-date: 2012/12/17
+date: 2012-12-17
 tags:
 - ruby
 - philadelphia

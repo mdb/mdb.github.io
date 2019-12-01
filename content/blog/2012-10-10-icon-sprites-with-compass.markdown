@@ -1,6 +1,6 @@
 ---
 title: Icon Sprites with Compass
-date: 2012/10/10
+date: 2012-10-10
 tags:
 - compass
 - scss

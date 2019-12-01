@@ -1,6 +1,6 @@
 ---
 title: Deploying Wordpress to Pagodabox
-date: 2012/03/24
+date: 2012-03-24
 tags:
 - wordpress
 - cloud

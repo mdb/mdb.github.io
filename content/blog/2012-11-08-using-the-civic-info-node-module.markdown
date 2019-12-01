@@ -1,6 +1,6 @@
 ---
 title: Using the civic-info Node.js Module to Get Voter and Election Info
-date: 2012/11/08
+date: 2012-11-08
 tags:
 - javascript
 - node.js

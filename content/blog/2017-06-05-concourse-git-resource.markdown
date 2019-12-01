@@ -1,6 +1,6 @@
 ---
 title: Commiting Via the Concourse Git Resource
-date: 2017/06/05
+date: 2017-06-05
 tags:
 - concourse
 - github

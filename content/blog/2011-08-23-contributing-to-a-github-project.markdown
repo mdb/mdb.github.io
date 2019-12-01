@@ -1,6 +1,6 @@
 ---
 title: How to Contribute to a Project on GitHub
-date: 2011/08/23
+date: 2011-08-23
 tags:
 - github
 - git

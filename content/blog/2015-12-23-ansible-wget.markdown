@@ -1,6 +1,6 @@
 ---
 title: Using wget over Ansible's get_url
-date: 2015/12/23
+date: 2015-12-23
 tags:
 - ansible
 - operations

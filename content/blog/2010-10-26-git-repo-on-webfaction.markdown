@@ -1,6 +1,6 @@
 ---
 title: How to Set Up a Git Repository on Webfaction
-date: 2010/10/26
+date: 2010-10-26
 tags:
 - git
 - notes
