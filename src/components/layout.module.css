@@ -1,4 +1,47 @@
-.layout {
+.header, .main {
+  width: 960px;
   margin: 0 auto;
-  width: 1024px;
+}
+
+.header {
+  margin-top: 50px;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.mark a {
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 100px;
+  display: block;
+  width: 100px;
+  border-radius: 50px;
+  height: 100px;
+  background: url('/mark_grayscale.png');
+  text-indent: -5000px;
+}
+
+.mark a:hover {
+  background: #000;
+  text-indent: 0;
+}
+
+.main {
+}
+
+.footer {
+  color: #fff;
+  background: #000;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer section {
+  display: block;
+  margin: 0 auto;
+  padding: 100px 0;
+  width: 960px;
 }
