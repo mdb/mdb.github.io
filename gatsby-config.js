@@ -1,9 +1,9 @@
 module.exports = {
   siteMetadata: {
-    title: `mikeball.info`,
-    author: `Mike Ball`,
-    description: `Recent projects, blog, and information`,
-    siteUrl: `http://mikeball.info`,
+    title: 'Mike Ball',
+    author: 'Mike Ball',
+    description: 'Recent projects, blog, and information',
+    siteUrl: 'http://mikeball.info',
   },
   plugins: [
     `gatsby-transformer-sharp`,
