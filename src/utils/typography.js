@@ -1,6 +1,11 @@
 import Typography from 'typography'
 
-const typography = new Typography()
+const typography = new Typography({
+  baseFontSize: '20px',
+  headerWeight: '200',
+  headerFontFamily: ['Georgia', 'serif'],
+  bodyFontFamily: ['Georgia', 'serif']
+})
 
 // Hot reload typography in development.
 if (process.env.NODE_ENV !== `production`) {
