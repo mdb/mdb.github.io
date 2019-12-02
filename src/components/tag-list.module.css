@@ -6,6 +6,7 @@ li.tag {
   display: inline-block;
   list-style-type: none;
   font-style: italic;
+  margin-bottom: 0;
 }
 
 li.tag:after {
