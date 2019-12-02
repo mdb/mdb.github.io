@@ -11,10 +11,11 @@
   float: left;
   width: 24%;
   margin: 4px;
+  height: 425px;
 }
 
-
-.gallery article small {
+.gallery article header {
+  margin: 7px;
 }
 
 .gallery article header p {
