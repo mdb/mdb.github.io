@@ -5,6 +5,7 @@
 li.tag {
   display: inline-block;
   list-style-type: none;
+  font-style: italic;
 }
 
 li.tag:after {

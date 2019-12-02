@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
+import { rhythm } from '../utils/typography'
 import tagStyles from './tag-list.module.css'
 
 class TagList extends React.Component {
@@ -8,7 +9,13 @@ class TagList extends React.Component {
       <ul className={tagStyles.tags}>
         {this.props.tags.map(tag => {
           return(
-            <li className={tagStyles.tag} key={tag}>
+            <li
+              style={{
+                fontSize: rhythm(1/2),
+              }}
+              className={tagStyles.tag}
+              key={tag}
+            >
               <Link to={`/tags/${tag}`}>
                 {tag}
               </Link>

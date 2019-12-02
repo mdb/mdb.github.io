@@ -1,5 +1,7 @@
 .gallery {
   margin: 0;
+  overflow: hidden;
+  clear: both;
 }
 
 .gallery li {
@@ -7,6 +9,7 @@
   margin: 0;
   padding: 0;
   float: left;
+  position: relative;
   width: 25%;
 }
 

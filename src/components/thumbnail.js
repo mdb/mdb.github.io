@@ -5,7 +5,7 @@ import Img from 'gatsby-image'
 class Thumbnail extends React.Component {
   render() {
     return (
-      <div style={{ maxWidth: 200 }}>
+      <div>
         <Link to={this.props.fields.slug}>
           <Img fluid={this.props.frontmatter.thumbnail.childImageSharp.fluid} />
         </Link>

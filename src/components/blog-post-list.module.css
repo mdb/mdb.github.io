@@ -1,0 +1,22 @@
+.gallery {
+  border-top: 1px solid #dbdbdb;
+  padding-top: 25px;
+  margin-top: 25px;
+  overflow: hidden;
+  clear: both;
+}
+
+.gallery article {
+  position: relative;
+  float: left;
+  width: 24%;
+  margin: 4px;
+}
+
+
+.gallery article small {
+}
+
+.gallery article header p {
+  font-style: italic;
+}
