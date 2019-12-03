@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import { rhythm } from '../utils/typography'
+import { rhythm, secondaryColor, secondaryFont } from '../utils/typography'
 import TagList from './tag-list'
 import Thumbnail from './thumbnail'
 import styles from './project-list.module.css'
@@ -18,9 +18,11 @@ class ProjectList extends React.Component {
               <header>
                 <small
                   style={{
-                    fontSize: rhythm(1/2),
+                    fontSize: rhythm(3/7),
                     marginBottom: rhythm(1/3),
-                    marginTop: rhythm(1/3),
+                    marginTop: rhythm(1/2),
+                    color: secondaryColor,
+                    fontFamily: secondaryFont
                   }}
                 >Project</small>
                 <h3

@@ -3,17 +3,23 @@
 }
 
 li.tag {
+  margin: 0;
   display: inline-block;
   list-style-type: none;
   font-style: italic;
-  margin-bottom: 0;
 }
 
 li.tag:after {
   content: ',';
   margin-right: .25em;
+  color: #8a8a8a;
 }
 
 li.tag:last-of-type:after {
   content: '';
+}
+
+li.tag a {
+  color: #8a8a8a;
+  font-family: Helvetica, Arial, sans-serif;
 }

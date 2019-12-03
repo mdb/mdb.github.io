@@ -3,7 +3,7 @@ import { Link } from 'gatsby'
 import TagList from './tag-list'
 import Thumbnail from './thumbnail'
 import styles from './blog-post-list.module.css'
-import { rhythm } from '../utils/typography'
+import { rhythm, secondaryColor, secondaryFont } from '../utils/typography'
 
 class BlogPostList extends React.Component {
   render() {
@@ -18,9 +18,11 @@ class BlogPostList extends React.Component {
               <header>
                 <small
                   style={{
-                    fontSize: rhythm(1/2),
+                    fontSize: rhythm(2/5),
                     marginBottom: rhythm(1/3),
-                    marginTop: rhythm(1/3),
+                    marginTop: rhythm(1/2),
+                    color: secondaryColor,
+                    fontFamily: secondaryFont
                   }}
                 >{node.frontmatter.date}</small>
                 <h3
@@ -37,6 +39,7 @@ class BlogPostList extends React.Component {
                   style={{
                     fontSize: rhythm(1/2),
                     marginBottom: rhythm(1/3),
+                    color: secondaryColor
                   }}
                 >{node.frontmatter.teaser}</p>
                 <TagList tags={node.frontmatter.tags} />

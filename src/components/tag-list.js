@@ -11,7 +11,7 @@ class TagList extends React.Component {
           return(
             <li
               style={{
-                fontSize: rhythm(1/2),
+                fontSize: rhythm(3/7),
               }}
               className={tagStyles.tag}
               key={tag}

@@ -15,3 +15,5 @@ if (process.env.NODE_ENV !== `production`) {
 export default typography
 export const rhythm = typography.rhythm
 export const scale = typography.scale
+export const secondaryColor = '#8a8a8a'
+export const secondaryFont = 'Helvetica, Arial, sans-serif'
