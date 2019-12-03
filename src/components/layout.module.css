@@ -10,6 +10,8 @@
 }
 
 .mark a {
+  display: block;
+  margin: 0 auto;
   color: #fff;
   text-align: center;
   text-decoration: none;
