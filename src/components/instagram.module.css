@@ -1,5 +1,7 @@
 .gallery {
+  border-top: 1px solid #dbdbdb;
   margin: 0;
+  padding-top: 30px;
   overflow: hidden;
   clear: both;
 }
