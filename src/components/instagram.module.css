@@ -15,7 +15,23 @@
   width: 25%;
 }
 
-.gallery li a {
+.gallery li a img {
+  display: block;
+}
+
+.gallery a {
   display: block;
   margin: 5px;
+}
+
+.loaded a {
+  min-height: 228px;
+}
+
+.loading a {
+  border: 1px solid #eee;
+}
+
+.loading a img {
+  margin: 40% auto;
 }
