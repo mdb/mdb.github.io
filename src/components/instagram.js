@@ -3,40 +3,12 @@ import ExternalThumbnail from './external-thumbnail'
 import styles from './instagram.module.css'
 
 class Instagram extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      loaded: false,
-      items: new Array(8).fill().map(x => ({
-        caption: 'loading',
-        link: '/',
-        images: {
-          standard_resolution: {
-            url: '/loading_indicator.gif'
-          }
-        }
-      }))
-    }
-  }
-
-  componentDidMount() {
-    fetch('https://clapclapexcitement-gram.herokuapp.com/recent-media')
-      .then(res => res.json())
-      .then(result => {
-        this.setState({
-          loaded: true,
-          items: result
-        })
-      })
-  }
-
   itemStyles() {
-    return this.state.loaded ? styles.loaded : styles.loading
+    return this.props.igLoaded ? styles.loaded : styles.loading
   }
 
   render() {
-    const { items } = this.state
+    const items = this.props.igItems
 
     return (
       <ul className={styles.gallery}>

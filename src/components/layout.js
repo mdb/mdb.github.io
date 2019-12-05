@@ -4,8 +4,45 @@ import styles from './layout.module.css'
 import Instagram from '../components/instagram'
 
 class Layout extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      loaded: false,
+      igItems: new Array(8).fill().map(x => ({
+        caption: 'loading',
+        link: '/',
+        images: {
+          standard_resolution: {
+            url: '/loading_indicator.gif'
+          }
+        }
+      }))
+    }
+  }
+
+  componentDidMount() {
+    fetch('https://clapclapexcitement-gram.herokuapp.com/recent-media')
+      .then(res => res.json())
+      .then(result => {
+        this.setState({
+          loaded: true,
+          igItems: result
+        })
+      })
+  }
+
+  childrenWithProps() {
+    return React.Children.map(this.props.children, (child, i) => {
+      return React.cloneElement(child, {
+        igItems: this.state.igItems,
+        igLoaded: this.state.loaded
+      })
+    })
+  }
+
   render() {
-    const { children, title } = this.props
+    const { title } = this.props
 
     return (
       <div>
@@ -16,7 +53,7 @@ class Layout extends React.Component {
             </Link>
           </h1>
         </header>
-        <main className={styles.main}>{children}</main>
+        <main className={styles.main}>{this.childrenWithProps()}</main>
         <footer className={styles.footer}>
           <section>
             <div className={styles.quarterColumn}>
@@ -26,7 +63,7 @@ class Layout extends React.Component {
             </div>
             <div className={styles.halfColumn}>
               <h2>Instagram</h2>
-              <Instagram />
+              <Instagram igItems={this.state.igItems} igLoaded={this.state.loaded} />
             </div>
             <div className={styles.quarterColumn}>
               <h2>Etc.</h2>
