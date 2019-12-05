@@ -78,6 +78,11 @@
   margin: 0;
 }
 
+.halfColumn ul,
+.halfColumn h2 {
+  width: 97%;
+}
+
 .quarterColumn ul li {
   margin: 0;
   padding: 0;
