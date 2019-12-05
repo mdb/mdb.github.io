@@ -45,4 +45,49 @@
   margin: 0 auto;
   padding: 100px 0;
   width: 960px;
+  overflow: hidden;
+}
+
+.quarterColumn,
+.halfColumn {
+  position: relative;
+  float: left;
+  width: 25%;
+}
+
+.quarterColumn h2,
+.halfColumn h2 {
+  width: 95%;
+  font-size: 75%;
+  border-bottom: 1px solid #555;
+  padding-bottom: 1rem;
+}
+
+.quarterColumn p {
+  width: 95%;
+  font-size: 75%;
+}
+
+.quarterColumn ul,
+.halfColumn ul {
+  width: 95%;
+  font-size: 75%;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.quarterColumn ul li {
+  margin: 0;
+  padding: 0;
+}
+
+.quarterColumn ul li a {
+  color: #fff;
+}
+
+.halfColumn {
+  width: 50%;
+  postion: relative;
+  float: left;
 }
