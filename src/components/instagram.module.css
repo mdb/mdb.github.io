@@ -1,7 +1,5 @@
 .gallery {
-  border-top: 1px solid #dbdbdb;
   margin: 0;
-  padding-top: 30px;
   overflow: hidden;
   clear: both;
 }
@@ -22,10 +20,6 @@
 .gallery a {
   display: block;
   margin: 5px;
-}
-
-.loaded a {
-  min-height: 228px;
 }
 
 .loading a {
