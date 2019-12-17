@@ -50,7 +50,44 @@ module.exports = {
         //trackingId: `ADD YOUR TRACKING ID HERE`,
       },
     },
-    `gatsby-plugin-feed`,
+    {
+      resolve: `gatsby-plugin-feed`,
+      options: {
+        feeds: [{
+          output: '/rss.xml',
+          query: `
+            {
+              allMarkdownRemark(
+                filter: {
+                  frontmatter: {
+                    published: { ne: false }
+                  },
+                  fields: {
+                    slug: { glob: "/blog/*" }
+                  }
+                },
+                sort: { fields: [frontmatter___date], order: DESC }
+              ) {
+                edges {
+                  node {
+                    excerpt
+                    fields {
+                      slug
+                    }
+                    frontmatter {
+                      date(formatString: "MMMM DD, YYYY")
+                      title
+                      teaser
+                      tags
+                    }
+                  }
+                }
+              }
+            }
+          `
+        }]
+      }
+    },
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -59,8 +96,8 @@ module.exports = {
         start_url: `/`,
         background_color: `#ffffff`,
         theme_color: `#663399`,
-        display: `minimal-ui`
-      },
+        display: `minimal-ui`,
+      }
     },
     `gatsby-plugin-react-helmet`,
     {
