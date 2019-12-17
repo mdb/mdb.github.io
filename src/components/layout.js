@@ -81,13 +81,10 @@ class Layout extends React.Component {
                   <a href='http://twitter.com/clapexcitement'>Twitter</a>
                 </li>
                 <li>
-                  <a href='TODO'>LinkedIn</a>
+                  <a href='https://www.linkedin.com/in/mikedball/'>LinkedIn</a>
                 </li>
                 <li>
-                  <a href='TODO'>RSS Feed</a>
-                </li>
-                <li>
-                  <a href='TODO'>Atom Feed</a>
+                  <a href='/rss.xml'>RSS Feed</a>
                 </li>
               </ul>
             </div>
