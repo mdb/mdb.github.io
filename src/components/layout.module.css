@@ -31,9 +31,6 @@
   text-indent: 0;
 }
 
-.main {
-}
-
 .footer {
   color: #fff;
   background: #000;
@@ -62,6 +59,7 @@
   font-size: 75%;
   border-bottom: 1px solid #555;
   padding-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .quarterColumn p {
