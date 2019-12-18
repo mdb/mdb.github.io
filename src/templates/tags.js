@@ -6,7 +6,6 @@ const Tags = ({ pageContext, data }) => {
   const { tag, allTagsUrl } = pageContext
   const { edges, totalCount } = data.allMarkdownRemark
   const descriptor = allTagsUrl && allTagsUrl.includes('blog') ? 'blog post' : 'project'
-  const pathPrefix = allTagsUrl && allTagsUrl.includes('blog') ? '/blog' : '/projects'
 
   const tagHeader = `${totalCount} ${descriptor}${
     totalCount === 1 ? "" : "s"
@@ -22,7 +21,7 @@ const Tags = ({ pageContext, data }) => {
 
           return (
             <li key={slug}>
-              <Link to={`${pathPrefix}${slug}`}>{title}</Link>
+              <Link to={`${slug}`}>{title}</Link>
             </li>
           )
         })}

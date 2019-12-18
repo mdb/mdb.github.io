@@ -16,7 +16,7 @@ class TagList extends React.Component {
               className={tagStyles.tag}
               key={tag}
             >
-              <Link to={`/tags/${tag}`}>
+              <Link to={`/${this.props.contentType}/tags/${tag}`}>
                 {tag}
               </Link>
             </li>

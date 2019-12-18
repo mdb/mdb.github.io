@@ -35,7 +35,7 @@ class ProjectList extends React.Component {
                     {title}
                   </Link>
                 </h3>
-                <TagList tags={node.frontmatter.tags} />
+                <TagList contentType="projects" tags={node.frontmatter.tags} />
               </header>
             </article>
           )

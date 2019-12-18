@@ -42,7 +42,7 @@ class BlogPostList extends React.Component {
                     color: secondaryColor
                   }}
                 >{node.frontmatter.teaser}</p>
-                <TagList tags={node.frontmatter.tags} />
+                <TagList contentType="blog" tags={node.frontmatter.tags} />
               </header>
             </article>
           )
