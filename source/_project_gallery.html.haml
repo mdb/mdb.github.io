@@ -1,8 +1,0 @@
-- limit = limit || nil
-- exclude = exclude || nil
-- only_featured = only_featured || nil
-- projects = project_posts({only_featured: only_featured, limit: limit, exclude: exclude})
-
-%ul.gallery.projects
-  - projects.each do |project|
-    = partial :gallery_item, locals: {item: project, type: "projects"}
