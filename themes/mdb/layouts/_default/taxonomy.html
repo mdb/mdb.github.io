@@ -1,0 +1,12 @@
+{{ define "main" }}
+  <article>
+    <p>{{i18n "taxonomyPageList" .}}</p>
+  </article>
+  <section>
+    {{ range  .Pages }}
+      <div>
+        {{ partial "summary.html" . }}
+      </div>
+    {{ end }}
+  </section>
+{{ end }}
