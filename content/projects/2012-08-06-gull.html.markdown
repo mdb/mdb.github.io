@@ -1,6 +1,6 @@
 ---
 title: Gull
-date: 2012/08/06
+date: 2012-08-06
 date_completed: August 2012
 thumbnail: gull_thumb.png
 tags:

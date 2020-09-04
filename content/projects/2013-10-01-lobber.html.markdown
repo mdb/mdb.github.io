@@ -1,6 +1,6 @@
 ---
 title: Lobber
-date: 2013/10/01
+date: 2013-10-01
 date_completed: September 2013
 tags:
 - ruby

@@ -1,6 +1,6 @@
 ---
 title: Clap Yr Hands
-date: 2010/02/23
+date: 2010-02-23
 date_completed: 2003 - Present
 thumbnail: clap_yr_hands_thumb.jpg
 featured: true

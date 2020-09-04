@@ -1,6 +1,6 @@
 ---
 title: Philadelphia Police Advisory Commission Complaint Map
-date: 2013/04/27
+date: 2013-04-27
 date_completed: April 2013
 thumbnail: pac_complaint_thumb.png
 tags:

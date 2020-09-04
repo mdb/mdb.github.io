@@ -1,6 +1,6 @@
 ---
 title: Battles
-date: 2010/02/23
+date: 2010-02-23
 date_completed: Summer 2006
 tags:
 - zine
