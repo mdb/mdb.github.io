@@ -1,0 +1,21 @@
+---
+title: "Lobbying.ph"
+date: 2012/03/05
+tags:
+- code for america
+- ruby
+- sinatra
+- open data
+thumbnail: cfa_thumb.jpg
+teaser: Leveraging open data to track Philly lobbying efforts.
+---
+
+<i><b>Update</b>: Casey Thomas migrated the original Lobbing.ph to Django and extended its functionality.</i>
+
+[Casey Thomas](http://twitter.com/caseypt), [Dan Freiman](http://twitter.com/dannyjf), [Adam Hinz](http://twitter.com/ahinz), and I build [Lobbying.ph](http://lobbying.ph) as an entry in Code for America's 2012 Civic Hackathon in Philadelphia. The project won first place.
+
+Completed in about 5 hours, Lobbying.ph seeks to help Philadelphians access information about local lobbying efforts. As is reported on the site:
+
+> "Beginning in 2012, lobbyists and those paying for lobbyists in Philadelphia are required to register and file quarterly reports of their expenses with the <a href="http://www.phila.gov/ethicsboard/lobbying.html">City of Philadelphia Board of Ethics</a>. The Board of Ethics will make the data avaialble on a regular basis. This application seeks to catalog that data, make it more accesible, and host visualizations to help citizens better understand the influence of lobbying in Philadelphia."
+
+Its source code is on <a href="https://github.com/caseypt/lobbying.ph">Github</a>.

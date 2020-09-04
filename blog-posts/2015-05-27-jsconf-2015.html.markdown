@@ -1,0 +1,25 @@
+---
+title: 'JSConf 2015: Headless Testing Against Real Web Browsers'
+date: 2015/05/27
+tags:
+- nwjs
+- node-webkit
+- polymer
+- ansible
+- xvfb
+- vagrant
+thumbnail: jsconf_thumb.png
+teaser: An overview of my JSConf 2015 talk on headlessly testing against real web browsers.
+---
+
+I spoke at [JSConf 2015](http://2015.jsconf.us) about how to test Google Polymer web components against real web browsers in a headless Linux using Xvfb.
+
+My talk offered background on my philosophy, why some software requires tests be run against a real GUI, and also covered a basic introduction to Xvfb, or X Virtual Frame Buffer. I also demo'd [polymer-testing-box](http://github.com/mdb/polymer-testing-box), a basic reference implementation illustrating how to provision an Ubuntu VM with all the prerequisites necessary to headlessly run Google Polymer web-component-tester tests against Chrome and Firefox.
+
+[View my slides &raquo;](http://mdb.github.io/testing-with-xvfb/)
+
+Some related resources:
+
+* [polymer-testing-box](http://github.com/mdb/polymer-testing-box) - a basic Vagrant box for testing Google Polymer elements headlessly against Firefox and Chrome
+* [nw-testing-box](http://github.com/mdb/nw-testing-box) - a basic Vagrant box for testing an NW.js application via Xvfb
+* [nw-app-testing](http://github.com/mdb/nw-app-testing) - a basic NW.js application demonstrating unit and end-to-end tests
