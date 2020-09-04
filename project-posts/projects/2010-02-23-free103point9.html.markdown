@@ -1,0 +1,18 @@
+---
+title: free103point9
+date: 2010/02/23
+date_completed: Fall 2007
+thumbnail: free103_thumb.png
+tags:
+- django
+- css
+- javascript
+- design
+images:
+  - nested:
+    - free103_1.png
+---
+
+<a href="http://github.com/gsf">Gabe Farrell</a> and I developed this site for the New York-based transmission arts advocacy organization free103point9.
+
+The site is built on Django. In addition to brochuring free103point9, the site also serves as a transmission arts digital archive, hosts an event calendar, and houses free103′s online radio station.

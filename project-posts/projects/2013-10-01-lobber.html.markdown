@@ -1,0 +1,18 @@
+---
+title: Lobber
+date: 2013/10/01
+date_completed: September 2013
+tags:
+- ruby
+- gem
+- aws
+thumbnail: lobber_thumb.png
+images:
+  - lobber_github.png
+---
+
+Lobber is a simple command line utility used to quickly upload a directory to [Amazon S3](http://aws.amazon.com/s3/).
+
+Lobber is built with Ruby and can be downloaded from [Rubygems](http://rubygems.org/gems/lobber).
+
+[View its source code on GitHub &raquo;](http://github.com/mdb/lobber)

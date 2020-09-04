@@ -1,0 +1,21 @@
+---
+title: GPCC News
+date: 2009/10/01
+date_completed: October 2009
+published: false
+thumbnail: gpcc_news_thumb.jpg
+tags:
+- wordpress
+- UX
+- ubuntu
+- css
+images:
+  - nested:
+    - gpcc_news_1.png
+---
+
+In the fall of 2009, I worked to conceptualize, design, and develop a platform through which the Greater Philadelphia Chamber of Commerce could more effectively publish its online content. <a href="http://news.gpcc.com">News.GPCC.com</a> integrates the previously disparate and isolated elements of the GPCC&#8217;s web presence &mdash; Youtube videos, Twitter content, Flickr photos, blog posts, press releases, and HTML newsletters &mdash; in a centralized platform. News.gpcc.com also helps streamline content developers&#8217; work flow and affords the GPCC&#8217;s Communications staff increased editorial control over messaging. Additionally, the site offers automated archiving, improved navigation and information architecture, and integrates fluidly with the GPCC&#8217;s primary site, greaterphilachamber.com.
+
+News.gpcc.com is built on a custom WordPress theme. It shares JSON-powered advertising and featured events modules with greaterphilachamber.com and aggregates feed content from Twitter, Flickr, and the GPCC&#8217;s event calendar.
+
+GPCC graphic designer <a href="http://www.natejohnsondesign.com">Nate Johnson</a> took the lead type photo used in the banner.

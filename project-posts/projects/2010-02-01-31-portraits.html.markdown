@@ -1,0 +1,27 @@
+---
+title: 31 Portraits
+date: 2010/02/01
+date_completed: January 2010
+thumbnail: 31_portraits_thumb.png
+tags:
+- illustration
+- design
+images:
+  - slideshow:
+    - 31_portraits_large/1.jpg
+    - 31_portraits_large/2.jpg
+    - 31_portraits_large/3.jpg
+    - 31_portraits_large/4.jpg
+    - 31_portraits_large/5.jpg
+    - 31_portraits_large/6.jpg
+    - 31_portraits_large/7.jpg
+    - 31_portraits_large/8.jpg
+    - 31_portraits_large/9.jpg
+    - 31_portraits_large/10.jpg
+    - 31_portraits_large/11.jpg
+    - 31_portraits_large/12.jpg
+    - 31_portraits_large/13.jpg
+    - 31_portraits_large/14.jpg
+---
+
+For Artclash’s 2010 Fun-a-Day show, I drew 31 portraits, one for each day of the month of January. The illustrations were compiled in <i>Anthrotopography</i>, a small, photocopied zine.
