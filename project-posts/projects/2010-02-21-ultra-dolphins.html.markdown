@@ -4,7 +4,11 @@ date: 2010/02/21
 date_completed: Winter 2007
 thumbnail: ultra_dolphins_thumb.gif
 published: false
-tags: UX, design, css, web
+tags:
+- UX
+- design
+- css
+- web
 images:
   - nested:
     - ultra_dolphins_1.gif

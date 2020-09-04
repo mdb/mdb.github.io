@@ -2,7 +2,11 @@
 title: wp2middleman
 date: 2014/01/15
 date_completed: December 2013
-tags: ruby, gem, wordpress, middleman
+tags:
+- ruby
+- gem
+- wordpress
+- middleman
 thumbnail: wp2mm_thumb.png
 images:
   - nested:

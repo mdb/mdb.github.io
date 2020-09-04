@@ -3,7 +3,10 @@ title: Parcell Press
 date: 2007/10/01
 date_completed: October 2007
 thumbnail: parcell_press_thumb.jpg
-tags: php, ecommerce, UX
+tags:
+- php
+- ecommerce
+- UX
 images:
   - parcell_press_card_large.jpg
   - nested:

@@ -4,7 +4,11 @@ date: 2009/10/01
 date_completed: October 2009
 published: false
 thumbnail: gpcc_news_thumb.jpg
-tags: wordpress, UX, ubuntu, css
+tags:
+- wordpress
+- UX
+- ubuntu
+- css
 images:
   - nested:
     - gpcc_news_1.png

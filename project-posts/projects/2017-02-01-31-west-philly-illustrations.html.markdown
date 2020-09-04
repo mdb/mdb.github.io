@@ -3,7 +3,11 @@ title: 31 West Philly Illustrations
 date: 2017/02/01
 date_completed: February 2017
 thumbnail: 31_west_philly_illustrations_thumb.png
-tags: illustration, risograph, design, print
+tags:
+- illustration
+- risograph
+- design
+- print
 images:
   - nested:
     - fad_panels.gif

@@ -3,7 +3,11 @@ title: Our Philadelphia
 date: 2010/04/23
 date_completed: Summer 2010
 thumbnail: our_phila_thumb.png
-tags: django, opensource, opendata, civic technology
+tags:
+- django
+- opensource
+- opendata
+- civic technology
 images:
   - nested:
     - our_phila_1.png

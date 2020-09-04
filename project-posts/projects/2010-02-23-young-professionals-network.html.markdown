@@ -4,7 +4,12 @@ date: 2010/02/23
 published: false
 date_completed: Summer 2009
 thumbnail: ypn_thumb.png
-tags: wordpress, php, javascript, css, design
+tags:
+- wordpress
+- php
+- javascript
+- css
+- design
 images:
   - nested:
     - ypn_1.png

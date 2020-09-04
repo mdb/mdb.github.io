@@ -4,7 +4,11 @@ published: false
 date: 2010/02/23
 date_completed: Winter 2009
 thumbnail: babc_thumb.png
-tags: wordpress, ubuntu, lamp, ux
+tags:
+- wordpress
+- ubuntu
+- lamp
+- ux
 images:
   - nested:
     - babc_1.png

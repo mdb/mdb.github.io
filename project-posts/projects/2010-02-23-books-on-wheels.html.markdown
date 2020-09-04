@@ -2,7 +2,11 @@
 title: Books on Wheels
 date: 2010/02/23
 date_completed: Fall 2007
-tags: web, wordpress, php, nonprofit
+tags:
+- web
+- wordpress
+- php
+- nonprofit
 published: false
 thumbnail: books_thumb.png
 images:

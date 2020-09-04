@@ -3,7 +3,11 @@ title: Philly.rb
 date: 2013/11/15
 date_completed: November 2013
 published: false
-tags: ruby, javascript, google maps, gis
+tags:
+- ruby
+- javascript
+- google maps
+- gis
 images:
   - phillyrb.png
 ---

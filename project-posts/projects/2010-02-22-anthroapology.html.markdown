@@ -3,7 +3,10 @@ title: Anthroapology
 date: 2010/02/22
 date_completed: Summer 2006
 thumbnail: anthroapology_thumb.jpg
-tags: zine, illustration, bangkok
+tags:
+- zine
+- illustration
+- bangkok
 images:
   - anthroapology_1_large.jpg
   - anthroapology_2_large.jpg
