@@ -1,6 +1,6 @@
 ---
 title: NW.js Chromium data-path
-date: 2015/04/09
+date: 2015-04-09
 tags:
 - nwjs
 - node-webkit

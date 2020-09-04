@@ -1,6 +1,6 @@
 ---
 title: HTML5 Canvas
-date: 2013/12/07
+date: 2013-12-07
 tags:
 - javascript
 - html5

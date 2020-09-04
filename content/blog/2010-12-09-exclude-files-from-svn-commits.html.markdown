@@ -1,6 +1,6 @@
 ---
 title: How to Exclude Files from SVN Commits
-date: 2010/12/09
+date: 2010-12-09
 tags:
 - subversion
 - notes

@@ -1,6 +1,6 @@
 ---
 title: Secure Session Cookie in Rails over HTTPS
-date: 2015/09/24
+date: 2015-09-24
 tags:
 - rails
 - apache

@@ -1,6 +1,6 @@
 ---
 title: Creating a Windows Installer for a node-webkit App on Mac OS
-date: 2014/09/25
+date: 2014-09-25
 tags:
 - node
 - node-webkit

@@ -1,6 +1,6 @@
 ---
 title: Basic Overview of the Surround Plugin for Vim
-date: 2010/11/01
+date: 2010-11-01
 tags:
 - vim
 - notes

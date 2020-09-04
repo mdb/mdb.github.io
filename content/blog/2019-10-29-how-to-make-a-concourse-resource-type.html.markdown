@@ -1,6 +1,6 @@
 ---
 title: How to Make a Concourse Resource Type
-date: 2019/10/29
+date: 2019-10-29
 tags:
 - concourse
 - ci

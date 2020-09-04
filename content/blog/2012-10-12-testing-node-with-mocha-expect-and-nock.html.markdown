@@ -1,6 +1,6 @@
 ---
 title: Testing Node.js with Mocha, Expect.js, and Nock
-date: 2012/10/12
+date: 2012-10-12
 tags:
 - javascript
 - node.js

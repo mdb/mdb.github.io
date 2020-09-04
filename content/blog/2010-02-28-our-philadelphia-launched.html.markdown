@@ -1,6 +1,6 @@
 ---
 title: OurPhiladelphia.org Launched
-date: 2010/02/28
+date: 2010-02-28
 tags:
 - django
 - open source

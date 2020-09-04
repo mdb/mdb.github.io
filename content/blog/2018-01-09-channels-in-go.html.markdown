@@ -1,6 +1,6 @@
 ---
 title: Channels in Go
-date: 2018/01/09
+date: 2018-01-09
 tags:
 - golang
 - go

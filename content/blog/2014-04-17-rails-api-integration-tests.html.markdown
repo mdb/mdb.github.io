@@ -1,6 +1,6 @@
 ---
 title: Rails API Integration Tests
-date: 2014/04/17
+date: 2014-04-17
 tags:
 - ruby
 - rspec

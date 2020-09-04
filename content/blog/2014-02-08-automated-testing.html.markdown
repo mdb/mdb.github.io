@@ -1,6 +1,6 @@
 ---
 title: 'Automated Tests: What, Why, How?'
-date: 2014/02/08
+date: 2014-02-08
 tags:
 - TDD
 - jasmine

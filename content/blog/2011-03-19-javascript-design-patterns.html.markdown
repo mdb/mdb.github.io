@@ -1,6 +1,6 @@
 ---
 title: JavaScript Design Patterns
-date: 2011/03/19
+date: 2011-03-19
 tags:
 - javascript
 - notes

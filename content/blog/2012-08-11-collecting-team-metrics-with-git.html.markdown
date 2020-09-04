@@ -1,6 +1,6 @@
 ---
 title: Collecting Basic Team and Sprint Metrics with Git
-date: 2012/08/11
+date: 2012-08-11
 tags:
 - git
 - metrics
