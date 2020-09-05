@@ -3,5 +3,5 @@ languageCode = "en-us"
 title = "mikeball.info"
 theme = "mdb"
 [permalinks]
-  blog = "/:title/"
-  projects = "/:title/"
+  blog = "/blog/:title/"
+  projects = "/projects/:title/"
