@@ -3,24 +3,18 @@
   <article>
     <header>
       <aside>
-          {{/*
-          CurrentSection allows us to use the section title instead of inferring from the folder.
-          https://gohugo.io/variables/page/#section-variables-and-methods
-          */}}
         {{with .CurrentSection.Title }}{{. | singularize }}{{end}}
       </aside>
       <h1>
         {{- .Title -}}
       </h1>
-      {{ with .Params.author }}
-      {{ end }}
       <time>
         {{- .Date.Format "January 2, 2006" -}}
       </time>
     </header>
     <div>
       {{- .Content -}}
-      {{- partial "tags.html" . -}}
     </div>
+    {{- partial "tags.html" . -}}
   </article>
 {{ end }}

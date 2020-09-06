@@ -3,6 +3,7 @@
     {{ range .Pages }}
     <h1><a href="{{ .Permalink }}">{{ .Title }}</a></h1>
     <p>{{ .Params.teaser  }}</p>
+    {{- partial "tags.html" . -}}
     {{ end }}
   </section>
 {{ end }}
