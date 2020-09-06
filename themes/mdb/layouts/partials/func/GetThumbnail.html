@@ -1,12 +1,7 @@
 {{ $linkToThumb := "/images/blog/thumbnails/default_thumb.gif" }}
 
-
 {{ if .Params.thumbnail }}
-  {{ $linkToThumb = printf "/images/blog/thumbnails/%s" .Params.thumbnail }}
-{{ end }}
-
-{{ if eq .Type "projects" }}
-  {{ $linkToThumb = printf "/images/projects/thumbnails/%s" .Params.thumbnail }}
+  {{ $linkToThumb = printf "/images/%s/thumbnails/%s" .Type .Params.thumbnail }}
 {{ end }}
 
 {{ return $linkToThumb }}
