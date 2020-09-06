@@ -2,30 +2,10 @@
   {{ range (where .Pages "Type" "blog") }}
     <h1><a href="{{ .Permalink }}">Blog</a></h1>
   {{ end }}
-  <ul>
-  {{ range (where .Site.RegularPages "Type" "blog") }}
-    <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
-    {{ $featured_image := partial "func/GetThumbnail.html" . }}
-    {{/* Trimming the slash and adding absURL make sure the image works no matter where our site lives */}}
-    {{ $featured_image := (trim $featured_image "/") | absURL }}
-      <a href="{{ .Permalink }}">
-        <img src="{{ $featured_image }}" alt="image from {{ .Title }}">
-      </a>
-  {{ end }}
-  </ul>
+  {{- partial "blog-post-gallery.html" . -}}
 
   {{ range (where .Pages "Type" "projects") }}
     <h1><a href="{{ .Permalink }}">Recent Projects</a></h1>
   {{ end }}
-  <ul>
-  {{ range (where .Site.RegularPages "Type" "projects") }}
-    <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
-    {{ $featured_image := partial "func/GetThumbnail.html" . }}
-    {{/* Trimming the slash and adding absURL make sure the image works no matter where our site lives */}}
-    {{ $featured_image := (trim $featured_image "/") | absURL }}
-      <a href="{{ .Permalink }}">
-        <img src="{{ $featured_image }}" alt="image from {{ .Title }}">
-      </a>
-  {{ end }}
-  </ul>
+  {{- partial "project-post-gallery.html" . -}}
 {{ end }}

@@ -1,9 +1,11 @@
 {{ define "main" }}
-  <section>
-    {{ range .Pages }}
-    <h1><a href="{{ .Permalink }}">{{ .Title }}</a></h1>
-    <p>{{ .Params.teaser  }}</p>
-    {{- partial "tags.html" . -}}
-    {{ end }}
-  </section>
+
+{{ if eq .Page.Type "blog" }}
+  {{- partial "blog-post-gallery.html" . -}}
+{{ end}}
+
+{{ if eq .Page.Type "projects" }}
+  {{- partial "project-post-gallery.html" . -}}
+{{ end}}
+
 {{ end }}

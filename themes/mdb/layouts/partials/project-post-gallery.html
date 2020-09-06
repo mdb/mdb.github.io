@@ -1,0 +1,11 @@
+<ul class="project gallery">
+{{ range (where .Site.RegularPages "Type" "projects") }}
+  <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
+  {{ $featured_image := partial "func/GetThumbnail.html" . }}
+  {{/* Trimming the slash and adding absURL make sure the image works no matter where our site lives */}}
+  {{ $featured_image := (trim $featured_image "/") | absURL }}
+  <a href="{{ .Permalink }}">
+    <img src="{{ $featured_image }}" alt="image from {{ .Title }}">
+  </a>
+{{ end }}
+</ul>
