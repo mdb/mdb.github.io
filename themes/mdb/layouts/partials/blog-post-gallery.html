@@ -1,11 +1,13 @@
 <ul class="blog gallery">
 {{ range (where .Site.RegularPages "Type" "blog") }}
-  <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
-  {{ $featured_image := partial "func/GetThumbnail.html" . }}
-  {{/* Trimming the slash and adding absURL make sure the image works no matter where our site lives */}}
-  {{ $featured_image := (trim $featured_image "/") | absURL }}
-  <a href="{{ .Permalink }}">
-    <img src="{{ $featured_image }}" alt="image from {{ .Title }}">
-  </a>
+  <li>
+    <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+    {{ $featured_image := partial "func/GetThumbnail.html" . }}
+    {{/* Trimming the slash and adding absURL make sure the image works no matter where our site lives */}}
+    {{ $featured_image := (trim $featured_image "/") | absURL }}
+    <a href="{{ .Permalink }}">
+      <img src="{{ $featured_image }}" alt="image from {{ .Title }}">
+    </a>
+  </li>
 {{ end }}
-</ul>
+</u>

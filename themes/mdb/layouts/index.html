@@ -2,10 +2,10 @@
   {{ range (where .Pages "Type" "blog") }}
     <h1><a href="{{ .Permalink }}">Blog</a></h1>
   {{ end }}
-  {{- partial "blog-post-gallery.html" . -}}
+  {{ partial "blog-post-gallery.html" . }}
 
   {{ range (where .Pages "Type" "projects") }}
     <h1><a href="{{ .Permalink }}">Recent Projects</a></h1>
   {{ end }}
-  {{- partial "project-post-gallery.html" . -}}
+  {{ partial "project-post-gallery.html" . }}
 {{ end }}
