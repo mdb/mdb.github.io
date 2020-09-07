@@ -1,13 +1,15 @@
 <ul class="project gallery">
 {{ range first .Count (where .Site.RegularPages "Type" "projects") }}
   <li>
-    <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
     {{ $featured_image := partial "func/GetThumbnail.html" . }}
     {{/* Trimming the slash and adding absURL make sure the image works no matter where our site lives */}}
     {{ $featured_image := (trim $featured_image "/") | absURL }}
     <a href="{{ .Permalink }}">
       <img src="{{ $featured_image }}" alt="image from {{ .Title }}">
     </a>
+    <aside>Project</aside>
+    <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+    {{ partial "tags.html" . }}
   </li>
 {{ end }}
 </ul>
