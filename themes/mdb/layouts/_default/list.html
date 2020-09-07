@@ -1,11 +1,11 @@
 {{ define "main" }}
+  {{ $galleryArgs := (dict "context" . "Site" $.Site "Count" 100) }}
 
-{{ if eq .Page.Type "blog" }}
-  {{- partial "blog-post-gallery.html" . -}}
-{{ end}}
+  {{ if eq .Page.Type "blog" }}
+    {{ partial "blog-post-gallery.html" $galleryArgs }}
+  {{ end}}
 
-{{ if eq .Page.Type "projects" }}
-  {{- partial "project-post-gallery.html" . -}}
-{{ end}}
-
+  {{ if eq .Page.Type "projects" }}
+    {{ partial "project-post-gallery.html" $galleryArgs }}
+  {{ end}}
 {{ end }}

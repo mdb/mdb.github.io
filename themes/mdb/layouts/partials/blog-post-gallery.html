@@ -1,5 +1,5 @@
 <ul class="blog gallery">
-{{ range (where .Site.RegularPages "Type" "blog") }}
+{{ range first .Count (where .Site.RegularPages "Type" "blog") }}
   <li>
     <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
     {{ $featured_image := partial "func/GetThumbnail.html" . }}
