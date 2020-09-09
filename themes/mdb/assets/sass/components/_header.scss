@@ -1,0 +1,42 @@
+header {
+  margin: 0 auto;
+  width: $desktop_width;
+  padding: 50px 0 25px 0;
+  overflow: hidden;
+
+  div.mark {
+    width: 240px;
+    float: left;
+
+    a {
+      text-indent: -5000px;
+      display: block;
+      width: 100px;
+      height: 100px;
+      background: url('/images/mark_grayscale.png') center center;
+      float: left;
+
+      &:hover {
+        text-decoration: none;
+        border-radius: 100px 100px;
+        text-align: center;
+        background: #000;
+        text-indent: 0;
+        color: #fff;
+        line-height: 100px;
+      }
+    }
+  }
+
+  nav {
+    float: left;
+    width: 240px;
+    padding-top: 60px;
+
+    a, a:visited {
+      color: $secondary_text_color;
+      font-family: $secondary_font_family;
+      font-size: 11px;
+    }
+  }
+}

@@ -1,0 +1,48 @@
+ul.gallery {
+  padding-top: 35px;
+  overflow: hidden;
+
+  li.item {
+    width: 25%;
+    float: left;
+    position: relative;
+    padding-bottom: 19%;
+    height: 200px;
+
+    a.thumbnail {
+      display: block;
+      margin: 5px 5px 1em 5px;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .details {
+      margin: 5px;
+
+      aside,
+      time {
+        font-family: $secondary_font_family;
+        color: $secondary_text_color;
+        margin-bottom: .75em;
+        display: block;
+      }
+
+      h2 {
+        margin-bottom: .65em;
+
+        a {
+          font-size: 120%;
+          line-height: 1em;
+        }
+      }
+
+      p {
+        color: $secondary_text_color;
+        font-style: italic;
+        margin-bottom: .65em;
+      }
+    }
+  }
+}

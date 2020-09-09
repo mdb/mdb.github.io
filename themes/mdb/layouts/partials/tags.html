@@ -1,6 +1,6 @@
-<ul>
+<ul class="tags">
   {{ range .Params.tags }}
-   <li class="list">
+   <li>
      <a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">
        {{- . -}}
      </a>
