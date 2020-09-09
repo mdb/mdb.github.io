@@ -2,12 +2,12 @@
   {{ $galleryArgs := (dict "context" . "Site" $.Site "Count" 4) }}
 
   {{ range (where .Pages "Type" "blog") }}
-    <h1><a href="{{ .Permalink }}">Blog</a></h1>
+    <h1 class="divider"><a href="{{ .Permalink }}">Blog</a></h1>
   {{ end }}
   {{ partial "blog-post-gallery.html" $galleryArgs }}
 
   {{ range (where .Pages "Type" "projects") }}
-    <h1><a href="{{ .Permalink }}">Recent Projects</a></h1>
+    <h1 class="divider"><a href="{{ .Permalink }}">Recent Projects</a></h1>
   {{ end }}
   {{ partial "project-post-gallery.html" $galleryArgs }}
 {{ end }}
