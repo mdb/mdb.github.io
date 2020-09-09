@@ -1,16 +1,18 @@
 <ul class="blog gallery">
 {{ range first .Count (where .Site.RegularPages "Type" "blog") }}
-  <li>
+  <li class="item">
     {{ $featured_image := partial "func/GetThumbnail.html" . }}
     {{/* Trimming the slash and adding absURL make sure the image works no matter where our site lives */}}
     {{ $featured_image := (trim $featured_image "/") | absURL }}
-    <a href="{{ .Permalink }}">
+    <a class="thumbnail" href="{{ .Permalink }}">
       <img src="{{ $featured_image }}" alt="image from {{ .Title }}">
     </a>
-    <time>{{- .Date.Format "January 2, 2006" -}}</time>
-    <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
-    <p>{{ .Params.teaser }}</p>
-    {{ partial "tags.html" . }}
+    <div class="details">
+      <time>{{- .Date.Format "January 2, 2006" -}}</time>
+      <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+      <p>{{ .Params.teaser }}</p>
+      {{ partial "tags.html" . }}
+    </div>
   </li>
 {{ end }}
 </ul>
