@@ -1,11 +1,6 @@
 {{ define "main" }}
   {{ $galleryArgs := (dict "context" . "Site" $.Site "Count" 100) }}
 
-  {{ if eq .Page.Type "blog" }}
-    <h1 class="divider">Blog</h1>
-    {{ partial "blog-post-gallery.html" $galleryArgs }}
-  {{ end}}
-
   {{ if eq .Page.Type "projects" }}
     <h1 class="divider">Recent Projects</h1>
     {{ partial "project-post-gallery.html" $galleryArgs }}

@@ -1,0 +1,5 @@
+{{ define "main" }}
+  {{ $galleryArgs := (dict "context" . "Site" $.Site "Count" 100) }}
+  <h1 class="divider">Blog</h1>
+  {{ partial "blog-post-gallery.html" $galleryArgs }}
+{{ end }}
