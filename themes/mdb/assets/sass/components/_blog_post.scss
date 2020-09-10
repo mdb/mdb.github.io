@@ -1,0 +1,16 @@
+div.blog-post {
+  overflow: hidden;
+
+  time {
+    margin-top: 25px;
+    width: 25%;
+    float: left;
+    font-family: $secondary_font_family;
+    color: $secondary_text_color;
+  }
+
+  article {
+    float: left;
+    width: 75%;
+  }
+}

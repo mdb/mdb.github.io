@@ -8,8 +8,51 @@ main {
       padding: 0;
 
       h1 {
-        margin: 25px 0 15px 0;
-        font-size: 200%;
+        margin: 25px 0 25px 0;
+        font-size: 250%;
+      }
+    }
+
+    h2 {
+      font-size: 200%;
+      margin-top: 25px;
+      margin-bottom: 25px;
+    }
+
+    code {
+      color: #c25;
+      border: 1px solid #e1e1e8;
+      padding: 0 3px;
+      background: #f7f7f9;
+    }
+
+    ul, ol {
+      margin-bottom: 25px;
+
+      li {
+        font-size: 150%;
+        line-height: 1.75em;
+        list-style-type: disc;
+        margin-left: 1em;
+
+
+        * {
+          font-size: 100%;
+        }
+      }
+    }
+
+    ol li {
+      list-style-type: decimal;
+    }
+
+    p {
+      font-size: 150%;
+      line-height: 1.75em;
+      margin-bottom: 25px;
+
+      * {
+        font-size: 100%;
       }
     }
 
