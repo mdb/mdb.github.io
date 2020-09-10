@@ -1,0 +1,44 @@
+footer {
+  background: #000;
+  padding: 50px 0 100px 0;
+  color: $inverse_text_color;
+  overflow: hidden;
+
+  section {
+    width: $desktop_width;
+    margin: 0 auto;
+
+    h1,
+    h2,
+    p,
+    ul,
+    a {
+      width: 95%;
+      margin-bottom: 25px;
+      font-size: 125%;
+    }
+
+    p a {
+      font-size: 100%;
+    }
+
+    a, a:visited {
+      color: $link_color;
+    }
+
+    div {
+      float: left;
+      width: 25%;
+
+      &.double {
+        width: 50%;
+      }
+
+      h2 {
+        padding-bottom: 10px;
+        font-size: 125%;
+        border-bottom: $inverse_divider;
+      }
+    }
+  }
+}
