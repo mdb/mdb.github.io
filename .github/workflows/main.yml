@@ -14,3 +14,9 @@ jobs:
         extended: true
     - name: Build
       run: hugo --minify
+    - name: Archive build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: build
+        path: |
+          public
