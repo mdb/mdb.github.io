@@ -64,7 +64,7 @@ func fetch(url string, ch chan<- string) {
 
 Example output:
 
-```
+```bash
 $ go run fetch.go
 http://mikeball.me       0.26s   200
 http://mikeball.info     0.38s   200

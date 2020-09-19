@@ -459,7 +459,7 @@ Alternatively, we could use `/opt/resource/out`'s support of a `params.file` to 
 
 First, create a `my-key` file:
 
-```
+```bash
 cat <<EOF > my-key
 my-new-value-from-file-params
 EOF
