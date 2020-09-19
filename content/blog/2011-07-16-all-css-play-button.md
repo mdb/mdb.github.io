@@ -9,13 +9,9 @@ thumbnail: play_thumb.jpg
 teaser: I wondered if it could be done; here's a quick and dirty technique.
 ---
 
-## Example
-
-<img src="/images/blog/play_button.jpg" />
-
 ## The HTML
 
-``` html
+```html
 <a class="thumb" href="/some-url">
   <img src="some-image.jpg" alt="Image" />
   <b class="play">
@@ -27,7 +23,7 @@ teaser: I wondered if it could be done; here's a quick and dirty technique.
 
 ## The CSS
 
-``` css
+```css
 /* the anchor tag containing everything */
 a.thumb {
   position:relative;

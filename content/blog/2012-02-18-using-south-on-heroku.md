@@ -9,61 +9,86 @@ thumbnail: cloud_thumb.png
 teaser: How to add new fields to an existing, Heroku-hosted Django project's database.
 ---
 
-<b>Problem</b>: You need to add new fields to the admin of a Django project hosted on Heroku but don't want to destroy data by running <code>syncdb</code> on your Heroku-hosted database.
+**Problem**: You need to add new fields to the admin of a Django project hosted on Heroku but don't want to destroy data by running `syncdb` on your Heroku-hosted database.
 
-<b>Solution</b>: <a href="http://south.aeracode.org/docs/about.html">South</a>
+**Solution**: [South](http://south.aeracode.org/docs/about.html).
 
-These instructions assume you're working in a clean checkout of a Heroku project named <code>heroku_project</code>, which contains a Django project named <code>django_project</code>, which contains an app named <code>django_app</code>. You need to add a new admin field to <code>django_app</code>.
+These instructions assume you're working in a clean checkout of a Heroku project named `heroku_project`, which contains a Django project named `django_project`, which contains an app named `django_app`. You need to add a new admin field to `django_app`.
 
-<ol>
-  <li>Open <code>settings.py</code> and add 'south' to your list of <code>INSTALLED_APPS</code></li>
-  <li>Run syncdb locally:
-    <pre><code>python django_project/manage.py syncdb</code></pre>
-  </li>
-  <li>Convert your project to use South:
-    <pre><code>python django_project/manage.py convert_to_south django_app</code></pre>
-  </li>
-  <li>Add some new fields to <code>django_project/django_app/models.py</code></li>
-  <li>Set up the schema:
-    <pre><code>python django_project/manage.py schemamigration django_app --auto</code></pre>
-  </li>
-  <li>Perform the migration:
-    <pre><code>python django_project/manage.py migrate django_app</code></pre>
-  </li>
-  <li>Add <code>South</code> Heroku project's <code>requirements.txt</code> file. For example:
-    <pre><code>South==0.7.3</code></pre>
-  </li>
-  <li>Add the South <code>django_project/migrations</code> directory to version control and commit all your changes.</li>
-  <li>Push your changes to Heroku:
-    <pre><code>git push heroku master</code></pre>
-  </li>
-  <li>Run <code>syncdb</code> on Heroku:
-    <pre><code>heroku run bin/python django_project/manage.py syncdb</code></pre>
-  </li>
-  <li>Convert your Heroku instance of <code>django_app</code> to use South
-  <pre><code>heroku run bin/python django_project/manage.py convert_to_south django_app</code></pre>
-  </li>
-  <li>Perform the migration:
-    <pre><code>heroku run bin/python django_project/manage.py migrate django_app</code></pre>
-  </li>
-</ol>
 
-Note that you will have to repeat the <code>django_app</code>-specific steps for each Django app you modify.
+1. Open `settings.py` and add 'south' to your list of `INSTALLED_APPS`
 
-And what if you make further changes to <code>django_project/django_app/models.py</code>?
+1. Run syncdb locally:
+    ```bash
+    python django_project/manage.py syncdb
+    ```
 
-<ol>
-  <li>Make changes to <code>django_project/some_app/models.py</code></li>
-  <li>Create the south migration file:
-    <pre><code>python django_project/manage.py schemamigration some_app --auto</code></pre>
-  </li>
-  <li>Migrate locally:
-    <pre><code>python django_project/manage.py migrate some_app</code></pre>
-  </li>
-  <li>Commit your changes and push them to Heroku</li>
-  <li>Migrate on Heroku:
-    <pre><code>heroku run bin/python django_project/manage.py migrate some_app</code></pre>
-  </li>
-</ol>
+1. Convert your project to use South:
+    ```bash
+    python django_project/manage.py convert_to_south django_app
+    ```
 
-Gratitude to <a href="http://www.caseypthomas.org/blog/managing-a-django-or-any-database-on-heroku">Casey Thomas</a> for the South knowledge-sharing.
+1. Add some new fields to `django_project/django_app/models.py`
+
+1. Set up the schema:
+    ```bash
+    python django_project/manage.py schemamigration django_app --auto
+    ```
+
+1. Perform the migration:
+    ```bash
+    python django_project/manage.py migrate django_app
+    ```
+
+1. Add `South` Heroku project's `requirements.txt` file. For example:
+    ```bash
+    South==0.7.3
+    ```
+
+1. Add the South `django_project/migrations` directory to version control and commit all your changes.
+
+1. Push your changes to Heroku:
+    ```bash
+    git push heroku master
+    ```
+
+1. Run `syncdb` on Heroku:
+    ```bash
+    heroku run bin/python django_project/manage.py syncdb
+    ```
+
+1. Convert your Heroku instance of `django_app` to use South
+    ```bash
+    heroku run bin/python django_project/manage.py convert_to_south django_app
+    ```
+
+1. Perform the migration:
+    ```bash
+    heroku run bin/python django_project/manage.py migrate django_app
+    ```
+
+Note that you will have to repeat the `django_app`-specific steps for each Django app you modify.
+
+And what if you make further changes to `django_project/django_app/models.py`?
+
+
+1. Make changes to `django_project/some_app/models.py`
+
+1. Create the south migration file:
+    ```bash
+    python django_project/manage.py schemamigration some_app --auto
+    ```
+
+1. Migrate locally:
+    ```bash
+    python django_project/manage.py migrate some_app
+    ```
+
+1. Commit your changes and push them to Heroku
+
+1. Migrate on Heroku:
+    ```bash
+    heroku run bin/python django_project/manage.py migrate some_app
+    ```
+
+Gratitude to [Casey Thomas](http://www.caseypthomas.org/blog/managing-a-django-or-any-database-on-heroku) for the South knowledge-sharing.

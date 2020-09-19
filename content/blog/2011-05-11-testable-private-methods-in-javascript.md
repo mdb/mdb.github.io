@@ -9,21 +9,21 @@ thumbnail: lock_thumb.png
 teaser: A controversial technique for writing unit tests against private methods.
 ---
 
-<b>Problem</b>: how to write unit tests for private functions?
+**Problem**: how to write unit tests for private functions?
 
 As my co-worker Trevor [suggests in more detail](http://trevmex.com/post/5365259743/a-javascript-template-for-making-testable-private), one solution is to create a class with 3 internal objects:
 
-* <b>settings</b>: this object houses configuration options, such as a debug option
-* <b>private</b>: this object houses private functions
-* <b>public</b>: this object houses all public functions
+* **settings**: this object houses configuration options, such as a debug option
+* **private**: this object houses private functions
+* **public**: this object houses all public functions
 
-Then, in writing unit tests, a developer can instantiate the class by passing {debug: true} to adjust the class’s settings such that the private and public objects are merged, in effect exposing the previously private functions housed in the private object.
+Then, in writing unit tests, a developer can instantiate the class by passing `{debug: true}` to adjust the class's settings such that the private and public objects are merged, in effect exposing the previously private functions housed in the private object.
 
-Note that this technique is a bit controversial amongst those who argue that the need to test private functions hints at larger code problems, specifically that the private functions are too complex. Also note that it requires jQuery.
+Note that this technique is a bit controversial amongst those who argue that the need to test private functions hints at larger code problems, specifically that the private functions are too complex. Also note that it requires `jQuery`.
 
 ## Example Code
 
-```
+```javascript
 if (typeof NS === 'undefined' || !NS) {
     var NS = {};
 }

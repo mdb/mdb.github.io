@@ -17,26 +17,26 @@ Fork a project by visiting its URL on GitHub and clicking the "Fork" button
 
 Clone your fork to your local machine:
 
-```
+```bash
 git clone git@github.com:yourUsername/project-name.git
 ```
 
 Assign the original repository to a remote called "upstream" to retrieve updates from the original repository you forked:
 
-```
+```bash
 cd project-name
 git remote add upstream git://github.com/originalUsername/project-name.git
 ```
 
 Routinely pull all the “upstream” updates to your local repository:
 
-```
+```bash
 git fetch upstream
 ```
 
-And merge them to your forked master:
+And merge them to your forked `master`:
 
-```
+```bash
 git merge upstream/master
 ```
 
@@ -44,30 +44,30 @@ git merge upstream/master
 
 Create and check out a feature branch to house your edits:
 
-```
+```bash
 git branch branchName
 git checkout branchName
 ```
 
 This can be shortened to:
 
-```
+```bash
 git checkout -b branchName
 ```
 
 Make edits and commit them:
 
-```
+```bash
 git add someFile.js
 git commit -m "Your commit message."
 ```
 
 Push your new branch to GitHub:
 
-```
+```bash
 git push origin branchName
 ```
 
-Visit your forked project on GitHub and switch to your branchName branch.
+Visit your forked project on GitHub and switch to your `branchName` branch.
 
 Click “Pull Request” to request that your features be merged to the “upstream” master.

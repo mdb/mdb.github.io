@@ -9,10 +9,6 @@ teaser: My quick solution to a CSS challenge.
 
 CSS transforms! The following works in IE9 and above, as well as modern versions of Firefox, Safari, Chrome, and Opera. There's probably a trickier way this could be done with less markup, leveraging the <code>:before</code> and <code>:after</code> pseudo classes.
 
-## Example
-
-<img src="/images/blog/cube.png" />
-
 ## The HTML
 
 ``` html
