@@ -17,13 +17,13 @@ Example: You have an icon set of 20 10x10px individual .png files. Their file na
 
 ## Step 1: Install compass
 
-```
+```bash
 gem install compass
 ```
 
 ## Step 2: Create a compass project
 
-```
+```bash
 compass create your_project_name
 ```
 

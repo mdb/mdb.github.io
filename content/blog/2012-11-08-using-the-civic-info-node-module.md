@@ -16,7 +16,7 @@ teaser: A quick tutorial in using a simple NPM module I built.
 <b>1.</b> Secure a Google API key.
 <b>2.</b> Install civic-info:
 
-```
+```bash
 npm install civic-info
 ```
 
@@ -26,7 +26,7 @@ npm install civic-info
 var civicInfo = require("civic-info")({apiKey: "YOUR KEY"});
 ```
 
-Alteratively, you can set a <code>GOOGLE\_API\_KEY</code> environment variable and instantiate like so:
+Alteratively, you can set a `GOOGLE_API_KEY` environment variable and instantiate like so:
 
 ```javascript
 var civicInfo = require("civic-info")();

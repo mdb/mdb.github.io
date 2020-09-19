@@ -15,7 +15,7 @@ teaser: Some small shell scripts to automate manual gem downloads & uploads.
 
 <b>1.</b> List the necessary gems in a <code>gems.txt</code> file:
 
-```
+```bash
 rails
 actionmailer
 activemodel
@@ -55,12 +55,12 @@ done
 
 Download gems:
 
-```
+```bash
 ./get_gems.sh gems.txt
 ```
 
 Upload gems:
 
-```
+```bash
 ./post_gems.sh gems.txt
 ```

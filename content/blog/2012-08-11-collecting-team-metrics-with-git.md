@@ -12,7 +12,7 @@ Per recent co-worker interest in metrics surrounding team performance, the follo
 
 ##View the Total Number of Commits Per Developer within the Codebase
 
-```
+```bash
 git shortlog -sne
 ```
 
@@ -20,7 +20,7 @@ git shortlog -sne
 
 This example assumes that the sprint began on July 1st and ended July 14th.
 
-```
+```bash
 git shortlog -sne --after=2012-07-23 --until=today
 ```
 
@@ -28,20 +28,20 @@ git shortlog -sne --after=2012-07-23 --until=today
 
 This example assumes that the sprint began on July 1st and ended July 14th, and that tests are contained within a <code>spec</code> directory.
 
-```
+```bash
 git shortlog -sne --after=2012-07-01 --until=2012-07-14 spec/
 ```
 
 ## How Many Lines of Code Did a Developer Add and Remove Within a Sprint?</h4>
 
-```
+```bash
 git log --author="A. Developer" --after=7-14-2012 --before=2012-07-14 --pretty=tformat: --numstat | gawk '{ add += $1 ; subs += $2 ; loc += $1 - $2 } END \
 { printf "added lines: %s removed lines : %s total lines: %s\n",add,subs,loc }'
 ```
 
 ## Who Worked on What Throughout a Sprint?
 
-```
+```bash
 git shortlog --after=2012-07-01 --until=2012-07-14
 ```
 
@@ -49,7 +49,7 @@ git shortlog --after=2012-07-01 --until=2012-07-14
 
 This example uses a handy Ruby Gem called <a href="https://github.com/oleander/git-fame-rb">git_fame</a>.
 
-```
+```bash
 gem install git_fame
 git fame
 ```

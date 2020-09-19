@@ -79,7 +79,7 @@ describe("flickrFeeder", function() {
 
 ## Run your test
 
-```
+```bash
 cd your_flickr_feeder_directory
 mocha
 ```

@@ -41,14 +41,14 @@ end
 
 Usage:
 
-```
+```yaml
 rake hello -- --name=mike
 hello mike
 ```
 
 Default behavior with no arguments:
 
-```
+```yaml
 $ rake hello
 hello world
 ```

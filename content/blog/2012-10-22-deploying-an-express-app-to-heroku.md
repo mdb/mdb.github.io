@@ -18,7 +18,7 @@ Step 2: Install the <a href="https://toolbelt.herokuapp.com">Heroku Toolbelt</a>
 
 Step 3: Log in by entering the following in the command line:
 
-```
+```bash
 heroku login
 ```
 
@@ -26,9 +26,9 @@ Step 4: Install <a href="http://nodejs.org">Node.js</a>.
 
 Step 5: Create an Express app.
 
-Let&#8217;s call it <code>heroku-demo</code>:
+Let&#8217;s call it `heroku-demo`:
 
-```
+```bash
 mkdir heroku-demo
 ```
 
@@ -48,7 +48,7 @@ Define the application dependencies via a heroku-demo/package.json file:
 
 Install the package:
 
-```
+```bash
 npm install
 ```
 
@@ -73,25 +73,25 @@ console.log("Listening on port " + port);
 
 Now, you can run your app locally and view it in your browser at <code>http://localhost:3000</code>:
 
-```
+```bash
 node app.js
 ```
 
 Step 6: Declare your app&#8217;s process types with a <code>heroku-demo/Procfile</code> so that it can run with <a href="https://github.com/ddollar/foreman">Foreman</a>:
 
-```
+```yaml
 web: node app.js
 ```
 
 This declares a &#8220;web&#8221; process, as well as the command needed to run it. You can test that your Procfile/Foreman works:</p>
 
-```
+```bash
 foreman start
 ```
 
 Step 7: Make <code>heroku-demo</code> a Git repository:
 
-```
+```bash
 git init
 git add .
 git commit -m "Initial commit"
@@ -101,19 +101,19 @@ Step 8: Deploy heroku-demo to Heroku.
 
 Create a Heroku app:
 
-```
+```bash
 heroku create
 ```
 
 Deploy the code to Heroku:
 
-```
+```bash
 git push heroku master
 ```
 
 Step 9: View your Heroku-hosted app in your web browser:
 
-```
+```bash
 heroku open
 ```
 
@@ -121,7 +121,7 @@ heroku open
 
 Make your app available at a custom newname.herokuapp.com subdomain:
 
-```
+```bash
 heroku apps:rename newname
 ```
 
@@ -129,7 +129,7 @@ You can also use custom domains. See the <a href="https://devcenter.heroku.com/a
 
 View environment variables:
 
-```
+```bash
 heroku config
 ```
 
@@ -137,24 +137,24 @@ heroku config
 
 Add environment variables:
 
-```
+```bash
 heroku config:add NODE_ENV=production
 ```
 
 View logs:
 
-```
+```bash
 heroku logs
 ```
 
 View running processes:
 
-```
+```bash
 heroku ps
 ```
 
 Learn more about the Heroku command line client:
 
-```
+```bash
 heroku help
 ```

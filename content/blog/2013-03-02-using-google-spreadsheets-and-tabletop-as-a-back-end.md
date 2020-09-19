@@ -21,7 +21,7 @@ The following offers a basic example.
 <b>2.</b> Click <code>File > Publish to the Web > Start Publishing</code> to publicly publish your spreadsheet.
 <b>3.</b> Create a project directory with the following files and structure:</p>
 
-```
+```bash
 ├── index.html
 └── js
     ├── app.js

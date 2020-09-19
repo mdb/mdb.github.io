@@ -74,13 +74,3 @@ The CSS:
   background: #fff;
 }
 ```
-
-<a class="modal-trigger" href="#modal-1">View demo &raquo;</a>
-
-<div class="modal" id="modal-1">
-  <div class='modal-content'>
-    <a class="close" href="#">close</a>
-    <h2>Some Heading</h2>
-    <p>Some paragraph</p>
-  </div>
-</div>

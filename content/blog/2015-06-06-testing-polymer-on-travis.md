@@ -19,7 +19,7 @@ In short, Xvfb can be spun up in advance of test execution. web-component-tester
 
 Example `.travis.yml`:
 
-```
+```yaml
 language: node_js
 node_js:
   - "0.12"

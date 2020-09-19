@@ -15,13 +15,13 @@ I recently released <a href="http://github.com/mdb/phl_geocode.rb">phl_geocode</
 
 <b>1.</b> Install phl_geocode:
 
-```
+```bash
 gem install phl_geocode
 ```
 
 <b>2.</b> Require phl_geocode:
 
-```
+```ruby
 require "phl_geocode"
 ```
 <b>3.</b> Instantiate a PHLGeocode instance:

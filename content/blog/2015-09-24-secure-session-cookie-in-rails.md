@@ -26,13 +26,13 @@ In Rails, calling `Rails.application.config.session_store` with `secure: true` i
 
 For example, to do so in Apache, add the following to the Apache config file controlling your site:
 
-```
+```bash
 RequestHeader set X-Forwarded-Proto "https"
 ```
 
 And add the following to your Rails app's `config/initializers/session_store.rb`:
 
-```
+```ruby
 Rails.application.config.session_store :cookie_store,
                                        :key => '_your_app_name_session',
                                        :secure => ENV['RAILS_ENV'] != 'development'

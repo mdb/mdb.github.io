@@ -15,9 +15,9 @@ teaser: How to verify a Docker image pull request in ConcourseCI.
 
 **Solution**: Configure the Concourse's pull request verification job to use the `docker-image` resource type, thus performing a `docker build` using the `Dockerfile` during a pull request's continuous integration. Note line 41 in the `pipeline.yml`.
 
-# The pipeline.yml
+## The pipeline.yml
 
-```
+```yaml
 resources:
 
 # source code

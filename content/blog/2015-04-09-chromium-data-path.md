@@ -29,7 +29,7 @@ The NW.js [manifest](https://github.com/nwjs/nw.js/wiki/Manifest-format) provide
 
 Example manifest:
 
-```
+```json
 {
   "name": "SOME_NW_APP",
   "description": "Some description",
@@ -51,7 +51,7 @@ In Windows, a tool such as [nsis](/blog/node-webkit-app-windows-installer/) can 
 
 Example nsi uninstaller section:
 
-```nsis
+```bash
 Section "Uninstall"
   RMDir '"$INSTDIR\Local Storage"'
   RMDir "$INSTDIR\locales"

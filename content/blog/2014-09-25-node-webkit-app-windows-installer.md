@@ -16,13 +16,13 @@ teaser: How to create a Windows app installer on the Mac OS command line using m
 
 Install `makensis` on Mac OS using [homebrew](http://brew.sh/):
 
-```
+```bash
 brew install nsis
 ```
 
 A basic `windows_installer.nsi` file:
 
-```nsi
+```bash
 !define PRODUCT_NAME "Your App Name"
 
 Name "${PRODUCT_NAME}"
@@ -75,7 +75,7 @@ SectionEnd
 
 And run the `nsi` file to generate the `your_app_installer.exe`:
 
-```
+```bash
 $ makensis windows_installer.nsi
 ```
 
