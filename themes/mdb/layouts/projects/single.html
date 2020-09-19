@@ -3,7 +3,7 @@
   <article>
     <header>
       <aside class="divider">
-        {{with .CurrentSection.Title }}{{. | singularize }}{{end}}
+        <a href="{{ .CurrentSection.Permalink }}">Recent Projects</a>
       </aside>
       <h1>{{- .Title -}}</h1>
       <time>{{- .Date.Format "January 2, 2006" -}}</time>

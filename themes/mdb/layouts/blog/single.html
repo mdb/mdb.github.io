@@ -2,7 +2,7 @@
   {{ $section := .Site.GetPage "section" .Section }}
   <div class="blog-post">
     <aside class="divider">
-      {{with .CurrentSection.Title }}{{. | singularize }}{{end}}
+      <a href="{{ .CurrentSection.Permalink }}">{{with .CurrentSection.Title }}{{. | singularize }}{{end}}</a>
     </aside>
     <time>{{- .Date.Format "January 2, 2006" -}}</time>
     <article>

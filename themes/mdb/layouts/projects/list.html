@@ -2,7 +2,7 @@
   {{ $galleryArgs := (dict "context" . "Site" $.Site "Count" 100) }}
 
   {{ if eq .Page.Type "projects" }}
-    <h1 class="divider">Recent Projects</h1>
+    <h1 class="divider"><a href="{{ .CurrentSection.Permalink }}">Recent Projects</a></h1>
     {{ partial "project-post-gallery.html" $galleryArgs }}
   {{ end}}
 {{ end }}
