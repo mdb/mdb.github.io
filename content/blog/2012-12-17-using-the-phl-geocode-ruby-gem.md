@@ -13,28 +13,25 @@ I recently released <a href="http://github.com/mdb/phl_geocode.rb">phl_geocode</
 
 ## Getting Started
 
-<b>1.</b> Install phl_geocode:
+1. Install `phl_geocode`:
+    ```bash
+    gem install phl_geocode
+    ```
 
-```bash
-gem install phl_geocode
-```
+1. Require `phl_geocode`:
+    ```ruby
+    require "phl_geocode"
+    ```
 
-<b>2.</b> Require phl_geocode:
+1. Instantiate a `PHLGeocode` instance:
+    ```ruby
+    phl = PHLGeocode.new
+    ```
 
-```ruby
-require "phl_geocode"
-```
-<b>3.</b> Instantiate a PHLGeocode instance:
-
-```ruby
-phl = PHLGeocode.new
-```
-
-<b>4.</b> Get latitude/longitude coordinates for a philadelphia address:
-
-```ruby
-phl.get_coordinates "1500 market street"
-```
+1. Get latitude/longitude coordinates for a Philadelphia address:
+    ```ruby
+    phl.get_coordinates "1500 market street"
+    ```
 
 Example response:
 
