@@ -12,8 +12,10 @@
   {{ end }}
   {{ partial "blog-post-gallery.html" $galleryArgs }}
 
+  <!--
   {{ range (where .Pages "Type" "projects") }}
     <h1 class="divider"><a href="{{ .Permalink }}">Recent Projects</a> | <a href="{{ .Permalink }}">View all</a></h1>
   {{ end }}
   {{ partial "project-post-gallery.html" $galleryArgs }}
+  -->
 {{ end }}
