@@ -1,0 +1,14 @@
+{{ range .Params.images }}
+  {{ printf "%T" . }}
+
+  {{ if eq (printf "%T" .) "string" }}
+    {{ $linkToWork := printf "/images/projects/work/%s" . }}
+    <img src="{{ $linkToWork }}" />
+  {{ else }}
+    {{ range .nested }}
+      {{ $linkToWork := printf "/images/projects/work/%s" . }}
+      <img src="{{ $linkToWork }}" />
+    {{ end }}
+  {{ end }}
+
+{{ end }}
