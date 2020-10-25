@@ -15,7 +15,7 @@ main {
 
     h2 {
       font-size: 200%;
-      margin-top: 25px;
+      margin-top: 50px;
       margin-bottom: 25px;
     }
 
@@ -24,6 +24,26 @@ main {
       border: 1px solid #e1e1e8;
       padding: 0 3px;
       background: #f7f7f9;
+      font-family: monospace;
+    }
+
+    pre {
+      padding: 20px;
+      margin-bottom: 25px;
+
+      code {
+        color: #c25;
+        border: none;
+        padding: 0;
+        background: #272822;
+        font-family: monospace;
+        font-size: 130%;
+
+        span {
+          font-family: inherit;
+          font-size: 100%;
+        }
+      }
     }
 
     ul, ol {
