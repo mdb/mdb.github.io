@@ -12,6 +12,8 @@ ul.gallery {
     a.thumbnail {
       display: block;
       margin: 5px 5px 1em 5px;
+      max-height: 230px;
+      overflow: hidden;
 
       img {
         width: 100%;
