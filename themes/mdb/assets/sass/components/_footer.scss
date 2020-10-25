@@ -39,6 +39,26 @@ footer {
         font-size: 125%;
         border-bottom: $inverse_divider;
       }
+
+      ul.ig-feed {
+        li {
+          height: 30px;
+          width: 25%;
+          padding-bottom: 19%;
+          float: left;
+          position: relative;
+
+          a {
+            display: block;
+            margin: 5px;
+            overflow: hidden;
+
+            img {
+              width: 100%;
+            }
+          }
+        }
+      }
     }
   }
 }

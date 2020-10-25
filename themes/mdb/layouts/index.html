@@ -1,4 +1,7 @@
 {{ define "main" }}
+  <h1 class="divider"><a href="https://instagram.com/clapclapexcitement">Instagram</a></h1>
+  <ul class="gallery ig-feed"></ul>
+
   {{ $galleryArgs := (dict "context" . "Site" $.Site "Count" 4) }}
 
   {{ range (where .Pages "Type" "blog") }}
