@@ -40,7 +40,8 @@ footer {
         border-bottom: $inverse_divider;
       }
 
-      ul.gallery.ig-feed {
+      ul.gallery.ig-feed,
+      ul.gallery.store-feed {
         padding: 0;
 
         li {
