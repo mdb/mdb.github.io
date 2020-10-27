@@ -5,8 +5,7 @@ footer {
   overflow: hidden;
 
   section {
-    width: $desktop_width;
-    margin: 0 auto;
+    @include container_section;
 
     h1,
     h2,

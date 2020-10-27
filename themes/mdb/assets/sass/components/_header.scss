@@ -1,6 +1,5 @@
 header {
-  margin: 0 auto;
-  width: $desktop_width;
+  @include container_section;
   padding: 50px 0 25px 0;
   overflow: hidden;
 

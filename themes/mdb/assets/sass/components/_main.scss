@@ -1,6 +1,5 @@
 main {
-  width: $desktop_width;
-  margin: 0 auto;
+  @include container_section;
 
   article {
     header {

@@ -1,0 +1,26 @@
+@mixin responsive_width {
+  @include breakpoint(desktop) {
+    width: 100%;
+  }
+}
+
+@mixin breakpoint($point: desktop) {
+  @if $point == desktop {
+    @media (max-width: $desktop_break_point) { @content; }
+  }
+
+  @else if $point == tablet {
+    @media (max-width: $tablet_break_point) { @content; }
+  }
+
+  @else if $point == mobile {
+    @media (max-width: $mobile_break_point)  { @content; }
+  }
+}
+
+@mixin container_section {
+  margin: 0 auto;
+  width: $desktop_width;
+  overflow: hidden;
+  @include responsive_width;
+}
