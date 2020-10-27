@@ -5,6 +5,10 @@
   color: $secondary_text_color;
   font-family: $secondary_font_family;
 
+  @include breakpoint(mobile) {
+    padding: $spacer;
+  }
+
   a, a:visited {
     color: $secondary_text_color;
     font-family: $secondary_font_family;

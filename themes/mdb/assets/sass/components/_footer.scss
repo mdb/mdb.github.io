@@ -4,16 +4,28 @@ footer {
   color: $inverse_text_color;
   overflow: hidden;
 
+  @include breakpoint(mobile) {
+    padding-bottom: 0;
+  }
+
+
   section {
     @include container_section;
 
     h1,
     h2,
     p,
-    ul,
-    a {
+    ul {
       width: 95%;
       margin-bottom: 25px;
+      font-size: 125%;
+
+      @include breakpoint(mobile) {
+        padding: 0 $spacer;
+      }
+    }
+
+    a {
       font-size: 125%;
     }
 
@@ -29,8 +41,20 @@ footer {
       float: left;
       width: 25%;
 
+      @include breakpoint(mobile) {
+        width: 100%;
+
+        p, h2, ul {
+          padding: 0 $spacer;
+        }
+      }
+
       &.double {
         width: 50%;
+
+        @include breakpoint(mobile) {
+          display: none;
+        }
       }
 
       h2 {
