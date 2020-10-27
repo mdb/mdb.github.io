@@ -25,7 +25,7 @@ ul.gallery {
     height: 200px;
 
     @include breakpoint(tablet) {
-      height: auto;
+      height: 350px;
       padding-bottom: $spacer * 2;
     }
 

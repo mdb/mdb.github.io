@@ -13,4 +13,17 @@ div.blog-post {
     float: left;
     width: 75%;
   }
+
+  article,
+  time {
+    @include breakpoint(tablet) {
+      width: 95%;
+      padding: 0 $spacer;
+    }
+
+    @include breakpoint(mobile) {
+      width: 95%;
+      padding: 0 $spacer;
+    }
+  }
 }
