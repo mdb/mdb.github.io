@@ -38,7 +38,7 @@ ul.gallery {
 
     a.thumbnail {
       display: block;
-      margin: 5px 5px $spacer 5px;
+      margin: 5px;
       max-height: 230px;
       overflow: hidden;
 
@@ -88,12 +88,9 @@ ul.gallery {
 }
 
 ul.gallery.ig-feed {
+  margin-bottom: $spacer*2;
   li.item {
-    padding-bottom: 8%;
-
-    @include breakpoint(mobile) {
-      padding: 0;
-      margin: 0;
-    }
+    height: auto;
+    padding-bottom: 0;
   }
 }
