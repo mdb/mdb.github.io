@@ -37,7 +37,7 @@ resources:
 - name: docker-foo-pull-request
   type: pull-request
   source:
-    uri: git@github.comcast.com:aae/cloud-tools.git
+    uri: git@github.com:username/docker-foo.git
     repo: username/docker-foo
 
 resource_types:
