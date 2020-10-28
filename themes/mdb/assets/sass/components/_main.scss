@@ -28,6 +28,7 @@ main {
     pre {
       padding: 20px;
       margin-bottom: $big_spacer;
+      overflow: auto;
 
       code {
         color: #c25;
