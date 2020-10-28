@@ -56,4 +56,17 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(data => {
       populateShopFeed(data);
     });
+
+  let button = document.getElementsByTagName('button')[0];
+  let header = button.parentElement;
+
+  button.addEventListener('click', () => {
+    if (header.className === '') {
+      header.className = 'toggled';
+
+      return;
+    }
+
+    header.className = '';
+  });
 });
