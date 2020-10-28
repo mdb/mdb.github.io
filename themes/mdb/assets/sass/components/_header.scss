@@ -37,6 +37,10 @@ header {
     width: 25%;
     padding-top: 60px;
 
+    @include breakpoint {
+      display: none;
+    }
+
     a, a:visited {
       color: $secondary_text_color;
       font-family: $secondary_font_family;
