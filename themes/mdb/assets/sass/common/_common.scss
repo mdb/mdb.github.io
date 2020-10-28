@@ -5,11 +5,7 @@
   color: $secondary_text_color;
   font-family: $secondary_font_family;
 
-  @include breakpoint(tablet) {
-    padding: $spacer;
-  }
-
-  @include breakpoint(mobile) {
+  @include breakpoint(desktop) {
     padding: $spacer;
   }
 

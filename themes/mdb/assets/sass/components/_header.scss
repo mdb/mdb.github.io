@@ -1,11 +1,16 @@
 header {
   @include container_section;
+
   padding: 50px 0 25px 0;
   overflow: hidden;
 
   div.mark {
     width: 25%;
     float: left;
+
+    @include breakpoint(desktop) {
+      margin-left: $spacer;
+    }
 
     a {
       text-indent: -5000px;
