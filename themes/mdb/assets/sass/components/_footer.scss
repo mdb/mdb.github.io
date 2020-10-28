@@ -16,7 +16,7 @@ footer {
     p,
     ul {
       width: 95%;
-      margin-bottom: 25px;
+      margin-bottom: $big_spacer;
       font-size: 125%;
 
       @include breakpoint(desktop) {

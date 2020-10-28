@@ -2,7 +2,7 @@ div.blog-post {
   overflow: hidden;
 
   time {
-    margin-top: 25px;
+    margin-top: $big_spacer;
     width: 25%;
     float: left;
     font-family: $secondary_font_family;

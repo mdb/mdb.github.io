@@ -1,7 +1,7 @@
 header {
   @include container_section;
 
-  padding: 50px 0 25px 0;
+  padding: 50px 0 $big_spacer 0;
   overflow: hidden;
   position: relative;
 

@@ -7,14 +7,14 @@ main {
       padding: 0;
 
       h1 {
-        margin: 25px 0 25px 0;
+        margin: $big_spacer 0;
         font-size: 250%;
       }
     }
 
     h2 {
       font-size: 200%;
-      margin: 25px 0;
+      margin: $big_spacer 0;
     }
 
     code {
@@ -27,7 +27,7 @@ main {
 
     pre {
       padding: 20px;
-      margin-bottom: 25px;
+      margin-bottom: $big_spacer;
 
       code {
         color: #c25;
@@ -45,7 +45,7 @@ main {
     }
 
     ul, ol {
-      margin-bottom: 25px;
+      margin-bottom: $big_spacer;
 
       li {
         font-size: 150%;
@@ -67,7 +67,7 @@ main {
     p {
       font-size: 150%;
       line-height: 1.75em;
-      margin-bottom: 25px;
+      margin-bottom: $big_spacer;
 
       * {
         font-size: 100%;
