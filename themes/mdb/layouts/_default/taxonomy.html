@@ -1,10 +1,24 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
-  <section>
-    <ul>
-    {{ range  .Pages }}
-      <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
-    {{ end }}
-    </ul>
-  </section>
+  {{/* This could probably be DRY'd up, as it's essentially a duplicate of the blog-post-gallery.html partical */}}
+  {{/* And perhaps taxonomy.html isn't the best place for it? */}}
+
+  <h1 class="divider">Posts tagged "{{ .Title }}"</h1>
+  <ul class="blog gallery">
+  {{ range (where .Pages "Type" "blog") }}
+    <li class="item">
+      {{ $featured_image := partial "func/GetThumbnail.html" . }}
+      {{/* Trimming the slash and adding absURL make sure the image works no matter where the site lives */}}
+      {{ $featured_image := (trim $featured_image "/") | absURL }}
+      <a class="thumbnail" href="{{ .Permalink }}">
+        <img src="{{ $featured_image }}" alt="image from {{ .Title }}">
+      </a>
+      <div class="details">
+        <time>{{- .Date.Format "January 2, 2006" -}}</time>
+        <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+        <p>{{ .Params.teaser }}</p>
+        {{ partial "tags.html" . }}
+      </div>
+    </li>
+  {{ end }}
+  </ul>
 {{ end }}
