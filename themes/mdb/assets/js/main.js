@@ -15,16 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   fetch('https://clapclapexcitement-gram.herokuapp.com/recent-media')
     .then(response => response.json())
-    .then(data => {
-      populateIGFeeds(data);
-    });
+    .then(populateIGFeeds);
 
   let gallery = document.querySelector('ul.gallery.store-feed');
   if (!gallery) {
     return;
   }
 
-  function populateShopFeed(data) {
+  function populateShopFeeds(data) {
     let footer = document.querySelector('footer ul.store-feed')
         gallery = document.querySelector('ul.gallery.store-feed'),
         items = data.slice(0, 4).map(item => {
@@ -53,12 +51,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   fetch('https://api.bigcartel.com/tiendah/products.json')
     .then(response => response.json())
-    .then(data => {
-      populateShopFeed(data);
-    });
+    .then(populateShopFeeds);
 
-  let button = document.getElementsByTagName('button')[0];
-  let header = button.parentElement;
+  let button = document.getElementsByTagName('button')[0],
+      header = button.parentElement;
 
   button.addEventListener('click', () => {
     if (header.className === '') {
