@@ -1,4 +1,0 @@
-%ul.gallery
-  - all_posts.each do |post|
-    - type = post_type(post)
-    = partial :gallery_item, locals: {item: post, type: type}

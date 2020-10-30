@@ -1,0 +1,82 @@
+main {
+  @include container_section;
+
+  article {
+    header {
+      margin: 0;
+      padding: 0;
+
+      h1 {
+        margin: $big_spacer 0;
+        font-size: 250%;
+      }
+    }
+
+    h2 {
+      font-size: 200%;
+      margin: $big_spacer 0;
+    }
+
+    code {
+      color: #c25;
+      border: 1px solid #e1e1e8;
+      padding: 0 3px;
+      background: #f7f7f9;
+      font-family: monospace;
+    }
+
+    pre {
+      padding: 20px;
+      margin-bottom: $big_spacer;
+      overflow: auto;
+
+      code {
+        color: #c25;
+        border: none;
+        padding: 0;
+        background: #272822;
+        font-family: monospace;
+        font-size: 130%;
+
+        span {
+          font-family: inherit;
+          font-size: 100%;
+        }
+      }
+    }
+
+    ul, ol {
+      margin-bottom: $big_spacer;
+
+      li {
+        font-size: 150%;
+        line-height: 1.75em;
+        list-style-type: disc;
+        margin-left: 1em;
+
+
+        * {
+          font-size: 100%;
+        }
+      }
+    }
+
+    ol li {
+      list-style-type: decimal;
+    }
+
+    p {
+      font-size: 150%;
+      line-height: 1.75em;
+      margin-bottom: $big_spacer;
+
+      * {
+        font-size: 100%;
+      }
+    }
+
+    a, a:visited {
+      color: $link_color;
+    }
+  }
+}

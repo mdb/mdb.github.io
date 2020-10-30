@@ -1,0 +1,29 @@
+div.blog-post {
+  overflow: hidden;
+
+  time {
+    margin-top: $big_spacer;
+    width: 25%;
+    float: left;
+    font-family: $secondary_font_family;
+    color: $secondary_text_color;
+  }
+
+  article {
+    float: left;
+    width: 75%;
+  }
+
+  article,
+  time {
+    @include breakpoint(tablet) {
+      width: 95%;
+      padding: 0 $spacer;
+    }
+
+    @include breakpoint(mobile) {
+      width: 95%;
+      padding: 0 $spacer;
+    }
+  }
+}

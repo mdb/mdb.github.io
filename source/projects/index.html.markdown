@@ -1,3 +1,0 @@
----
-layout: projects_index
----

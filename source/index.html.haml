@@ -1,8 +1,0 @@
-%div.content-wrap
-  %div.content
-    %h1.divider.homepage-projects Recent Projects | <a href="/projects">View all</a>
-    = partial :project_gallery, :locals => { limit: 4, only_featured: true }
-    %h1.divider.homepage-instagram Instagram | <a href="https://instagram.com/clapclapexcitement">View all</a>
-    %div.instagram.homepage-instagram
-    %h1.divider.homepage-blog-posts Blog | <a href="/blog">View all</a>
-    = partial :blog_gallery, :locals => { limit: 4, display_teaser: true }

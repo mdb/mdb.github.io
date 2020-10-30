@@ -1,31 +1,21 @@
-[![Build Status](https://travis-ci.org/mdb/mikeball.info.svg?branch=master)](https://travis-ci.org/mdb/mikeball.info)
-
 # mikeball.info
 
-Personal portfolio, blog, and info website.
+Personal website, over a decade of blog posts and notes about software engineering, some archived projects, etc.
 
-[mikeball.info &raquo;](http://mikeball.info)
+Built using [hugo](https://gohugo.io).
 
-Built with [middleman](http://middlemanapp.com).
+## Development
 
-## Local development
+Run a development server on `localhost:1313`:
 
 ```
-make dev
+make serve
 ```
 
 ## Build
 
+Compile site to a `public` directory:
+
 ```
 make
-```
-
-## Deploy
-
-[TravisCI](https://travis-ci.org/mdb/mikeball.info) continuously builds and deploys each change to `master`.
-
-To deploy outside of CI:
-
-```
-make deploy
 ```

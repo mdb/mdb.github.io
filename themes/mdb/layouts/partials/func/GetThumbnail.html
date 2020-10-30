@@ -1,0 +1,7 @@
+{{ $linkToThumb := "/images/blog/thumbnails/default_thumb.gif" }}
+
+{{ if .Params.thumbnail }}
+  {{ $linkToThumb = printf "/images/%s/thumbnails/%s" .Type .Params.thumbnail }}
+{{ end }}
+
+{{ return $linkToThumb }}

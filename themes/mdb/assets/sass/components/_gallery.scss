@@ -1,0 +1,97 @@
+@mixin responsive_gallery {
+  @include breakpoint(mobile) {
+    padding: 0;
+
+    &.blog li.item {
+      border-bottom: $divider;
+
+      a.thumbnail {
+        display: none;
+      }
+    }
+  }
+}
+
+ul.gallery {
+  padding-top: 35px;
+  overflow: hidden;
+  @include responsive_gallery;
+
+  li.item {
+    width: 25%;
+    float: left;
+    position: relative;
+    padding-bottom: 19%;
+    height: 200px;
+
+    @include breakpoint(tablet) {
+      height: 350px;
+      padding-bottom: $spacer * 2;
+    }
+
+    @include breakpoint(mobile) {
+      width: 100%;
+      height: auto;
+      padding: 0;
+      margin: 0;
+    }
+
+    a.thumbnail {
+      display: block;
+      margin: 5px;
+      max-height: 230px;
+      overflow: hidden;
+
+      @include breakpoint(mobile) {
+        margin: 0;
+        padding: 0;
+        max-height: 100%;
+      }
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .details {
+      padding: 5px;
+
+      @include breakpoint(mobile) {
+        padding: $spacer;
+      }
+
+      aside,
+      time {
+        font-family: $secondary_font_family;
+        color: $secondary_text_color;
+        margin-bottom: .75em;
+        display: block;
+      }
+
+      h2 {
+        margin-bottom: .65em;
+        line-height: 1.75em;
+
+        a {
+          font-size: 120%;
+          line-height: 1em;
+        }
+      }
+
+      p {
+        color: $secondary_text_color;
+        font-style: italic;
+        margin-bottom: .65em;
+      }
+    }
+  }
+}
+
+ul.gallery.ig-feed {
+  margin-bottom: $spacer*2;
+
+  li.item {
+    height: auto;
+    padding-bottom: 0;
+  }
+}

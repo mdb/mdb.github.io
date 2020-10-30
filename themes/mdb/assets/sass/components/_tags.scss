@@ -1,0 +1,25 @@
+ul.tags {
+  li {
+    display: inline;
+    margin: 0;
+
+    a {
+      font-style: italic;
+      font-size: $font_size;
+
+      &:after {
+        content: ',';
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &:last-child a {
+      &:after {
+        content: '';
+      }
+    }
+  }
+}

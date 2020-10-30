@@ -1,0 +1,16 @@
+.divider {
+  border-top: $divider;
+  border-bottom: $divider;
+  padding: 15px 5px;
+  color: $secondary_text_color;
+  font-family: $secondary_font_family;
+
+  @include breakpoint(desktop) {
+    padding: $spacer;
+  }
+
+  a, a:visited {
+    color: $secondary_text_color;
+    font-family: $secondary_font_family;
+  }
+}

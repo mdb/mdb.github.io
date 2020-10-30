@@ -1,0 +1,112 @@
+header {
+  @include container_section;
+
+  padding: 50px 0 $big_spacer 0;
+  overflow: hidden;
+  position: relative;
+
+  div.mark {
+    width: 25%;
+    float: left;
+
+    @include breakpoint(desktop) {
+      margin-left: $spacer;
+    }
+
+    a {
+      text-indent: -5000px;
+      display: block;
+      width: 100px;
+      height: 100px;
+      background: url('/images/mark_grayscale.png') center center;
+      float: left;
+
+      &:hover {
+        text-decoration: none;
+        border-radius: 100px 100px;
+        text-align: center;
+        background: #000;
+        text-indent: 0;
+        color: #fff;
+        line-height: 100px;
+      }
+    }
+  }
+
+  button {
+    display: none;
+    border: 0;
+    text-indent: -5000px;
+    width: 40px;
+    height: 34px;
+    position: absolute;
+    right: $spacer;
+    top: 65px;
+    background: none;
+    border-top: 8px solid $secondary_text_color;
+    border-bottom: 8px solid $secondary_text_color;
+
+    @include breakpoint {
+      display: block;
+      margin: 50px $spacer 0 0;
+    }
+
+    &:focus {
+      outline: 0;
+    }
+
+    &:before {
+      width: 40px;
+      height: 34px;
+      content: '.';
+      text-indent: -5000px;
+      border-top: 8px solid $secondary_text_color;
+      position: absolute;
+      right: 0;
+      top: 4px;
+    }
+  }
+
+  nav {
+    float: left;
+    width: 25%;
+    padding-top: 60px;
+
+    @include breakpoint {
+      display: none;
+      background: #000;
+      float: none;
+      width: 100%;
+      padding: 0;
+    }
+
+    a, a:visited {
+      color: $secondary_text_color;
+      font-family: $secondary_font_family;
+      font-size: 11px;
+
+
+      @include breakpoint {
+        background: #000;
+        width: 100%;
+        display: block;
+        padding: $spacer 0 $spacer $spacer;
+        border-bottom: $inverse_divider;
+        color: $tertiary_text_color;
+      }
+    }
+  }
+
+  &.toggled {
+    div.nav-wrap {
+      margin-top: 120px;
+      margin-bottom: -$spacer * 2 + 5px;
+
+      nav {
+        @include breakpoint {
+          display: block;
+        }
+      }
+    }
+  }
+}
