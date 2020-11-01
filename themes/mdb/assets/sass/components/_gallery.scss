@@ -90,6 +90,10 @@ ul.gallery {
 ul.gallery.ig-feed {
   margin-bottom: $spacer*2;
 
+  @include breakpoint(mobile) {
+    margin-bottom: 0;
+  }
+
   li.item {
     height: auto;
     padding-bottom: 0;
