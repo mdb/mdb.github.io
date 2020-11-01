@@ -20,8 +20,9 @@ resources:
   type: git
   source:
     branch: master
-    uri: git@github.com:my-org/my-repo.git
-    private_key: ((github_private_key))
+    uri: https://github.com/my-org/my-repo.git
+    uername: git
+    password: ((github-access-token))
 
 jobs:
 
@@ -34,7 +35,7 @@ jobs:
       - name: my-repo
       platform: linux
       image_resource:
-        type: docker-image
+        type: registry-image
         source:
           repository: node
           tag: 6.3.1
@@ -55,8 +56,9 @@ resources:
   type: git
   source:
     branch: master
-    uri: git@github.com:my-org/my-repo.git
-    private_key: ((github_private_key))
+    uri: https://github.com:my-org/my-repo.git
+    username: git
+    password: ((github-access-token))
 
 jobs:
 
