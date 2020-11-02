@@ -7,6 +7,6 @@ thumbnail: hometown_thumb.png
 teaser: A typeface I created in illustrator.
 ---
 
-%p Been doing a little typeface design in illustrator; I'm calling it hometown.
+I've been playing with typeface design. I'm calling this one hometown.
 
-%img{:src => "/images/blog/hometown_typeface.gif"}
+![hometown](/images/blog/hometown_typeface.gif)
