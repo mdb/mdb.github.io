@@ -1,6 +1,6 @@
 [![CI](https://github.com/mdb/mikeball.info/workflows/CI/badge.svg)](https://github.com/mdb/mikeball.info/actions?query=workflow%3ACI) [![CD](https://github.com/mdb/mikeball.info/workflows/CD/badge.svg)](https://github.com/mdb/mikeball.info/actions?query=workflow%3ACD)
 
-# mikeball.info
+# [mikeball.info](http://mikeball.info)
 
 Personal website, over a decade of blog posts and notes about software engineering, some archived projects, etc.
 
