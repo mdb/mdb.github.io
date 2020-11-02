@@ -35,7 +35,8 @@ deploy:
 			s3 \
 				sync \
 				"public" \
-				"s3://www.mikeball.info"
+				"s3://www.mikeball.info" \
+				--delete
 
 .PHONY: s3-help
 s3-help:
