@@ -1,4 +1,4 @@
-![CI](https://github.com/mdb/mikeball.info/workflows/CI/badge.svg) ![CD](https://github.com/mdb/mikeball.info/workflows/CD/badge.svg)
+[![CI](https://github.com/mdb/mikeball.info/workflows/CI/badge.svg)](https://github.com/mdb/mikeball.info/actions?query=workflow%3ACI) [![CD](https://github.com/mdb/mikeball.info/workflows/CD/badge.svg)](https://github.com/mdb/mikeball.info/actions?query=workflow%3ACD)
 
 # mikeball.info
 
@@ -20,4 +20,14 @@ Compile site to a `public` directory:
 
 ```
 make
+```
+
+## Deploy
+
+The `main` branch is continuously deployed via a [CD GitHub action workflow](https://github.com/mdb/mikeball.info/actions?query=workflow%3ACD).
+
+Alternatively:
+
+```
+make deploy
 ```

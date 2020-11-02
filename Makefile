@@ -22,7 +22,7 @@ serve:
 			server
 
 .PHONY: deploy
-deploy:
+deploy: build
 	docker run \
 		--rm \
 		--tty \
