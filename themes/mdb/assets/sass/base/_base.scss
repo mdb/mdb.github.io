@@ -10,6 +10,10 @@
   font-family: $font_family;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: $background;
 }
