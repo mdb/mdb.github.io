@@ -9,7 +9,7 @@ thumbnail: roller_skating_thumb.png
 teaser: A brief intro to Go concurrency through channels and goroutines.
 ---
 
-Through `goroutines` and `channels`, Go offers mechanisms for concurrent programming. A `goroutine` is a concurrent function execution, while a `channel` offers a communication mechanism through which one `goroutine` can pass values of a specific type to another `goroutine`.
+Through `goroutines` and `channels`, Go offers constructs for concurrent programming. A `goroutine` is a concurrent function execution, while a `channel` offers a communication mechanism through which one `goroutine` can pass values of a specific type to another `goroutine`.
 
 For example, the following code performs three HTTP requests concurrently, reports back the request URL, the request response time, and its HTTP response status code for each request, and also the total time spent executing the program. In this example, the `channel` receives a string summarizing the URL, response time, and status code details for each concurrent request, while the `main` function prints each string sent to the `channel`. The code illustrates that the total time spent executing the program is less than the sum of the times spent waiting for each individual HTTP response, as the HTTP requests are performed concurrently.
 
