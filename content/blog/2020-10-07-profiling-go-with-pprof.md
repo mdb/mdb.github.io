@@ -9,13 +9,18 @@ teaser: My notes and personal cheat sheet for using pprof.
 draft: true
 ---
 
-These are my quick notes on profiling Go programs with [pprof](https://golang.org/pkg/runtime/pprof/). They're almost entirely based on Julia Evans' excellent blog post [Profiling Go programs with pprof](https://jvns.ca/blog/2017/09/24/profiling-go-with-pprof/), which is worth a read.
+These are my quick notes on profiling Go programs with [pprof](https://golang.org/pkg/runtime/pprof/). They're largely based on Julia Evans' excellent blog post [Profiling Go programs with pprof](https://jvns.ca/blog/2017/09/24/profiling-go-with-pprof/), which is worth a read.
 
 ## Basics
 
-`pprof` collects CPU profiles, traces, and heap profiles for Go programs.
+`pprof` collects CPU profiles, traces, and heap profiles for Go programs. It's a tool for visualizatio and analysis of this data.
 
-Typically, usage looks like:
+There are generally two ways to use `pprof`:
+
+1. Instrument code to generate a profile during development
+2. Remotely analyze a profile via a web server
+
+In my experience, typical usage generally involves remotely analyzing a profile via a webserver. It looks like:
 
 1. Establish a web server for getting Go profiles: use the `net/http/pprof` package in your program
 2. Save a profile: `curl localhost:$PORT/debug/pprof/$PROFILE_TYPE`
@@ -28,6 +33,7 @@ Typically, usage looks like:
 * [How to establish a pprof web server](https://golang.org/pkg/net/http/pprof/)
 * [pprof developer documentation](https://github.com/google/pprof/blob/master/doc/pprof.md)
 * [rakyll.org/archive/](https://rakyll.org/archive/)
+* [Profiling Go](https://www.integralist.co.uk/posts/profiling-go/)
 
 ## What's a profile?
 
@@ -41,7 +47,7 @@ Furthermore:
 
 Out of the box, a few profiles are pre-defined:
 
-```
+```text
 goroutine    - stack traces of all current goroutines
 heap         - a sampling of all heap allocations
 threadcreate - stack traces that led to the creation of new OS threads
@@ -61,13 +67,12 @@ Additionally, the default web server offers a CPU profile and CPU trace endpoint
 
 * http://localhost:6060/debug/pprof/profile
 * http://localhost:6060/debug/pprof/trace?seconds=5
-    Note: This endpoint outputs a file that is _not_ a `pprof` profile but is a _trace_.
 
-    It can be viewed via `go tool trace`.
+Note: `/debug/pprof/trace?seconds=5` outputs a file that is _not_ a `pprof` profile but is a _trace_. It can be viewed via `go tool trace`.
 
 ## Julia Evans' technique for getting a heap profile with pprof
 
-As [Julia writes](https://jvns.ca/blog/2017/09/24/profiling-go-with-pprof/), we can test drive debugging memory problems with `pprof` by writing a program that allocates a lot of memory:
+As [Julia writes](https://jvns.ca/blog/2017/09/24/profiling-go-with-pprof/), we can test drive debugging memory problems with `pprof` by writing a program that allocates a lot of memory and also establishes a `pprof` web server on port `6060`:
 
 ```golang
 package main
@@ -82,7 +87,7 @@ import (
 )
 
 func main() {
-	// we need a webserver to get the pprof webserver
+	// we need a web server to get the pprof web server
 	go func() {
 		log.Println(http.ListenAndServe("localhost:6060", nil))
 	}()
@@ -108,7 +113,8 @@ func leakyFunction(wg sync.WaitGroup) {
 Run the program: `go run main.go`
 
 Now, enter an "interactive mode" of the heap profile for this program:
-```
+
+```bash
 go tool pprof  http://localhost:6060/debug/pprof/heap
 Fetching profile over HTTP from http://localhost:6060/debug/pprof/heap
 Saved profile in /Users/mdb/pprof/pprof.alloc_objects.alloc_space.inuse_objects.inuse_space.002.pb.gz
@@ -119,7 +125,7 @@ Entering interactive mode (type "help" for commands, "o" for options)
 
 In the interactive mode, `top` can be run, which tells us that `main.leadkyFunction` is using 7MB of memory:
 
-```
+```bash
 (pprof) top
 Showing nodes accounting for 7MB, 100% of 7MB total
       flat  flat%   sum%        cum   cum%
@@ -128,15 +134,15 @@ Showing nodes accounting for 7MB, 100% of 7MB total
 
 Alternatively, a PNG profile can be generated, which visually represents the program's memory consumption:
 
-```
+```bash
 go tool pprof -png http://localhost:6060/debug/pprof/heap > out.png
 ```
 
-## `alloc_space` and `inuse_space`
+## alloc_space and inuse_space
 
-Reading the output of `go tool pprof --help`, you'll note that there's options to sample allocation counts or in use memory:
+Reading the output of `go tool pprof --help`, you'll note that there are options to sample allocation counts or in use memory:
 
-```
+```bash
 -sample_index=alloc_space
 -sample_index=inuse_space
 ```
@@ -147,7 +153,7 @@ According to Julia:
 
 ## Understanding a pprof file
 
-`.pb` files are protobuf files. If you're interested in viewing their contents, they can be viewed with `protoc` (you may need to do some internet searching for exact `protoc` installation instructions).
+`.pb` files are protobuf files. If you're interested in viewing their contents, they can be viewed with `protoc` (you may need to do some internet searching for exact `protoc` installation instructions for your system).
 
 mutex, block may show contention
 
@@ -157,13 +163,13 @@ mutex, block may show contention
 
 Get a trace dump:
 
-```
+```text
 wget http://localhost:8082/debug/pprof/trace\?seconds\=10 -O localdump
 ```
 
 View it:
 
-```
+```bash
 go tool trace localdump
 2020/10/07 10:25:58 Parsing trace...
 2020/10/07 10:25:58 Splitting trace...
