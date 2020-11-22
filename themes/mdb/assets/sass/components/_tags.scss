@@ -8,7 +8,7 @@ ul.tags {
       font-size: $font_size;
 
       &:after {
-        content: ',';
+        content: ', ';
       }
 
       &:hover {
