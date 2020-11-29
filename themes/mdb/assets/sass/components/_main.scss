@@ -25,6 +25,10 @@ main {
       font-family: monospace;
     }
 
+    p code {
+      font-size: 90%;
+    }
+
     pre {
       padding: 20px;
       margin-bottom: $big_spacer;
