@@ -17,7 +17,7 @@ _A brief guide and reference example explaining a technique for using Molecule a
 
 ## Solution
 
-[Docker-in-docker](https://www.docker.com/blog/docker-can-now-run-within-docker/) allows the use of a containerized dev/test environment, within which Molecule can leverage its Docker driver provider to test the Ansible role against sub-containers (Note, however: the solution isn't free of tradeoffs. Read on for further insight on security concerns).
+[Docker-in-Docker](https://www.docker.com/blog/docker-can-now-run-within-docker/) allows the use of a containerized dev/test environment, within which Molecule can leverage its Docker driver provider to test the Ansible role against sub-containers (Note, however: the solution isn't free of tradeoffs. Read on for further insight on security concerns).
 
 ## The Details
 
@@ -142,6 +142,6 @@ jobs:
         status: failure
 ```
 
-Note that the Concourse task must be executed with a [privileged: true](https://concourse-ci.org/jobs.html#schema.step.task-step.privileged) configuration to utilize Docker-in-docker capabilities. As a result, the container's `root` user is the system's actual `root` user. This comes with some tradeoffs and security risks, as noted in the [Concourse documentation](https://concourse-ci.org/jobs.html#schema.step.task-step.privileged), and should never be done with untrusted code. For this reason, the above-described technique may not be advisable for all use cases and circumstances.
+Note that the Concourse task must be executed with a [privileged: true](https://concourse-ci.org/jobs.html#schema.step.task-step.privileged) configuration to utilize Docker-in-Docker capabilities. As a result, the container's `root` user is the system's actual `root` user. This comes with some tradeoffs and security risks, as noted in the [Concourse documentation](https://concourse-ci.org/jobs.html#schema.step.task-step.privileged), and should never be done with untrusted code. For this reason, the above-described technique may not be advisable for all use cases and circumstances.
 
 I'm curious to learn more about others' techniques, especially Concourse-compatible techniques that avoid the use of container privilege escalation.
