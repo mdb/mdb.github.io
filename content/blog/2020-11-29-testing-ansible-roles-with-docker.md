@@ -13,15 +13,15 @@ _A brief guide and reference example explaining a technique for using Molecule a
 
 ## Problem
 
-[Ansible](https://www.ansible.com/) encourages the use of [Molecule](https://github.com/ansible-community/molecule) to test Ansible roles "against multiple instances, operating systems and distributions, virtualization providers, test frameworks, and testing scenarios." [Molecule documentation](https://molecule.readthedocs.io/en/latest/getting-started.html) offers an overview of how to get started, including how to use [Docker](https://docker.io) as the test driver provider. But what if you'd like to _also_ use Docker as your development environment, thus avoiding the need to install any dependencies &mdash; Python, Ansible, Molecule, etc. &mdash; beyond Docker itself? Or what if your CI/CD pipeline run in a container, as is the case with a [Concourse task](https://concourse-ci.org/tasks.html), for example?
+[Ansible](https://www.ansible.com/) encourages the use of [Molecule](https://github.com/ansible-community/molecule) to test Ansible roles "against multiple instances, operating systems and distributions, virtualization providers, test frameworks, and testing scenarios." [Molecule documentation](https://molecule.readthedocs.io/en/latest/getting-started.html) offers an overview of how to get started, including how to use [Docker](https://docker.io) as the test driver provider, as well as how to use Ansible as the [Molecule verifier](https://molecule.readthedocs.io/en/latest/configuration.html#verifier). But what if you'd like to _also_ use Docker as your development environment, thus avoiding the need to install any dependencies &mdash; Python, Ansible, Molecule, etc. &mdash; beyond Docker itself? Or what if the relevant CI/CD pipeline steps run in a container, as is the case with a [Concourse task](https://concourse-ci.org/tasks.html), for example?
 
 ## Solution
 
-[Docker-in-docker](https://www.docker.com/blog/docker-can-now-run-within-docker/) allows the use of a containerized dev/test environment, within which Molecule can leverage its Docker driver provider to test the Ansible role against sub-containers.
+[Docker-in-docker](https://www.docker.com/blog/docker-can-now-run-within-docker/) allows the use of a containerized dev/test environment, within which Molecule can leverage its Docker driver provider to test the Ansible role against sub-containers (Note, however: the solution isn't free of tradeoffs. Read on for further insight on security concerns).
 
 ## The Details
 
-[mdb/ansible-hello-world](https://github.com/mdb/ansible-hello-world) offers a basic reference example demonstrating the technique. For the sake of simplicity, the role's only responsibility is to create a `/hello-world.json` file on the targeted host. Its `molecule/converge.yml` file invokes the role against a Dockerized Ubuntu test container, while its `molecule/verify.yml` tests that the role behaved as expected and properly creates the `/hello-world.json` file on the test container. It requires no development dependencies beyond Docker.
+[mdb/ansible-hello-world](https://github.com/mdb/ansible-hello-world) offers a basic reference example demonstrating the technique. For the sake of simplicity, the role's only responsibility is to create a `/hello-world.json` file on the targeted host. Its `molecule/converge.yml` file invokes the role against a Dockerized Ubuntu test container, while its `molecule/verify.yml` tests that the role behaves as expected and properly creates the `/hello-world.json` file on the targeted host. It requires no development dependencies beyond Docker.
 
 To try it, clone the code:
 
@@ -142,6 +142,6 @@ jobs:
         status: failure
 ```
 
-Note that the task must be executed with a [privileged: true](https://concourse-ci.org/jobs.html#schema.step.task-step.privileged) configuration to utilize Docker-in-docker capabilities. As a result, the container's `root` user is the system's actual `root` user. This comes with some tradeoffs and security risks, as noted in the [Concourse documentation](https://concourse-ci.org/jobs.html#schema.step.task-step.privileged), and should never be done with untrusted code. For this reason, the above-described technique may not be advisable for all use cases and circumstances.
+Note that the Concourse task must be executed with a [privileged: true](https://concourse-ci.org/jobs.html#schema.step.task-step.privileged) configuration to utilize Docker-in-docker capabilities. As a result, the container's `root` user is the system's actual `root` user. This comes with some tradeoffs and security risks, as noted in the [Concourse documentation](https://concourse-ci.org/jobs.html#schema.step.task-step.privileged), and should never be done with untrusted code. For this reason, the above-described technique may not be advisable for all use cases and circumstances.
 
 I'm curious to learn more about others' techniques, especially Concourse-compatible techniques that avoid the use of container privilege escalation.
