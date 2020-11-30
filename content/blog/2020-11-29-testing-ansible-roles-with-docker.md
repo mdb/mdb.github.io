@@ -21,7 +21,7 @@ _A brief guide and reference example explaining a technique for using Molecule a
 
 ## The Details
 
-[mdb/ansible-hello-world](https://github.com/mdb/ansible-hello-world) offers a basic reference example demonstrating the technique. For the sake of simplicity, the role's only responsibility is to create a `/hello-world.json` file on the targeted host. Its `molecule/converge.yml` file invokes the role against a Dockerized Ubuntu test container, while its `molecule/verify.yml` tests that the role behaves as expected and properly creates the `/hello-world.json` file on the targeted host. It requires no development dependencies beyond Docker.
+[mdb/ansible-hello-world](https://github.com/mdb/ansible-hello-world) offers a basic reference example demonstrating the technique. For the sake of simplicity, the role's only responsibility is to create a `/hello-world.json` file on the targeted host. Its `molecule/converge.yml` file invokes the role against a Dockerized Ubuntu test container, while its `molecule/verify.yml` tests that the role behaves as expected and properly creates the `/hello-world.json` file on the targeted host. It requires no development dependencies beyond Docker (and `make`, arguably, though that's not a hard requirement).
 
 To try it, clone the code:
 
@@ -30,7 +30,7 @@ git clone https://github.com/mdb/ansible-hello-world.git
 cd ansible-hello-world
 ```
 
-...and run `make` to start a [amidos/dcind](https://hub.docker.com/r/amidos/dcind/) container instance on which Docker is running, install Python, Ansible, and Molecule on it, and run `molecule test` from within the container:
+...and run `make` to start a [amidos/dcind](https://hub.docker.com/r/amidos/dcind/) container instance on which Docker is running, install Python, Ansible, and Molecule on it, and execute `molecule test` from within the container:
 
 ```text
 make
@@ -57,7 +57,7 @@ TASK [ansible-hello-world : create hello-world.json file] **********************
 changed: [instance]
 
 PLAY RECAP *********************************************************************
-instance                   : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+instance   : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 
 ...
 
@@ -72,9 +72,9 @@ ok: [instance] => {
 TASK [Delete docker network(s)] ************************************************
 
 PLAY RECAP *********************************************************************
-localhost                  : ok=2    changed=2    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0
+localhost    : ok=2    changed=2    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0
 
-INFO     Pruning extra files from scenario ephemeral directory
+INFO    Pruning extra files from scenario ephemeral directory
 ```
 
 ## Improvements
