@@ -13,7 +13,7 @@ Through `goroutines` and `channels`, Go offers constructs for concurrent program
 
 For example, the following code performs three HTTP requests concurrently, reports back the request URL, the request response time, and its HTTP response status code for each request, and also the total time spent executing the program. In this example, the `channel` receives a string summarizing the URL, response time, and status code details for each concurrent request, while the `main` function prints each string sent to the `channel`. The code illustrates that the total time spent executing the program is less than the sum of the times spent waiting for each individual HTTP response, as the HTTP requests are performed concurrently.
 
-```go
+```go {linenos=true}
 package main
 
 import (
