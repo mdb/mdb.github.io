@@ -29,6 +29,10 @@ main {
       font-size: 90%;
     }
 
+    p strong {
+      font-weight: bold;
+    }
+
     pre {
       padding: 20px;
       margin-bottom: $big_spacer;
