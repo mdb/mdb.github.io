@@ -39,7 +39,7 @@ docker run \
   --workdir / \
   --privileged \
   --rm \
-  amidos/dcind \
+  clapclapexcitement/dind-ansible-molecule \
   /ansible-hello-world/ci/tasks/test.sh
 Starting Docker...
 waiting for docker to come up...
@@ -79,7 +79,7 @@ INFO    Pruning extra files from scenario ephemeral directory
 
 ## Improvements
 
-In current implementation, Python, Ansible, and Molecule are installed on the `amidos/dcind`-based container on each invocation of `make`. While this exercises the role's _continuous integration_ and compatibility with the latest versions of those dependencies, it's quite time consuming. To save time during test execution, these dependencies could be pre-installed on a purpose-built container image used instead of `amidos/dcind`. The `Dockerfile` for such a purpose-built image might look something like...
+~In current implementation, Python, Ansible, and Molecule are installed on the `amidos/dcind`-based container on each invocation of `make`. While this exercises the role's _continuous integration_ and compatibility with the latest versions of those dependencies, it's quite time consuming. To save time during test execution, these dependencies could be pre-installed on a purpose-built container image used instead of `amidos/dcind`. The `Dockerfile` for such a purpose-built image might look something like...~
 
 ```Dockerfile
 FROM amidos/dcind
@@ -90,6 +90,8 @@ RUN apk update && \
 RUn pip3 install --upgrade pip &&
   pip3 install ansible molecule[docker]
 ```
+
+**Update**: I've published [mdb/dind-ansible-molecule](https://github.com/mdb/dind-ansible-molecule), which has the Python, Ansible, and Molecule dependencies baked in. This blog post and the [mdb/ansible-hello-world](https://github.com/mdb/ansible-hello-world) reference example have been updated accordingly.
 
 ## Bonus: Concourse CI
 
