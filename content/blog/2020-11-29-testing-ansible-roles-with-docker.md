@@ -39,8 +39,9 @@ docker run \
   --workdir / \
   --privileged \
   --rm \
+  --tty \
   clapclapexcitement/dind-ansible-molecule \
-  /ansible-hello-world/ci/tasks/test.sh
+  molecule test
 Starting Docker...
 waiting for docker to come up...
 /ansible-hello-world /
@@ -95,7 +96,7 @@ RUn pip3 install --upgrade pip &&
 
 ## Bonus: Concourse CI
 
-See [ci/task.yml](https://github.com/mdb/ansible-hello-world/blob/main/ci/tasks/test.yml) for an example [Concourse task configuration](https://concourse-ci.org/tasks.html) that invokes the playbook and Molecule tests against a test container within a Concourse task. The task uses the same `amidos/dcind` and `ci/tasks/test.sh` script used in development.
+See [ci/task.yml](https://github.com/mdb/ansible-hello-world/blob/main/ci/tasks/test.yml) for an example [Concourse task configuration](https://concourse-ci.org/tasks.html) that invokes the playbook and Molecule tests against a test container within a Concourse task. The task uses the same `clapclapexcitement/dind-ansible-molecule` image used in development.
 
 Its use within a Concourse pipeline `pipeline.yml` configuration file might look something like this, for example:
 
