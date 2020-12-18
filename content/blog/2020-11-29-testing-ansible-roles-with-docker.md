@@ -94,6 +94,42 @@ RUn pip3 install --upgrade pip &&
 
 **Update**: I've published [mdb/dind-ansible-molecule](https://github.com/mdb/dind-ansible-molecule), which has the Python, Ansible, and Molecule dependencies baked in. This blog post and the [mdb/ansible-hello-world](https://github.com/mdb/ansible-hello-world) reference example have been updated accordingly.
 
+## A Development Environment
+
+But what about those scenarios when you're rapidly iterating on the playbook? Or even the Molecule tests?
+
+`make shell` can be used to start up a `clapclapexcitement/dind-ansible-molecule` container and pop you into an interactive `bash` shell:
+
+```text
+$ make shell
+docker run \
+  --volume /Users/mball0001/git/ansible-hello-world:/ansible-hello-world \
+  --workdir /ansible-hello-world \
+  --privileged \
+  --interactive \
+  --tty \
+  --rm \
+  clapclapexcitement/dind-ansible-molecule \
+    /bin/bash
+Starting Docker...
+waiting for docker to come up...
+bash-5.0#
+```
+
+From here, `molecule` commands like `molecule create`, `molecule converge`, and `molecule verify` can be invoked without having to fully tear down and rebuild the Docker-in-Docker container with each invocation; the testing container is left running between invocations:
+
+```text
+bash-5.0# docker ps
+CONTAINER ID  IMAGE                                                        COMMAND                 CREATED             STATUS         PORTS  NAMES
+4ea283fec6fe  molecule_local/geerlingguy/docker-ubuntu1804-ansible:latest  "/lib/systemd/systemd"  About a minute ago  Up 36 seconds         instance
+```
+
+In addition to enabling faster, more frequent playbook edits and feedback from `molecule` commands, this is also helpful in those scenarios where you may want to shell into the test container to poke around and troubleshoot via `docker exec`:
+
+```text
+docker exec -it <CONTAINER_ID> /bin/bash
+```
+
 ## Bonus: Concourse CI
 
 See [ci/task.yml](https://github.com/mdb/ansible-hello-world/blob/main/ci/tasks/test.yml) for an example [Concourse task configuration](https://concourse-ci.org/tasks.html) that invokes the playbook and Molecule tests against a test container within a Concourse task. The task uses the same `clapclapexcitement/dind-ansible-molecule` image used in development.
