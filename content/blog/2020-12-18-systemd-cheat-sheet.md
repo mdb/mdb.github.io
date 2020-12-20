@@ -9,14 +9,14 @@ thumbnail: crowded_park_thumb.png
 teaser: A personal systemd overview and cheat sheet
 ---
 
-_Generally speaking, `systemd` is the standard init system standard across Linux
-distributions. `systemctl` is the central CLI management tool for for
-interacting with `systemd`. This is a brief overview and cheat sheet._
+_Generally, `systemd` is the standard init system across Linux
+distributions. `systemctl` is its central CLI management tool.
+This is a brief overview and cheat sheet._
 
 ## Background
 
 * `systemd` is responsible for initializing and managing components, services,
-and daemons that must be started after the kernel is booted. Such componetns
+and daemons that must be started after the kernel is booted. Such components
 are often referred to as "userland" components.
 * resources managed by `systemd` are called _units_; these are defined in unit
 files
@@ -35,7 +35,7 @@ focuses on `.service` units, though)
 * `systemctl reload something.service` - reload a service's configuration
 without restarting the service, assuming the service is capable of this
 * `systemctl reload-or-restart something.service` - reload a service's
-configuration in place, if it's capable of doing so (otherwise, restart the
+configuration in place, if the service is capable of doing so (otherwise, restart the
 service to pick up the new configuration)
 * `systemctl daemon-reload` reloads the entire `systemd` process
 
@@ -58,6 +58,8 @@ service in the current session; that still requires a `start`)
 * `systemctl list-units` - lists active units
 * `systemctl list-units --all --state=active` - lists all active units
 
+(Other options exist too.)
+
 ## Learning more about a unit's details
 
 * `systemctl cat something.service` - output the service's unit files
@@ -69,7 +71,7 @@ service in the current session; that still requires a `start`)
 * unit files usually live in `/lib/systemd/system`
 * `.conf` files in `.d` directories like `/etc/systemd/system/something.service.d` containing "snippets" are merged on load with a unit definition to override or extend the unit definition with the "snippet"
 * `.service` unit files in `/etc/systemd/system` completely override the unit definition usually found in `/lib/systemd/system`
-* [Understanding systemd Units and Unit Files](https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files) offers a detailed overview of unit files
+* [Understanding systemd Units and Unit Files](https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files) offers a detailed overview of unit file "anatomy"
 
 A very basic example:
 
