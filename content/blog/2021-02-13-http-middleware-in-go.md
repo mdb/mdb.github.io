@@ -64,4 +64,4 @@ func WrappedHandler(handler http.Handler) http.Handler {
 
 [Concourse pull request 5897](https://github.com/concourse/concourse/pull/5897/files) introduces what is perhaps a more realistic example via its [token.StoreAccessToken](https://github.com/concourse/concourse/pull/5897/files#diff-47f1a1fcbe74de4be3af39c657cec8111bcc235be0ca43b1c076f3a460585136R38) function.
 
-`token.StoreAccessToken` provides middleware that records `/sky/issuer/token` requests' response from a [dex](https://github.com/concourse/dex/) `server.Server` and modifies the `access_token` field in its JSON response body.
+`token.StoreAccessToken` provides middleware that records `/sky/issuer/token` requests' response from a [dex](https://github.com/concourse/dex/) `server.Server` and does some stuff with its HTTP response, including storing some of the response data in the Concourse database, as well as modifying the `access_token` field in its JSON response body.
