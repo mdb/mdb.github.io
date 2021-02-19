@@ -12,7 +12,7 @@ _A technique for creating "post-process" HTTP middleware in Go._
 
 ## Problem
 
-You need to add a bit of extra "post-process" functionality or logic beyond what an existing [http.Handler](https://golang.org/pkg/net/http/#Handler) offers, but don't have the ability to modify the existing handler, perhaps because it's provided by a third party package.
+You need to add a bit of extra "post-process" functionality or logic beyond what an existing [http.Handler](https://golang.org/pkg/net/http/#Handler) offers, but don't have the ability to modify the existing handler, perhaps because it's provided by a third party package. For example, how might you add an HTTP response header to the handler's HTTP response before the response is sent to the client?
 
 While the [http.Handler wrapper technique](https://medium.com/@matryer/the-http-handler-wrapper-technique-in-golang-updated-bc7fbcffa702) is commonly utilized to invoke code before and/or after invoking an `http.Handler`'s `ServeHTTP`, method, it doesn't enable post-processing the `http.Handler`'s handling of the `http.ResponseWriter`.
 
