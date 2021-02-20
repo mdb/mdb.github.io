@@ -239,7 +239,7 @@ http://github.com/mdb    0.93s   200
 Total time: 0.93s
 ```
 
-Note that the program's total execution time of 2.23s is _less than_ the sum of the times consumed by each HTTP request.
+Note that the program's total execution time of 0.93s is _less than_ the sum of the times consumed by each HTTP request.
 
 ## A real world example
 
