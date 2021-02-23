@@ -256,4 +256,44 @@ gossboss healthzs \
 ✔ http://another-goss-server/healthz
 ```
 
-`gossboss` fetches the test results concurrently, as its [`gossboss.Client#CollectHealthzs`](https://github.com/mdb/gossboss/blob/main/client.go#L53) method leverages a channel and goroutines.
+`gossboss` fetches the test results concurrently, as its [`gossboss.Client#CollectHealthzs`](https://github.com/mdb/gossboss/blob/main/client.go#L53) method leverages a channel and goroutines:
+
+```golang
+func (c *Client) CollectHealthzs(urls []string) *Healthzs {
+	hzs := &Healthzs{
+		Summary: &Summary{
+			Failed:  0,
+			Errored: 0,
+		},
+	}
+	ch := make(chan *Healthz)
+
+	for _, url := range urls {
+		go c.collectHealthz(url, ch)
+	}
+
+	// wait until all goss server test
+	// results have been collected.
+	for {
+		hz := <-ch
+		hzs.Healthzs = append(hzs.Healthzs, hz)
+
+		if hz.Error == nil && hz.Result.Summary.Failed != 0 {
+			hzs.Summary.Failed += hz.Result.Summary.Failed
+		}
+
+		if hz.Error != nil {
+			hzs.Summary.Errored++
+		}
+
+		if len(hzs.Healthzs) == len(urls) {
+			close(ch)
+			break
+		}
+	}
+
+	return hzs
+}
+```
+
+For more insight on implementation details, check out [github.com/mdb/gossboss](https://github.com/mdb/gossboss). Do you have some ideas for how `gossboss` could be improved? Create a pull request.
