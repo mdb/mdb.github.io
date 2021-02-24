@@ -28,7 +28,7 @@ For example:
 ```golang
 chan Foo      // can be used to send & receive values of type Foo
 chan<- string // send only; can be used to send strings
-<-chan string // receive only; can be used to receive ints
+<-chan int    // receive only; can be used to receive ints
 ```
 
 So, to elaborate:
