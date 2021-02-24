@@ -15,7 +15,7 @@ _Some introductory notes on Go concurrency, goroutines, and channels, largely se
 
 Normally, calling a function &mdash; `foo()`, for example &mdash; is a _blocking_ operation. This means that program execution waits for it to finish before proceeding.
 
-However, invoking a function with the `go` keyword &mdash; `go foo()`, for example &mdash; is _non-blocking_. When invoked as `go foo()`, Go runs `foo()` in a separate process. The separate process is called a _goroutine_. The original Go process &mdash; the one Go creates when operating on a program's `main` function &mdash; is called the _main goroutine_. In this case, when `foo` is invoked as `go foo()`, the main goroutine does not wait for `foo()` to finish; it proceeds, as `foo()` runs _concurrently_ in a separate _goroutine_.
+However, invoking a function with the `go` keyword &mdash; `go foo()`, for example &mdash; is _non-blocking_. When invoked as `go foo()`, Go runs `foo()` as a separate task managed by Go. The separate task is called a [_goroutine_](https://golang.org/doc/effective_go#goroutines). The original Go task &mdash; the one Go creates when operating on a program's `main` function &mdash; is called the _main goroutine_. In this case, when `foo` is invoked as `go foo()`, the main goroutine does not wait for `foo()` to finish; it proceeds, as `foo()` runs _concurrently_ in a separate _goroutine_.
 
 ## Channels
 
