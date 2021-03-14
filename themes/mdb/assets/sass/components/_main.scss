@@ -3,6 +3,7 @@ main {
 
   article {
     header {
+      width: auto;
       margin: 0;
       padding: 0;
 
@@ -34,7 +35,7 @@ main {
       font-size: 90%;
     }
 
-    p strong {
+    strong {
       font-weight: bold;
     }
 
@@ -55,6 +56,30 @@ main {
           font-family: inherit;
           font-size: 100%;
         }
+      }
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: $divider;
+
+      th, td {
+        border: $divider;
+        padding: 10px;
+        text-align: left;
+        font-size: 150%;
+
+        code {
+          font-size: 100%;
+        }
+      }
+
+      th {
+        font-weight: bold;
+      }
+
+      td {
       }
     }
 
