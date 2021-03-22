@@ -8,13 +8,19 @@ thumbnail: zig_zag_thumb.jpg
 teaser: A brief, beginners' guide and cheat sheet to Unix file permissions.
 ---
 
-_Unix file permissions are abstract and can be confusing, especially for those who aren't immersed in the surrounding concepts on a daily basis. This is a basic introduction and cheat sheet._
+_Unix file permissions can be strange and confusing. This is a basic introduction and cheat sheet._
 
-`ls -l file.txt` shows you `file.txt`'s permissions, among other things. But what does this stuff mean?
+`ls -l file.txt` shows you `file.txt`'s _permissions_, among other things:
 
 ```txt
--rw-r--r--  1 mike  staff  804 Nov  1 20:09 file.txt
+-rw-r--r--  1 mike  staff  0 Nov 1 20:09 file.txt
 ```
+
+But what does this stuff mean?
+
+The file name -- `file.txt` -- is reported on the far right. To its left, `ls` reports the date and time when `file.txt` was last modified: `Nov 1 20:09`. To the left of this, `file.txt`'s size -- `0` -- is shown in bytes. To its left, `staff` is the group that can access `file.txt` and `mike` is the file's owner. The `1` to the left of `mike` represents `file.txt`'s [hard link](https://en.wikipedia.org/wiki/Hard_link) count.
+
+Let's focus on the first column, though.
 
 The first column -- `-rw-r--r--` -- represents the permissions access modes associated with `file.txt`.
 
@@ -24,16 +30,16 @@ In Unix-based operating systems, there are 3 things that can be done to a file:
 2. `w`rite to it and/or modify its content (represented by a `w`)
 3. e`x`ecute it, as done when running a program (represented by a `x`)
 
-Every file has attributes associated with...
+Every file has permissions attributes associated with...
 
-1. owner permissions - What actions can the owner perform on the file?
-2. group permissions - What actions can a user who is a member of a group that a file belongs to perform on the file?
-3. other (world) permissions - What actions can all other users perform on the file?
+1. owner - What actions can the owner perform on the file?
+2. group - What actions can a user who is a member of a group that a file belongs to perform on the file?
+3. other (world) - What actions can all other users perform on the file?
 
 Let's examine `ls -l file.txt`'s output again:
 
 ```txt
--rw-r--r--  1 mike  staff  804 Nov  1 20:09 file.txt
+-rw-r--r--  1 mike  staff  0 Nov 1 20:09 file.txt
 ```
 
 `file.txt`'s access modes -- `-rw-r--r--` -- can be subdivided into three groups of three, where each character in each group represents permissions pertaining to (1) the owner (the first group of three characters), (2) the group (the second group of three characters), and (3) the world (the third group of three characters):
@@ -98,8 +104,7 @@ In contrast to symbolic mode, absolute mode allows the use of `chmod` with an oc
 For example, let's review the original permissions on `file.txt`:
 
 ```txt
-ls -l file.txt
--rw-r--r--  1 mike  staff  804 Nov  1 20:09 file.txt
+-rw-r--r--  1 mike  staff  0 Nov 1 20:09 file.txt
 ```
 
 Expressed as octal notation, `file.txt`'s permissions are `644`:
