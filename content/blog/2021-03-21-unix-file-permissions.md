@@ -119,5 +119,5 @@ To change `file.txt`'s permissions and add write access to the group (`staff`):
 chmod 664 file.txt
 
 ls -l file.txt
--rw-rw-r--  1 mike  staff  804 Nov  1 20:09 file.txt
+-rw-rw-r--  1 mike  staff  0 Nov 1 20:10 file.txt
 ```
