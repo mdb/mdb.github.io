@@ -48,7 +48,7 @@ block        - stack traces that led to blocking on synchronization primitives
 mutex        - stack traces of holders of contended mutexes
 ```
 
-Each of these pre-defined profiles has its own endpoint in the default `pprof` web server; `go tool pprof` can be used to analyze each. Again, these are profiles are collections of stacktraces, sometimes with some metadata attached:
+Each of these pre-defined profiles has its own endpoint in the default `pprof` web server; `go tool pprof` can be used to analyze each. Again, these profiles are collections of stacktraces, sometimes with some metadata attached:
 
 * `http://localhost:6060/debug/pprof/goroutine`
 * `http://localhost:6060/debug/pprof/heap`
@@ -156,13 +156,17 @@ Julia Evans provides a [good overview of pprof files](https://jvns.ca/blog/2017/
 
 ## Working with traces
 
-As noted earlier `/debug/pprof/trace?seconds=5` outputs a file that is _not_ a `pprof` profile but is instead a _trace_. It can be viewed via `go tool trace`.
+As noted earlier `/debug/pprof/trace?seconds=5` outputs a file that is _not_ a `pprof` profile but is instead a _trace_. It can be viewed via `go tool trace`. `go tool trace --help` is also worth a read. [GopherAcademy's Go Execution Tracer](https://blog.gopheracademy.com/advent-2017/go-execution-tracer/) is a bit old, but is also a helpful introduction to Go traces.
 
 To get a trace dump and save it to a `localdump` file:
 
 ```text
 wget http://localhost:8082/debug/pprof/trace\?seconds\=10 -O localdump
 ```
+
+According to [the docs](https://golang.org/pkg/runtime/trace/), a trace...
+
+> captures a wide range of execution events such as goroutine creation/blocking/unblocking, syscall enter/exit/block, GC-related events, changes of heap size, processor start/stop, etc.
 
 The trace dump can be inspected by starting a web server:
 
@@ -175,8 +179,8 @@ go tool trace localdump
 
 While sometimes a bit difficult to interpret, the trace viewer offers a few pages and diagrams for analyzing the trace dump:
 
-* `/trace` - a tool for viewing the trace
-* `/goroutines` - shows goroutine analysis. This view allows us to drill into an analysis of specific goroutines, their execution time, and other profiling traits of note.
+* `/trace` - a tool for viewing the trace, visualizing the complete timeline of program execution.
+* `/goroutines` - shows an analysis of how many of each kind of goroutine created during execution. This view allows viewers to drill into an analysis of specific goroutines, their execution time, time spent being blocked, and other profiling traits of note.
 * `/io` - download a network blocking profile. This view shows where the program is waiting on network I/O.
 * `/block` - download a synchronization blocking profile. This shows mutex contention if such contention exists in the program.
 * `/syscall` - download a syscall blocking profile. This shows where the program is waiting for the OS. Writing to a log file might appear here, for example.
