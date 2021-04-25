@@ -57,7 +57,7 @@ By adopting the use of named Terraform workspaces when applying a Terraform conf
 
 ### 3. Code DRY-ness
 
-Additionally, Terraform workspaces arguably reduce the need to repeat Terraform configuration for each environment. Instead, a single Terraform configuration can be applied against multiple workspaces; it's not necessary to repeat the configuration across multiple, per-environment directories and/or module instantiations. It's also no longer necessary to declare and use a `var.environment` variable; `terraform.workspace` can be used intead.
+Additionally, Terraform workspaces arguably reduce the need to repeat Terraform configuration for each environment. Instead, a single Terraform configuration can be applied against multiple workspaces. Through the use of workspaces, it's not necessary to maintain per-environment directories and/or multiple, repetitive, per-environment module instantiations. The use of workspaces also reduces the need to use a `var.environment` variable; `terraform.workspace` can be used intead.
 
 ## Workspace naming
 
