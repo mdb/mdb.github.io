@@ -9,7 +9,9 @@ thumbnail: terraform_thumb.png
 teaser: Terraform workspaces, their arguable advantages, and some thoughts on naming convention.
 ---
 
-_Terraform workspaces, their arguable advantages, and some thoughts on naming convention._
+**Problem**: How can a single Terraform configuration be used to manage resources across multiple environments or distinct, logical groupings of resources? What are techniques for adequately isolating Terraform actions against one environment or logical resource grouping such that other environments or groupings aren't inadvertently modified?
+
+**Solution**: Consider the use of sufficiently granular and descriptively named Terraform [_workspaces_](https://www.terraform.io/docs/state/workspaces.html).
 
 ## Introduction to Terrraform workspaces
 
@@ -19,13 +21,18 @@ According to the Terraform documentation:
 
 > Each Terraform configuration has an associated [backend](https://www.terraform.io/docs/backends/index.html) that defines how operations are executed and where persistent data such as [the Terraform state](https://www.terraform.io/docs/state/purpose.html) are stored.
 
-Terraform's built-in concept of _workspaces_ is often overlooked in favor of homegrown patterns. Usually, these homegrown techniques are understandably focused on isolating "production" environment resources from other, non-production environment resources, such as "development" and/or "staging" resources. For example, it's common practice to separate Terraform configurations across directories within a code repository, each of which pertains to a named environment, has its own state, and can by applied independently. Similarly, it's also common to adopt the use of a Terraform `var.environment` variable to apply different configuration based on the `environment` variable's value.
+> Workspaces are managed with the `terraform workspace` set of commands. To create a new workspace and switch to it, you can use `terraform workspace new`; to switch workspaces you can use `terraform workspace select`; etc.
 
-However, depending on perspective, Terraform's built-in concept of _workspaces_ may offer advantages over homegrown techniques for isolating logical groupings of Terraform resources across environments. A few arguably distinct advantages include:
+Despite that named workspaces "allow conveniently switching between multiple instances of a single configuration," the use of workspaces is often overlooked in favor of homegrown patterns. For example, it's common practice to separate Terraform configurations across directories within a code repository, each of which pertains to a named environment (`production`, `development`, etc.), has its own state, and can by applied independently. Similarly, it's also common to adopt the use of a Terraform `var.environment` variable to apply different configuration based on the `var.environment` variable's value.
+
+However, depending on perspective, Terraform's built-in concept of workspaces may offer advantages over homegrown techniques for isolating logical groupings of Terraform resources across environments.
+
+Specifically, a few arguable advantages of workspaces include:
 
 1. Out of the box state isolation
 2. The creation and management of infinite new environments is relatively low effort
 3. DRY-ness
+4. Low effort feature flag capabilities
 
 ### 1. Out of the box state isolation
 
@@ -43,29 +50,46 @@ terraform {
 }
 ```
 
-...Terraform will automatically create a unique, independent per-workspace `terraform.tfstate` file in S3 at a workspace-specific path:
+Terraform automatically creates a unique, isolated per-workspace `terraform.tfstate` file in S3 at each named workspace-specific path:
 
 ```txt
 my-team-state/:env/${workspace name}/my-service/terraform.tfstate
 ```
 
+(If no named workspace is explicitly selected via `terraform workspace select ${workspace}`, Terraform uses the `default` workspace and its corresponding `my-team-state/:env/default/my-service/terraform.tfstate` S3 path.)
+
 Through the use of workspaces, Terraform offers out-of-the-box state isolation; it's not necessary to explicitly declare multiple, per-environment state backend configurations. The use of workspaces also ensure it's less likely the application of one workspace's configuration will impact another workspace's resources and/or state.
 
 ### 2. The creation and management of infinite new environments is relatively low effort
 
-By adopting the use of named Terraform workspaces when applying a Terraform configuration, the configuration can be applied against an infinite number of unique, isolated workspaces. In effect, the use of Terraform workspaces makes it less necessary to initially know and declare a finite number of environments -- `production`, `staging`, and `dev`, for example -- and empowers the low effort management of an infinite number of far more granular environments. Most notably in my experience, this may include short-lived and ephemeral environments, as might be helpful in development or when performing A/B tests or canary rollouts.
+By adopting the use of named Terraform workspaces when applying a Terraform configuration, the configuration can be applied against an infinite number of unique, isolated workspaces. In effect, the use of Terraform workspaces makes it less necessary to initially know and declare a finite number of environments -- `production`, `staging`, and `dev`, for example -- and empowers the low effort management of an infinite number of far more granular parallel environments. Most notably in my experience, this may include short-lived and ephemeral environments, as might be helpful in development or when performing A/B tests or canary rollouts.
 
 ### 3. Code DRY-ness
 
 Additionally, Terraform workspaces arguably reduce the need to repeat Terraform configuration for each environment. Instead, a single Terraform configuration can be applied against multiple workspaces. Through the use of workspaces, it's not necessary to maintain per-environment directories and/or multiple, repetitive, per-environment module instantiations. The use of workspaces also reduces the need to use a `var.environment` variable; `terraform.workspace` can be used intead.
 
+### 4. Low effort feature flag capabilities
+
+Terraform workspaces also offer a mechanism through which conditional logic can enable or disable certain infrastructure features or attributes based on the workspace.
+
+For example, the following Terraform only creates a `aws_s3_bucket.my_bucket` resource when applied against the `dev` workspace:
+
+```hcl
+resource "aws_s3_bucket" "my_bucket" {
+  count  = terraform.workspace == "dev" ? 1 : 0
+  bucket = "my-bucket"
+}
+```
+
+Workspace-based feature flags can be particularly useful when incrementally deploying features across workspaces in a [canary](https://martinfowler.com/bliki/CanaryRelease.html) fashion. By enabling "[NOOP](https://en.wikipedia.org/wiki/NOP_(code))" code changes, workspace-based feature flags may also be helpful when practicing a model of [continuous delivery](https://en.wikipedia.org/wiki/Continuous_delivery) in which small, iterative changes to Terraform configuration are frequently introduced to a repository's main branch and continuously applied.
+
 ## Workspace naming
 
-By default, when no explicit workspace is used, Terraform uses a `default` workspace, as is explained by Terraform's documentation:
+When no explicitly named workspace is selected via `terraform workspace select`, Terraform uses a `default` workspace, as is explained by Terraform's documentation:
 
 > The persistent data stored in the backend belongs to a _workspace_. Initially the backend has only one workspace, called “default”, and thus there is only one Terraform state associated with that configuration.
 
-However, because the use of non-`default`, explicitly named Terraform workspaces enables more granular resource groupings and associated state, a team's Terraform actions can safely and easily target subsets of Terraform-managed infrastructure without broader impact. The `terraform.workspace` can also be used -- often in alternative to a `var.environment` -- to uniquely name and tag Terraform-managed resources. This further ensures workspace resource isolation, makes infrastructure self-descriptive, and also makes cloud resources queryable across workspace names.
+However, because the use of non-`default` named workspaces enables more granular resource groupings and associated state, a configuration's Terraform actions can safely and easily target subsets of Terraform-managed infrastructure without broader impact. The `terraform.workspace` can also be used -- often in alternative to a `var.environment` -- to uniquely name and tag Terraform-managed resources. This further ensures workspace resource isolation, makes infrastructure self-descriptive, and also makes cloud resources queryable across workspace names.
 
 Ideally, a workspace name should be sufficiently descriptive of the collection of resources associated with the workspace. But how?
 
