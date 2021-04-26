@@ -9,9 +9,9 @@ thumbnail: terraform_thumb.png
 teaser: Terraform workspaces, their arguable advantages, and some thoughts on naming convention.
 ---
 
-**Problem**: How can a single Terraform configuration be used to manage resources across multiple environments or distinct, logical groupings of resources? What are techniques for adequately isolating Terraform actions against one environment or logical resource grouping such that other environments or groupings aren't inadvertently modified?
+**Problem**: How can a single [Terraform](https://terraform.io) configuration be used to manage resources across multiple parallel environments or distinct, logical groupings of resources? What are techniques for adequately isolating Terraform actions against one environment or logical resource grouping such that other environments or groupings aren't inadvertently modified?
 
-**Solution**: Consider the use of sufficiently granular and descriptively named Terraform [_workspaces_](https://www.terraform.io/docs/state/workspaces.html).
+**Solution**: Sufficiently granular and descriptively named Terraform [_workspaces_](https://www.terraform.io/docs/state/workspaces.html) may help.
 
 ## Introduction to Terrraform workspaces
 
@@ -30,9 +30,9 @@ However, depending on perspective, Terraform's built-in concept of workspaces ma
 Specifically, a few arguable advantages of workspaces include:
 
 1. Out of the box state isolation
-2. The creation and management of infinite new environments is relatively low effort
-3. DRY-ness
-4. Low effort feature flag capabilities
+2. Creating and managing infinite new environments is relatively low effort
+3. Code DRY-ness and simplicity
+4. Simple feature flag capabilities
 
 ### 1. Out of the box state isolation
 
@@ -60,15 +60,15 @@ my-team-state/:env/${workspace name}/my-service/terraform.tfstate
 
 Through the use of workspaces, Terraform offers out-of-the-box state isolation; it's not necessary to explicitly declare multiple, per-environment state backend configurations. The use of workspaces also ensure it's less likely the application of one workspace's configuration will impact another workspace's resources and/or state.
 
-### 2. The creation and management of infinite new environments is relatively low effort
+### 2. Creating and managing infinite new environments is relatively low effort
 
 By adopting the use of named Terraform workspaces when applying a Terraform configuration, the configuration can be applied against an infinite number of unique, isolated workspaces. In effect, the use of Terraform workspaces makes it less necessary to initially know and declare a finite number of environments -- `production`, `staging`, and `dev`, for example -- and empowers the low effort management of an infinite number of far more granular parallel environments. Most notably in my experience, this may include short-lived and ephemeral environments, as might be helpful in development or when performing A/B tests or canary rollouts.
 
-### 3. Code DRY-ness
+### 3. Code DRY-ness and simplicity
 
 Additionally, Terraform workspaces arguably reduce the need to repeat Terraform configuration for each environment. Instead, a single Terraform configuration can be applied against multiple workspaces. Through the use of workspaces, it's not necessary to maintain per-environment directories and/or multiple, repetitive, per-environment module instantiations. The use of workspaces also reduces the need to use a `var.environment` variable; `terraform.workspace` can be used intead.
 
-### 4. Low effort feature flag capabilities
+### 4. Simple feature flag capabilities
 
 Terraform workspaces also offer a mechanism through which conditional logic can enable or disable certain infrastructure features or attributes based on the workspace.
 
