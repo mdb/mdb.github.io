@@ -106,7 +106,7 @@ In basic scenarios, workspace names mapping to logical environments may suffice.
 
 But what about more advanced scenarios? For example, what about scenarios where a `prod` environment consists of resources across multiple AWS regions, each of which should be applied in isolation? Or even across multiple cloud providers, each of which should be applied in isolation? Or what about when an environment consists of independent `blue` and `green` stacks in the case of a [blue/green deployment](https://martinfowler.com/bliki/BlueGreenDeployment.html)? Or an independent [canary stack](https://martinfowler.com/bliki/CanaryRelease.html) in the case of an incremental rampup-style deployment? How can Terraform actions target subsets of complex infrastructure landscapes, ensuring against scenarios where a problematic Terraform action has broad reach beyond its intended field of impact?
 
-For these more advanced landscapes, a logical environment (prod, staging, etc.) may consist of _multiple_, independent workspaces, each of which maps to its own, independent state. For such scenarios, I've often recommended the adoption of a more advanced, multi-part workspace-naming convention:
+For these more advanced landscapes, a logical environment (`prod`, `staging`, etc.) may consist of _multiple_, independent workspaces, each of which maps to its own, independent state. For such scenarios, I've often adopted a more advanced, multi-part workspace-naming convention:
 
 ```txt
 ${env}-${provider}-${region}-${an optional unique identifier if necessary}
@@ -129,7 +129,7 @@ ${env}-${provider}-${region}-${an optional unique identifier if necessary}
 
 ## Examples in use
 
-In addition to empowering the ability to execute Terraform actions against a targeted subset of infrastructure without broader impact, sufficiently granular workspace naming also enables per-workspace variables and configuration differences.
+In addition to empowering the ability to execute Terraform actions against a targeted subset of infrastructure without broader impact, sufficiently granular workspace naming also enables per-workspace variables and more targeted configuration differences.
 
 ### Per-workspace variable values
 
@@ -158,7 +158,7 @@ resource "aws_db_instance" "rds" {
 
 ### Per-env variable values
 
-But isn't that a lot of variable repetition for scenarios where `rds_instance_class` is the same across all `prod-*` workspaces? For such scenarios, the use of a [Terraform local](https://www.terraform.io/docs/configuration/locals.html) to select the `env` from the workspace enables some DRY-ness.
+But isn't that a lot of variable repetition for scenarios where `rds_instance_class` is the same across all `prod-*` workspaces? The use of a [Terraform local](https://www.terraform.io/docs/configuration/locals.html) to select the `env` from the multi-part workspace name enables DRY-ness.
 
 For example, to an extract a `local.env` from the `terraform.workspace`:
 
