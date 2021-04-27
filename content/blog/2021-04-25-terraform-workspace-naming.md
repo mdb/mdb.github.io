@@ -23,7 +23,7 @@ According to the Terraform documentation:
 
 > Workspaces are managed with the `terraform workspace` set of commands. To create a new workspace and switch to it, you can use `terraform workspace new`; to switch workspaces you can use `terraform workspace select`; etc.
 
-Despite that named workspaces "allow conveniently switching between multiple instances of a single configuration," the use of workspaces is often overlooked in favor of homegrown patterns. For example, it's common practice to separate Terraform configurations across directories within a code repository, each of which pertains to a named environment (`production`, `development`, etc.), has its own state, and can by applied independently. Similarly, it's also common to adopt the use of a Terraform `var.environment` variable to apply different configuration based on the `var.environment` variable's value.
+Despite that named workspaces "allow conveniently switching between multiple instances of a single configuration," the use of workspaces is often overlooked in favor of homegrown patterns. For example, it's common practice to separate Terraform configurations across directories within a code repository, where each directory's `*.tf` contents pertains to a named environment (`production`, `development`, etc.), has its own state, and can by applied independently. Similarly, it's also common to adopt the use of a Terraform `var.environment` variable to apply different configuration based on the `var.environment` variable's value.
 
 However, depending on perspective, Terraform's built-in concept of workspaces may offer advantages over homegrown techniques for isolating logical groupings of Terraform resources across environments.
 
