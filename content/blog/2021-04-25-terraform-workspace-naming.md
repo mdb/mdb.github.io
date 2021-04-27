@@ -9,7 +9,7 @@ thumbnail: terraform_thumb.png
 teaser: Terraform workspaces, their arguable advantages, and some thoughts on naming convention.
 ---
 
-**Problem**: How can a single [Terraform](https://terraform.io) configuration be used to manage resources across multiple parallel environments or distinct, logical groupings of resources? What are techniques for adequately isolating Terraform actions against one environment or logical resource grouping such that other environments or groupings aren't inadvertently modified?
+**Problem**: In distributed software engineering, it's common to maintain multiple named _environments_, each of which is a distinct, logical grouping of infrastructure resources. For example, utilizing separate `production` and `pre-production` environments (`staging`, `development`, etc.) is a traditional multi-tiered environment strategy in structuring a phased software build, test, and release lifecycle (or even a phased approach in deploying the software _infrastructure_ itself). But how can a single [Terraform](https://terraform.io) configuration be used to safely manage infrastructure resources spanning multiple parallel environments? What are techniques for adequately isolating Terraform actions against one environment such that other environments aren't inadvertently modified? How might the traditional, somewhat coarse-grained multi-tiered environment structure present Terraform management challenges in some circumstances?
 
 **Solution**: Sufficiently granular and descriptively named Terraform [_workspaces_](https://www.terraform.io/docs/state/workspaces.html) may help.
 
@@ -50,7 +50,7 @@ terraform {
 }
 ```
 
-Terraform automatically creates a unique, isolated per-workspace `terraform.tfstate` file in S3 at each named workspace-specific path:
+...Terraform automatically creates a unique, isolated per-workspace `terraform.tfstate` file in S3 at each named workspace-specific path:
 
 ```txt
 my-team-state/:env/${workspace name}/my-service/terraform.tfstate
@@ -62,11 +62,11 @@ Through the use of workspaces, Terraform offers out-of-the-box state isolation; 
 
 ### 2. Creating and managing infinite new environments is relatively low effort
 
-By adopting the use of named Terraform workspaces when applying a Terraform configuration, the configuration can be applied against an infinite number of unique, isolated workspaces. In effect, the use of Terraform workspaces makes it less necessary to initially know and declare a finite number of environments -- `production`, `staging`, and `dev`, for example -- and empowers the low effort management of an infinite number of far more granular parallel environments. Most notably in my experience, this may include short-lived and ephemeral environments, as might be helpful in development or when performing A/B tests or canary rollouts.
+By adopting the use of named Terraform workspaces when applying a Terraform configuration, the configuration can be applied against an infinite number of unique, isolated workspaces. In effect, the use of Terraform workspaces makes it less necessary to initially know and declare a finite number of environments -- `production`, `staging`, and `dev`, for example -- and empowers the low effort management of an infinite number of far more granular parallel environments. This may be particularly beneficial in facilitating the management of short-lived and ephemeral environments, as might be helpful in development or when performing A/B tests, progressive rollouts, or even incremental infrastructure migrations.
 
 ### 3. Code DRY-ness and simplicity
 
-Additionally, Terraform workspaces arguably reduce the need to repeat Terraform configuration for each environment. Instead, a single Terraform configuration can be applied against multiple workspaces. Through the use of workspaces, it's not necessary to maintain per-environment directories and/or multiple, repetitive, per-environment module instantiations. The use of workspaces also reduces the need to use a `var.environment` variable; `terraform.workspace` can be used intead.
+Additionally, Terraform workspaces arguably reduce the need to repeat Terraform configuration for each environment. Instead, a single Terraform configuration can be applied against multiple workspaces. Through the use of workspaces, it's not necessary to maintain per-environment directories and/or multiple, repetitive, per-environment module instantiations or state backend configurations. The use of workspaces also reduces the need to use a `var.environment` variable; `terraform.workspace` can be used intead. In this sense, the use of Terraform workspaces may reduce code complixity, redundant configurations, and thereby maintenance challenges.
 
 ### 4. Simple feature flag capabilities
 
@@ -83,30 +83,32 @@ resource "aws_s3_bucket" "my_bucket" {
 
 Workspace-based feature flags can be particularly useful when incrementally deploying features across workspaces in a [canary](https://martinfowler.com/bliki/CanaryRelease.html) fashion. By enabling "[NOOP](https://en.wikipedia.org/wiki/NOP_(code))" code changes, workspace-based feature flags may also be helpful when practicing a model of [continuous delivery](https://en.wikipedia.org/wiki/Continuous_delivery) in which small, iterative changes to Terraform configuration are frequently introduced to a repository's main branch and continuously applied.
 
-## Workspace naming
+While such feature flagging capabilities are certainly possible without utilizing Terraform workspaces, workspaces may prove helpful in facilitating a relatively simple implementation pattern.
+
+## How should workspaces be modeled and named?
 
 When no explicitly named workspace is selected via `terraform workspace select`, Terraform uses a `default` workspace, as is explained by Terraform's documentation:
 
 > The persistent data stored in the backend belongs to a _workspace_. Initially the backend has only one workspace, called “default”, and thus there is only one Terraform state associated with that configuration.
 
-However, because the use of non-`default` named workspaces enables more granular resource groupings and associated state, a configuration's Terraform actions can safely and easily target subsets of Terraform-managed infrastructure without broader impact. The `terraform.workspace` can also be used -- often in alternative to a `var.environment` -- to uniquely name and tag Terraform-managed resources. This further ensures workspace resource isolation, makes infrastructure self-descriptive, and also makes cloud resources queryable across workspace names.
+However, because the use of non-`default` and explicitly named workspaces enables more granular resource groupings and associated state, a configuration's Terraform actions can safely and easily target subsets of Terraform-managed infrastructure without broader impact. The `terraform.workspace` can also be used -- often in alternative to a `var.environment` -- to uniquely name and tag Terraform-managed resources. This further ensures workspace resource isolation, makes infrastructure self-descriptive, and also makes cloud resources queryable across workspace names.
 
-Ideally, a workspace name should be sufficiently descriptive of the collection of resources associated with the workspace. But how?
+So, ideally, workspace names should be sufficiently descriptive of the collection of resources associated with the workspace. But how?
 
 ## Basic naming convention
 
-In basic scenarios, workspace names mapping to logical environments may suffice. For example:
+In basic scenarios, workspace names mapping to traditional, multi-tiered environments may suffice. For example:
 
 * `pull-request`
-* `dev`
+* `development`
 * `staging`
-* `prod`
+* `production`
 
 ## Advanced naming convention
 
-But what about more advanced scenarios? For example, what about scenarios where a `prod` environment consists of resources across multiple AWS regions, each of which should be applied in isolation? Or even across multiple cloud providers, each of which should be applied in isolation? Or what about when an environment consists of independent `blue` and `green` stacks in the case of a [blue/green deployment](https://martinfowler.com/bliki/BlueGreenDeployment.html)? Or an independent [canary stack](https://martinfowler.com/bliki/CanaryRelease.html) in the case of an incremental rampup-style deployment? How can Terraform actions target subsets of complex infrastructure landscapes, ensuring against scenarios where a problematic Terraform action has broad reach beyond its intended field of impact?
+But what about more advanced scenarios? What about scenarios where a `production` environment consists of resources across multiple AWS regions, each of which should be applied in isolation? Or even across multiple cloud providers, each of which should be applied in isolation? Or what about when an environment consists of independent `blue` and `green` stacks in the case of a [blue/green deployment](https://martinfowler.com/bliki/BlueGreenDeployment.html)? Or an independent [canary stack](https://martinfowler.com/bliki/CanaryRelease.html) in the case of an incremental rampup-style deployment? How can Terraform actions target subsets of complex infrastructure environments, ensuring against scenarios where a problematic Terraform action has broad reach beyond its intended field of impact?
 
-For these more advanced landscapes, a logical environment (`prod`, `staging`, etc.) may consist of _multiple_, independent workspaces, each of which maps to its own, independent state. For such scenarios, I've often adopted a more advanced, multi-part workspace-naming convention:
+For these more advanced landscapes, a logical environment (`production`, `staging`, etc.) may consist of _multiple_, independent workspaces, each of which maps to its own, independent state. For such scenarios, a more advanced, multi-part workspace-naming convention may be worth considering. For example:
 
 ```txt
 ${env}-${provider}-${region}-${an optional unique identifier if necessary}
@@ -122,14 +124,14 @@ ${env}-${provider}-${region}-${an optional unique identifier if necessary}
 ### Some real world examples:
 
 * `staging-aws-us-west-2`
-* `prod-aws-us-east-1`
-* `prod-aws-us-east-1-blue`
-* `prod-aws-us-east-1-green`
-* `prod-aws-us-east-1-5fe7bsa`
+* `production-aws-us-east-1`
+* `production-aws-us-east-1-blue`
+* `production-aws-us-east-1-green`
+* `production-aws-us-east-1-5fe7bsa`
 
 ## Examples in use
 
-In addition to empowering the ability to execute Terraform actions against a targeted subset of infrastructure without broader impact, sufficiently granular workspace naming also enables per-workspace variables and more targeted configuration differences.
+In addition to empowering the ability to execute Terraform actions against a targeted subset of infrastructure without broader impact, sufficiently granular workspaces also enable per-workspace variables and the ability to declare more nuanced configuration differences between workspaces.
 
 ### Per-workspace variable values
 
@@ -141,9 +143,9 @@ variable "rds_instance_class" {
   type        = map(string)
 
   default = {
-    staging-aws-us-east-1 = "db.t3.micro"
-    prod-aws-us-east-1    = "db.m5.8xlarge"
-    prod-aws-us-west-2    = "db.m5.8xlarge"
+    staging-aws-us-east-1    = "db.t3.micro"
+    production-aws-us-east-1 = "db.m5.8xlarge"
+    production-aws-us-west-2 = "db.m5.8xlarge"
   }
 }
 ```
@@ -156,21 +158,19 @@ resource "aws_db_instance" "rds" {
 ...
 ```
 
-### Per-env variable values
+But isn't that a lot of variable repetition for scenarios where `rds_instance_class` is the same across all `prod-*` workspaces? How might the code be further improved? The use of a [Terraform local](https://www.terraform.io/docs/configuration/locals.html) to select the `environment` from the multi-part workspace name enables DRY-ness.
 
-But isn't that a lot of variable repetition for scenarios where `rds_instance_class` is the same across all `prod-*` workspaces? The use of a [Terraform local](https://www.terraform.io/docs/configuration/locals.html) to select the `env` from the multi-part workspace name enables DRY-ness.
-
-For example, to an extract a `local.env` from the `terraform.workspace`:
+For example, to an extract a `local.environment` from the `terraform.workspace`:
 
 ```hcl
 locals {
   # The 'logical' environment name (prod, staging, dev etc.)
   # taken from the terraform.workspace (prod-aws-us-east-1, for example)
-  env = "${split("-", terraform.workspace)[0]}"
+  environment = "${split("-", terraform.workspace)[0]}"
 }
 ```
 
-Now, the `rds_instance_class` values can be collapsed to two per-`env` values:
+Now, the `rds_instance_class` values can be collapsed to two per-`environment` values:
 
 ```hcl
 variable "rds_instance_class" {
@@ -178,8 +178,8 @@ variable "rds_instance_class" {
   type        = map(string)
 
   default = {
-    staging = "db.t3.micro"
-    prod    = "db.m5.8xlarge"
+    staging    = "db.t3.micro"
+    production = "db.m5.8xlarge"
   }
 }
 ```
@@ -188,10 +188,10 @@ In turn, this allows a single Terraform configuration to select and deploy `env`
 
 ```hcl
 resource "aws_db_instance" "rds" {
-  instance_class = var.rds_instance_class[local.env]
+  instance_class = var.rds_instance_class[local.environment]
 ...
 ```
 
 ## Summary
 
-In summary, the use of [Terraform workspaces](https://www.terraform.io/docs/language/state/workspaces.html) -- as well as the adoption of a sufficiently granular workspace naming convention -- may help facilitate logical and safe multi-environment Terraform practices and code simplification.
+In summary, the use of [Terraform workspaces](https://www.terraform.io/docs/language/state/workspaces.html) -- as well as the adoption of a sufficiently granular workspaces -- may help facilitate logical and safe multi-environment Terraform practices and code simplification.
