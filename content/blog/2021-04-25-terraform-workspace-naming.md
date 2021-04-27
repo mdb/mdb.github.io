@@ -81,7 +81,7 @@ resource "aws_s3_bucket" "my_bucket" {
 }
 ```
 
-Workspace-based feature flags can be particularly useful when incrementally deploying features across workspaces in a [canary](https://martinfowler.com/bliki/CanaryRelease.html) fashion. By enabling "[NOOP](https://en.wikipedia.org/wiki/NOP_(code))" code changes, workspace-based feature flags may also be helpful when practicing a model of [continuous delivery](https://en.wikipedia.org/wiki/Continuous_delivery) in which small, iterative changes to Terraform configuration are frequently introduced to a repository's main branch and continuously applied.
+Workspace-based feature flags can be particularly useful when incrementally deploying features across workspaces in a [canary](https://martinfowler.com/bliki/CanaryRelease.html) fashion, or in dividing _implementation_ and _application_ across multiple phases. By enabling "[NOOP](https://en.wikipedia.org/wiki/NOP_(code))" code changes, workspace-based feature flags may also be helpful when practicing a model of [continuous delivery](https://en.wikipedia.org/wiki/Continuous_delivery) in which small, iterative changes to Terraform configuration are frequently introduced to a repository's main branch and continuously applied.
 
 While such feature flagging capabilities are certainly possible without utilizing Terraform workspaces, workspaces may prove helpful in facilitating a relatively simple implementation pattern.
 
