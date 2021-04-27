@@ -1,5 +1,5 @@
 ---
-title: Granular Terraform Workspace Naming
+title: Using Terraform workspaces
 date: 2021-04-25
 tags:
 - terraform
