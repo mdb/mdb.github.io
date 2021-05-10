@@ -33,7 +33,7 @@ variable greeting {
 
 data "template_file" "greeting" {
   template = <<-EOT
-  #/bin/bash
+  #!/bin/bash
 
   echo "${var.greeting}"
   EOT
