@@ -13,13 +13,13 @@ _A pattern for automatting Terraform plan analysis using Open Policy Agent._
 
 ## Problem
 
-Your CI/CD pipeline performs a Terraform [plan](https://www.terraform.io/docs/cli/commands/plan.html) prior to executing a Terraform [apply](https://www.terraform.io/docs/cli/commands/apply.html). The CI/CD pipeline gates on the Terraform plan, such that team members can manually review its output for unwanted, problematic, and/or destructive resource changes. While the manual plan review helps ensure against the application of changes that could negatively impact systems' availability, the manual analysis is tedious and error prone.
+Your CI/CD pipeline performs a Terraform [plan](https://www.terraform.io/docs/cli/commands/plan.html) prior to executing a Terraform [apply](https://www.terraform.io/docs/cli/commands/apply.html). The CI/CD pipeline gates on the Terraform plan, such that team members can manually review its output for unwanted, problematic, and/or destructive resource modifications. While the manual plan review helps protect against the application of changes that could negatively impact systems' availability, the analysis is tedious and error prone.
 
-Could aspects of the Terraform plan analysis be automated? Could such automation help expedite reviews and protect against errors? [HashiCorp Sentinel](https://www.hashicorp.com/sentinel) offers a relevant policy-as-code solution, but it's a paid product. What free and open source Terraform policy-as-code tooling exists?
+Could aspects of the Terraform plan analysis be automated? Could such automation help expedite reviews and further protect against errors? [HashiCorp Sentinel](https://www.hashicorp.com/sentinel) offers a commercial policy-as-code solution, but what free and open source Terraform policy-as-code tooling exists?
 
 ## Solution
 
-[Open Policy Agent](https://www.openpolicyagent.org/) offers a flexible, multi-purpose policy-as-code framework. Its [Terraform support](https://www.openpolicyagent.org/docs/latest/terraform/) enables the codification of rules and expectations pertaining to Terraform plans, in effect providing a toolset through which Terraform plan analysis and checks can be automated in CI/CD pipelines.
+[Open Policy Agent](https://www.openpolicyagent.org/) offers a flexible, multi-purpose policy-as-code framework. Its [Terraform support](https://www.openpolicyagent.org/docs/latest/terraform/) enables the codification of rules and expectations pertaining to Terraform plans, in effect providing a toolset through which Terraform plan analysis and safeguards can be automated in CI/CD pipelines and development processes.
 
 ## Example
 
@@ -95,7 +95,7 @@ has_acceptable_greeting {
 }
 ```
 
-The `policy.rego` policy accepts a [Terraform plan JSON](https://www.terraform.io/docs/internals/json-format.html) as input, analyzes the value of the plan JSON's `var.greeting`, and contain a `has_acceptable_greeting` expression that checks if the plan JSON's `var.greeting` value is `"goodbye"`. The policy can be evaluated 
+The `policy.rego` policy accepts a [Terraform plan JSON](https://www.terraform.io/docs/internals/json-format.html) as input, analyzes the value of the plan JSON's `var.greeting`, and contains a `has_acceptable_greeting` expression checking that the plan JSON's `var.greeting` value does not contain `"goodbye"`.
 
 The policy expressed in the `policy.rego` file can be evaluated via the `opa` CLI (See the [OPA website's installation instructions](https://www.openpolicyagent.org/docs/latest/#running-opa))...
 
@@ -113,7 +113,7 @@ terraform show \
   -json tf-plan.binary > tf-plan.json
 ```
 
-Finally, execute `opa eval` against the `has_acceptable_greeting` expression, specifying the `policy.rego` and `tf-plan.json` as the `--data` and `--input`, respectively, and also denoting `--fail` to exit nonzero if `has_acceptable_greeting` identifies a policy violation:
+Finally, execute `opa eval` against the `has_acceptable_greeting` expression, specifying the `policy.rego` and `tf-plan.json` as the `--data` and `--input`, respectively, and also passing a `--fail` flag forcing a nonzero exit status if `has_acceptable_greeting` identifies a policy violation:
 
 ```txt
 opa eval \
@@ -170,7 +170,7 @@ opa eval \
 
 ## More advanced use cases
 
-While the `has_acceptable_greeting` is example is simple and fairly contrived, more sophisticated real world policies might...
+While the `has_acceptable_greeting` example is quite simple and fairly contrived, more sophisticated real world policies might...
 
 * ensure AWS security groups never allow ingress on port 22
 * protect against destructive actions on critical resources
