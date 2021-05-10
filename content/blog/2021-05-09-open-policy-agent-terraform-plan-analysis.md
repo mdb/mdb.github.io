@@ -9,7 +9,7 @@ thumbnail:
 teaser: Automating Terraform plan analysis with Open Policy Agent
 ---
 
-_A pattern for automatting Terraform plan analysis using Open Policy Agent._
+_A pattern for automating Terraform plan analysis using Open Policy Agent._
 
 ## Problem
 
