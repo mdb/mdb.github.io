@@ -95,7 +95,7 @@ has_acceptable_greeting {
 }
 ```
 
-The `policy.rego` policy accepts a [Terraform plan JSON](https://www.terraform.io/docs/internals/json-format.html) as input, analyzes the value of the plan JSON's `var.greeting`, and contains a `has_acceptable_greeting` expression checking that the plan JSON's `var.greeting` value does not contain `"goodbye"`.
+The `policy.rego` policy accepts [Terraform plan JSON](https://www.terraform.io/docs/internals/json-format.html) as input, analyzes the value of the plan JSON's `var.greeting`, and contains a `has_acceptable_greeting` expression checking that the plan JSON's `var.greeting` value does not contain `"goodbye"`.
 
 The policy expressed in the `policy.rego` file can be evaluated via the `opa` CLI (See the [OPA website's installation instructions](https://www.openpolicyagent.org/docs/latest/#running-opa))...
 
