@@ -198,7 +198,7 @@ test_inacceptable_verbose_greeting {
 }
 ```
 
-These test cases make assertions on on `has_acceptable_greeting`'s behavior given various Terraform plan JSON scenarios.
+These test cases make assertions on `has_acceptable_greeting`'s behavior given various Terraform plan JSON scenarios.
 
 To execute the tests:
 
