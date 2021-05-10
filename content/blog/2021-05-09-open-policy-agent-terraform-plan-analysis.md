@@ -13,7 +13,7 @@ _A pattern for automatting Terraform plan analysis using Open Policy Agent._
 
 ## Problem
 
-Your CI/CD pipeline performs a Terraform [plan](https://www.terraform.io/docs/cli/commands/plan.html) prior to executing a Terraform [apply](https://www.terraform.io/docs/cli/commands/apply.html). The CI/CD pipeline gates on the Terraform plan, such that team members can manually review its output for unwanted, problematic, and/or destructive resource modifications. While the manual plan review helps protect against the application of changes that could negatively impact systems' availability, the analysis is tedious and error prone.
+Your project's CI/CD pipeline performs a Terraform [plan](https://www.terraform.io/docs/cli/commands/plan.html) prior to executing a Terraform [apply](https://www.terraform.io/docs/cli/commands/apply.html). The CI/CD pipeline gates on the Terraform plan, such that team members can manually review its output for unwanted, problematic, and/or destructive resource modifications. While the manual plan review helps protect against the application of changes that could negatively impact systems' availability, the analysis is tedious and error prone.
 
 Could aspects of the Terraform plan analysis be automated? Could such automation help expedite reviews and further protect against errors? [HashiCorp Sentinel](https://www.hashicorp.com/sentinel) offers a commercial policy-as-code solution, but what free and open source Terraform policy-as-code tooling exists?
 
