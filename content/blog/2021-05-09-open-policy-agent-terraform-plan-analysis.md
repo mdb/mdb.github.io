@@ -19,7 +19,7 @@ Could aspects of the Terraform plan analysis be automated? Could such automation
 
 ## Solution
 
-[Open Policy Agent](https://www.openpolicyagent.org/) offers a flexible, multi-purpose policy-as-code framework. Its [Terraform support](https://www.openpolicyagent.org/docs/latest/terraform/) enables the codification of rules and expectations pertaining to Terraform plans, in effect providing a toolset through which Terraform plan analysis and safeguards can be automated in CI/CD pipelines and development processes.
+[Open Policy Agent](https://www.openpolicyagent.org/) offers a flexible, multi-purpose policy-as-code framework. Its [Terraform support](https://www.openpolicyagent.org/docs/latest/terraform/) enables the codification of rules and expectations pertaining to Terraform configuration, in effect providing a toolset through which Terraform plan analysis and safeguards can be automated in CI/CD pipelines and development processes.
 
 ## Example
 
@@ -189,6 +189,10 @@ test_acceptable_greeting {
   has_acceptable_greeting with input as {"variables": {"greeting": {"value": "hello"}}}
 }
 
+test_acceptable_nondefault_greeting {
+  has_acceptable_greeting with input as {"variables": {"greeting": {"value": "hi"}}}
+}
+
 test_inacceptable_greeting {
   not has_acceptable_greeting with input as {"variables": {"greeting": {"value": "goodbye"}}}
 }
@@ -204,11 +208,12 @@ To execute the tests:
 
 ```txt
 opa test . --verbose
-data.terraform.analysis.test_acceptable_greeting: PASS (362.109µs)
-data.terraform.analysis.test_inacceptable_greeting: PASS (124.44µs)
-data.terraform.analysis.test_inacceptable_verbose_greeting: PASS (105.393µs)
+data.terraform.analysis.test_acceptable_greeting: PASS (328.455µs)
+data.terraform.analysis.test_acceptable_nondefault_greeting: PASS (122.705µs)
+data.terraform.analysis.test_inacceptable_greeting: PASS (125.167µs)
+data.terraform.analysis.test_inacceptable_verbose_greeting: PASS (83.331µs)
 --------------------------------------------------------------------------------
-PASS: 3/3
+PASS: 4/4
 ```
 
 ## Bonus: GitHub Actions
