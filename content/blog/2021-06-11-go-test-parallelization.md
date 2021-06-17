@@ -63,7 +63,7 @@ func TestSimple(t *testing.T) {
 }
 ```
 
-The code leverage a common [table driven testing](https://dave.cheney.net/2019/05/07/prefer-table-driven-tests) pattern: individual test case names are stored in a `testCases` anonymous struct literal and each test case is subject to an assertion. To futher illustrate the benefits of parallelization, the code also sleeps for three seconds during each test case iteration.
+The code leverages a common [table driven testing](https://dave.cheney.net/2019/05/07/prefer-table-driven-tests) pattern: individual test case names are stored in a `testCases` anonymous struct literal and each test case is subject to an assertion. To futher illustrate the benefits of parallelization, the code also sleeps for three seconds during each test case iteration.
 
 When run via `go test -v`, the following is logged:
 
