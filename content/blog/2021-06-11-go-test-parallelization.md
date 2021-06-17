@@ -121,7 +121,7 @@ func TestSimple(t *testing.T) {
 
   t.Logf("Running %d tests...", len(testCases))
 
-  for _, tc := range testCases {
+  for i, tc := range testCases {
     // NOTE:
     // Define a local 'tc' and 'i' variables inside the loop to keep
     // tc and i from from being re-assigned to the next test case with
