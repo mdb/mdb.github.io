@@ -97,7 +97,7 @@ Note that...
 The following offers an example of how the test cases could be run in parallel; the new code is preceded by `// NOTE:` explanation comments:
 
 ```golang
-package parallelizing
+package main
 
 import (
   "testing"
@@ -191,7 +191,7 @@ What about scenarios where common logic -- perhaps some cleanup -- must happen a
 At a glance, Go's [`defer`](https://tour.golang.org/flowcontrol/12) -- which registers a function to execute before its parent function returns -- _appears_ to be a good fit:
 
 ```golang
-package parallelizing
+package main
 
 import (
   "strconv"
@@ -276,7 +276,7 @@ ok      github.com/mdb/paralleling      3.171s
 Go's `testing` package ships with a [`Cleanup`](https://golang.org/pkg/testing/#B.Cleanup) function that "registers a function to be called when the test and all its subtests complete:"
 
 ```golang
-package parallelizing
+package main
 
 import (
   "strconv"
@@ -355,3 +355,5 @@ $ go test -v
 PASS
 ok      github.com/mdb/paralleling      3.885s
 ```
+
+As evidenced by the test output, `Finished running 5 tests...` no longer prints until after all parallelized test cases return.
