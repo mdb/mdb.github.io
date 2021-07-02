@@ -9,7 +9,7 @@ thumbnail: hope_fingers_thumb.jpg
 teaser: An introduction to using terraputs.
 ---
 
-_An introduction to using a tool I wrote, [`terraputs`](https://github.com/mdb/terraputs), to transform Terraform configuration [output values](https://www.terraform.io/docs/language/values/outputs.html) to markdown._
+_An introduction to using a tool I wrote, [`terraputs`](https://github.com/mdb/terraputs), to transform Terraform configuration [output values](https://www.terraform.io/docs/language/values/outputs.html) to markdown. I owe a hat tip to my colleagues [Justin LaRose](https://github.com/justinlarose) and [Travis Truman](https://github.com/trumant) for giving me the idea to create `terraputs`._
 
 ## Problem
 
