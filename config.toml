@@ -6,3 +6,6 @@ theme = "mdb"
 [permalinks]
   blog = "/blog/:title/"
   projects = "/projects/:title/"
+
+[markup.goldmark.renderer]
+  unsafe = true
