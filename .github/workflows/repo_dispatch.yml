@@ -2,7 +2,7 @@ name: Hello
 
 on:
   repository_dispatch:
-    event_types: "say-hello"
+    types: "say-hello"
 
 jobs:
   greet:
