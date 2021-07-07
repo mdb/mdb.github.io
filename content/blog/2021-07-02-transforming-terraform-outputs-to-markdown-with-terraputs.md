@@ -1,6 +1,6 @@
 ---
 title: Transforming Terraform Output Values to Markdown with Terraputs
-date: 2021-06-22
+date: 2021-07-02
 tags:
 - terraform
 - CI/CD

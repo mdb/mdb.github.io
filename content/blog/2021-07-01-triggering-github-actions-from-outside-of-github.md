@@ -1,6 +1,6 @@
 ---
 title: Triggering GitHub Actions From Outside of GitHub
-date: 2021-06-21
+date: 2021-07-01
 tags:
 - github
 - CI/CD
