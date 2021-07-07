@@ -79,6 +79,6 @@ Also note that the final `hello` image remains sufficiently minimal; `shellcheck
 
 ## Summary
 
-While the `hello` example is fairly simplistic and contrived, multi-stage Docker builds could be far more sophisticated, even executing unit, functional, and and even integration tests from within the Docker build.
+While the `hello` example is fairly simplistic and contrived, multi-stage Docker builds could be far more sophisticated, even executing application compilation, unit tests, functional tests, and even integration tests from within the Docker build.
 
 Aggressively utilizing multi-stage Docker builds to streamline build and test processes may not be appropriate in all contexts. However, the technique's worth considering and can simplify many workflows.
