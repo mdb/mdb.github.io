@@ -17,7 +17,7 @@ Your application is deployed via a minimal [OCI](https://opencontainers.org/) im
 
 ## A potential solution
 
-Consider leveraging [multi-stage `docker` image builds](https://docs.docker.com/develop/develop-images/multistage-build/) and leaning into Docker (or another [OCI image technology](https://opencontainers.org/)) as the standard entrypoint and single dependency used to consistently build and test your software across all environments.
+Consider leveraging [multi-stage `docker` image builds](https://docs.docker.com/develop/develop-images/multistage-build/) and leaning into Docker (or another [OCI image technology](https://opencontainers.org/)) as the standard, streamlined entrypoint and lowest common dependency used to consistently build and test your software across all environments.
 
 ## A basic example
 
@@ -48,13 +48,21 @@ COPY hello.sh /hello.sh
 ENTRYPOINT ["/hello.sh"]
 ```
 
+...where `hello.sh` looks like this:
+
+```sh
+#!/bin/sh
+
+echo "hello"
+```
+
 However, before building the `hello` image, the CI/CD and local build processes might subject `hello.sh` to [shellcheck](https://github.com/koalaman/shellcheck) analysis, ensuring that the script conforms to common shell script conventions and contains no syntax errors.
 
 In local development, the installation and invocation of `shellcheck` might be managed via a `Makefile`. In CI/CD, `shellcheck` might be invoked via the [action-shellcheck](https://github.com/marketplace/actions/shellcheck) GitHub Action prior to a [GitHub Actions-based Docker build](https://github.com/marketplace/actions/build-and-push-docker-images).
 
 ### After
 
-Rather than manage multiple `shellcheck` installation and invocation techniques, perhaps the build process could be streamlined via a multi-stage image build in which `shellcheck` is invoked directly from within the `docker build`:
+Rather than manage multiple `shellcheck` installation and invocation techniques, perhaps the build process could be streamlined via a multi-stage image build in which `shellcheck` is invoked directly from within the `docker build`. The following `Dockerfile` does so via a `shellchecker` stage that must succeed before building the final image:
 
 ```Dockerfile
 FROM koalaman/shellcheck-alpine AS shellchecker
@@ -70,15 +78,15 @@ COPY --from=shellchecker /hello.sh /hello.sh
 ENTRYPOINT ["/hello.sh"]
 ```
 
-Now...
+In leveraging the multi-stage `Dockerfile`:
 
 * `docker` becomes the sole build-and-run-time dependency across all environments
-* `shellcheck` is invoked in a standard way across both local development and CI/CD environments; the disparate `Makefile`-based and GitHub Actions-based `shellcheck` invocation code can be deleted
+* `shellcheck` is installed and invoked in a standard way across both local development and CI/CD environments; the disparate `Makefile`-based and GitHub Actions-based `shellcheck` installation/invocation code can be deleted
 
 Also note that the final `hello` image remains sufficiently minimal; `shellcheck` is only installed during the `shellchecker` stage and is not present in the final `hello` image.
 
 ## Summary
 
-While the `hello` example is fairly simplistic and contrived, multi-stage Docker builds could be far more sophisticated, even executing application compilation, unit tests, functional tests, and even integration tests from within the Docker build.
+While the `hello` example is fairly simplistic and contrived, multi-stage Docker builds could be far more sophisticated, executing application compilation, unit tests, functional tests, and even integration tests from within the Docker build.
 
-Aggressively utilizing multi-stage Docker builds to streamline build and test processes may not be appropriate in all contexts. However, the technique's worth considering and can simplify many workflows.
+Utilizing multi-stage Docker builds to streamline build and test processes may not be appropriate in all contexts. However, the technique's worth considering and may simplify many workflows.
