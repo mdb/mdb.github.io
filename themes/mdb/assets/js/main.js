@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  fetch('https://clapclapexcitement-gram.herokuapp.com/recent-media')
+  fetch('https://mdb.github.io/ig-feed/instagram.json/instagram.json')
     .then(response => response.json())
     .then(populateIGFeeds);
 
