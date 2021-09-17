@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  fetch('https://mdb.github.io/ig-feed/instagram.json/instagram.json')
+  fetch('https://mdb.github.io/ig-feed/ig/media.json')
     .then(response => response.json())
     .then(populateIGFeeds);
 
