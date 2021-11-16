@@ -142,7 +142,7 @@ const export listEksClusterVersions = async () => {
     }
 
     return versions;
-  catch (e) {
+  } catch (e) {
     throw e;
   }
 };
