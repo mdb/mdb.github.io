@@ -36,7 +36,7 @@ How can `getEksClusterCount`'s use of `AWS.EKS` be mocked out for unit testing? 
 
 ## A solution
 
-`jest.mock` enables mocking the entire `aws-sdk` module. Because `getEksClusterCount` only makes use of `EKS`, we can create relevant mocks for these classes, but otherwise `require` the un-mocked `aws-sdk` classes:
+`jest.mock` enables mocking the entire `aws-sdk` module. Because `getEksClusterCount` only makes use of `EKS`, we can mock `EKS`, but otherwise `require` other, un-mocked `aws-sdk` classes:
 
 ```javascript
 const mockEks = {
