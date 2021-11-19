@@ -42,7 +42,7 @@ How can `getEksClusterCount`'s use of `AWS.EKS` be mocked out for unit testing? 
 const mockEks = {
   listClusters: jest.fn().mockReturnThis(),
   promise: jest.fn()
-}:
+};
 
 jest.mock('aws-sdk', () => {
   return {
@@ -59,7 +59,7 @@ For example, its promise can be mocked to successfully resolve:
 ```javascript
 mockEks.promise.mockResolvedValueOnce({
   clusters: ['cluster-1'],
-}),
+});
 ```
 
 ...or mocked to reject:
@@ -76,7 +76,7 @@ A more complete, in-context example might look like this:
 const mockEks = {
   listClusters: jest.fn().mockReturnThis(),
   promise: jest.fn()
-}:
+};
 
 jest.mock('aws-sdk', () => {
   return {
