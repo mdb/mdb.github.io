@@ -1,3 +1,6 @@
+HUGO_VERSION=0.95.0-ext
+HUGO_IMAGE=klakegg/hugo:$(HUGO_VERSION)
+
 all: build
 
 .PHONY: build
@@ -7,7 +10,7 @@ build:
 		--tty \
 		--interactive \
 		--volume=$(PWD):/src \
-		klakegg/hugo:0.74.3
+		$(HUGO_IMAGE)
 
 .PHONY: serve
 # TODO: livereload does not work
@@ -18,7 +21,7 @@ serve:
 		--interactive \
 		--volume=$(PWD):/src \
 		--publish=1313:1313 \
-		klakegg/hugo:0.74.3 \
+		$(HUGO_IMAGE) \
 			server
 
 .PHONY: deploy
