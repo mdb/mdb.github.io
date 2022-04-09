@@ -1,0 +1,195 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>Go Concurrency With Goroutines and Channels | Mike Ball</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=generator content="Hugo 0.95.0"><meta name=ROBOTS content="NOINDEX, NOFOLLOW"><link rel=stylesheet href=http://mikeball.info/main.min.fc82b5f1b515fbd2833bd59ff79fa346acc53053fa47e21268ea8a00c448d9c9.css></head><body><header><div class=mark><a href=/>Mike Ball</a></div><button>Toggle Navigation</button><div class=nav-wrap><nav class=primary><ul><li><a href=/blog>Blog</a></li><li><a href=#about>About</a></li></ul></nav><nav class=secondary><ul><li><a href=https://github.com/mdb>GitHub</a></li><li><a href=https://instagram.com/clapclapexcitement>Instagram</a></li></ul></nav><nav class=tertiary><ul><li><a href=https://tiendah.bigcartel.com>Shop</a></li><li><a href=#about>Contact</a></li></ul></nav></div></header><main role=main><div class=blog-post><aside class=divider><a href=http://mikeball.info/blog/>Blog</a></aside><time>February 20, 2021</time><article><header><h1>Go Concurrency With Goroutines and Channels</h1></header><div><p><em>Some introductory notes on Go concurrency, goroutines, and channels, largely serving as a slightly-more-indepth supplement to <a href=/blog/channels-in-go/>a brief 2018 overview and example</a>.</em></p><h2 id=goroutines>Goroutines</h2><p>Normally, calling a function — <code>foo()</code>, for example — is a <em>blocking</em> operation. This means that program execution waits for it to finish before proceeding.</p><p>However, invoking a function with the <code>go</code> keyword — <code>go foo()</code>, for example — is <em>non-blocking</em>. When invoked as <code>go foo()</code>, Go runs <code>foo()</code> as a separate task managed by Go. The separate task is called a <a href=https://golang.org/doc/effective_go#goroutines><em>goroutine</em></a>. The original Go task — the one Go creates when operating on a program&rsquo;s <code>main</code> function — is called the <em>main goroutine</em>. In this case, when <code>foo</code> is invoked as <code>go foo()</code>, the main goroutine does not wait for <code>foo()</code> to finish; it proceeds, as <code>foo()</code> runs <em>concurrently</em> in a separate <em>goroutine</em>.</p><h2 id=channels>Channels</h2><p>In Go, the <code>chan</code> keyword defines a <em>channel</em>. According to <a href=https://tour.golang.org/concurrency/2>A Tour of Go</a>, &ldquo;Channels are a typed conduit through which you can send and receive values with the channel operator, <code>&lt;-</code>.&rdquo; A channel can transport data of only one type.</p><p>The <code>&lt;-</code> operator indicates the channel direction: either <em>send</em> or <em>receive</em>. If no <code>&lt;-</code> direction is specified, the channel is <em>bi-directional</em>.</p><p>For example:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#66d9ef>chan</span> <span style=color:#a6e22e>Foo</span>      <span style=color:#75715e>// can be used to send &amp; receive values of type Foo
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>chan</span><span style=color:#f92672>&lt;-</span> <span style=color:#66d9ef>string</span> <span style=color:#75715e>// send only; can be used to send strings
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#f92672>&lt;-</span><span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>int</span>    <span style=color:#75715e>// receive only; can be used to receive ints
+</span></span></span></code></pre></div><p>So, to elaborate:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#a6e22e>ch</span> <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>s</span>   <span style=color:#75715e>// Send s to channel ch.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#a6e22e>s</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>ch</span> <span style=color:#75715e>// Receive from ch, and assign value to s.
+</span></span></span></code></pre></div><p><code>make</code> is used to create a channel:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#a6e22e>strCh</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>string</span>) <span style=color:#75715e>// a channel of strings
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#a6e22e>intCh</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>int</span>)    <span style=color:#75715e>// a channel of ints
+</span></span></span></code></pre></div><p>In the case of the above channels, sends and receives block until the other side is ready. However, channels can also be buffered:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#a6e22e>strCh</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>string</span>, <span style=color:#ae81ff>100</span>) <span style=color:#75715e>// a buffered channel of length 100
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#a6e22e>intCh</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>int</span>, <span style=color:#ae81ff>100</span>)    <span style=color:#75715e>// a buffered channel of length 100
+</span></span></span></code></pre></div><p>Sends to a buffered channels block only when the buffer is full. Receives block only when the buffer is empty.</p><p><code>close</code> is used to close a channel, indicating no more values will be sent. For example:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span>close(<span style=color:#a6e22e>strCh</span>) <span style=color:#75715e>// close strCh
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>close(<span style=color:#a6e22e>intCh</span>) <span style=color:#75715e>// close intCh
+</span></span></span></code></pre></div><p>Receivers can check whether a channel is closed like so:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#a6e22e>s</span>, <span style=color:#a6e22e>ok</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>ch</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> <span style=color:#a6e22e>ok</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;s channel is not closed&#34;</span>)
+</span></span><span style=display:flex><span>} <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;s channel is closed&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>(Although, closing is really only necessary if the receiver must be explicitly told no more values will come, as might be necessary to terminate a loop, for example.)</p><h2 id=using-channels-to-communicate-between-goroutines>Using channels to communicate between goroutines</h2><p>Channels offer a mechanism through which separate goroutines can communicate, in effect offering a useful construct for <em>concurrent</em> programming. Performing multiple concurrent HTTP requests offers a common use case. A program that performs the HTTP requests <em>serially</em> — one at a time — is slower than one that performs the HTTP requests concurrently.</p><h3 id=a-non-concurrent-go-program>A non-concurrent Go program</h3><p>For example, the following non-concurrent program — let&rsquo;s call it <code>fetch_urls.go</code> — performs a series of HTTP requests, reports the time it took to perform each request, and reports the program&rsquo;s total execution time:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;net/http&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;time&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// main is the main goroutine
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Save the start time to a variable
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>start</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Now</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Create a slice of URLs to request
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>urls</span> <span style=color:#f92672>:=</span> []<span style=color:#66d9ef>string</span>{
+</span></span><span style=display:flex><span>		<span style=color:#e6db74>&#34;http://mikeball.info&#34;</span>,
+</span></span><span style=display:flex><span>		<span style=color:#e6db74>&#34;http://mikeball.me&#34;</span>,
+</span></span><span style=display:flex><span>		<span style=color:#e6db74>&#34;http://github.com/mdb&#34;</span>,
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Call `fetch` with each URL in `urls` and print the results
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>url</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>urls</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>fetch</span>(<span style=color:#a6e22e>url</span>))
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Print the total seconds spent in `main`
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;Total time: %.2fs\n&#34;</span>, <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Since</span>(<span style=color:#a6e22e>start</span>).<span style=color:#a6e22e>Seconds</span>())
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// fetch performs an HTTP request to the URL it&#39;s passed.
+</span></span></span><span style=display:flex><span><span style=color:#75715e>//
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// If it does not encounter an error performing the HTTP
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// request, returns a string like the following,
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// reporting the total seconds required to perform the
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// request, as well as the response status code:
+</span></span></span><span style=display:flex><span><span style=color:#75715e>//
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// &#34;http://foo.com  0.26s  200&#34;
+</span></span></span><span style=display:flex><span><span style=color:#75715e>//
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// If it encounters an error, it returns a string like the
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// following:
+</span></span></span><span style=display:flex><span><span style=color:#75715e>//
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// &#34;http://foo.com request encountered error: some error&#34;
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>fetch</span>(<span style=color:#a6e22e>url</span> <span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>string</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>start</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Now</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>resp</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Get</span>(<span style=color:#a6e22e>url</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;%s request enountered error: %s&#34;</span>, <span style=color:#a6e22e>url</span>, <span style=color:#a6e22e>err</span>.<span style=color:#a6e22e>Error</span>())
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>secs</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Since</span>(<span style=color:#a6e22e>start</span>).<span style=color:#a6e22e>Seconds</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Return a summary string containing the URL, its request response time, and its HTTP status code
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;%s \t %.2fs \t %d&#34;</span>, <span style=color:#a6e22e>url</span>, <span style=color:#a6e22e>secs</span>, <span style=color:#a6e22e>resp</span>.<span style=color:#a6e22e>StatusCode</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>When the program is run via <code>go run fetch_urls.go</code>, it prints the following:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>go run fetch_urls.go
+</span></span><span style=display:flex><span>http://mikeball.info     0.96s   <span style=color:#ae81ff>200</span>
+</span></span><span style=display:flex><span>http://mikeball.me       0.35s   <span style=color:#ae81ff>200</span>
+</span></span><span style=display:flex><span>http://github.com/mdb    0.92s   <span style=color:#ae81ff>200</span>
+</span></span><span style=display:flex><span>Total time: 2.23s
+</span></span></code></pre></div><p>Note that the program&rsquo;s total execution time of 2.23s is the sum of the times consumed by each HTTP request.</p><h3 id=a-concurrent-go-program>A concurrent Go program</h3><p>So, how might channels and goroutines be used to perform multiple concurrent HTTP requests? The following offers an example — similar to one I <a href=/blog/channels-in-go/>wrote about in 2018</a> — illustrating how the serial version of <code>fetch_urls.go</code> could be refactored to leverage concurrency:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;net/http&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;time&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// main is the main goroutine
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Store the current time in a variable
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>start</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Now</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Create a channel of strings
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>ch</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>string</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>urls</span> <span style=color:#f92672>:=</span> []<span style=color:#66d9ef>string</span>{
+</span></span><span style=display:flex><span>		<span style=color:#e6db74>&#34;http://mikeball.info&#34;</span>,
+</span></span><span style=display:flex><span>		<span style=color:#e6db74>&#34;http://mikeball.me&#34;</span>,
+</span></span><span style=display:flex><span>		<span style=color:#e6db74>&#34;http://github.com/mdb&#34;</span>,
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Call `fetch` in a new goroutine for each URL in `urls`
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>url</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>urls</span> {
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>go</span> <span style=color:#a6e22e>fetch</span>(<span style=color:#a6e22e>url</span>, <span style=color:#a6e22e>ch</span>)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Receive and print each string sent to the `ch` channel from `fetch`
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>for</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>urls</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>ch</span>)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Print the total seconds spent in `main`
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#75715e>// The individual request response times reported by `fetch` equal a sum greater than the total
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#75715e>// seconds spent in `main`, thus illustrating that the `fetch` requests occurred concurrently.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;Total time: %.2fs\n&#34;</span>, <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Since</span>(<span style=color:#a6e22e>start</span>).<span style=color:#a6e22e>Seconds</span>())
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// fetch performs an HTTP request to the URL it&#39;s passed.
+</span></span></span><span style=display:flex><span><span style=color:#75715e>//
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// If it does not encounter an error performing the HTTP
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// request, it sends a string like the following to the
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// ch channel it&#39;s passed, reporting the total seconds
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// required to perform the request, as well as the response
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// status code:
+</span></span></span><span style=display:flex><span><span style=color:#75715e>//
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// &#34;http://foo.com  0.26s  200&#34;
+</span></span></span><span style=display:flex><span><span style=color:#75715e>//
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// If it encounters an error, it sends a string like the
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// following too the ch channel it&#39;s passed:
+</span></span></span><span style=display:flex><span><span style=color:#75715e>//
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// &#34;http://foo.com request encountered error: some error&#34;
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>fetch</span>(<span style=color:#a6e22e>url</span> <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>ch</span> <span style=color:#66d9ef>chan</span><span style=color:#f92672>&lt;-</span> <span style=color:#66d9ef>string</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Store the start time in a variable
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>start</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Now</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>resp</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Get</span>(<span style=color:#a6e22e>url</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>ch</span> <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;%s request enountered error: %s&#34;</span>, <span style=color:#a6e22e>url</span>, <span style=color:#a6e22e>err</span>.<span style=color:#a6e22e>Error</span>())
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Store the seconds since start time in a variable
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>secs</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Since</span>(<span style=color:#a6e22e>start</span>).<span style=color:#a6e22e>Seconds</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Send a summary string to the `ch` channel containing the URL, its request response time, and its HTTP status code
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>ch</span> <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;%s \t %.2fs \t %d&#34;</span>, <span style=color:#a6e22e>url</span>, <span style=color:#a6e22e>secs</span>, <span style=color:#a6e22e>resp</span>.<span style=color:#a6e22e>StatusCode</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Now, when the program is run via <code>go run fetch_urls.go</code>, it prints the following:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>go run fetch_urls.go
+</span></span><span style=display:flex><span>http://mikeball.info     0.33s   <span style=color:#ae81ff>200</span>
+</span></span><span style=display:flex><span>http://mikeball.me       0.34s   <span style=color:#ae81ff>200</span>
+</span></span><span style=display:flex><span>http://github.com/mdb    0.93s   <span style=color:#ae81ff>200</span>
+</span></span><span style=display:flex><span>Total time: 0.93s
+</span></span></code></pre></div><p>Note that the program&rsquo;s total execution time of 0.93s is <em>less than</em> the sum of the times consumed by each HTTP request.</p><h2 id=a-real-world-example>A real world example</h2><p>A similar, real world example can be viewed in <a href=https://github.com/mdb/gossboss>gossboss</a>, a tool I recently wrote for collecting <a href=https://github.com/aelsabbahy/goss>Goss</a> test results from multiple Goss servers.</p><p><code>gossboss</code> can be run as a server or used as a CLI. For example, <code>gossboss healthzs</code> reports the Goss test results from each Goss server <code>--server</code> specified:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>gossboss healthzs <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  --server <span style=color:#e6db74>&#34;http://some-goss-server/healthz&#34;</span> <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  --server <span style=color:#e6db74>&#34;http://another-goss-server/healthz&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>✔ http://some-goss-server/healthz
+</span></span><span style=display:flex><span>✔ http://another-goss-server/healthz
+</span></span></code></pre></div><p><code>gossboss</code> fetches the test results concurrently, as its <a href=https://github.com/mdb/gossboss/blob/main/client.go#L53><code>gossboss.Client#CollectHealthzs</code></a> method leverages a channel and goroutines:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>c</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Client</span>) <span style=color:#a6e22e>CollectHealthzs</span>(<span style=color:#a6e22e>urls</span> []<span style=color:#66d9ef>string</span>) <span style=color:#f92672>*</span><span style=color:#a6e22e>Healthzs</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>hzs</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>Healthzs</span>{
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>Summary</span>: <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>Summary</span>{
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>Failed</span>:  <span style=color:#ae81ff>0</span>,
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>Errored</span>: <span style=color:#ae81ff>0</span>,
+</span></span><span style=display:flex><span>		},
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>ch</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Healthz</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>url</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>urls</span> {
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>go</span> <span style=color:#a6e22e>c</span>.<span style=color:#a6e22e>collectHealthz</span>(<span style=color:#a6e22e>url</span>, <span style=color:#a6e22e>ch</span>)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// wait until all goss server test
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#75715e>// results have been collected.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>for</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>hz</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>ch</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>hzs</span>.<span style=color:#a6e22e>Healthzs</span> = append(<span style=color:#a6e22e>hzs</span>.<span style=color:#a6e22e>Healthzs</span>, <span style=color:#a6e22e>hz</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>hz</span>.<span style=color:#a6e22e>Error</span> <span style=color:#f92672>==</span> <span style=color:#66d9ef>nil</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#a6e22e>hz</span>.<span style=color:#a6e22e>Result</span>.<span style=color:#a6e22e>Summary</span>.<span style=color:#a6e22e>Failed</span> <span style=color:#f92672>!=</span> <span style=color:#ae81ff>0</span> {
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>hzs</span>.<span style=color:#a6e22e>Summary</span>.<span style=color:#a6e22e>Failed</span> <span style=color:#f92672>+=</span> <span style=color:#a6e22e>hz</span>.<span style=color:#a6e22e>Result</span>.<span style=color:#a6e22e>Summary</span>.<span style=color:#a6e22e>Failed</span>
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>hz</span>.<span style=color:#a6e22e>Error</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>hzs</span>.<span style=color:#a6e22e>Summary</span>.<span style=color:#a6e22e>Errored</span><span style=color:#f92672>++</span>
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>if</span> len(<span style=color:#a6e22e>hzs</span>.<span style=color:#a6e22e>Healthzs</span>) <span style=color:#f92672>==</span> len(<span style=color:#a6e22e>urls</span>) {
+</span></span><span style=display:flex><span>			close(<span style=color:#a6e22e>ch</span>)
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>break</span>
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>hzs</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>For more insight on implementation details, check out <a href=https://github.com/mdb/gossboss>github.com/mdb/gossboss</a>. Do you have some ideas for how <code>gossboss</code> could be improved? Create a pull request.</p></div><ul class=tags><li><a href=/tags/golang>golang</a></li><li><a href=/tags/programming>programming</a></li><li><a href=/tags/concurrency>concurrency</a></li></ul></article></div></main><footer><section><h1 id=about>Info</h1><div><h2>Mike Ball</h2><p>I live in Philadelphia and work as a multi-disciplinary software engineer & designer.</p><p>Over the years, I've developed front end UIs, server backends, automated cloud infrastructure provisioning, built continuous deployment pipelines for highly available applications, and contributed to numerous open source software projects.</p><p>I've also worked in graphic and UX design. Buy prints of my illustrations at <a href=https://tiendah.bigcartel.com>Tiendah</a>.</div><div class=double><h2>Shop Tiendah</h2><ul class="gallery store-feed"></ul><h2>Instagram</h2><ul class="gallery ig-feed"></ul></div><div><h2>Etc.</h2><ul><li><a href=http://github.com/mdb>GitHub</a></li><li><a href=http://twitter.com/clapexcitement>Twitter</a></li><li><a href=https://instagram.com/clapclapexcitement>Instagram</a></li><li><a href=/index.xml>RSS Feed</a></li><li><a href=https://tiendah.bigcartel.com>Shop Tiendah</a></li></ul><h2>Contact</h2><p>Interested in working with me? <a href=mailto:mikedball@gmail.com>Get in touch</a>.</p></div></section></footer><script type=text/javascript src=/js/main.min.c32b1a9bb9a5dc973e4de713e5e17dc2614c23e6ed476c5edc8f24c490738752.js></script>
+<script type=text/javascript>(function(e,o,i,a,t,n,s){e.GoogleAnalyticsObject=t,e[t]=e[t]||function(){(e[t].q=e[t].q||[]).push(arguments)},e[t].l=1*new Date,n=o.createElement(i),s=o.getElementsByTagName(i)[0],n.async=1,n.src=a,s.parentNode.insertBefore(n,s)})(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-54324621-1","auto"),ga("send","pageview")</script></body></html>

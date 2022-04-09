@@ -1,0 +1,279 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>Go Test Parallelization | Mike Ball</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=generator content="Hugo 0.95.0"><meta name=ROBOTS content="NOINDEX, NOFOLLOW"><link rel=stylesheet href=http://mikeball.info/main.min.fc82b5f1b515fbd2833bd59ff79fa346acc53053fa47e21268ea8a00c448d9c9.css></head><body><header><div class=mark><a href=/>Mike Ball</a></div><button>Toggle Navigation</button><div class=nav-wrap><nav class=primary><ul><li><a href=/blog>Blog</a></li><li><a href=#about>About</a></li></ul></nav><nav class=secondary><ul><li><a href=https://github.com/mdb>GitHub</a></li><li><a href=https://instagram.com/clapclapexcitement>Instagram</a></li></ul></nav><nav class=tertiary><ul><li><a href=https://tiendah.bigcartel.com>Shop</a></li><li><a href=#about>Contact</a></li></ul></nav></div></header><main role=main><div class=blog-post><aside class=divider><a href=http://mikeball.info/blog/>Blog</a></aside><time>June 11, 2021</time><article><header><h1>Go Test Parallelization</h1></header><div><p><em>A brief introduction to using Go&rsquo;s <code>testing</code> package&rsquo;s <a href=https://golang.org/pkg/testing/#T.Parallel><code>T.Parallel()</code></a> to parallelize tests.</em></p><h2 id=problem>Problem</h2><p>Your Go project&rsquo;s tests are slow and run serially. Or perhaps they&rsquo;re not slow, but they run serially and could be faster.</p><h2 id=solution>Solution</h2><p>Consider running the test cases in parallel.</p><h2 id=simple-non-parallelized-example>Simple non-parallelized example</h2><p>As a starting point, consider a simple non-parallelized test:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;io/ioutil&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;os&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;testing&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;time&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>TestSimple</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>testCases</span> <span style=color:#f92672>:=</span> []<span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>  }{{
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;1&#34;</span>,
+</span></span><span style=display:flex><span>    }, {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;2&#34;</span>,
+</span></span><span style=display:flex><span>    }, {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;3&#34;</span>,
+</span></span><span style=display:flex><span>    }, {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;4&#34;</span>,
+</span></span><span style=display:flex><span>    }, {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;5&#34;</span>,
+</span></span><span style=display:flex><span>  }}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Logf</span>(<span style=color:#e6db74>&#34;Running %s tests...&#34;</span>, len(<span style=color:#a6e22e>testCases</span>))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span>, <span style=color:#a6e22e>tc</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>testCases</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Run</span>(<span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>name</span>, <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Sleep</span>(<span style=color:#ae81ff>3</span> <span style=color:#f92672>*</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Second</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>expected</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>Itoa</span>(<span style=color:#a6e22e>i</span> <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>expected</span> <span style=color:#f92672>!=</span> <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>name</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;expected index %s to equal test %s&#34;</span>, <span style=color:#a6e22e>expected</span>, <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>name</span>)
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>The code leverages a common <a href=https://dave.cheney.net/2019/05/07/prefer-table-driven-tests>table driven testing</a> pattern: individual test case names are stored in a <code>testCases</code> anonymous struct literal and each test case is subject to an assertion. To futher illustrate the benefits of parallelization, the code also sleeps for three seconds during each test case iteration.</p><p>When run via <code>go test -v</code>, the following is logged:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>$ go test -v
+</span></span><span style=display:flex><span>=== RUN   TestSimple
+</span></span><span style=display:flex><span>    paralling_test.go:24: Running 5 tests...
+</span></span><span style=display:flex><span>=== RUN   TestSimple/1
+</span></span><span style=display:flex><span>=== RUN   TestSimple/2
+</span></span><span style=display:flex><span>=== RUN   TestSimple/3
+</span></span><span style=display:flex><span>=== RUN   TestSimple/4
+</span></span><span style=display:flex><span>=== RUN   TestSimple/5
+</span></span><span style=display:flex><span>=== CONT  TestSimple
+</span></span><span style=display:flex><span>--- PASS: TestSimple (15.01s)
+</span></span><span style=display:flex><span>    --- PASS: TestSimple/1 (3.00s)
+</span></span><span style=display:flex><span>    --- PASS: TestSimple/2 (3.00s)
+</span></span><span style=display:flex><span>    --- PASS: TestSimple/3 (3.00s)
+</span></span><span style=display:flex><span>    --- PASS: TestSimple/4 (3.00s)
+</span></span><span style=display:flex><span>    --- PASS: TestSimple/5 (3.00s)
+</span></span><span style=display:flex><span>PASS
+</span></span><span style=display:flex><span>ok      github.com/mdb/paralleling      15.166s
+</span></span></code></pre></div><p>Note that&mldr;</p><ol><li>The test cases are executed and run to completion one at a time in the order in which they appear in <code>testCases</code>. This is evidenced by each <code>PASS: Testsimple/&lt;test case index></code> line.</li><li>The total test execution time is 15.166 seconds.</li></ol><h2 id=a-parallelized-example>A parallelized example</h2><p>The following offers an example of how the test cases could be run in parallel; the new code is preceded by <code>// NOTE:</code> explanation comments:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;testing&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;time&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>TestSimple</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>testCases</span> <span style=color:#f92672>:=</span> []<span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>  }{{
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;1&#34;</span>,
+</span></span><span style=display:flex><span>  }, {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;2&#34;</span>,
+</span></span><span style=display:flex><span>  }, {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;3&#34;</span>,
+</span></span><span style=display:flex><span>  }, {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;4&#34;</span>,
+</span></span><span style=display:flex><span>  }, {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;5&#34;</span>,
+</span></span><span style=display:flex><span>  }}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Logf</span>(<span style=color:#e6db74>&#34;Running %d tests...&#34;</span>, len(<span style=color:#a6e22e>testCases</span>))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span>, <span style=color:#a6e22e>tc</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>testCases</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// NOTE:
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// Define a local &#39;tc&#39; and &#39;i&#39; variables inside the loop to keep
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// tc and i from from being re-assigned to the next test case with
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// each iteration.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// More info: https://gist.github.com/posener/92a55c4cd441fc5e5e85f27bca008721
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#a6e22e>tc</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tc</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Run</span>(<span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>name</span>, <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#75715e>// NOTE:
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>      <span style=color:#75715e>// Signal that this test is to be run in parallel with (and only with) other parallel tests.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>      <span style=color:#75715e>// https://golang.org/pkg/testing/#T.Parallel
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>      <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Parallel</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Sleep</span>(<span style=color:#ae81ff>3</span> <span style=color:#f92672>*</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Second</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>expected</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>Itoa</span>(<span style=color:#a6e22e>i</span> <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>expected</span> <span style=color:#f92672>!=</span> <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>name</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;expected index %s to equal test %s&#34;</span>, <span style=color:#a6e22e>expected</span>, <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>name</span>)
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Now, when run via <code>go test -v</code>, the following is logged:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>go test -v
+</span></span><span style=display:flex><span>=== RUN   TestSimple
+</span></span><span style=display:flex><span>    paralling_test.go:24: Running 5 tests...
+</span></span><span style=display:flex><span>=== RUN   TestSimple/1
+</span></span><span style=display:flex><span>=== PAUSE TestSimple/1
+</span></span><span style=display:flex><span>=== RUN   TestSimple/2
+</span></span><span style=display:flex><span>=== PAUSE TestSimple/2
+</span></span><span style=display:flex><span>=== RUN   TestSimple/3
+</span></span><span style=display:flex><span>=== PAUSE TestSimple/3
+</span></span><span style=display:flex><span>=== RUN   TestSimple/4
+</span></span><span style=display:flex><span>=== PAUSE TestSimple/4
+</span></span><span style=display:flex><span>=== RUN   TestSimple/5
+</span></span><span style=display:flex><span>=== PAUSE TestSimple/5
+</span></span><span style=display:flex><span>=== CONT  TestSimple
+</span></span><span style=display:flex><span>=== CONT  TestSimple/1
+</span></span><span style=display:flex><span>=== CONT  TestSimple/3
+</span></span><span style=display:flex><span>=== CONT  TestSimple/2
+</span></span><span style=display:flex><span>=== CONT  TestSimple/4
+</span></span><span style=display:flex><span>=== CONT  TestSimple/5
+</span></span><span style=display:flex><span>--- PASS: TestSimple (0.00s)
+</span></span><span style=display:flex><span>    --- PASS: TestSimple/5 (3.00s)
+</span></span><span style=display:flex><span>    --- PASS: TestSimple/4 (3.00s)
+</span></span><span style=display:flex><span>    --- PASS: TestSimple/3 (3.00s)
+</span></span><span style=display:flex><span>    --- PASS: TestSimple/2 (3.00s)
+</span></span><span style=display:flex><span>    --- PASS: TestSimple/1 (3.00s)
+</span></span><span style=display:flex><span>PASS
+</span></span><span style=display:flex><span>ok      github.com/mdb/paralleling      3.319s
+</span></span></code></pre></div><p>Note that&mldr;</p><ol><li>The test cases no longer print <code>PASS: TestSimple/&lt;test case index></code> in the order in which they appear in <code>testCases</code>; the test cases now execute in parallel.</li><li>The total test execution time is 3.319 seconds, which is hardly longer than the 3 seconds each test case sleeps.</li></ol><h2 id=bonus>Bonus</h2><p>What about scenarios where common logic &ndash; perhaps some cleanup &ndash; must happen after all test cases are executed? How can such cleanup be guaranteed to happen <em>after</em> the test cases, even when the tests panic?</p><p>At a glance, Go&rsquo;s <a href=https://tour.golang.org/flowcontrol/12><code>defer</code></a> &ndash; which registers a function to execute before its parent function returns &ndash; <em>appears</em> to be a good fit:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;strconv&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;testing&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;time&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>TestSimple</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>testCases</span> <span style=color:#f92672>:=</span> []<span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>  }{{
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;1&#34;</span>,
+</span></span><span style=display:flex><span>  }, {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;2&#34;</span>,
+</span></span><span style=display:flex><span>  }, {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;3&#34;</span>,
+</span></span><span style=display:flex><span>  }, {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;4&#34;</span>,
+</span></span><span style=display:flex><span>  }, {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;5&#34;</span>,
+</span></span><span style=display:flex><span>  }}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Logf</span>(<span style=color:#e6db74>&#34;Running %d tests...&#34;</span>, len(<span style=color:#a6e22e>testCases</span>))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// NOTE:
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// defer the execution until the parent function returns
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Logf</span>(<span style=color:#e6db74>&#34;Finished running %d tests...&#34;</span>, len(<span style=color:#a6e22e>testCases</span>))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span>, <span style=color:#a6e22e>tc</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>testCases</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>tc</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tc</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Run</span>(<span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>name</span>, <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Parallel</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Sleep</span>(<span style=color:#ae81ff>3</span> <span style=color:#f92672>*</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Second</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>expected</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>Itoa</span>(<span style=color:#a6e22e>i</span> <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>expected</span> <span style=color:#f92672>!=</span> <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>name</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;expected index %s to equal test %s&#34;</span>, <span style=color:#a6e22e>expected</span>, <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>name</span>)
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>However, <code>defer</code> doesn&rsquo;t suffice, as the <code>defer</code>&rsquo;d function executes immediately after <code>range</code>-ing over all the <code>testCases</code>, but before each <code>t.Run</code>&rsquo;s function exits:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>$ go test -v
+</span></span><span style=display:flex><span>=== RUN   TestSimple
+</span></span><span style=display:flex><span>paralling_test.go:24: Running 5 tests...
+</span></span><span style=display:flex><span>=== RUN   TestSimple/1
+</span></span><span style=display:flex><span>=== PAUSE TestSimple/1
+</span></span><span style=display:flex><span>=== RUN   TestSimple/2
+</span></span><span style=display:flex><span>=== PAUSE TestSimple/2
+</span></span><span style=display:flex><span>=== RUN   TestSimple/3
+</span></span><span style=display:flex><span>=== PAUSE TestSimple/3
+</span></span><span style=display:flex><span>=== RUN   TestSimple/4
+</span></span><span style=display:flex><span>=== PAUSE TestSimple/4
+</span></span><span style=display:flex><span>=== RUN   TestSimple/5
+</span></span><span style=display:flex><span>=== PAUSE TestSimple/5
+</span></span><span style=display:flex><span>=== CONT  TestSimple
+</span></span><span style=display:flex><span>paralling_test.go:43: Finished running 5 tests...
+</span></span><span style=display:flex><span>=== CONT  TestSimple/1
+</span></span><span style=display:flex><span>=== CONT  TestSimple/5
+</span></span><span style=display:flex><span>=== CONT  TestSimple/4
+</span></span><span style=display:flex><span>=== CONT  TestSimple/3
+</span></span><span style=display:flex><span>=== CONT  TestSimple/2
+</span></span><span style=display:flex><span>--- PASS: TestSimple (0.00s)
+</span></span><span style=display:flex><span>--- PASS: TestSimple/2 (3.00s)
+</span></span><span style=display:flex><span>--- PASS: TestSimple/1 (3.00s)
+</span></span><span style=display:flex><span>--- PASS: TestSimple/5 (3.00s)
+</span></span><span style=display:flex><span>--- PASS: TestSimple/3 (3.00s)
+</span></span><span style=display:flex><span>--- PASS: TestSimple/4 (3.00s)
+</span></span><span style=display:flex><span>PASS
+</span></span><span style=display:flex><span>ok      github.com/mdb/paralleling      3.171s
+</span></span></code></pre></div><h3 id=solution-1>Solution</h3><p>Go&rsquo;s <code>testing</code> package ships with a <a href=https://golang.org/pkg/testing/#B.Cleanup><code>Cleanup</code></a> function that &ldquo;registers a function to be called when the test and all its subtests complete:&rdquo;</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-golang data-lang=golang><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;strconv&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;testing&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;time&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>TestSimple</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>testCases</span> <span style=color:#f92672>:=</span> []<span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>  }{{
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;1&#34;</span>,
+</span></span><span style=display:flex><span>  }, {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;2&#34;</span>,
+</span></span><span style=display:flex><span>  }, {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;3&#34;</span>,
+</span></span><span style=display:flex><span>  }, {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;4&#34;</span>,
+</span></span><span style=display:flex><span>  }, {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;5&#34;</span>,
+</span></span><span style=display:flex><span>  }}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Logf</span>(<span style=color:#e6db74>&#34;Running %d tests...&#34;</span>, len(<span style=color:#a6e22e>testCases</span>))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// NOTE:
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// Cleanup registers a function to be called when the test and all subtests complete.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Cleanup</span>(<span style=color:#66d9ef>func</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Logf</span>(<span style=color:#e6db74>&#34;Finished running %d tests...&#34;</span>, len(<span style=color:#a6e22e>testCases</span>))
+</span></span><span style=display:flex><span>  })
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span>, <span style=color:#a6e22e>tc</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>testCases</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>tc</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tc</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Run</span>(<span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>name</span>, <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Parallel</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Sleep</span>(<span style=color:#ae81ff>3</span> <span style=color:#f92672>*</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Second</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>expected</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>Itoa</span>(<span style=color:#a6e22e>i</span> <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>expected</span> <span style=color:#f92672>!=</span> <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>name</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;expected index %s to equal test %s&#34;</span>, <span style=color:#a6e22e>expected</span>, <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>name</span>)
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>$ go test -v
+</span></span><span style=display:flex><span>=== RUN   TestSimple
+</span></span><span style=display:flex><span>    paralling_test.go:24: Running 5 tests...
+</span></span><span style=display:flex><span>=== RUN   TestSimple/1
+</span></span><span style=display:flex><span>=== PAUSE TestSimple/1
+</span></span><span style=display:flex><span>=== RUN   TestSimple/2
+</span></span><span style=display:flex><span>=== PAUSE TestSimple/2
+</span></span><span style=display:flex><span>=== RUN   TestSimple/3
+</span></span><span style=display:flex><span>=== PAUSE TestSimple/3
+</span></span><span style=display:flex><span>=== RUN   TestSimple/4
+</span></span><span style=display:flex><span>=== PAUSE TestSimple/4
+</span></span><span style=display:flex><span>=== RUN   TestSimple/5
+</span></span><span style=display:flex><span>=== PAUSE TestSimple/5
+</span></span><span style=display:flex><span>=== CONT  TestSimple/1
+</span></span><span style=display:flex><span>=== CONT  TestSimple/2
+</span></span><span style=display:flex><span>=== CONT  TestSimple/5
+</span></span><span style=display:flex><span>=== CONT  TestSimple/4
+</span></span><span style=display:flex><span>=== CONT  TestSimple/3
+</span></span><span style=display:flex><span>=== CONT  TestSimple
+</span></span><span style=display:flex><span>    paralling_test.go:27: Finished running 5 tests...
+</span></span><span style=display:flex><span>--- PASS: TestSimple (0.00s)
+</span></span><span style=display:flex><span>    --- PASS: TestSimple/3 (3.00s)
+</span></span><span style=display:flex><span>    --- PASS: TestSimple/4 (3.00s)
+</span></span><span style=display:flex><span>    --- PASS: TestSimple/1 (3.00s)
+</span></span><span style=display:flex><span>    --- PASS: TestSimple/5 (3.00s)
+</span></span><span style=display:flex><span>    --- PASS: TestSimple/2 (3.00s)
+</span></span><span style=display:flex><span>PASS
+</span></span><span style=display:flex><span>ok      github.com/mdb/paralleling      3.885s
+</span></span></code></pre></div><p>As evidenced by the test output, <code>Finished running 5 tests...</code> no longer prints until after all parallelized test cases return.</p></div><ul class=tags><li><a href=/tags/go>go</a></li><li><a href=/tags/test>test</a></li><li><a href=/tags/concurrency>concurrency</a></li></ul></article></div></main><footer><section><h1 id=about>Info</h1><div><h2>Mike Ball</h2><p>I live in Philadelphia and work as a multi-disciplinary software engineer & designer.</p><p>Over the years, I've developed front end UIs, server backends, automated cloud infrastructure provisioning, built continuous deployment pipelines for highly available applications, and contributed to numerous open source software projects.</p><p>I've also worked in graphic and UX design. Buy prints of my illustrations at <a href=https://tiendah.bigcartel.com>Tiendah</a>.</div><div class=double><h2>Shop Tiendah</h2><ul class="gallery store-feed"></ul><h2>Instagram</h2><ul class="gallery ig-feed"></ul></div><div><h2>Etc.</h2><ul><li><a href=http://github.com/mdb>GitHub</a></li><li><a href=http://twitter.com/clapexcitement>Twitter</a></li><li><a href=https://instagram.com/clapclapexcitement>Instagram</a></li><li><a href=/index.xml>RSS Feed</a></li><li><a href=https://tiendah.bigcartel.com>Shop Tiendah</a></li></ul><h2>Contact</h2><p>Interested in working with me? <a href=mailto:mikedball@gmail.com>Get in touch</a>.</p></div></section></footer><script type=text/javascript src=/js/main.min.c32b1a9bb9a5dc973e4de713e5e17dc2614c23e6ed476c5edc8f24c490738752.js></script>
+<script type=text/javascript>(function(e,o,i,a,t,n,s){e.GoogleAnalyticsObject=t,e[t]=e[t]||function(){(e[t].q=e[t].q||[]).push(arguments)},e[t].l=1*new Date,n=o.createElement(i),s=o.getElementsByTagName(i)[0],n.async=1,n.src=a,s.parentNode.insertBefore(n,s)})(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-54324621-1","auto"),ga("send","pageview")</script></body></html>

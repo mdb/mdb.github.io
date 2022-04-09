@@ -1,0 +1,154 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>A Simple Ruby Class Example | Mike Ball</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=generator content="Hugo 0.95.0"><meta name=ROBOTS content="NOINDEX, NOFOLLOW"><link rel=stylesheet href=http://mikeball.info/main.min.fc82b5f1b515fbd2833bd59ff79fa346acc53053fa47e21268ea8a00c448d9c9.css></head><body><header><div class=mark><a href=/>Mike Ball</a></div><button>Toggle Navigation</button><div class=nav-wrap><nav class=primary><ul><li><a href=/blog>Blog</a></li><li><a href=#about>About</a></li></ul></nav><nav class=secondary><ul><li><a href=https://github.com/mdb>GitHub</a></li><li><a href=https://instagram.com/clapclapexcitement>Instagram</a></li></ul></nav><nav class=tertiary><ul><li><a href=https://tiendah.bigcartel.com>Shop</a></li><li><a href=#about>Contact</a></li></ul></nav></div></header><main role=main><div class=blog-post><aside class=divider><a href=http://mikeball.info/blog/>Blog</a></aside><time>March 30, 2014</time><article><header><h1>A Simple Ruby Class Example</h1></header><div><p>Some colleagues asked about basic Ruby examples. The following RemoteConfig class makes an HTTP request and provides an object-oriented interface to XML served at the URL requested. The class serves as simple intro to some common needs and Ruby-oriented language features:</p><ul><li>dynamic method definition</li><li>performing GET requests over HTTPS</li><li>creating a basic, object-oriented interface</li><li>parsing attribute-heavy XML with XPATH queries</li><li>testing with <a href=http://rspec.info/>Rspec</a> and <a href=https://github.com/bblimke/webmock>Webmock</a></li></ul><h2 id=the-xml>The XML</h2><p>Assume the following XML is hosted at <a href=https://somedomain.com/config.xml>https://somedomain.com/config.xml</a>:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=display:flex><span><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>&lt;configuration&gt;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&lt;add</span> <span style=color:#a6e22e>key=</span><span style=color:#e6db74>&#34;first_key&#34;</span> <span style=color:#a6e22e>value=</span><span style=color:#e6db74>&#34;first key value&#34;</span> <span style=color:#f92672>/&gt;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&lt;add</span> <span style=color:#a6e22e>key=</span><span style=color:#e6db74>&#34;second_key&#34;</span> <span style=color:#a6e22e>value=</span><span style=color:#e6db74>&#34;second key value&#34;</span> <span style=color:#f92672>/&gt;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&lt;add</span> <span style=color:#a6e22e>key=</span><span style=color:#e6db74>&#34;third_key&#34;</span> <span style=color:#a6e22e>value=</span><span style=color:#e6db74>&#34;third key value&#34;</span> <span style=color:#f92672>/&gt;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&lt;add</span> <span style=color:#a6e22e>key=</span><span style=color:#e6db74>&#34;fourth_key&#34;</span> <span style=color:#a6e22e>value=</span><span style=color:#e6db74>&#34;fourth key value&#34;</span> <span style=color:#f92672>/&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>&lt;/configuration&gt;</span>
+</span></span></code></pre></div><h2 id=the-ruby>The Ruby</h2><p>A Ruby class providing an interface to the above-cited XML could like like this:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=display:flex><span>require <span style=color:#e6db74>&#39;net/http&#39;</span>
+</span></span><span style=display:flex><span>require <span style=color:#e6db74>&#39;uri&#39;</span>
+</span></span><span style=display:flex><span>require <span style=color:#e6db74>&#39;nokogiri&#39;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>RemoteConfig</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>attr_reader</span> <span style=color:#e6db74>:xml</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># On instantiation, perform an HTTP request to the XML</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># config file, parse it with nokogiri, and define methods</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># through which its values can be accessed:</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>initialize</span>
+</span></span><span style=display:flex><span>    @xml <span style=color:#f92672>=</span> get_and_parse_config
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    create_methods
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>end</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># A method to store the XML endpoint</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>url</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;https://somedomain.com/config.xml&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>end</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># private methods; not publicly exposed for use</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># in an RemoteConfig instance</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>private</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># Perform a GET request to retrieve the remote XML</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># and parse the response with Nokogiri</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_and_parse_config</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>Nokogiri</span><span style=color:#f92672>::</span><span style=color:#66d9ef>XML</span>(get_remote_config)
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>end</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># Set up Net::HTTP to perform a GET request against</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># the remote XML URL using HTTPS.</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># Retrieve the response body.</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_remote_config</span>
+</span></span><span style=display:flex><span>    http <span style=color:#f92672>=</span> <span style=color:#66d9ef>Net</span><span style=color:#f92672>::</span><span style=color:#66d9ef>HTTP</span><span style=color:#f92672>.</span>new(uri<span style=color:#f92672>.</span>host, uri<span style=color:#f92672>.</span>port)
+</span></span><span style=display:flex><span>    http<span style=color:#f92672>.</span>use_ssl <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    http<span style=color:#f92672>.</span>request(request)<span style=color:#f92672>.</span>body
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>end</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># Perform the HTTP request to the XML file:</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>request</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>Net</span><span style=color:#f92672>::</span><span style=color:#66d9ef>HTTP</span><span style=color:#f92672>::</span><span style=color:#66d9ef>Get</span><span style=color:#f92672>.</span>new(uri<span style=color:#f92672>.</span>request_uri)
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>end</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># parse the URL string as a URI</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>uri</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>URI</span><span style=color:#f92672>.</span>parse(url)
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>end</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># Use xpath to fetch the relevant attribute value:</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>fetch_value</span>(value)
+</span></span><span style=display:flex><span>    @xml<span style=color:#f92672>.</span>xpath(<span style=color:#e6db74>&#34;//add[@key=&#39;</span><span style=color:#e6db74>#{</span>value<span style=color:#e6db74>}</span><span style=color:#e6db74>&#39;]/@value&#34;</span>)<span style=color:#f92672>.</span>text
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>end</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># An array of the methods we want a RemoteConfig</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># instance to have:</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>available_methods</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>[</span>
+</span></span><span style=display:flex><span>      <span style=color:#e6db74>:first_key</span>,
+</span></span><span style=display:flex><span>      <span style=color:#e6db74>:second_key</span>,
+</span></span><span style=display:flex><span>      <span style=color:#e6db74>:third_key</span>,
+</span></span><span style=display:flex><span>      <span style=color:#e6db74>:fourth_key</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>end</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># Rather than repeat our method logic, define the public</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># instance methods on instantantiation of the class:</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>create_methods</span>
+</span></span><span style=display:flex><span>    available_methods<span style=color:#f92672>.</span>each <span style=color:#66d9ef>do</span> <span style=color:#f92672>|</span>method<span style=color:#f92672>|</span>
+</span></span><span style=display:flex><span>      self<span style=color:#f92672>.</span>class<span style=color:#f92672>.</span>send(<span style=color:#e6db74>:define_method</span>, method) { fetch_value method<span style=color:#f92672>.</span>to_s }
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>end</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>end</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>end</span>
+</span></span></code></pre></div><h2 id=usage>Usage</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=display:flex><span><span style=color:#75715e># instantiate an instance of RemoteConfig</span>
+</span></span><span style=display:flex><span>config <span style=color:#f92672>=</span> <span style=color:#66d9ef>RemoteConfig</span><span style=color:#f92672>.</span>new
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>config<span style=color:#f92672>.</span>first_key
+</span></span><span style=display:flex><span><span style=color:#75715e># =&gt; &#39;first key value&#39;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>config<span style=color:#f92672>.</span>second_key
+</span></span><span style=display:flex><span><span style=color:#75715e># =&gt; &#39;second key value&#39;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>config<span style=color:#f92672>.</span>url
+</span></span><span style=display:flex><span><span style=color:#75715e># =&gt; &#39;https://somedomain.com/config.xml&#39;</span>
+</span></span></code></pre></div><h2 id=testing>Testing</h2><p>I&rsquo;m assuming you&rsquo;re using Rspec and webmock, and that you have a spec_helper.rb file.</p><p>Your spec_helper.rb contains the following:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=display:flex><span>require <span style=color:#e6db74>&#39;webmock/rspec&#39;</span>
+</span></span><span style=display:flex><span>require <span style=color:#e6db74>&#39;remote_config&#39;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Disable real HTTP network requests when</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># running our tests:</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>WebMock</span><span style=color:#f92672>.</span>disable_net_connect!
+</span></span></code></pre></div><p>And the spec looks like this:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=display:flex><span>require <span style=color:#e6db74>&#39;spec_helper&#39;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>describe <span style=color:#66d9ef>RemoteConfig</span> <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  subject(<span style=color:#e6db74>:remote_config</span>) { described_class<span style=color:#f92672>.</span>new }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  before <span style=color:#e6db74>:each</span> <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># Use webmock to stub HTTP requests to return the value we expect:</span>
+</span></span><span style=display:flex><span>    stub_request(<span style=color:#e6db74>:get</span>, <span style=color:#e6db74>&#39;https://somedomain.com/config.xml&#39;</span>)<span style=color:#f92672>.</span>to_return(
+</span></span><span style=display:flex><span>      <span style=color:#e6db74>:status</span> <span style=color:#f92672>=&gt;</span> <span style=color:#ae81ff>200</span>,
+</span></span><span style=display:flex><span>      <span style=color:#e6db74>:body</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#39;&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &lt;configuration&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>          &lt;add key=&#34;first_key&#34; value=&#34;first key value&#34; /&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>          &lt;add key=&#34;second_key&#34; value=&#34;second key value&#34; /&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>          &lt;add key=&#34;third_key&#34; value=&#34;third key value&#34; /&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>          &lt;add key=&#34;fourth_key&#34; value=&#34;fourth key value&#34; /&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &lt;/configuration&gt;&#39;</span>
+</span></span><span style=display:flex><span>    )
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>end</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># Test its public methods:</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  describe <span style=color:#e6db74>&#34;#initialize&#34;</span> <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>    it <span style=color:#e6db74>&#34;creates a Nokogiri XML document&#34;</span> <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>      expect(remote_config<span style=color:#f92672>.</span>xml<span style=color:#f92672>.</span>class)<span style=color:#f92672>.</span>to eq(<span style=color:#66d9ef>Nokogiri</span><span style=color:#f92672>::</span><span style=color:#66d9ef>XML</span><span style=color:#f92672>::</span><span style=color:#66d9ef>Document</span>)
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>end</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>end</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  describe <span style=color:#e6db74>&#34;#first_key&#34;</span> <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>    subject { remote_config<span style=color:#f92672>.</span>first_key }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    it { should eq <span style=color:#e6db74>&#39;first key value&#39;</span> }
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>end</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  describe <span style=color:#e6db74>&#34;#second_key&#34;</span> <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>    subject { remote_config<span style=color:#f92672>.</span>second_key }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    it { should eq <span style=color:#e6db74>&#39;second key value&#39;</span> }
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>end</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  describe <span style=color:#e6db74>&#34;#third_key&#34;</span> <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>    subject { remote_config<span style=color:#f92672>.</span>third_key }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    it { should eq <span style=color:#e6db74>&#39;third key value&#39;</span> }
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>end</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  describe <span style=color:#e6db74>&#34;#url&#34;</span> <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>    subject { remote_config<span style=color:#f92672>.</span>url }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    it { should eq <span style=color:#e6db74>&#39;https://somdomain.com/config.xml&#39;</span> }
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>end</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>end</span>
+</span></span></code></pre></div></div><ul class=tags><li><a href=/tags/ruby>ruby</a></li><li><a href=/tags/rspec>rspec</a></li><li><a href=/tags/tdd>TDD</a></li><li><a href=/tags/http>HTTP</a></li></ul></article></div></main><footer><section><h1 id=about>Info</h1><div><h2>Mike Ball</h2><p>I live in Philadelphia and work as a multi-disciplinary software engineer & designer.</p><p>Over the years, I've developed front end UIs, server backends, automated cloud infrastructure provisioning, built continuous deployment pipelines for highly available applications, and contributed to numerous open source software projects.</p><p>I've also worked in graphic and UX design. Buy prints of my illustrations at <a href=https://tiendah.bigcartel.com>Tiendah</a>.</div><div class=double><h2>Shop Tiendah</h2><ul class="gallery store-feed"></ul><h2>Instagram</h2><ul class="gallery ig-feed"></ul></div><div><h2>Etc.</h2><ul><li><a href=http://github.com/mdb>GitHub</a></li><li><a href=http://twitter.com/clapexcitement>Twitter</a></li><li><a href=https://instagram.com/clapclapexcitement>Instagram</a></li><li><a href=/index.xml>RSS Feed</a></li><li><a href=https://tiendah.bigcartel.com>Shop Tiendah</a></li></ul><h2>Contact</h2><p>Interested in working with me? <a href=mailto:mikedball@gmail.com>Get in touch</a>.</p></div></section></footer><script type=text/javascript src=/js/main.min.c32b1a9bb9a5dc973e4de713e5e17dc2614c23e6ed476c5edc8f24c490738752.js></script>
+<script type=text/javascript>(function(e,o,i,a,t,n,s){e.GoogleAnalyticsObject=t,e[t]=e[t]||function(){(e[t].q=e[t].q||[]).push(arguments)},e[t].l=1*new Date,n=o.createElement(i),s=o.getElementsByTagName(i)[0],n.async=1,n.src=a,s.parentNode.insertBefore(n,s)})(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-54324621-1","auto"),ga("send","pageview")</script></body></html>

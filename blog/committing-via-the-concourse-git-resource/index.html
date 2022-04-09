@@ -1,0 +1,72 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>Committing Via the Concourse Git Resource | Mike Ball</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=generator content="Hugo 0.95.0"><meta name=ROBOTS content="NOINDEX, NOFOLLOW"><link rel=stylesheet href=http://mikeball.info/main.min.fc82b5f1b515fbd2833bd59ff79fa346acc53053fa47e21268ea8a00c448d9c9.css></head><body><header><div class=mark><a href=/>Mike Ball</a></div><button>Toggle Navigation</button><div class=nav-wrap><nav class=primary><ul><li><a href=/blog>Blog</a></li><li><a href=#about>About</a></li></ul></nav><nav class=secondary><ul><li><a href=https://github.com/mdb>GitHub</a></li><li><a href=https://instagram.com/clapclapexcitement>Instagram</a></li></ul></nav><nav class=tertiary><ul><li><a href=https://tiendah.bigcartel.com>Shop</a></li><li><a href=#about>Contact</a></li></ul></nav></div></header><main role=main><div class=blog-post><aside class=divider><a href=http://mikeball.info/blog/>Blog</a></aside><time>June 5, 2017</time><article><header><h1>Committing Via the Concourse Git Resource</h1></header><div><p>A <a href=http://concourse-ci.org>Concourse</a> <em>resource</em> is any entity that can be checked for new versions, fetched at a specific version, and/or pushed up to idempotently create new versions. <a href=http://concourse-ci.org>Concourse</a>&rsquo;s built-in <a href=https://github.com/concourse/git-resource>git-resource</a> is a Concourse resource for working with git repositories.</p><p>Pulling down a git repository for use in a pipeline job using the <code>git-resource</code> is fairly straight forward:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>resources</span>:
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>- <span style=color:#f92672>name</span>: <span style=color:#ae81ff>my-repo</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>type</span>: <span style=color:#ae81ff>git</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>source</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>branch</span>: <span style=color:#ae81ff>master</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>uri</span>: <span style=color:#ae81ff>https://github.com/my-org/my-repo.git</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>uername</span>: <span style=color:#ae81ff>git</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>password</span>: <span style=color:#ae81ff>((github-access-token))</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>jobs</span>:
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>- <span style=color:#f92672>name</span>: <span style=color:#ae81ff>git-log</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>plan</span>:
+</span></span><span style=display:flex><span>  - <span style=color:#f92672>get</span>: <span style=color:#ae81ff>my-repo</span>
+</span></span><span style=display:flex><span>  - <span style=color:#f92672>task</span>: <span style=color:#ae81ff>show-log</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>config</span>:
+</span></span><span style=display:flex><span>      <span style=color:#f92672>inputs</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>my-repo</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>platform</span>: <span style=color:#ae81ff>linux</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>image_resource</span>:
+</span></span><span style=display:flex><span>        <span style=color:#f92672>type</span>: <span style=color:#ae81ff>registry-image</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>source</span>:
+</span></span><span style=display:flex><span>          <span style=color:#f92672>repository</span>: <span style=color:#ae81ff>node</span>
+</span></span><span style=display:flex><span>          <span style=color:#f92672>tag</span>: <span style=color:#ae81ff>6.3.1</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>run</span>:
+</span></span><span style=display:flex><span>        <span style=color:#f92672>dir</span>: <span style=color:#ae81ff>my-repo</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>path</span>: <span style=color:#ae81ff>git</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>args</span>:
+</span></span><span style=display:flex><span>          - --<span style=color:#66d9ef>no</span>-<span style=color:#ae81ff>pager</span>
+</span></span><span style=display:flex><span>          - <span style=color:#ae81ff>log</span>
+</span></span></code></pre></div><p>But how can Concourse&rsquo;s <code>git-resource</code> be leveraged to make and push commits to a repository? The following offers an example pipeline job executing a <code>put</code> on a modified git resource:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>resources</span>:
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>- <span style=color:#f92672>name</span>: <span style=color:#ae81ff>my-repo</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>type</span>: <span style=color:#ae81ff>git</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>source</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>branch</span>: <span style=color:#ae81ff>master</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>uri</span>: <span style=color:#ae81ff>https://github.com:my-org/my-repo.git</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>username</span>: <span style=color:#ae81ff>git</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>password</span>: <span style=color:#ae81ff>((github-access-token))</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>jobs</span>:
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>- <span style=color:#f92672>name</span>: <span style=color:#ae81ff>commit-and-push-to-repo</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>plan</span>:
+</span></span><span style=display:flex><span>  - <span style=color:#f92672>get</span>: <span style=color:#ae81ff>my-repo</span>
+</span></span><span style=display:flex><span>  - <span style=color:#f92672>task</span>: <span style=color:#ae81ff>commit-and-push</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>config</span>:
+</span></span><span style=display:flex><span>      <span style=color:#f92672>inputs</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>my-repo</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>outputs</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>my-repo-modified</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>platform</span>: <span style=color:#ae81ff>linux</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>image_resource</span>:
+</span></span><span style=display:flex><span>        <span style=color:#f92672>type</span>: <span style=color:#ae81ff>docker-image</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>source</span>:
+</span></span><span style=display:flex><span>          <span style=color:#f92672>repository</span>: <span style=color:#ae81ff>node</span>
+</span></span><span style=display:flex><span>          <span style=color:#f92672>tag</span>: <span style=color:#ae81ff>6.3.1</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>run</span>:
+</span></span><span style=display:flex><span>        <span style=color:#f92672>path</span>: <span style=color:#ae81ff>bash</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>args</span>:
+</span></span><span style=display:flex><span>          - -<span style=color:#ae81ff>exc</span>
+</span></span><span style=display:flex><span>          - <span style=color:#ae81ff>git clone my-repo my-repo-modified</span>
+</span></span><span style=display:flex><span>          - <span style=color:#ae81ff>cd my-repo-modified</span>
+</span></span><span style=display:flex><span>          - <span style=color:#ae81ff>echo $(date) &gt; date_file.txt</span>
+</span></span><span style=display:flex><span>          - <span style=color:#ae81ff>git add .</span>
+</span></span><span style=display:flex><span>          - <span style=color:#ae81ff>git commit -m &#34;add new date_file.txt date&#34;</span>
+</span></span><span style=display:flex><span>  - <span style=color:#f92672>put</span>: <span style=color:#ae81ff>my-repo</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>params</span>:
+</span></span><span style=display:flex><span>      <span style=color:#f92672>repository</span>: <span style=color:#ae81ff>my-repo-modified</span>
+</span></span></code></pre></div></div><ul class=tags><li><a href=/tags/concourse>concourse</a></li><li><a href=/tags/github>github</a></li><li><a href=/tags/git>git</a></li></ul></article></div></main><footer><section><h1 id=about>Info</h1><div><h2>Mike Ball</h2><p>I live in Philadelphia and work as a multi-disciplinary software engineer & designer.</p><p>Over the years, I've developed front end UIs, server backends, automated cloud infrastructure provisioning, built continuous deployment pipelines for highly available applications, and contributed to numerous open source software projects.</p><p>I've also worked in graphic and UX design. Buy prints of my illustrations at <a href=https://tiendah.bigcartel.com>Tiendah</a>.</div><div class=double><h2>Shop Tiendah</h2><ul class="gallery store-feed"></ul><h2>Instagram</h2><ul class="gallery ig-feed"></ul></div><div><h2>Etc.</h2><ul><li><a href=http://github.com/mdb>GitHub</a></li><li><a href=http://twitter.com/clapexcitement>Twitter</a></li><li><a href=https://instagram.com/clapclapexcitement>Instagram</a></li><li><a href=/index.xml>RSS Feed</a></li><li><a href=https://tiendah.bigcartel.com>Shop Tiendah</a></li></ul><h2>Contact</h2><p>Interested in working with me? <a href=mailto:mikedball@gmail.com>Get in touch</a>.</p></div></section></footer><script type=text/javascript src=/js/main.min.c32b1a9bb9a5dc973e4de713e5e17dc2614c23e6ed476c5edc8f24c490738752.js></script>
+<script type=text/javascript>(function(e,o,i,a,t,n,s){e.GoogleAnalyticsObject=t,e[t]=e[t]||function(){(e[t].q=e[t].q||[]).push(arguments)},e[t].l=1*new Date,n=o.createElement(i),s=o.getElementsByTagName(i)[0],n.async=1,n.src=a,s.parentNode.insertBefore(n,s)})(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-54324621-1","auto"),ga("send","pageview")</script></body></html>
