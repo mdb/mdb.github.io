@@ -22,6 +22,11 @@ jobs:
       with:
         name: build
         path: public
+    - name: Push to gh-pages
+      uses: JamesIves/github-pages-deploy-action@v4.3.0
+      with:
+        branch: gh-pages
+        folder: public
     - name: Deploy
       uses: jakejarvis/s3-sync-action@master
       with:
