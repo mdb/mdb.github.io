@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Setup Hugo
+    - name: Set up Hugo
       uses: peaceiris/actions-hugo@v2
       with:
         hugo-version: '0.74.3'
@@ -21,8 +21,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: build
-        path: |
-          public
+        path: public
     - name: Deploy
       uses: jakejarvis/s3-sync-action@master
       with:
@@ -31,5 +30,5 @@ jobs:
         AWS_S3_BUCKET: www.mikeball.info
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: 'us-east-1'
-        SOURCE_DIR: 'public'
+        AWS_REGION: us-east-1
+        SOURCE_DIR: public
