@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  fetch('https://mdb.github.io/ig-feed/ig/media.json')
+  fetch('https://www.mikeball.info/ig-feed/ig/media.json')
     .then(response => response.json())
     .then(populateIGFeeds);
 
