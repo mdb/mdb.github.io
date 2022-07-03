@@ -1,4 +1,4 @@
-[![CI](https://github.com/mdb/mikeball.info/workflows/CI/badge.svg)](https://github.com/mdb/mikeball.info/actions?query=workflow%3ACI) [![CD](https://github.com/mdb/mikeball.info/workflows/CD/badge.svg)](https://github.com/mdb/mikeball.info/actions?query=workflow%3ACD)
+[![CI](https://github.com/mdb/mdb.github.io/actions/workflows/ci.yml/badge.svg)](https://github.com/mdb/mdb.github.io/actions/workflows/ci.yml) [![CD](https://github.com/mdb/mdb.github.io/actions/workflows/cd.yml/badge.svg)](https://github.com/mdb/mdb.github.io/actions/workflows/cd.yml)
 
 # [mikeball.info](http://mikeball.info)
 
