@@ -1,17 +1,33 @@
-### Hello 👋
+[![CI](https://github.com/mdb/mikeball.info/workflows/CI/badge.svg)](https://github.com/mdb/mikeball.info/actions?query=workflow%3ACI) [![CD](https://github.com/mdb/mikeball.info/workflows/CD/badge.svg)](https://github.com/mdb/mikeball.info/actions?query=workflow%3ACD)
 
-I live in Philadelphia and work as a multi-disciplinary software engineer &
-designer. I'm currently a software engineer on the [HBO Max](https://www.hbomax.com/)
-Strategic Global Infrastructure team.
+# [mikeball.info](http://mikeball.info)
 
-Over the years, I've developed front end UIs, server backends, automated cloud
-infrastructure provisioning, and built continuous deployment pipelines for highly
-available applications. I like using and contributing to open source software.
+Personal website, over a decade of blog posts and notes about software engineering, some archived projects, etc.
 
-I've also worked in graphic and UX design. Buy prints of my illustrations at
-[Tiendah](https://tiendah.bigcartel.com).
+Built using [hugo](https://gohugo.io).
 
-[mikeball.info](http://mikeball.info) is my personal website and blog, featuring
-over a decade of musings, lessons, and notes on technology.
+## Development
 
-![GitHub stats](https://github-readme-stats.vercel.app/api?username=mdb&count_private=true&include_all_commits=true&custom_title=GitHub%20Stats)
+Run a development server on `localhost:1313`:
+
+```
+make serve
+```
+
+## Build
+
+Compile site to a `public` directory:
+
+```
+make
+```
+
+## Deploy
+
+The `main` branch is continuously deployed via a [CD GitHub action workflow](https://github.com/mdb/mikeball.info/actions?query=workflow%3ACD).
+
+Alternatively:
+
+```
+make deploy
+```
