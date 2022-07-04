@@ -3,7 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const footer = document.querySelector('footer ul.ig-feed'),
       gallery = document.querySelector('ul.gallery.ig-feed'),
       images = data.slice(0, 8).map(image => {
-        return `<li class="item"><a class="thumbnail" href="${image.permalink}"><img src="${image.media_url}" /></a></li>`;
+        return `
+          <li class="item">
+            <a class="thumbnail" href="${image.permalink}">
+              <img src="${image.media_url}" />
+            </a>
+          </li>`;
       });
 
     footer.innerHTML = images.join('');
