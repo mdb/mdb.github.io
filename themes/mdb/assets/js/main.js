@@ -1,21 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
   function populateIGFeeds(data) {
-    const footer = document.querySelector('footer ul.ig-feed'),
-      gallery = document.querySelector('ul.gallery.ig-feed'),
-      images = data.slice(0, 8).map(image => {
+    const galleries = document.querySelectorAll('ul.ig-feed'),
+      items = data.slice(0, 8).map(image => {
         return `
           <li class="item">
             <a class="thumbnail" href="${image.permalink}">
               <img src="${image.media_url}" />
             </a>
           </li>`;
-      });
+      }).join('');
 
-    footer.innerHTML = images.join('');
-
-    if (gallery) {
-      gallery.innerHTML = images.join('');
-    }
+    galleries.forEach(gallery => gallery.innerHTML = items);
   }
 
   // Published to GH pages via https://github.com/mdb/ig-feed/'s own
@@ -24,14 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(response => response.json())
     .then(populateIGFeeds);
 
-  const gallery = document.querySelector('ul.gallery.store-feed');
-  if (!gallery) {
-    return;
-  }
-
   function populateShopFeeds(data) {
-    const footer = document.querySelector('footer ul.store-feed'),
-      gallery = document.querySelector('ul.gallery.store-feed'),
+    const galleries = document.querySelectorAll('ul.store-feed'),
       items = data.slice(0, 4).map(item => {
         const url = `https://tiendah.bigcartel.com/${item.url}`;
 
@@ -47,13 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
               <p><a href="${url}">Buy print</a></p>
             </div>
           </li>`;
-      });
+      }).join('');
 
-    footer.innerHTML = items.join('');
-
-    if (gallery) {
-      gallery.innerHTML = items.join('');
-    }
+    galleries.forEach(gallery => gallery.innerHTML = items);
   }
 
   fetch('https://api.bigcartel.com/tiendah/products.json')
