@@ -2,4 +2,4 @@
 Problem Your Go project&amp;rsquo;s tests are slow and run serially. Or perhaps they&amp;rsquo;re not slow, but they run serially and could be faster.
 Solution Consider running the test cases in parallel.
 Simple non-parallelized example As a starting point, consider a simple non-parallelized test:
-package main import ( &amp;#34;io/ioutil&amp;#34; &amp;#34;os&amp;#34; &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; ) func TestSimple(t *testing.</description></item></channel></rss>
+package main import ( &amp;#34;io/ioutil&amp;#34; &amp;#34;os&amp;#34; &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; ) func TestSimple(t *testing.T) { testCases := []struct { name string }{{ &amp;#34;1&amp;#34;, }, { &amp;#34;2&amp;#34;, }, { &amp;#34;3&amp;#34;, }, { &amp;#34;4&amp;#34;, }, { &amp;#34;5&amp;#34;, }} t.</description></item></channel></rss>

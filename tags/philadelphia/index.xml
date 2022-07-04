@@ -4,4 +4,4 @@ gem install phl_geocode Require phl_geocode:
 require &amp;#34;phl_geocode&amp;#34; Instantiate a PHLGeocode instance:
 phl = PHLGeocode.new Get latitude/longitude coordinates for a Philadelphia address:
 phl.get_coordinates &amp;#34;1500 market street&amp;#34; Example response:
-[{ :address =&amp;gt; &amp;#34;1500 MARKET ST&amp;#34;, :similarity =&amp;gt; 100, :latitude =&amp;gt; 39.</description></item></channel></rss>
+[{ :address =&amp;gt; &amp;#34;1500 MARKET ST&amp;#34;, :similarity =&amp;gt; 100, :latitude =&amp;gt; 39.9521740263203, :longitude =&amp;gt; -75.1661518986459 }, { :address =&amp;gt; &amp;#34;1500S MARKET ST&amp;#34;, :similarity =&amp;gt; 99, :latitude =&amp;gt; 39.</description></item></channel></rss>
