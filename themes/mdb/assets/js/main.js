@@ -49,11 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
           </li>`;
       });
 
-      footer.innerHTML = items.join('');
+    footer.innerHTML = items.join('');
 
-      if (gallery) {
-        gallery.innerHTML = items.join('');
-      }
+    if (gallery) {
+      gallery.innerHTML = items.join('');
+    }
   }
 
   fetch('https://api.bigcartel.com/tiendah/products.json')
