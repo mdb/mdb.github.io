@@ -8,9 +8,9 @@ build:
 	docker run \
 		--rm \
 		--tty \
-		--interactive \
 		--volume=$(PWD):/src \
-		$(HUGO_IMAGE)
+		$(HUGO_IMAGE) \
+			--minify
 
 .PHONY: serve
 # TODO: livereload does not work
