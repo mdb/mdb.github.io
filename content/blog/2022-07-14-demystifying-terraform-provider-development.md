@@ -131,6 +131,12 @@ While individual functions can be unit tested in isolation, the plugin SDK provi
 
 Generally, these acceptance tests are configured to target real APIs provided by cloud providers, though some Terraform providers -- particularly those that target open source provider platforms or SaaS APIs -- may configure acceptance tests to interact with `localhost`-hosted APIs enabled via tools such as [Docker](https://www.docker.com/). For example, `terraform-provider-grafana`'s own acceptance testing utilizes a local Grafana established via [docker-compose](https://github.com/grafana/terraform-provider-grafana/blob/v1.24.0/docker-compose.yml) in local development, as well as remote instances of Grafana in CI/CD.
 
+To learn more:
+
+* [an example PR adding tests of a new `grafana_annotation` resource](https://github.com/grafana/terraform-provider-grafana/pull/558)
+* [an example PR adding tests of new `grafana_organization` data source functionality](https://github.com/grafana/terraform-provider-grafana/pull/551)
+* [an example terraform-provider-grafana PR CI/CD execution](https://drone.grafana.net/grafana/terraform-provider-grafana/1345)
+
 ## Building
 
 Typically, [goreleaser](https://goreleaser.com/) is used to compile cross-platform provider binaries and publish them as versioned GitHub releases. [terraform-provider-grafana's `.goreleaser.yml`](https://github.com/grafana/terraform-provider-grafana/blob/v1.24.0/.goreleaser.yml) offers a configuration example used to publish its [GitHub releases](https://github.com/grafana/terraform-provider-grafana/releases).
