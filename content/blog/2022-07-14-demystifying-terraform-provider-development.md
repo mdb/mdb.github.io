@@ -161,13 +161,13 @@ To learn more:
 
 ## Building
 
-Typically, [goreleaser](https://goreleaser.com/) is used to compile cross-platform provider binaries and publish them as versioned GitHub releases. [terraform-provider-grafana's `.goreleaser.yml`](https://github.com/grafana/terraform-provider-grafana/blob/v1.24.0/.goreleaser.yml) offers a configuration example used to publish its [GitHub releases](https://github.com/grafana/terraform-provider-grafana/releases).
+Typically, [goreleaser](https://goreleaser.com/) is used to compile provider binaries across platforms and publish them as versioned GitHub releases. [terraform-provider-grafana's .goreleaser.yml](https://github.com/grafana/terraform-provider-grafana/blob/v1.24.0/.goreleaser.yml) offers a configuration example used to build and publish its own [GitHub releases](https://github.com/grafana/terraform-provider-grafana/releases).
 
 Often, [tfplugindocs](https://github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs) is integrated with providers' build process to automate the generation of markdown documents documenting the provider; these are typically committed to a [docs](https://github.com/grafana/terraform-provider-grafana/tree/v1.24.0/docs) directory in source control.
 
 ## Releasing
 
-Assuming the provider and its associated GitHub releases conform to some [common standards](https://www.terraform.io/registry/providers/publishing), the provider can be published to the [Terraform registry](https://www.terraform.io/registry/providers/publishing#publishing-to-the-registry) where it can be downloaded by Terraform configurations that reference it and used by other Terraform practitioners.
+Assuming the provider and its associated GitHub releases conform to some [common standards](https://www.terraform.io/registry/providers/publishing), the provider can be published to the [Terraform registry](https://www.terraform.io/registry/providers/publishing#publishing-to-the-registry). From there, its available for use and can be downloaded by Terraform configurations in which it's referenced and configured.
 
 ## Learn more
 
