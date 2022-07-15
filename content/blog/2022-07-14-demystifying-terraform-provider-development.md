@@ -113,7 +113,7 @@ Generally, each of the individual CRUD functions accept 2 arguments:
 1. [*schema.ResourceData](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#ResourceData) - this represents the Terraform configuration.
 1. an `interface{}` - this is a generic interface often homing an API client package configured by the provider and used to interact with the provider APIs
 
-Each of the CRUD functions interact with the appropriate corresponding provider APIs to create, read, update, or delete the corresponding resource, accordingly. Each of the functions is also responsible for updating [Terraform state](https://www.terraform.io/language/state) to reflect this.
+Each of the CRUD functions interact with the appropriate corresponding provider APIs to create, read, update, or delete the corresponding resource, accordingly. Each of the functions is also responsible for updating [Terraform state](https://www.terraform.io/language/state) to reflect this. However, it's business logic codified within Terraform itself -- and not the provider codebase -- that decides which of the CRUD functions to invoke when, via the aforementioned "Terraform lifecycle algorithm."
 
 To learn more:
 
