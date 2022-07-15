@@ -10,7 +10,7 @@ thumbnail: grassy_hill_thumb.jpg
 teaser: An introduction to Terraform provider development patterns
 ---
 
-_Many Terraform practitioners may be unfamiliar with provider development. How are providers implemented? The following offers an outline of a brief presentation I gave to the [HBO Max](https://www.hbomax.com/) Strategic Global Infrastructure team._
+_Many Terraform practitioners may be unfamiliar with [provider](https://www.terraform.io/language/providers) development. How are providers actually implemented? The following offers an outline of a brief presentation I gave to the [HBO Max](https://www.hbomax.com/) Strategic Global Infrastructure team._
 
 ## Review of the basics
 
