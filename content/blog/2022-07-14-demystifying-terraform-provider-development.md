@@ -14,7 +14,7 @@ _Many Terraform practitioners may be unfamiliar with [provider](https://www.terr
 
 ## Review of the basics
 
-First, let's re-establish a foundation, especially for those who may be less familiar with [Terraform](https://www.terraform.io/).
+First, let's establish a foundation, especially for those who may be less familiar with [Terraform](https://www.terraform.io/).
 
 ### Terraform fundamentals
 
@@ -123,12 +123,12 @@ To learn more:
 
 ## Data sources
 
-Terraform [data sources](https://www.terraform.io/language/data-sources) enable Terraform to _read_ outside information. Unlike resources -- which enable Terraform to create, update, and delete resources -- data sources are read-only.
+Terraform [data sources](https://www.terraform.io/language/data-sources) enable Terraform to _read_ outside information. Unlike resources -- which enable Terraform to create, update, and delete resources -- data sources only offer read-only functionality.
 
 Assuming the use of the [plugin SDK](github.com/hashicorp/terraform-plugin-sdk), individual provider data sources are managed via functions that return a [schema.Resource](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#Resource), similar to that returned by resource functions. However, a data source's `*schema.Resource` typically only specifies:
 
 * `Description` - a description of the data source used to generate documentation
-* `ReadContext` - a function for reading the resource specified in configuration via the associated provider API
+* `Read` - a function for reading the resource specified in configuration via the associated provider API
 * `Schema` - a `map[string]*schema.Schema` specifying the supported resource arguments and attributes
 
 To learn more:
@@ -137,7 +137,7 @@ To learn more:
 
 ## Tying it together
 
-In summary, provider implementation is largely composed of boilerplate-ish configuration code, with most of the business logic confined to the individual CRUD functions associated with individual resources, as described above. Then, finally, a `main.go` provides the entry point for the provider program.
+In summary, provider implementation is largely composed of boilerplate-ish configuration code implementing the above-described types, with most of the business logic confined to the individual CRUD functions associated with individual resources. Then, finally, a `main.go` provides the entry point for the provider program.
 
 To learn more:
 
@@ -149,9 +149,9 @@ Most provider codebases feature a `GNUmakefile` in which various build and test 
 
 ## Testing
 
-While individual functions can be unit tested in isolation, the plugin SDK provides an [acctest](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk@v1.17.2/helper/acctest) and testing types (most notably [`resource.TestCase`](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk@v1.17.2/helper/resource#TestCase)) used to author acceptance tests against provider, provider resource, and provider data source functionality.
+While individual functions can be unit tested in isolation, the plugin SDK provides an [acctest](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk@v1.17.2/helper/acctest) and testing utilities (most notably [`resource.TestCase`](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk@v1.17.2/helper/resource#TestCase)) used to author acceptance tests against provider, provider resource, and provider data source functionality.
 
-Generally, these acceptance tests are configured to target real APIs associated with cloud providers, though some Terraform providers -- particularly those that target open source provider platforms or SaaS APIs -- may configure acceptance tests to interact with `localhost`-served APIs enabled via tools such as [Docker](https://www.docker.com/). For example, `terraform-provider-grafana`'s own acceptance testing utilizes a local Grafana established via [docker-compose](https://github.com/grafana/terraform-provider-grafana/blob/v1.24.0/docker-compose.yml) in local development, as well as remote instances of Grafana in CI/CD.
+Generally, these acceptance tests are configured to interact with real APIs associated with a given cloud provider, though some Terraform providers -- particularly those that target open source platforms or SaaS APIs -- may configure acceptance tests to interact with `localhost`-served APIs enabled via tools such as [Docker](https://www.docker.com/). For example, `terraform-provider-grafana`'s own acceptance testing utilizes a local Grafana established via [docker-compose](https://github.com/grafana/terraform-provider-grafana/blob/v1.24.0/docker-compose.yml) in local development, as well as remote instances of Grafana in CI/CD.
 
 To run `terraform-provider-grafana`'s acceptance tests locally, install [Go](https://go.dev/) and [Docker](https://www.docker.com/), then clone the repository:
 
