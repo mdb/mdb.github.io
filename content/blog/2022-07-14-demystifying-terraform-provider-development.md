@@ -155,13 +155,13 @@ Generally, these acceptance tests are configured to target real APIs associated 
 
 To run `terraform-provider-grafana`'s acceptance tests locally, install [Go](https://go.dev/) and [Docker](https://www.docker.com/), then clone the repository:
 
-```
+```sh
 git clone git@github.com:grafana/terraform-provider-grafana.git
 ```
 
 ...and run the acceptance tests against a local Docker-established Grafana:
 
-```
+```sh
 make testacc-docker
 ```
 
