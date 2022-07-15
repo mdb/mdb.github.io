@@ -75,7 +75,7 @@ Providers are generally authored in Go using Terraform's [plugin SDK](https://gi
 
 ## Implementing a provider
 
-As Terraform practitioners know, a provider is configured in a Terraform configuration via a `provider "some_provider" {}` HCL configuration. For example:
+A provider is configured in an individual Terraform configuration via a `provider "some_provider" {}`-style HCL configuration. For example, the AWS provider might be configured like...
 
 ```hcl
 provider "aws" {
