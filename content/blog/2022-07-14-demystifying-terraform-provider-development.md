@@ -89,7 +89,7 @@ Assuming the use of the [plugin SDK](https://github.com/hashicorp/terraform-plug
 * `Schema` - a `map[string]*schema.Schema` specifying the supported provider arguments and attributes
 * `ResourcesMap` - a `map[string]*schema.Resource` specifying the supported resources and their related functions
 * `DataSourcesMap` - a `map[string]*schema.Resource` specifying the supported data sources and their related functions
-* `ConfigureFunc` - a [`ConfigureFunc`](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#ConfigureFunc) used to configure a provider, often configuring and returning an API client using the provider configuration provided via the `provider "some_provider" {}` HCL configuration defined in Terraform configuration.
+* `ConfigureFunc` - a [`ConfigureFunc`](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#ConfigureFunc) used to configure a provider, often creating and returning an API client using the provider configuration defined in `.tf` via the `provider "some_provider" {}` HCL.
 
 To learn more:
 
