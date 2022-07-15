@@ -137,7 +137,7 @@ To learn more:
 
 ## Tying it together
 
-Finally, `main.go` provides the entry point for the provider program.
+In summary, provider implementation is largely composed of boilerplate-ish configuration code, with most of the business logic confined to the individual CRUD functions associated with individual resources, as described above. Then, finally, a `main.go` provides the entry point for the provider program.
 
 To learn more:
 
@@ -151,7 +151,19 @@ Most provider codebases feature a `GNUmakefile` in which various build and test 
 
 While individual functions can be unit tested in isolation, the plugin SDK provides an [acctest](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk@v1.17.2/helper/acctest) and testing types (most notably [`resource.TestCase`](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk@v1.17.2/helper/resource#TestCase)) used to author acceptance tests against provider, provider resource, and provider data source functionality.
 
-Generally, these acceptance tests are configured to target real APIs provided by cloud providers, though some Terraform providers -- particularly those that target open source provider platforms or SaaS APIs -- may configure acceptance tests to interact with `localhost`-hosted APIs enabled via tools such as [Docker](https://www.docker.com/). For example, `terraform-provider-grafana`'s own acceptance testing utilizes a local Grafana established via [docker-compose](https://github.com/grafana/terraform-provider-grafana/blob/v1.24.0/docker-compose.yml) in local development, as well as remote instances of Grafana in CI/CD.
+Generally, these acceptance tests are configured to target real APIs associated with cloud providers, though some Terraform providers -- particularly those that target open source provider platforms or SaaS APIs -- may configure acceptance tests to interact with `localhost`-served APIs enabled via tools such as [Docker](https://www.docker.com/). For example, `terraform-provider-grafana`'s own acceptance testing utilizes a local Grafana established via [docker-compose](https://github.com/grafana/terraform-provider-grafana/blob/v1.24.0/docker-compose.yml) in local development, as well as remote instances of Grafana in CI/CD.
+
+To run `terraform-provider-grafana`'s acceptance tests locally, install [Go](https://go.dev/) and [Docker](https://www.docker.com/), then clone the repository:
+
+```
+git clone git@github.com:grafana/terraform-provider-grafana.git
+```
+
+...and run the acceptance tests against a local Docker-established Grafana:
+
+```
+make testacc-docker
+```
 
 To learn more:
 
