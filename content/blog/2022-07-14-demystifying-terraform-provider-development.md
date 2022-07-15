@@ -174,3 +174,5 @@ Assuming the provider and its associated GitHub releases conform to some [common
 In my experience, the codebase of existing provider offers the best way to learn more, particularly that of a simple provider (as opposed to the [terraform-provider-aws](https://registry.terraform.io/providers/hashicorp/aws/latest/docs), whose codebase is huge and daunting). Maybe it's worth taking a look at something like [terraform-provider-dominos](https://github.com/nat-henderson/terraform-provider-dominos)? For me, `git clone`-ing provider code locally, running tests, and looking for simple areas of improvement has taught me a lot. Maybe that's helpful for you too?
 
 It's also worth looking at [HashiCorp's own learning resources](https://learn.hashicorp.com/collections/terraform/providers).
+
+Do you see an inaccuracy or typo in this post? [Submit a pull request](https://github.com/mdb/mdb.github.io).
