@@ -14,13 +14,13 @@ _Many Terraform practitioners may be unfamiliar with provider development. How a
 
 ## Review of the basics
 
-First, let's re-establish a foundation, especially for those who may be less familiar with Terraform.
+First, let's re-establish a foundation, especially for those who may be less familiar with [Terraform](https://www.terraform.io/).
 
-### Terraform
+### Terraform fundamentals
 
-Terraform enables users to describe infrastructure resources -- and their dependency relationships -- in `.tf` files using [HCL](https://github.com/hashicorp/hcl).
+Terraform enables users to describe infrastructure resources -- and their dependency relationships -- in `.tf` files using [HCL](https://github.com/hashicorp/hcl), and to automate the creation and ongoing management of that infrastructure via the Terraform command line inferface.
 
-These HCL-declared infrastructure resources are often associated with cloud infrastructure services, such as AWS, OpenStack, or Kubernetes, but they might also be less cloudy resources, such as local files. For example, the following configuration creates a Digigal Ocean droplet, a DNSSimple A record, and a local file documenting the droplet's IP address:
+HCL configurations often spec out resources associated with cloud infrastructure services, such as AWS, OpenStack, or Kubernetes, but they might also spec out less cloudy resources, such as local files. For example, the following configuration creates a Digigal Ocean droplet, a DNSSimple A record, and a local file documenting the droplet's IP address:
 
 ```hcl
 resource "digitalocean_droplet" "web" {
@@ -43,13 +43,13 @@ resource "local_file" "ip_address" {
 }
 ```
 
-When invoked against a configuration (i.e. a collection of resources specified in `*.tf` files like the example above) via the `terraform plan` and/or `terraform apply` CLI commands, Terraform builds a [dependency graph of resource relationships](https://www.terraform.io/internals/graph) and attributes and analyzes...
+When invoked against a configuration (i.e. a collection of resources specified in `*.tf` files like the example above) via the `terraform plan` and/or `terraform apply` CLI commands, Terraform builds a [dependency graph of resource relationships](https://www.terraform.io/internals/graph) and resource attributes and analyzes...
 
 1. What has been specified in the `*.tf` files?
 1. How does that compare to what has been captured in [Terraform state](https://www.terraform.io/language/state)?
 1. How does all that compare to what may or may not actually exist, as reported by the resources' corresponding APIs?
 
-Based on its analysis, Terraform decides the order in which it must invoke the necessary CRUD ("create," "read," "update," or "destroy") actions against the resources' APIs in order to produce the desired state, as specified in `*.tf` configuration. I often refer to this logic as the "Terraform lifecycle algorithm," though I may have made up that terminilogy; I don't know if the Terraform maintainers would view it as appropriate, though I find it helpful.
+Based on its analysis, Terraform decides the order in which it must invoke the necessary CRUD actions ("create," "read," "update," or "destroy") against the resources' APIs in order to produce the desired state, as specified in HCL configuration in `*.tf` files. I often refer to this logic as the "Terraform lifecycle algorithm," though I may have made up that terminology; I don't know if the Terraform maintainers would view it as appropriate, though I find it helpful.
 
 ### Terraform providers
 
@@ -73,7 +73,7 @@ Providers are decoupled from the Terraform CLI itself as independent software co
 
 Providers are generally authored in Go using Terraform's [plugin SDK](https://github.com/hashicorp/terraform-plugin-sdk). So, how does this work?
 
-## Specifying a provider
+## Implementing a provider
 
 As Terraform practitioners know, a provider is configured in a Terraform configuration via a `provider "some_provider" {}` HCL configuration. For example:
 
@@ -84,7 +84,7 @@ provider "aws" {
 }
 ```
 
-Assuming the use of the [plugin SDK](https://github.com/hashicorp/terraform-plugin-sdk), a provider is specified via a [*schema.Provider](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#Provider) on which a few key fields are specified, most notably fields like...
+Assuming the use of the [plugin SDK](https://github.com/hashicorp/terraform-plugin-sdk), a provider is implemented as a [*schema.Provider](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#Provider) on which a few key fields are specified, most notably fields like...
 
 * `Schema` - a `map[string]*schema.Schema` specifying the supported provider arguments and attributes
 * `ResourcesMap` - a `map[string]*schema.Resource` specifying the supported resources and their related functions
