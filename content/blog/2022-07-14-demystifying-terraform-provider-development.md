@@ -20,7 +20,7 @@ First, let's establish a foundation, especially for those who may be less famili
 
 Terraform enables users to describe infrastructure resources -- and their dependency relationships -- in `.tf` files using [HCL](https://github.com/hashicorp/hcl), and to automate the creation and ongoing management of that infrastructure via the Terraform command line inferface.
 
-HCL configurations often spec out resources associated with cloud infrastructure services, such as AWS, OpenStack, or Kubernetes, but they might also spec out less cloudy resources, such as local files. For example, the following configuration creates a Digigal Ocean droplet, a DNSSimple A record, and a local file documenting the droplet's IP address:
+HCL configurations often spec out resources associated with cloud infrastructure services, such as AWS, OpenStack, or Kubernetes, but they might also spec out less cloudy resources, such as local files. For example, the following configuration creates a Digital Ocean droplet, a DNSSimple A record, and a local file documenting the droplet's IP address:
 
 ```hcl
 resource "digitalocean_droplet" "web" {
