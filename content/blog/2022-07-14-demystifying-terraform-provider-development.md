@@ -137,7 +137,7 @@ To learn more:
 
 ## Tying it together
 
-In summary, provider implementation is largely composed of boilerplate-ish configuration code implementing the above-described types, with most of the business logic confined to the individual CRUD functions associated with individual resources. Then, finally, a `main.go` provides the entry point for the provider program.
+In summary, provider implementation is largely composed of boilerplate-ish configuration code implementing the above-described types. Most of the provider-specific business logic is confined to the individual CRUD functions associated with individual resources, and itself mostly focused on provider-API-interaction and the surrounding reading and writing of Terraform state. Then, finally, a `main.go` provides the entry point for the provider program.
 
 To learn more:
 
