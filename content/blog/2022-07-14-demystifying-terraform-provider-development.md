@@ -179,7 +179,7 @@ Often, [tfplugindocs](https://github.com/hashicorp/terraform-plugin-docs/cmd/tfp
 
 ## Releasing
 
-Assuming the provider and its associated GitHub releases conform to some [common standards](https://www.terraform.io/registry/providers/publishing), the provider can be published to the [Terraform registry](https://www.terraform.io/registry/providers/publishing#publishing-to-the-registry). From there, its available for use and can be downloaded by Terraform configurations in which it's referenced and configured.
+Assuming the provider and its associated GitHub releases conform to some [common standards](https://www.terraform.io/registry/providers/publishing), the provider can be published to the [Terraform registry](https://www.terraform.io/registry/providers/publishing#publishing-to-the-registry). From there, it's available for use and can be downloaded by Terraform configurations in which it's referenced and configured.
 
 ## Learn more
 
