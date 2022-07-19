@@ -86,7 +86,7 @@ provider "aws" {
 
 Assuming the use of the [plugin SDK](https://github.com/hashicorp/terraform-plugin-sdk), a provider is implemented as a [*schema.Provider](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#Provider) on which a few key fields are specified, most notably fields like...
 
-* `Schema` - a `map[string]*schema.Schema` specifying the supported provider arguments and attributes
+* `Schema` - a `map[string]*schema.Schema` specifying the supported provider arguments and attributes. See [schema.Schema documentation](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#Schema) for more info.
 * `ResourcesMap` - a `map[string]*schema.Resource` specifying the supported resources and their related functions
 * `DataSourcesMap` - a `map[string]*schema.Resource` specifying the supported data sources and their related functions
 * `ConfigureFunc` - a [ConfigureFunc](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#ConfigureFunc) used to configure a provider, often creating and returning an API client using the provider configuration defined in `.tf` via the `provider "some_provider" {}` HCL.
@@ -105,7 +105,7 @@ Individual provider resources are managed via functions that return a [*schema.R
 * `Read` - a [ReadFunc](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#ReadFunc) function for reading the resource from configuration via the provider API
 * `Update` - an [UpdateFunc](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#UpdateFunc) function for updating the resource from configuration via the provider API
 * `Delete` - a [DeleteFunc](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#DeleteFunc) function for deleting the resource if/when it's removed from configuration via the provider API
-* `Schema` - a `map[string]*schema.Schema` specifying the supported resource arguments and attributes
+* `Schema` - a `map[string]*schema.Schema` specifying the supported resource arguments and attributes. See [schema.Schema documentation](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#Schema) for more info.
 * etc.
 
 Generally, each of the individual CRUD functions accept 2 arguments:
@@ -129,7 +129,7 @@ Assuming the use of the [plugin SDK](github.com/hashicorp/terraform-plugin-sdk),
 
 * `Description` - a description of the data source used to generate documentation
 * `Read` - a function for reading the resource specified in configuration via the associated provider API
-* `Schema` - a `map[string]*schema.Schema` specifying the supported resource arguments and attributes
+* `Schema` - a `map[string]*schema.Schema` specifying the supported resource arguments and attributes. See [schema.Schema documentation](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#Schema) for more info.
 
 To learn more:
 
