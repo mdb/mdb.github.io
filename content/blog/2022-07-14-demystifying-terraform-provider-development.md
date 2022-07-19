@@ -20,7 +20,7 @@ First, let's establish a foundation, especially for those who may be less famili
 
 Terraform enables users to describe infrastructure resources -- and their dependency relationships -- in `.tf` files using [HCL](https://github.com/hashicorp/hcl), and to automate the creation and ongoing management of that infrastructure via the Terraform command line inferface.
 
-HCL configurations often spec out resources associated with cloud infrastructure services, such as AWS, OpenStack, or Kubernetes, but they might also spec out less cloudy resources, such as local files. For example, the following configuration creates a Digital Ocean droplet, a DNSSimple A record, and a local file documenting the droplet's IP address:
+HCL configurations often describe resources associated with cloud infrastructure services such as AWS, OpenStack, or Kubernetes, but they might also describe less cloudy resources, such as local files. For example, the following configuration creates a Digital Ocean droplet, a DNSSimple A record, and a local file documenting the resulting droplet's IP address:
 
 ```hcl
 resource "digitalocean_droplet" "web" {
@@ -43,17 +43,17 @@ resource "local_file" "ip_address" {
 }
 ```
 
-When invoked against a configuration (i.e. a collection of resources specified in `*.tf` files like the example above) via the `terraform plan` and/or `terraform apply` CLI commands, Terraform builds a [dependency graph of resource relationships](https://www.terraform.io/internals/graph) and resource attributes and analyzes...
+When invoked against a configuration (i.e. a collection of resources specified as HCL in `*.tf` files like the example above) via the `terraform plan` and/or `terraform apply` CLI commands, Terraform builds a [dependency graph](https://www.terraform.io/internals/graph) of resource attributes and relationships and analyzes...
 
 1. What has been specified in the `*.tf` files?
-1. How does that compare to what has been captured in [Terraform state](https://www.terraform.io/language/state)?
+1. How does that compare to what's been captured in [Terraform state](https://www.terraform.io/language/state)?
 1. How does all that compare to what may or may not actually exist, as reported by the resources' corresponding APIs?
 
 Based on its analysis, Terraform decides the order in which it must invoke the necessary CRUD actions ("create," "read," "update," or "destroy") against the resources' APIs in order to produce the desired state, as specified in HCL configuration in `*.tf` files. I often refer to this logic as the "Terraform lifecycle algorithm," though I may have made up that terminology; I don't know if the Terraform maintainers would view it as appropriate, though I find it helpful.
 
 ### Terraform providers
 
-In Terraform parlance, _resources_ (such as an individual DNS record) are associated with _providers_ (such as DNSSimple or AWS Route 53). When declaring a resource in a `.tf` HCL file, the provider name appears as the `${provider name}_` prefix. In the following example, Grafana is the provider associated with a folder resource:
+In Terraform parlance, _resources_ (such as an individual DNS record) are associated with _providers_ (such as DNSSimple or AWS Route 53). When declaring a resource in HCL in a `.tf` file, the provider name appears as the `${provider name}_` prefix. In the following example, Grafana is the provider associated with a folder resource:
 
 ```hcl
 resource "grafana_folder" "foo" {
@@ -64,12 +64,12 @@ resource "grafana_folder" "foo" {
 
 As mentioned above, providers are often cloud infrastructure services such as AWS, OpenStack, Fastly, etc., but might also be...
 
-* SaaS platforms such as Grafana, GitHub, OKTA, etc.
+* SaaS platforms such as Grafana, Heroku, GitHub, Okta, etc.
 * a local file system, etc.
 
 Generally speaking, a provider (and its underlying resource(s)) could be anything that can be modeled declaritively and has some sort of corresponding CRUD API(s).
 
-Providers are decoupled from the Terraform CLI itself as independent software components, often versioned, compiled, and published to the [Terraform registry](https://registry.terraform.io/browse/providers) via their own CI/CD processes.
+Providers are decoupled from the Terraform CLI itself as independent software components, often versioned, compiled, and published to the [Terraform registry](https://registry.terraform.io/browse/providers) via their own CI/CD processes. Typically, a Terraform provider's source code lives in a `git` repository conforming to the `terraform-provider-${PROVIDER}` naming convention.
 
 Providers are generally authored in Go using Terraform's [plugin SDK](https://github.com/hashicorp/terraform-plugin-sdk). So, how does this work?
 
@@ -89,12 +89,12 @@ Assuming the use of the [plugin SDK](https://github.com/hashicorp/terraform-plug
 * `Schema` - a `map[string]*schema.Schema` specifying the supported provider arguments and attributes
 * `ResourcesMap` - a `map[string]*schema.Resource` specifying the supported resources and their related functions
 * `DataSourcesMap` - a `map[string]*schema.Resource` specifying the supported data sources and their related functions
-* `ConfigureFunc` - a [`ConfigureFunc`](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#ConfigureFunc) used to configure a provider, often creating and returning an API client using the provider configuration defined in `.tf` via the `provider "some_provider" {}` HCL.
+* `ConfigureFunc` - a [ConfigureFunc](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#ConfigureFunc) used to configure a provider, often creating and returning an API client using the provider configuration defined in `.tf` via the `provider "some_provider" {}` HCL.
 
 To learn more:
 
-* [`terraform-provider-grafana` example](https://github.com/grafana/terraform-provider-grafana/blob/master/grafana/provider.go)
-* [`schema.Provider` Godocs](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#Provider)
+* [terraform-provider-grafana example](https://github.com/grafana/terraform-provider-grafana/blob/master/grafana/provider.go)
+* [schema.Provider Godocs](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#Provider)
 
 ## Resources
 
@@ -113,7 +113,7 @@ Generally, each of the individual CRUD functions accept 2 arguments:
 1. [*schema.ResourceData](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#ResourceData) - this represents the Terraform configuration.
 1. an `interface{}` - this is a generic interface often homing an API client package configured by the provider and used to interact with the provider APIs
 
-Each of the CRUD functions interact with the appropriate corresponding provider APIs to create, read, update, or delete the corresponding resource, accordingly. Each of the functions is also responsible for updating [Terraform state](https://www.terraform.io/language/state) to reflect this. However, it's business logic codified within Terraform itself -- and not the provider codebase -- that decides which of the CRUD functions to invoke when, via the aforementioned "Terraform lifecycle algorithm."
+Each of the CRUD functions interact with the appropriate corresponding provider APIs to create, read, update, or delete the corresponding resource, accordingly. Each of the functions is also responsible for updating [Terraform state](https://www.terraform.io/language/state) to reflect all this. However, it's business logic codified within Terraform itself -- and not the provider codebase -- that decides which of the CRUD functions to invoke when, via the aforementioned "Terraform lifecycle algorithm."
 
 To learn more:
 
@@ -123,7 +123,7 @@ To learn more:
 
 ## Data sources
 
-Terraform [data sources](https://www.terraform.io/language/data-sources) enable Terraform to _read_ outside information. Unlike resources -- which enable Terraform to create, update, and delete resources -- data sources only offer read-only functionality.
+Terraform [data sources](https://www.terraform.io/language/data-sources) enable Terraform to _read_ outside information. Unlike resources -- which enable Terraform to create, update, and delete resources -- data sources offer read-only functionality.
 
 Assuming the use of the [plugin SDK](github.com/hashicorp/terraform-plugin-sdk), individual provider data sources are managed via functions that return a [schema.Resource](https://pkg.go.dev/github.com/hashicorp/terraform-plugin-sdk/helper/schema#Resource), similar to that returned by resource functions. However, a data source's `*schema.Resource` typically only specifies:
 
@@ -137,7 +137,7 @@ To learn more:
 
 ## Tying it together
 
-In summary, provider implementation is largely composed of boilerplate-ish configuration code implementing the above-described types. Most of the provider-specific business logic is confined to the individual CRUD functions associated with individual resources, and itself mostly focused on provider-API-interaction and the surrounding reading and writing of Terraform state. Then, finally, a `main.go` provides the entry point for the provider program.
+In summary, provider implementation is largely composed of boilerplate-ish configuration code implementing the above-described types. Most of the provider-specific business logic is confined to the individual CRUD functions associated with individual resources, and is itself mostly focused on provider-API-interaction and the surrounding reading and writing of Terraform state. Then, finally, a `main.go` provides the entry point for the provider program.
 
 To learn more:
 
@@ -173,7 +173,7 @@ To learn more:
 
 ## Building
 
-Typically, [goreleaser](https://goreleaser.com/) is used to compile provider binaries across platforms and publish them as versioned GitHub releases. [terraform-provider-grafana's .goreleaser.yml](https://github.com/grafana/terraform-provider-grafana/blob/v1.24.0/.goreleaser.yml) offers a configuration example used to build and publish its own [GitHub releases](https://github.com/grafana/terraform-provider-grafana/releases).
+Typically, [goreleaser](https://goreleaser.com/) is used to compile provider binaries across platforms and publish them as versioned GitHub releases. [terraform-provider-grafana's .goreleaser.yml](https://github.com/grafana/terraform-provider-grafana/blob/v1.24.0/.goreleaser.yml) offers an example of a `goreleaser` configuration used to build and publish its own [GitHub releases](https://github.com/grafana/terraform-provider-grafana/releases).
 
 Often, [tfplugindocs](https://github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs) is integrated with providers' build process to automate the generation of markdown documents documenting the provider; these are typically committed to a [docs](https://github.com/grafana/terraform-provider-grafana/tree/v1.24.0/docs) directory in source control.
 
@@ -183,7 +183,7 @@ Assuming the provider and its associated GitHub releases conform to some [common
 
 ## Learn more
 
-In my experience, the codebase of an existing provider offers the best way to learn more, particularly that of a simple provider (as opposed to the [terraform-provider-aws](https://registry.terraform.io/providers/hashicorp/aws/latest/docs), whose codebase is huge and daunting). Maybe it's worth taking a look at something like [terraform-provider-dominos](https://github.com/nat-henderson/terraform-provider-dominos)? For me, `git clone`-ing provider code locally, running tests, and looking for simple areas of improvement has taught me a lot. Maybe that's helpful for you too?
+In my experience, the codebase of an existing provider offers the best way to learn more, particularly that of a simple provider (as opposed to the [terraform-provider-aws](https://registry.terraform.io/providers/hashicorp/aws/latest/docs), whose codebase is large and daunting). Maybe it's worth taking a look at something like [terraform-provider-dominos](https://github.com/nat-henderson/terraform-provider-dominos)? For me, `git clone`-ing provider code locally, running tests, and looking for simple areas of improvement has taught me a lot. Maybe that's helpful for you too?
 
 It's also worth looking at [HashiCorp's own learning resources](https://learn.hashicorp.com/collections/terraform/providers).
 
