@@ -12,6 +12,20 @@
   }
 }
 
+@keyframes slidein {
+  from {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 ul.gallery {
   padding-top: 35px;
   overflow: hidden;
@@ -50,6 +64,7 @@ ul.gallery {
 
       img {
         width: 100%;
+        opacity: 0;
       }
     }
 
