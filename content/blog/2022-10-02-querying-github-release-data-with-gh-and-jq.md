@@ -13,7 +13,13 @@ A demo of semi-advanced `gh` CLI and `jq` querying techniques.
 
 ## Problem
 
-You'd like to fetch a JSON array listing the latest patch release associated with each of the latest 5 minor versions of Grafana.
+You'd like to list the latest patch release associated with each of the latest 5 minor versions of Grafana represented as a JSON array.
+
+For example:
+
+```json
+["9.1.6","9.0.9","8.5.13","8.4.11","8.3.11"]
+```
 
 ## Solution
 
@@ -46,7 +52,7 @@ gh api 'repos/grafana/grafana/releases?per_page=100' \
     '
 ```
 
-Example result at the time of writing (subject to change as as additional Grafana releases are published):
+Example result (this is subject to change as additional Grafana releases are published):
 
 ```json
 ["9.1.6","9.0.9","8.5.13","8.4.11","8.3.11"]
