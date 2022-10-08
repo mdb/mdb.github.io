@@ -1,5 +1,5 @@
 ---
-title: Querying GitHub release data with gh and jq
+title: Querying GitHub Release Data With gh and jq
 date: 2022-10-02
 tags:
 - gh
