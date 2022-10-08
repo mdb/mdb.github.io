@@ -26,9 +26,9 @@ For example:
 Leverage that...
 
 1. Grafana releases are published as [GitHub releases](https://github.com/grafana/grafana/releases)
-1. The [gh](https://cli.github.com/) CLI's support for a `api` command, enabling users to query GitHub API endpoints
-1. The GitHub API's support for a [list releases](https://docs.github.com/en/rest/releases/releases#list-releases) endpoint
-1. `gh api`'s support for a `--jq` flag, enabling the ability to invoke `jq` queries against GitHub API responses
+1. The [gh](https://cli.github.com/) CLI supports an `api` command, enabling users to query GitHub API endpoints
+1. The GitHub API supports a [list releases](https://docs.github.com/en/rest/releases/releases#list-releases) endpoint
+1. `gh api` supports a `--jq` flag, enabling the ability to invoke `jq` queries against GitHub API responses
 
 For example:
 
