@@ -10,13 +10,13 @@ thumbnail: zig_zag2_thumb.jpg
 teaser: Collect all pages of data from a paginated HTTP API in JavaScript using async/await.
 ---
 
-_Collecting all pages of data from a paginated HTTP API can be a bit tricky in JavaScript, especially for developers who are less familiar with asynchronous JavaScript's nuances. The following offers a reference example using JavaScript's `async`/`await`._
+_Collecting all pages of data from a paginated HTTP API can be a bit quirky in JavaScript, especially for those who are less familiar with asynchronous JavaScript's nuances. The following offers a reference example using JavaScript's `async`/`await`._
 
 ## Problem
 
-You need to fetch all pages of data from a paginated HTTP API in JavaScript; you'd like to do so using [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch), and you'd like to leverage [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function). While this is a relatively common scenario, how best to tackle it in JavaScript using `async`/`await` is a bit tricky.
+You need to fetch all pages of data from a paginated HTTP API in JavaScript; you'd like to do so using [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch), and you'd like to leverage [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function).
 
-To establish a bit more context, let's imagine...
+To establish a bit more context, imagine...
 
 * The API is hosted at `https://foo.bar`.
 * The API's `/results` endpoint returns JSON array response body such as `["foo", "bar"]`.
