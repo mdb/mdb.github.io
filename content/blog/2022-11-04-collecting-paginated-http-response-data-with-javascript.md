@@ -21,7 +21,7 @@ To establish a bit more context, let's imagine...
 * The API is hosted at `https://foo.bar`.
 * The API's `/results` endpoint returns JSON array response body such as `["foo", "bar"]`.
 * The API's `/results` endpoint accepts an optional `page` query parameter, the inclusion of which returns the specified page of results. For example, `https://foo.bar/results?page=2` returns the second page of results.
-* The ommission of a `page` query paramenter from `https://foo.bar/results` returns the first page of results.
+* The omission of a `page` query parameter from `https://foo.bar/results` returns the first page of results.
 * Each HTTP response from the `/results` endpoint returns an `x-next-page` HTTP response header specifying the next page number. For example, `x-next-page: 2` indicates that `2` is the next page of results.
 * The final page of results returned by the `/results` endpoint has no `x-next-page` response header, thereby indicating it's the final page of results.
 
