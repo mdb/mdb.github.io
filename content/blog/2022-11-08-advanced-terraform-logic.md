@@ -11,6 +11,8 @@ teaser: A case study illustrating Terraform techniques for expressing moderately
 
 _Critics argue [Terraform](https://terraform.io) is limiting and doesn't adequately enable the expression of complex logic in HCL. While imperfect, Terraform does indeed often accommodate moderately complex logic. As a reference example, the following illustrates how Terraform constructs such as `for_each`, `for`/`in`, `if`, `try`, various [functions](https://developer.hashicorp.com/terraform/language/functions), and custom `local` data structures can be used to successfully satisfy a relatively logic-intensive use case._
 
+_As a bonus, the reference example also teases some broader techniques for automating platform engineering across an organization._
+
 [github.com/mdb/terraform-advanced-logic-demo](https://github.com/mdb/terraform-advanced-logic-demo) homes the source code referenced throughout this post.
 
 ## Problem
