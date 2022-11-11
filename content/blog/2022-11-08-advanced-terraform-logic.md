@@ -8,7 +8,7 @@ thumbnail: terraform2_thumb.jpg
 teaser: A case study illustrating Terraform techniques for expressing moderately complex business logic.
 ---
 
-_Critics often argue [Terraform](https://terraform.io) is limiting and doesn't adequately enable the expression of complex logic in HCL. While imperfect, Terraform does indeed often accommodate complex logic needs in my experience. As a reference example, the following illustrates how Terraform constructs such as `for_each`, `for`/`in`, `if`, `try`, various [functions](https://developer.hashicorp.com/terraform/language/functions), and custom `local` data structures can be used to successfully satisfy a relatively complex, logic-intensive use case._
+_Critics often argue [Terraform](https://terraform.io) is limiting and doesn't adequately enable the expression of complex logic in HCL. While imperfect, Terraform does indeed often accommodate complex logic. As a reference example, the following illustrates how Terraform constructs such as `for_each`, `for`/`in`, `if`, `try`, various [functions](https://developer.hashicorp.com/terraform/language/functions), and custom `local` data structures can be used to successfully satisfy a relatively complex, logic-intensive use case._
 
 [github.com/mdb/terraform-advanced-logic-demo](https://github.com/mdb/terraform-advanced-logic-demo) homes the source code referenced throughout this post.
 
@@ -30,7 +30,7 @@ A few assumptions driving the implementation:
 1. git repositories may feature a dot (`.`) in their name, though Grafana folders and dashboards should not feature a dot in their name
 1. archived git repositories should be ignored
 1. git repositories that have no default branch should be ignored
-1. in addition to being driven dynamically by `Dockerfile`s homed in git repositories (as describd above), the automation should also support creating additional Grafana folders and dashboards from a static, hard-coded list provided via a YAML file
+1. in addition to being driven dynamically by `Dockerfile`s homed in git repositories (as described above), the automation should also support creating additional Grafana folders and dashboards from a static, hard-coded list provided via a YAML file
 
 While the above-listed requirements are a bit contrived, they offer an example scenario through which some more advanced, less obvious Terraform features can be exercised and demonstrated.
 
@@ -39,8 +39,8 @@ While the above-listed requirements are a bit contrived, they offer an example s
 Before examining its code, here's an overview of some key aspects of the implementation:
 
 * The [GitHub Terraform provider](https://registry.terraform.io/providers/integrations/github/latest/docs)'s data sources enable querying GitHub repositories via Terraform
-* In particular, the [`github_tree` data source](https://registry.terraform.io/providers/integrations/github/latest/docs/data-sources/tree) enables querying and analyzing repository contents, such as the the existence of `Dockerfile`s and those files' directory names
-* `for_each` and `for`/`in` enables iteration
+* In particular, the [`github_tree` data source](https://registry.terraform.io/providers/integrations/github/latest/docs/data-sources/tree) enables querying and analyzing repository contents, such as the existence of `Dockerfile`s and those files' directory names
+* `for_each` and `for`/`in` enables looping and data transformation
 * `if` enables conditional logic
 * `locals` enable building custom data structures catering to the nuanced business requirements
 * `try` enables gracefully handling errors and falling back to reliable default Terraform expressions if/when errors occur
@@ -214,4 +214,12 @@ Note that...
 
 ## Summary, Disclaimers, etc.
 
-Again, the above-described example is somewhat contrived. In particular, because the implementation uses GitHub provider data sources to dynamically drive the dashboards and folder names, the resulting Grafana folders and dashboards are vulnerable to inadvertent destruction or modification during subsequent `terraform apply` invocations if/when git repositories are deleted, or even when their `Dockerfile`s are moved or deleted. This could be mitigated via the use of the [prevent_destroy](https://developer.hashicorp.com/terraform/tutorials/state/resource-lifecycle#prevent-resource-deletion) lifecyle argument, or by hardcoding such dashboards and folders in the `additional_dashboards.yaml` file. Alternatively, the use of the GitHub provider data sources could be reevaluated or evolved per real-world needs. The above-described example is merely intended to illustrate a few Terraform capabilities, and to inspire ideas.
+Again, the above-described example is somewhat contrived. In particular, because the implementation uses GitHub provider data sources to dynamically drive the dashboards and folder names, the resulting Grafana folders and dashboards are vulnerable to inadvertent destruction or modification during subsequent `terraform apply` invocations if/when git repositories are deleted, or even when their `Dockerfile`s are moved or deleted. This could be mitigated via the use of the [prevent_destroy](https://developer.hashicorp.com/terraform/tutorials/state/resource-lifecycle#prevent-resource-deletion) lifecyle argument, or by hardcoding such dashboards and folders in the `additional_dashboards.yaml` file. Alternatively, the use of the GitHub provider data sources could be reevaluated or evolved per real-world needs.
+
+The above-described example is merely intended to illustrate a few Terraform capabilities, and to inspire ideas. In addition to illustrating semi-advanced logic, the configuration also teases some broader ideas for automating platform onboarding across an organization. While the example focuses largely on Grafana resources, the pattern could be applied to bootstrap other aspects of platform engineering beyond Grafana, such as...
+
+* artifact repositories
+* Vault secrets
+* AWS resources, or even AWS account provisioning
+* Kubernetes namespaces and other resources
+* etc.
