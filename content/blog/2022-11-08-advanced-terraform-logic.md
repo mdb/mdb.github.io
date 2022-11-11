@@ -3,7 +3,8 @@ title: Advanced Terraform Logic
 date: 2022-11-08
 tags:
 - terraform
-- iac
+- grafana
+- platform engineering
 thumbnail: terraform2_thumb.jpg
 teaser: A case study illustrating Terraform techniques for expressing moderately complex business logic.
 ---
