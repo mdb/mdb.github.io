@@ -9,7 +9,7 @@ thumbnail: terraform2_thumb.jpg
 teaser: A case study illustrating Terraform techniques for expressing moderately complex business logic.
 ---
 
-_Critics argue [Terraform](https://terraform.io) is limiting and doesn't adequately enable the expression of complex logic in HCL. While imperfect, Terraform does indeed often accommodate moderately complex logic. As a reference example, the following illustrates how Terraform constructs such as `for_each`, `for`/`in`, `if`, `try`, various [functions](https://developer.hashicorp.com/terraform/language/functions), and custom `local` data structures can be used to successfully satisfy a relatively logic-intensive use case._
+_Critics argue [Terraform](https://terraform.io) is limiting and doesn't adequately enable the expression of complex logic. While imperfect, Terraform does indeed often accommodate moderately complex logic. As a reference example, the following illustrates how Terraform constructs such as `for_each`, `for`/`in`, `if`, `try`, various [functions](https://developer.hashicorp.com/terraform/language/functions), and custom `local` data structures can be used to successfully satisfy a relatively logic-intensive use case._
 
 _As a bonus, the reference example also teases some broader techniques for automating platform engineering across an organization._
 
@@ -42,7 +42,7 @@ While the above-listed requirements are a bit contrived, they offer an example s
 Before examining its code, here's an overview of some key aspects of the implementation:
 
 * The [GitHub Terraform provider](https://registry.terraform.io/providers/integrations/github/latest/docs)'s data sources enable querying GitHub repositories via Terraform
-* In particular, the [`github_tree` data source](https://registry.terraform.io/providers/integrations/github/latest/docs/data-sources/tree) enables querying and analyzing repository contents, such as the existence of `Dockerfile`s and those files' directory names
+* In particular, the [`github_tree` data source](https://registry.terraform.io/providers/integrations/github/latest/docs/data-sources/tree) enables querying and analyzing repository contents, such as the existence of `Dockerfile`s and those files' paths
 * `for_each` and `for`/`in` enables looping and data transformation
 * `if` enables conditional logic
 * `locals` enable building custom data structures catering to the nuanced business requirements
@@ -56,7 +56,7 @@ Before examining its code, here's an overview of some key aspects of the impleme
 
 * For demonstration purposes, the configuration targets a local Grafana using hard-coded authentication credentials. In a real-world scenario, the configuration would likely target a real, remote Grafana URL, and would not expose hard-coded credentials.
 * For demonstration purposes, the configuration does not configure a [remote state backend](https://developer.hashicorp.com/terraform/language/settings/backends/configuration), though a real-world configuration likely would.
-* The GitHub provider is configured to target the GitHub owner specified as `local.owner` (stay tuned on this...).
+* The GitHub provider is configured to target the GitHub organization specified as `local.owner` (stay tuned on this...).
 
 `provider.tf`:
 
@@ -185,10 +185,10 @@ locals {
   folder: vinyldns_baz
 ```
 
-...and, ultimately, `grafana.tf` enables the creation of...
+...and, finally, `grafana.tf` enables the creation of...
 
 * a Grafana folder for each item in `local.grafana_folders`
-* a Grafana dashboard whose name and title, respectively, corresponds to the `dashboard` attribute of each object in the `local.grafana_folders`
+* a Grafana dashboard whose name and title correspond to the `dashboard` attribute of each object in the `local.grafana_folders`
 
 `grafana.tf`:
 
@@ -213,16 +213,16 @@ resource "grafana_dashboard" "all" {
 Note that...
 
 * In this example, the Grafana dashboard JSON is deliberately simple. However, Terraform offers options for templating more complex Grafana JSON too, either via Terraform's own [templatefile function](https://developer.hashicorp.com/terraform/language/functions/templatefile) or even via [jsonnet](https://jsonnet.org/), perhaps in concert with [grafonnet](https://grafana.github.io/grafonnet-lib/) and even a [Terraform jsonnet provider](https://registry.terraform.io/providers/alxrem/jsonnet/latest/docs), [grizzly](https://grafana.github.io/grizzly/), or other templating technologies.
-* The [Grafana Terraform provider](https://registry.terraform.io/providers/grafana/grafana/latest/docs) offers resources for managing many other aspects of Grafana too, such as teams, API keys, etc. A real-world example might manage more aspects of Grafana via Terraform, such as the dynamic creation of a unique Grafana API key for each git repository in the targeted organization, and the seeding of that key in a corresponding `GRAFANA_API_KEY` [GitHub Actions secret](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) in each repository. This would then enable the repositories' GitHub Actions workflows to programmatically interact with Grafana, thereby enabling further platform automation capabilities.
+* The [Grafana Terraform provider](https://registry.terraform.io/providers/grafana/grafana/latest/docs) offers resources for managing many other aspects of Grafana too, such as teams, API keys, etc. A real-world example might manage additional Grafana resources via Terraform. For example, Terraform could manage the creation of a unique Grafana API key for each git repository in the targeted organization, and seed that key in a corresponding `GRAFANA_API_KEY` [GitHub Actions secret](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) in each repository. This would then enable the repositories' GitHub Actions workflows to programmatically interact with Grafana, thereby empowering further platform automation capabilities.
 
 ## Summary, Disclaimers, etc.
 
-Again, the above-described example is somewhat contrived. In particular, because the implementation uses GitHub provider data sources to dynamically drive the dashboards and folder names, the Terraform configuration could yield different results with each `terraform apply` invocation if/when modifications to the underlying git repositories and/or their `Dockerfile`s performed in between applies. For example:
+Again, the above-described example is somewhat contrived. In particular, because the implementation uses GitHub provider data sources to dynamically drive the dashboards and folder names, each `terraform apply` invocation could yield differing results if/when modifications to the underlying git repositories and/or their `Dockerfile`s are performed between `apply` invocations. For example...
 
-* The creation Grafana folders and dashboards pertaining to newly created git repositories and microservices would require a `terraform apply` subsquent to those git repositories' creation/modification. If necessary, this could be mitigated via automation that invokes `terraform apply` in response to relevant [GitHub organization webhook events](https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads).
-* The deletion of git repositories and/or microservices could inadvertently result in the Grafana resources' destruction on subsequent `terraform apply` invocations. If undesired, this could be mitigated via the use of the [prevent_destroy](https://developer.hashicorp.com/terraform/tutorials/state/resource-lifecycle#prevent-resource-deletion) lifecyle argument, or by hardcoding such dashboards and folders in the `additional_dashboards.yaml` file. Alternatively, the use of the GitHub provider data sources could be reevaluated or evolved per real-world needs.
+* When new git repositories and microservices are created, a subsequent `terraform apply` is necessary to create their corresponding Grafana folders and dashboards. If necessary, this could be orchestrated via automation that invokes `terraform apply` in response to relevant [GitHub organization webhook events](https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads).
+* When git repositories and/or microservices are deleted, a subsequent `terraform apply` could inadvertently result in the corresponding Grafana resources' destruction. If undesired, this could be mitigated via the use of the [prevent_destroy](https://developer.hashicorp.com/terraform/tutorials/state/resource-lifecycle#prevent-resource-deletion) lifecyle argument, or by hardcoding such dashboards and folders in the `additional_dashboards.yaml` file. Alternatively, the use of the GitHub provider data sources could be reevaluated or evolved to better account real-world needs.
 
-The above-described example is merely intended to showcase a few Terraform capabilities, and to inspire ideas. In addition to demonstrating semi-advanced logic, the configuration also teases some broader ideas for automating platform onboarding across an organization: While the example focuses largely on Grafana resources, the pattern could be applied to bootstrap other aspects of platform engineering across other providers, beyond Grafana, such as...
+The above-described example is merely intended to showcase a few Terraform capabilities, and to inspire ideas. In addition to demonstrating semi-advanced logic, the configuration also teases some broader ideas for automating platform onboarding across an organization: While the example focuses largely on Grafana resources, the pattern could be applied to bootstrap other aspects of platform engineering across other non-Grafana providers For example...
 
 * PagerDuty configurations
 * artifact repositories
