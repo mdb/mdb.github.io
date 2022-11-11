@@ -217,12 +217,13 @@ Note that...
 
 Again, the above-described example is somewhat contrived. In particular, because the implementation uses GitHub provider data sources to dynamically drive the dashboards and folder names, the resulting Grafana folders and dashboards are vulnerable to inadvertent destruction or modification during subsequent `terraform apply` invocations if/when git repositories are deleted, or even when their `Dockerfile`s are moved or deleted. This could be mitigated via the use of the [prevent_destroy](https://developer.hashicorp.com/terraform/tutorials/state/resource-lifecycle#prevent-resource-deletion) lifecyle argument, or by hardcoding such dashboards and folders in the `additional_dashboards.yaml` file. Alternatively, the use of the GitHub provider data sources could be reevaluated or evolved per real-world needs.
 
-The above-described example is merely intended to illustrate a few Terraform capabilities, and to inspire ideas. In addition to illustrating semi-advanced logic, the configuration also teases some broader ideas for automating platform onboarding across an organization. While the example focuses largely on Grafana resources, the pattern could be applied to bootstrap other aspects of platform engineering beyond Grafana, such as...
+The above-described example is merely intended to illustrate a few Terraform capabilities, and to inspire ideas. In addition to illustrating semi-advanced logic, the configuration also teases some broader ideas for automating platform onboarding across an organization. While the example focuses largely on Grafana resources, the pattern could be applied to bootstrap other aspects of platform engineering across other providers, beyond Grafana, such as...
 
 * artifact repositories
 * Vault secrets
 * AWS resources, or even AWS account provisioning
 * Kubernetes namespaces and other resources
+* PagerDuty configurations
 * etc.
 
 See [github.com/mdb/terraform-advanced-logic-demo](https://github.com/mdb/terraform-advanced-logic-demo) for the complete Terraform configuration.
