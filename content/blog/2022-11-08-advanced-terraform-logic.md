@@ -224,3 +224,5 @@ The above-described example is merely intended to illustrate a few Terraform cap
 * AWS resources, or even AWS account provisioning
 * Kubernetes namespaces and other resources
 * etc.
+
+See [github.com/mdb/terraform-advanced-logic-demo](https://github.com/mdb/terraform-advanced-logic-demo) for the complete Terraform configuration.
