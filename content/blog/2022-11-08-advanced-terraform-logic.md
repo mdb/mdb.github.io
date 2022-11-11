@@ -9,7 +9,7 @@ thumbnail: terraform2_thumb.jpg
 teaser: A case study illustrating Terraform techniques for expressing moderately complex business logic.
 ---
 
-_Critics argue [Terraform](https://terraform.io) is limiting and doesn't adequately enable the expression of complex logic in HCL. While imperfect, Terraform does indeed often accommodate complex logic. As a reference example, the following illustrates how Terraform constructs such as `for_each`, `for`/`in`, `if`, `try`, various [functions](https://developer.hashicorp.com/terraform/language/functions), and custom `local` data structures can be used to successfully satisfy a relatively logic-intensive use case._
+_Critics argue [Terraform](https://terraform.io) is limiting and doesn't adequately enable the expression of complex logic in HCL. While imperfect, Terraform does indeed often accommodate moderately complex logic. As a reference example, the following illustrates how Terraform constructs such as `for_each`, `for`/`in`, `if`, `try`, various [functions](https://developer.hashicorp.com/terraform/language/functions), and custom `local` data structures can be used to successfully satisfy a relatively logic-intensive use case._
 
 [github.com/mdb/terraform-advanced-logic-demo](https://github.com/mdb/terraform-advanced-logic-demo) homes the source code referenced throughout this post.
 
@@ -17,7 +17,7 @@ _Critics argue [Terraform](https://terraform.io) is limiting and doesn't adequat
 
 For example's sake, imagine a contrived scenario:
 
-You'd like to use Terraform to automate the management of Grafana folders and dashboards for each of a GitHub organization's microservices.
+You'd like to use Terraform to automate the management of [Grafana](https://grafana.com/) folders and dashboards for each of a GitHub organization's microservices.
 
 A few assumptions driving the implementation:
 
@@ -215,15 +215,18 @@ Note that...
 
 ## Summary, Disclaimers, etc.
 
-Again, the above-described example is somewhat contrived. In particular, because the implementation uses GitHub provider data sources to dynamically drive the dashboards and folder names, the resulting Grafana folders and dashboards are vulnerable to inadvertent destruction or modification during subsequent `terraform apply` invocations if/when git repositories are deleted, or even when their `Dockerfile`s are moved or deleted. This could be mitigated via the use of the [prevent_destroy](https://developer.hashicorp.com/terraform/tutorials/state/resource-lifecycle#prevent-resource-deletion) lifecyle argument, or by hardcoding such dashboards and folders in the `additional_dashboards.yaml` file. Alternatively, the use of the GitHub provider data sources could be reevaluated or evolved per real-world needs.
+Again, the above-described example is somewhat contrived. In particular, because the implementation uses GitHub provider data sources to dynamically drive the dashboards and folder names, the Terraform configuration could yield different results with each `terraform apply` invocation if/when modifications to the underlying git repositories and/or their `Dockerfile`s performed in between applies. For example:
 
-The above-described example is merely intended to illustrate a few Terraform capabilities, and to inspire ideas. In addition to illustrating semi-advanced logic, the configuration also teases some broader ideas for automating platform onboarding across an organization. While the example focuses largely on Grafana resources, the pattern could be applied to bootstrap other aspects of platform engineering across other providers, beyond Grafana, such as...
+* The creation Grafana folders and dashboards pertaining to newly created git repositories and microservices would require a `terraform apply` subsquent to those git repositories' creation/modification. If necessary, this could be mitigated via automation that invokes `terraform apply` in response to relevant [GitHub organization webhook events](https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads).
+* The deletion of git repositories and/or microservices could inadvertently result in the Grafana resources' destruction on subsequent `terraform apply` invocations. If undesired, this could be mitigated via the use of the [prevent_destroy](https://developer.hashicorp.com/terraform/tutorials/state/resource-lifecycle#prevent-resource-deletion) lifecyle argument, or by hardcoding such dashboards and folders in the `additional_dashboards.yaml` file. Alternatively, the use of the GitHub provider data sources could be reevaluated or evolved per real-world needs.
 
+The above-described example is merely intended to showcase a few Terraform capabilities, and to inspire ideas. In addition to demonstrating semi-advanced logic, the configuration also teases some broader ideas for automating platform onboarding across an organization: While the example focuses largely on Grafana resources, the pattern could be applied to bootstrap other aspects of platform engineering across other providers, beyond Grafana, such as...
+
+* PagerDuty configurations
 * artifact repositories
 * Vault secrets
 * AWS resources, or even AWS account provisioning
-* Kubernetes namespaces and other resources
-* PagerDuty configurations
+* Kubernetes namespaces and other Kubernetes resources
 * etc.
 
 See [github.com/mdb/terraform-advanced-logic-demo](https://github.com/mdb/terraform-advanced-logic-demo) for the complete Terraform configuration.
