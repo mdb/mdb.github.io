@@ -106,6 +106,10 @@ main {
 
     ol li {
       list-style-type: decimal;
+
+      ul li {
+        list-style-type: disc;
+      }
     }
 
     p {
