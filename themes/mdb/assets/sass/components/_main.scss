@@ -31,30 +31,24 @@ main {
       font-family: monospace;
     }
 
-    p code {
-      font-size: 90%;
-    }
-
     strong {
       font-weight: bold;
     }
 
-    pre {
-      padding: 20px;
-      margin-bottom: $big_spacer;
-      overflow: auto;
+    // style code blocks
+    div.highlight {
+      pre {
+        padding: 20px;
+        margin-bottom: $big_spacer;
+        overflow: auto;
 
-      code {
-        color: #c25;
-        border: none;
-        padding: 0;
-        background: #272822;
-        font-family: monospace;
-        font-size: 130%;
+        code {
+          border: none;
+          padding: 0;
 
-        span {
-          font-family: inherit;
-          font-size: 100%;
+          span {
+            font-family: monospace;
+          }
         }
       }
     }
