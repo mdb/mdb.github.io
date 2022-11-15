@@ -29,6 +29,7 @@ main {
       padding: 0 3px;
       background: #f7f7f9;
       font-family: monospace;
+      line-height: $line_height;
     }
 
     p code {
@@ -49,13 +50,7 @@ main {
         border: none;
         padding: 0;
         background: #272822;
-        font-family: monospace;
         font-size: 130%;
-
-        span {
-          font-family: inherit;
-          font-size: 100%;
-        }
       }
     }
 
