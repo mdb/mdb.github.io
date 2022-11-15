@@ -60,7 +60,7 @@ Before examining its code, here's an overview of some key aspects of the impleme
 
 `provider.tf`:
 
-```hcl
+```terraform
 terraform {
   required_providers {
     github = {
@@ -89,7 +89,7 @@ provider "grafana" {
 
 `data.tf`:
 
-```hcl
+```terraform
 data "github_repositories" "owner" {
   query = "org:${local.owner}"
 }
@@ -130,7 +130,7 @@ data "github_tree" "all" {
 
 `locals.tf`:
 
-```hcl
+```terraform
 locals {
   owner = "vinyldns"
 
@@ -192,7 +192,7 @@ locals {
 
 `grafana.tf`:
 
-```hcl
+```terraform
 resource "grafana_folder" "all" {
   for_each = toset(local.grafana_folders)
 
