@@ -24,3 +24,10 @@
   overflow: hidden;
   @include responsive_width;
 }
+
+@mixin base_typography {
+  font-size: $font_size;
+  line-height: $line_height;
+  font-weight: normal;
+  font-family: $font_family;
+}

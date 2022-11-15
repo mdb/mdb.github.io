@@ -4,14 +4,15 @@
 * {
   margin: 0;
   padding: 0;
-  font-size: $font_size;
-  line-height: 1.5em;
-  font-weight: normal;
-  font-family: $font_family;
 }
 
 html {
   scroll-behavior: smooth;
+  @include base_typography;
+}
+
+h1, h2, h3, p, ul, li, li a {
+  @include base_typography;
 }
 
 body {
