@@ -60,6 +60,8 @@ Before examining its code, here's an overview of some key aspects of the impleme
 
 `provider.tf`:
 
+<!--{{< gist mdb e14382aded52a7890203ba9cf3b0610d "provider.tf" >}}-->
+
 ```terraform
 terraform {
   required_providers {
@@ -88,6 +90,8 @@ provider "grafana" {
 `data.tf` uses data sources provided by the GitHub provider to query GitHub repositories via the GitHub API and, ultimately, fetch a file tree representing the files in each repository's default branch across the targeted GitHub organization.
 
 `data.tf`:
+
+<!--{{< gist mdb e14382aded52a7890203ba9cf3b0610d "data.tf" >}}-->
 
 ```terraform
 data "github_repositories" "owner" {
@@ -129,6 +133,8 @@ data "github_tree" "all" {
 * exercises logic building a `local.grafana_folders` data structure homing a deduplicated list of _just_ the Grafana folder names
 
 `locals.tf`:
+
+<!--{{< gist mdb e14382aded52a7890203ba9cf3b0610d "locals.tf" >}}-->
 
 ```terraform
 locals {
@@ -177,6 +183,8 @@ locals {
 
 `additional_dashboards.yaml`:
 
+<!--{{< gist mdb e14382aded52a7890203ba9cf3b0610d "additional_dashboards.yaml" >}}-->
+
 ```yaml
 ---
 - dashboard: vinyldns_foo_bar
@@ -191,6 +199,8 @@ locals {
 * a Grafana dashboard whose name and title correspond to the `dashboard` attribute of each object in the `local.grafana_folders`
 
 `grafana.tf`:
+
+<!--{{< gist mdb e14382aded52a7890203ba9cf3b0610d "grafana.tf" >}}-->
 
 ```terraform
 resource "grafana_folder" "all" {
