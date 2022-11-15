@@ -4,14 +4,14 @@
 * {
   margin: 0;
   padding: 0;
+  font-size: $font_size;
+  line-height: 1.5em;
+  font-weight: normal;
+  font-family: $font_family;
 }
 
 html {
   scroll-behavior: smooth;
-  font-size: $font_size;
-  line-height: $line_height;
-  font-weight: normal;
-  font-family: $font_family;
 }
 
 body {
