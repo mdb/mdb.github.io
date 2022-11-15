@@ -25,27 +25,23 @@
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span><span style=color:#66d9ef>
 </span></span></span><span style=display:flex><span><span style=color:#66d9ef>data</span> <span style=color:#e6db74>&#34;github_repository&#34;</span> <span style=color:#e6db74>&#34;all&#34;</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>for_each</span> = toset(data.<span style=color:#a6e22e>github_repositories</span>.<span style=color:#a6e22e>owner</span>.<span style=color:#a6e22e>full_names</span>)
-</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>for_each</span>  = toset(data.<span style=color:#a6e22e>github_repositories</span>.<span style=color:#a6e22e>owner</span>.<span style=color:#a6e22e>full_names</span>)
 </span></span><span style=display:flex><span>  <span style=color:#a6e22e>full_name</span> = each.<span style=color:#a6e22e>value</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span><span style=color:#66d9ef>
 </span></span></span><span style=display:flex><span><span style=color:#66d9ef>data</span> <span style=color:#e6db74>&#34;github_repository_branches&#34;</span> <span style=color:#e6db74>&#34;all&#34;</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>for_each</span> = data.<span style=color:#a6e22e>github_repository</span>.<span style=color:#a6e22e>all</span>
-</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>for_each</span>   = data.<span style=color:#a6e22e>github_repository</span>.<span style=color:#a6e22e>all</span>
 </span></span><span style=display:flex><span>  <span style=color:#a6e22e>repository</span> = each.<span style=color:#a6e22e>value</span>.<span style=color:#a6e22e>name</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span><span style=color:#66d9ef>
 </span></span></span><span style=display:flex><span><span style=color:#66d9ef>data</span> <span style=color:#e6db74>&#34;github_branch&#34;</span> <span style=color:#e6db74>&#34;default_branches&#34;</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>for_each</span> = <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>github_repositories</span>
-</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>for_each</span>   = <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>github_repositories</span>
 </span></span><span style=display:flex><span>  <span style=color:#a6e22e>repository</span> = each.<span style=color:#a6e22e>value</span>.<span style=color:#a6e22e>name</span>
 </span></span><span style=display:flex><span>  <span style=color:#a6e22e>branch</span>     = each.<span style=color:#a6e22e>value</span>.<span style=color:#a6e22e>default_branch</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span><span style=color:#66d9ef>
 </span></span></span><span style=display:flex><span><span style=color:#66d9ef>data</span> <span style=color:#e6db74>&#34;github_tree&#34;</span> <span style=color:#e6db74>&#34;all&#34;</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>for_each</span> = data.<span style=color:#a6e22e>github_branch</span>.<span style=color:#a6e22e>default_branches</span>
-</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>for_each</span>   = data.<span style=color:#a6e22e>github_branch</span>.<span style=color:#a6e22e>default_branches</span>
 </span></span><span style=display:flex><span>  <span style=color:#a6e22e>recursive</span>  = <span style=color:#66d9ef>true</span>
 </span></span><span style=display:flex><span>  <span style=color:#a6e22e>repository</span> = each.<span style=color:#a6e22e>value</span>.<span style=color:#a6e22e>repository</span>
 </span></span><span style=display:flex><span>  <span style=color:#a6e22e>tree_sha</span>   = each.<span style=color:#a6e22e>value</span>.<span style=color:#a6e22e>sha</span>
