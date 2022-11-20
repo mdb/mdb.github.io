@@ -8,6 +8,7 @@ build:
 	docker run \
 		--rm \
 		--tty \
+		--env HUGO_ENV=production \
 		--volume=$(PWD):/src \
 		$(HUGO_IMAGE) \
 			--minify
