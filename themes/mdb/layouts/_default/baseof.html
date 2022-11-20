@@ -32,8 +32,7 @@
       {{ template "_internal/google_analytics_async.html" . }}
     {{ end }}
   </head>
-
-  <body class="{{ $.Param "body_classes" | default ""}}{{ with getenv "HUGO_ENV" }} {{ . }}{{ end }}">
+  <body class={{ block "body_class" . }}{{ end }}>
     {{ block "header" . }}{{ partial "site-header.html" .}}{{ end }}
     <main role="main">
       {{ block "main" . }}{{ end }}
