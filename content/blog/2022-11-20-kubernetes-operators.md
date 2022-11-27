@@ -79,7 +79,7 @@ Optionally, Kubernetes' [aggregation layer](https://kubernetes.io/docs/concepts/
 
 It's my sense the terms operator, controller, and custom resource are all a bit overloaded and frequently conflated. After all, their conceptual boundaries are somewhat blurry, arguably. In theory, Kubernetes custom resources don't _require_ a corresponding controller, though a custom resource without a controller is arguably little more than a data store. Similarly, a custom controller doesn't need to operate on a custom resource; custom controllers may exercise custom logic on built-in Kubernetes resources.
 
-However, strictly speaking, the _operator pattern_ relies on one or more custom resources and one or more corresponding controllers -- all working in concert -- to extend Kubernetes (Or at least that's my understanding. [Submit a PR](http://github.com/mdb/mdb.github.io) if you feel I've misprepresented something).
+To some extent, the terms "operator," "controller," and even "custom resource" are used somewhat interchangably (after all, the one's existence often implies the others' existence). However, very strictly speaking, the _operator pattern_ relies on one or more custom resources and one or more corresponding controllers all working in concert to extend Kubernetes (Or at least that's my conception. [Submit a PR](http://github.com/mdb/mdb.github.io) if you feel I've misprepresented something).
 
 ## Implementing an Operator
 
