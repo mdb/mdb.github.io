@@ -83,7 +83,7 @@ However, strictly speaking, the _operator pattern_ relies on one or more custom 
 
 ## Implementing an Operator
 
-Interested in learning more about implementing an operator? The [operator-sdk](https://sdk.operatorframework.io/) offers a CLI to help; its [tutorials](https://sdk.operatorframework.io/docs/building-operators/) are a good place to start.
+Interested in implementing your own operator? The [operator-sdk](https://sdk.operatorframework.io/) offers a CLI to help; its [tutorials](https://sdk.operatorframework.io/docs/building-operators/) are a good place to start.
 
 ## Further reading
 
