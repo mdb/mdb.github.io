@@ -71,9 +71,9 @@ Optionally, Kubernetes' [aggregation layer](https://kubernetes.io/docs/concepts/
 
 ## Custom Controllers
 
-* programs installed on a Kubernetes cluster that use the Kubernetes API to reconcile -- and transform -- installed resources' actual state with the desired state specified by the custom resource (On their own -- in absence of an associated controller -- custom resources merely expose a way to set the desired state and read the actual state, but offer no mechanism by which the actual state is actually transformed to the desired state).
-* leverage the [Reconciler Pattern](https://www.oreilly.com/library/view/cloud-native-infrastructure/9781491984291/ch04.html), just as core Kubernetes does in managing built-in, non-custom resources too
-* use methods exposed by the Kubernetes API to watch for key events pertaining to resources and act accordingly based on their business logic
+* custom controllers are programs installed on a Kubernetes cluster that use the Kubernetes API to reconcile -- and transform -- installed resources' actual state with the desired state specified by the custom resource (On their own -- in absence of an associated controller -- custom resources merely expose a way to set the desired state and read the actual state, but offer no mechanism by which the actual state is actually transformed to the desired state).
+* controllers leverage the [Reconciler Pattern](https://www.oreilly.com/library/view/cloud-native-infrastructure/9781491984291/ch04.html), just as core Kubernetes does in managing built-in, non-custom resources too
+* controllers often use methods exposed by the Kubernetes API to watch for key events pertaining to resources and act accordingly based on their business logic
 
 ## Summary: Operators, CRDs, and Controllers
 
