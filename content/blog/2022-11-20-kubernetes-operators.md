@@ -25,7 +25,7 @@ As summarized in the [CNCF Operator Whitepaper](https://github.com/cncf/tag-app-
 
 Out of the box, the [Kubernetes API](https://kubernetes.io/docs/concepts/overview/kubernetes-api/) enables querying and manipulating common, built-in [API objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/), such as Pods, Namespaces, Deployments, ConfigMaps, etc. However, through operators, the core Kubernetes API can be extended -- and enhanced -- beyond these core objects to support higher level abstractions.
 
-In effect, operators enable platform engineers to codify operational logic, thereby abstracting features like application resilience, deployment logic, autoscaling, advanced routing, configuration, etc. into discreet software components. These discreet operators may have their own develop, build, test, version, and release lifeycle, and offer operational solutions that can be repeatably installed into underlying Kubernetes clusters to natively enhance those clusters' platform experience and capabilities.
+In effect, operators enable platform engineers to codify operational logic, thereby abstracting features like application resilience, deployment logic, autoscaling, advanced routing, configuration, etc. into discreet software components. These discreet operators may have their own develop, build, test, version, and release lifeycle, and offer operational solutions that can be repeatably installed into underlying Kubernetes clusters to natively enhance those clusters' capabilities.
 
 A few examples:
 
@@ -45,7 +45,7 @@ Operator implementations leverage two constructs:
 * a resource is a Kubernetes API endpoint pertaining a collection of a certain **kind** of object. Pods, Services, ConfigMaps, and Namespaces are common, core examples.
 * a custom resource enhances the built-in Kubernetes API via a **Custom Resource Definition** or via **API aggregation**
 
-Custom resources can be created via the [CustomResourceDefinition API](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/) by specifying the custom resource in YAML, then `kubectal apply -f`-ing the YAML file to install the resource into the cluster. For example, the following offers the beginnings of a `Foo` custom resource definition:
+Custom resources can be created via the [CustomResourceDefinition API](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/) by specifying the custom resource in YAML, then `kubectal apply -f`-ing the YAML file to install the resource into the cluster. For example, the following offers the beginnings of a hypothetical `Foo` custom resource definition:
 
 ```yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -57,7 +57,7 @@ spec:
 ...
 ```
 
-Once created, authorized users can create instances of the `kind: Foo` resource type and perform CRUD interactctions with those instances, just as can be done for the built-in resources. For example:
+Once created, authorized users can create instances of the `kind: Foo` resource type and perform CRUD actions against those instances, just as can be done for the built-in resources. For example, `kubectl get foos` reads the available instances of `Foo`:
 
 ```txt
 kubectl get foos
