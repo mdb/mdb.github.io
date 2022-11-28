@@ -4,7 +4,7 @@ date: 2022-11-28
 tags:
 - kubernetes
 - platform engineering
-thumbnail:
+thumbnail: kubernetes_thumb.png
 teaser: An introduction to the Kubernetes operator pattern.
 ---
 
@@ -22,13 +22,12 @@ As summarized in the [CNCF Operator Whitepaper](https://github.com/cncf/tag-app-
 
 ## Why?
 
-Out of the box, the [Kubernetes API](https://kubernetes.io/docs/concepts/overview/kubernetes-api/) enables querying and manipulating common, built-in [API objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/), such as Pods, Namespaces, Deployments, ConfigMaps, etc. However, through operators, the core Kubernetes API can be extended -- and enhanced -- beyond these core objects to support higher level abstractions.
+By default, the [Kubernetes API](https://kubernetes.io/docs/concepts/overview/kubernetes-api/) enables querying and manipulating common, built-in [API objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/), such as Pods, Namespaces, Deployments, ConfigMaps, etc. However, through operators, the core Kubernetes API can be extended -- and enhanced -- beyond these core objects to support higher level abstractions pertaining to more specific, less generic workloads.
 
-In effect, operators enable platform engineers to codify operational logic pertaining to an application or workload, thereby abstracting features like resilience, deployment logic, autoscaling, advanced routing, configuration, etc. into discreet software components. These discreet operators may have their own develop, build, test, version, and release lifeycle, and offer operational solutions that can be repeatably installed into underlying Kubernetes clusters to natively enhance those clusters' capabilities.
+In effect, operators enable platform engineers to codify and automate the operational logic associated with an application or workload, thereby abstracting features like resilience, deployment behavior, autoscaling, advanced routing, configuration, etc. into discreet software components. These discreet components -- _operators_ -- may have their own develop, build, test, version, and release lifeycle, and offer operational solutions that can be repeatably installed into underlying Kubernetes clusters to enhance those clusters' capabilities.
 
 A few examples:
 
-* [Predictive Horizontal Pod Autoscaler](https://github.com/jthomperoo/predictive-horizontal-pod-autoscaler) offers predictive horizontal pod autoscaling capabilities
 * [GlooEdge](https://github.com/solo-io/gloo) offers an ingress controller and API gateway
 * [operatorhub.io](https://operatorhub.io/) offers numerous operator examples
 * The [operator-sdk tutorial](https://sdk.operatorframework.io/docs/building-operators/golang/tutorial/) offers an example of an operator that abstracts a [memcached](https://memcached.org/) deployment
@@ -47,7 +46,7 @@ The operator pattern leverages two constructs:
 
 Custom resources can be created via the [CustomResourceDefinition API](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/) by specifying the custom resource in YAML; a subsequent `kubectl apply` of this YAML installs the resource into the cluster.
 
-For example, consider the following contrived `Foo` custom resource definition saved to a `foo-crd.yaml` file:
+For example, consider a contrived `Foo` custom resource definition saved to a `foo-crd.yaml` file:
 
 ```yaml
 # foo-crd.yaml
@@ -98,7 +97,7 @@ customresourcedefinition.apiextensions.k8s.io/foos.stable.mikeball.info created
 
 Once created, authorized users can create instances of the `kind: Foo` resource type and perform CRUD actions against those instances, just as can be done for the built-in resources.
 
-For example, consider the following instance of a `Foo` saved to a `foo.yaml` file:
+For example, consider an instance of a `Foo` specified in YAML and saved to a `foo.yaml` file:
 
 ```yaml
 # foo.yaml
@@ -110,14 +109,14 @@ spec:
   foo: "bar"
 ```
 
-To create the `my-foo` instance of the `Foo` resource on a cluster:
+To create the `my-foo` instance of the `Foo` resource on a cluster where the `kind: Foo` custom resource has been installed:
 
 ```
 kubectl apply -f foo.yaml
 foo.stable.mikeball.info/my-foo created
 ```
 
-...And fetch the instances of `Foo` from the cluster:
+Subsequently, instances of `Foo` can be read from the cluster:
 
 ```txt
 kubectl get foos
@@ -127,11 +126,11 @@ my-foo   3s
 
 See [Extend the Kubernetes API with CustomResourceDefinitions](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/) for more details on the specifics.
 
-Optionally, Kubernetes' [aggregation layer](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/apiserver-aggregation/) accommodates further, more flexible extension of the Kubernetes API via API aggregation. While Custom Resources make Kubernetes recognize new kinds of objects, the aggregation layer supports the registration of "add-on" extension API servers in association with URL paths. For example, when an extension API server is registered in association with `/apis/foo.mikeball.info/v1/*` paths, the aggregation layer proxies requests to these paths to the associated extension API server. Typically, the underlying extension API server is running on pods within the cluster and is itself associated with one or more _custom controllers_.
+Optionally, Kubernetes' [aggregation layer](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/apiserver-aggregation/) accommodates further, more flexible extension of the Kubernetes API via API aggregation. While Custom Resources make Kubernetes recognize new kinds of objects, the aggregation layer supports the registration of "add-on" extension API servers in association with URL paths. For example, when an extension API server is registered in association with `/apis/foo.stable.mikeball.info/v1/*` paths, the aggregation layer proxies requests to these paths to the associated extension API server. Typically, the underlying extension API server is running on pods within the cluster and is itself associated with one or more _custom controllers_.
 
 ## Custom Controllers
 
-* Custom controllers are programs installed on a Kubernetes cluster that use the Kubernetes API to reconcile -- and transform -- installed resources' actual state with the desired state specified by the resource
+* Custom controllers are programs installed on a Kubernetes cluster that use the Kubernetes API to reconcile -- and transform -- installed resources' actual state with the desired state specified by the resource. This is referred to as the _controller pattern_.
 * In the context of an operator, custom controllers reconcile the desired and actual state of _custom_ resources (On their own -- in absence of an associated controller -- custom resources merely expose a way to set the desired state and read the actual state, but offer no mechanism by which the actual state is actually transformed to the desired state).
 * Controllers leverage the [Reconciler Pattern](https://www.oreilly.com/library/view/cloud-native-infrastructure/9781491984291/ch04.html), just as core Kubernetes does in managing built-in, non-custom resources too.
 * Controllers often use methods exposed by the Kubernetes API to watch for key events pertaining to resources and act accordingly based on their business logic.
@@ -201,11 +200,11 @@ See the [Kubernetes controller documentation](https://kubernetes.io/docs/concept
 
 While operators, controllers, and custom resources are distinct constructs, the terms are frequently conflated and used somwhat interchangeably. After all, their conceptual boundaries are somewhat blurry; in practice, one's existence often implies the others' existence.
 
-However, Kubernetes custom resources don't _require_ a corresponding controller, though a custom resource without a controller reconciling desired and actual resource state is arguably little more than a data store. Similarly, a custom controller doesn't need to operate on a custom resource; custom controllers may exercise custom logic on built-in Kubernetes resources (For example, [Caddy Ingress Controller](https://github.com/caddyserver/ingress/tree/v0.1.3) uses existing, core resources to enable [caddy](https://github.com/caddyserver/caddy)-based ingress via a custom, purpose-built controller. Similarly, [Writing a Controller for Pod Labels](https://kubernetes.io/blog/2021/06/21/writing-a-controller-for-pod-labels/) shows how the [operator-sdk](https://sdk.operatorframework.io/) could be used to write a single controller in absence of a custom resource type).
+However, Kubernetes custom resources don't _require_ a corresponding controller, though a custom resource without a controller reconciling desired and actual resource state is arguably little more than a data store. Similarly, a custom controller doesn't need to operate on a custom resource; custom controllers may exercise custom logic on built-in Kubernetes resources (For example, [Caddy Ingress Controller](https://github.com/caddyserver/ingress/tree/v0.1.3) uses existing, core resources to enable [caddy](https://github.com/caddyserver/caddy)-based ingress via a custom, purpose-built controller. Similarly, [Writing a Controller for Pod Labels](https://kubernetes.io/blog/2021/06/21/writing-a-controller-for-pod-labels/) shows how the [operator-sdk](https://sdk.operatorframework.io/) could be used to write a single controller in absence of a custom resource).
 
-Nonetheless, the _operator pattern_ -- strictly speaking -- typically relies on one or more custom controllers operating on one or more custom resources with an application-specific focus. (Disagree? [Submit a PR](http://github.com/mdb/mdb.github.io) if you feel I've misprepresented something).
+Nonetheless, the _operator pattern_ -- strictly speaking -- typically relies on one or more custom controllers operating on one or more custom resources towards the goal of codifying operational knowledge pertaining to a specific application or workload (Or at least that's my conception. Disagree? [Submit a PR](http://github.com/mdb/mdb.github.io) if you feel I've misprepresented something).
 
-That said, it's worth noting the [Kubernetes documentation](https://kubernetes.io/docs/concepts/extend-kubernetes/#combining-new-apis-with-automation) itself articulates all this a bit differently, perhaps calling into question the above-outlined strict definition:
+That said, it's worth noting the [Kubernetes documentation](https://kubernetes.io/docs/concepts/extend-kubernetes/#combining-new-apis-with-automation) itself articulates all this a bit differently:
 
 > A combination of a custom resource API and a control loop is called the controllers pattern. If your controller takes the place of a human operator deploying infrastructure based on a desired state, then the controller may also be following the operator pattern. The Operator pattern is used to manage specific applications; usually, these are applications that maintain state and require care in how they are managed.
 
