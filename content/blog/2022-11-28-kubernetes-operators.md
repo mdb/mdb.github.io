@@ -26,6 +26,8 @@ By default, the [Kubernetes API](https://kubernetes.io/docs/concepts/overview/ku
 
 In effect, operators enable platform engineers to codify and automate the operational logic associated with an application or workload, thereby abstracting features like resilience, deployment behavior, autoscaling, advanced routing, configuration, etc. into discreet software components. These discreet components -- _operators_ -- may have their own develop, build, test, version, and release lifeycle, and offer operational solutions that can be repeatably installed into underlying Kubernetes clusters to enhance those clusters' capabilities.
 
+Arguably, this is especially compelling considering the growing ubiquity of Kubernetes, and operators' natural, low friction compatibility with teams' existing Kubernetes platform tooling (CI/CD pipelines, [helm](http://helm.sh), [kustomize](https://kustomize.io/), `kubectl`, observability tools, platform [RBAC](https://en.wikipedia.org/wiki/Role-based_access_control), etc.)
+
 A few examples:
 
 * [GlooEdge](https://github.com/solo-io/gloo) offers an ingress controller and API gateway
