@@ -1,6 +1,6 @@
 ---
 title: What is the Kubernetes Operator Pattern?
-date: 2022-11-20
+date: 2022-11-28
 tags:
 - kubernetes
 - platform engineering
