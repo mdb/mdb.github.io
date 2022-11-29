@@ -222,5 +222,5 @@ In closing, beware: these terms can be a bit confusing and tend to mean slightly
 * [Kubebuilder](https://book.kubebuilder.io/) is a framework for building Kubernetes APIs using CRDs in Go.
 * The [Operator SDK](https://sdk.operatorframework.io/) provides a toolkit for building, testing, and packaging operators (and uses `kubebuilder` itself, under the hood).
 * [Writing a Controller for Pod Labels](https://kubernetes.io/blog/2021/06/21/writing-a-controller-for-pod-labels/) illustrates the use of the controller pattern in absence of corresonding custom resources.
-* [Controllers and Operators](https://joshrosso.com/docs/2019/2019-10-13-controllers-and-operators/) offers a good over view of the controller pattern and when a controller qualifies as an operator.
+* [Controllers and Operators](https://joshrosso.com/docs/2019/2019-10-13-controllers-and-operators/) offers a good overview of the controller pattern and when a controller qualifies as an operator.
 * As an interesting reference, [Oxidizing the Kubernetes Operator](https://www.pavel.cool/rust/rust-kubernetes-operators/) illustrates a pattern for authoring Rust-based operators.
