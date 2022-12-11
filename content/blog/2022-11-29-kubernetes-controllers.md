@@ -8,9 +8,9 @@ thumbnail:
 teaser: An introduction to the Kubernetes controller pattern.
 ---
 
-_A colleague recently relayed to me their vision for a microservices architecture involving the automatic injection of sidecar containers to all pods in Kubernetes deployments. Naive to Kubernetes' support for custom controllers, the colleague hoped to proof-of-concept the idea via enhanced CI/CD pipeline logic that opaquely extended Kubernetes deployment manifest YAML prior to each application deployment. As a alternative, the following offers an overview of the Kubernetes controller pattern, as well as reference implementation._
+_A colleague recently relayed to me their vision for a microservices architecture involving the automatic injection of sidecar containers to all deployments' pods within a Kubernetes namespace. Naive to Kubernetes' support for custom controllers, the colleague hoped to proof-of-concept the idea via enhanced CI/CD pipeline logic that opaquely extended Kubernetes deployment manifest YAML prior to each application deployment. As an alternative, the following offers an overview of the Kubernetes controller pattern, as well as reference implementation._
 
-Note that this introduction to the controller pattern also serves as a natural followup to [What is the Kubernetes Operator Pattern?](/blog/what-is-the-kubernetes-operator-pattern/)
+_This controller pattern intro also serves as a natural followup to [What is the Kubernetes Operator Pattern?](/blog/what-is-the-kubernetes-operator-pattern/)._
 
 ## What?
 
@@ -22,16 +22,20 @@ Note that this introduction to the controller pattern also serves as a natural f
 
 Let's relate all this back to my colleague's original vision, as noted above:
 
-> TODO
+> A colleague recently relayed to me their vision for a microservices architecture involving the automatic injection of sidecar containers to all deployments' pods within a Kubernetes namespace.
 
-How might a custom controller be developed to satisfy this architecture? The [operator-sdk]()
+How might a custom controller be developed to satisfy this architecture? The [operator-sdk](https://sdk.operatorframework.io/) offers a toolkit for building such Kubernetes native applications. Once installed, the `operator-sdk` CLI can bootstrap a customer controller codebase and kickstart the development process.
+
+While often used to build full-on Kubernetes _operators_ -- controller that interact with _custom resources_ (see [What is the Kubernetes Operator Pattern?](/blog/what-is-the-kubernetes-operator-pattern/) for more on all that) -- `operator-sdk` can also be used to build controllers that interact with core, non-custom Kubernetes resources, as is a bit more appropriate to implement a basic sidecar injector controller (at least in its crude, demo-appropriate MVP form).
+
+To get started, first create a directory to home the controller codebase:
 
 ```txt
 mkdir sidecar-injector
 cd sidecar-injector
 ```
 
-The `--domain` option specifies a path prefix for the API group the controller's custom Kubernetes resources belong to. However, `sidecar-injector` will feature no custom resources and so this value isn't super important. The `--repo` option specifies the name of the `sidecar-injector` Go module.
+Next, use the `operator-sdk` to scaffold a controller codebase. For the purposes of this example, the controller will be built using Go (though it's worth noting other options exist). As seen below, the `--domain` option specifies a path prefix for the API group the controller's custom Kubernetes resources belong to. Because `sidecar-injector` will feature no custom resources, this value isn't super important. The `--repo` option specifies the name of the `sidecar-injector` Go module.
 
 ```
 operator-sdk init \
@@ -39,7 +43,7 @@ operator-sdk init \
   --repo=github.com/mdb/sidecar-injector
 ```
 
-Next, scaffold a controller. `--kind` specifies the controller will handle Deployments, and `--resource=false` specifies that the controller does not deal with any custom resources:
+Next, scaffold a controller. `--kind` specifies the controller will handle [Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/), and `--resource=false` specifies the controller does not deal with any custom resources:
 
 ```
 operator-sdk create api \
@@ -50,7 +54,20 @@ operator-sdk create api \
   --resource=false
 ```
 
-Most notably, the `operator-sdk create api` command created a `controllers/deployment_controller.go` file, which will serve as the backbone of the `sidecar-injector` controller. Most notably, the `DeploymentReconciler#Reconcile` method will home the core of relevant control loop, _reconciling_ desired and actual state on Deployment resources by injecting a sidecar container to each Pod template.
+The `operator-sdk create api` command created a `controllers/deployment_controller.go` file, which will serve as the backbone of the `sidecar-injector` controller. Most notably, the `DeploymentReconciler#Reconcile` method will home the core of relevant control loop, _reconciling_ desired and actual state on Deployment resources by injecting a sidecar container to each Pod template:
+
+```
+tree controllers
+controllers
+├── deployment_controller.go
+└── suite_test.go
+
+0 directories, 2 files
+
+cat controllers/deployment_controller.go | grep 'Reconcile('
+func (r *DeploymentReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+...
+```
 
 However, before proceeding, note the following annotations:
 
@@ -60,13 +77,38 @@ However, before proceeding, note the following annotations:
 //+kubebuilder:rbac:groups=apps,resources=deployments/finalizers,verbs=update
 ```
 
-These are used under the hood by the `operator-sdk` CLI to generate and scaffold relevant code pertaining to the controller's required permissions. However, in `sidecar-injector`'s case, not all these permissions are necessary. Remove the unnecessary permissions annotations, leaving only...
+These are used to generate and scaffold relevant code pertaining to the controller's required permissions during `sidecar-injector`'s build process (see the `Makefile` for more details and clues). However, in `sidecar-injector`'s case, not all these permissions are necessary. Remove the unnecessary permissions annotations, leaving only...
 
 ```
 //+kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;watch;create;update;patch;delete
 ```
 
-Next, let's begin building out `Reconcile`. Note the in-context code comments:
+Now, run `make manifests` to generate a `config/rbac/role.yaml` file from the modified annotations. This `config/rbac/role.yaml` file specifies `sidecar-injector`'s [RBAC]() requirements such that it's authorized to perform the necessary actions against Deployments:
+
+```
+cat config/rbac/role.yaml
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+```
+
+Next, begin building out `Reconcile`, as demonstrated by the following. Note the in-context code comment explanations:
 
 ```golang
 package controllers
@@ -107,7 +149,7 @@ func (r *DeploymentReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 ...
 ```
 
-After each code edit, run `make` to ensure `sidecar-injector` continues to compile:
+After each code edit, run `make` to ensure `sidecar-injector` continues to successfullly compile to a `bin/manager` binary:
 
 ```
 make
@@ -117,7 +159,7 @@ go vet ./...
 go build -o bin/manager main.go
 ```
 
-Now, let's add real logic to `Reconcile`, ensuring that a `busybox` sidecar container is present in every deployment pod:
+Now, add real logic to `Reconcile`, ensuring that a `busybox` sidecar container is present in every Deployment Pod:
 
 ```golang
 import (
@@ -189,7 +231,7 @@ func (r *DeploymentReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 }
 ```
 
-Finally, edit `main.go` -- the controller program's entrypoint -- and specify that the controller should only inject sidecars in the specified Kubernetes namespace, defaulting to the "default" namespace:
+Finally, edit `main.go` -- the controller program's entrypoint -- and ensure the controller only injects sidecars in the specified Kubernetes Namespace. By default, `sidecar-injector` targets the `default` namespace, but also accommodates overrides via the specification of a `-namespace` command line option when running `sidecar-injector` via its compiled binary.
 
 ```golang
 func main() {
@@ -206,7 +248,18 @@ func main() {
 ...
 ```
 
-We're now ready to try out the controller using a local Kubernetes cluster. Assuming you're running a local cluster via a tool like [kind](TODO), [minikube](TODO), or [Docker Desktop](TODO) -- and assuming you have `kubectl` installed and that its context is configured to target the local cluster, run `make run` to run `sidecar-injector` against the cluster:
+Run `make` to verify `sidecar-injector` continues to compile. Note the resulting `bin/manager` executable now features a `-namespace` option:
+
+```
+./bin/manager -help
+Usage of ./bin/manager:
+...
+  -namespace string
+        The namespace in which to inject sidecars. (default "default")
+...
+```
+
+Now, the controller can be test driven on a local Kubernetes cluster. Assuming you're running a local cluster via a tool like [kind](TODO), [minikube](TODO), or [Docker Desktop](TODO) -- and assuming you have `kubectl` installed and that its context is configured to target the local cluster, run `make run` to build and run `sidecar-injector` against the cluster:
 
 ```
 make run
@@ -226,7 +279,7 @@ go run ./main.go
 ...
 ```
 
-Now, let's create an example `hello` deployment in the cluster's `default` namespace and verify that `sidecar-injector` properly injects a `hello-sidecar` busybox container.
+Now, create an example `hello` deployment in the cluster's `default` namespace and verify that `sidecar-injector` properly injects a `hello-sidecar` busybox container.
 
 First, save the following to a `hello-deployment.yaml` file:
 
@@ -259,7 +312,7 @@ kubectl apply -f deployment.yaml --namespace default
 deployment.apps/hello created
 ```
 
-Verify that the resulting `hello` deployment features both a `hello` and a `hello-sidecar` containers:
+Verify the resulting `hello` deployment features both a `hello` and a `hello-sidecar` containers:
 
 ```
 kubectl get deployment/hello -o jsonpath="{.spec.template.spec.containers[*].name}"
@@ -272,5 +325,68 @@ Verify that `hello-sidecar` is running the correct `busybox` image:
 kubectl get deployment/hello -o jsonpath="{.spec.template.spec.containers[1].image}"
 busybox
 ```
+
+## Automated testing
+
+## Building a container image
+
+When running `sidecar-injector` against a local cluster in development, `make run` does the trick. However, to run `sidecar-injector` on a real production Kubernetes cluster, it's first necessary to package the controller as an [OCI]() image. Note that `operator-sdk`
+
+```Makefile
+...
+# Image URL to use all building/pushing image targets
+IMG ?= controller:latest
+...
+```
+
+Change this to be...
+
+```Makefile
+...
+# Image URL to use all building/pushing image targets
+IMG ?= $(IMAGE_TAG_BASE):$(VERSION)
+...
+```
+
+...and change `IMAGE_TAG_BASE` to be an appropriate value. For example, I've changed the original `IMAGE_TAG_BASE` to reference my personal [DockerHub](TODO) repository:
+
+```Makefile
+...
+# IMAGE_TAG_BASE defines the docker.io namespace and part of the image name for remote images.
+# This variable is used to construct full image tags for bundle and catalog images.
+#
+# For example, running 'make bundle-build bundle-push catalog-build catalog-push' will build and push both
+# hub.docker.com/clapclapexcitement/sidecar-injector-bundle:$VERSION and hub.docker.com/clapclapexcitement/sidecar-injector-catalog:$VERSION.
+IMAGE_TAG_BASE ?= hub.docker.com/clapclapexcitement/sidecar-injector
+...
+```
+
+Note that, at least when using `operator-sdk` version, the templated `Dockerfile` assumes an `api` directory, despite that `sidecar-injector` has no corresponding custom resource definition:
+
+```
+make docker-build
+...
+ => ERROR [builder 7/9] COPY api/ api/                                                                                                                                           0.0s
+------
+ > [builder 7/9] COPY api/ api/:
+------
+failed to compute cache key: "/api" not found: not found
+make: *** [docker-build] Error 1
+```
+
+To fix this, remove the `COPY api/ api/` from the `Dockerfile`.
+
+Now, build the `sidecar-injector` image:
+
+```
+make docker-build
+...
+ => => naming to hub.docker.com/clapclapexcitement/sidecar-injector:0.0.1
+...
+```
+
+TODO:
+* is it true that 'make run' does not run an image?
+* what's up with the `config` dir? Should `config/manager` be edited to reflect the image name changes?
 
 ## Further reading
