@@ -423,7 +423,7 @@ For more information, `operator-sdk`'s documentation notes a few learning resour
 
 ## Summary
 
-At a glance, `operator-sdk` generally offers a helpful toolkit for getting started with Kubernetes controller development, even when a controller reconciles core resources rather than custom resources. Nonetheless, a few notes and open questions remain, especially for `operator-sdk` newcomers...
+Through Kubernetes' controller pattern, functionality -- such as sidecar injection logic -- can be natively baked into a cluster. At a glance, `operator-sdk` generally offers a helpful toolkit for getting started with Kubernetes controller development, even when a controller reconciles core resources rather than custom resources. Nonetheless, a few notes and open questions remain, especially for `operator-sdk` newcomers...
 
 1. For a simple controller such as `sidecar-injector` -- which has no CRDs -- is the use of `operator-sdk` a bit overly complicated? Would [kubebuilder](https://kubebuilder.ior) or even just the [controller-gen](https://kubebuilder.io/reference/controller-gen.html) be a more appropriately minimal tool? Or perhaps no external framework is warrented, and `sidecar-injector` could be implemented even more minimally, as exemplified by [trstringer/k8s-controller-core-resource](https://github.com/trstringer/k8s-controller-core-resource)?
 2. In a real world scenario, would `sidecar-injector` be more appropriately implemented as a [mutating admission webhook](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#mutatingadmissionwebhook)?
