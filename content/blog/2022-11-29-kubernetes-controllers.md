@@ -4,7 +4,7 @@ date: 2022-11-29
 tags:
 - kubernetes
 - platform engineering
-thumbnail:
+thumbnail: kubernetes2_thumb.png
 teaser: An introduction to the Kubernetes controller pattern.
 ---
 
