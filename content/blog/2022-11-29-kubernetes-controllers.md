@@ -8,15 +8,15 @@ thumbnail:
 teaser: An introduction to the Kubernetes controller pattern.
 ---
 
-_A colleague recently relayed to me their vision for a microservices architecture involving the automatic injection of sidecar containers to all deployments' pods within a Kubernetes namespace. Naive to Kubernetes' support for custom controllers, the colleague hoped to proof-of-concept the idea via enhanced CI/CD pipeline logic that opaquely extended Kubernetes deployment manifest YAML prior to each application deployment. As an alternative, the following offers an overview of the Kubernetes controller pattern, as well as reference implementation._
+_A colleague recently relayed to me their vision for a microservices architecture involving the automatic injection of sidecar containers to all deployments' pods within a Kubernetes namespace. Naive to Kubernetes' support for custom controllers, the colleague hoped to proof-of-concept the idea via enhanced CI/CD pipeline logic that opaquely extended Kubernetes deployment manifest YAML prior to each application deployment. As an alternative, the following offers an overview of the Kubernetes controller pattern, as well as a tour of a basic reference implementation._
 
-_This controller pattern intro also serves as a natural followup to [What is the Kubernetes Operator Pattern?](/blog/what-is-the-kubernetes-operator-pattern/)._
+_This controller pattern intro also serves as a natural followup to [What is the Kubernetes Operator Pattern?](/blog/what-is-the-kubernetes-operator-pattern/). The example referenced throughout this introduction can be viewed at [github.com/mdb/sidecar-injector](https://github.com/mdb/sidecar-injector). This introduction is not intended as a final authority on the canonically appropriate way to solve the above-described problem; see the open questions for thoughts on alternative approaches and undiscussed topics._
 
-## What?
+## What? Why? How?
 
-## Why?
+In Kubernetes, controllers monitor the state of a cluster and make changes according to their implementation logic. Through the controller pattern, Kubernetes functionality can be extended to support custom, non-built-in use cases. A Kubernetes controller can be implemented in any language or runtime that can act as a client to the Kubernetes API. However, technologies such as [kubebuilder](https://kubebuilder.io/), [controller-gen](https://kubebuilder.io/reference/controller-gen.html), and [operator-sdk](https://sdk.operatorframework.io) offer tools to help controller development.
 
-## How?
+The following offers an overview of how [operator-sdk](https://sdk.operatorframework.io) might be leveraged to build a Kubernetes controller (and note that `operator-sdk` itself leverages both `kubebuilder` and `controller-gen` under the hood). Again, all disclaimers apply: the following is largely intended as an overview and tour of my own experience using the `operator-sdk`. It's not intended as an authority controller implementation best practices; alternative approaches -- some perhaps supior -- exist.
 
 ## Implementing a Custom Controller
 
@@ -26,7 +26,7 @@ Let's relate all this back to my colleague's original vision, as noted above:
 
 How might a custom controller be developed to satisfy this architecture? The [operator-sdk](https://sdk.operatorframework.io/) offers a toolkit for building such Kubernetes native applications. Once installed, the `operator-sdk` CLI can bootstrap a customer controller codebase and kickstart the development process.
 
-While often used to build full-on Kubernetes _operators_ -- controller that interact with _custom resources_ (see [What is the Kubernetes Operator Pattern?](/blog/what-is-the-kubernetes-operator-pattern/) for more on all that) -- `operator-sdk` can also be used to build controllers that interact with core, non-custom Kubernetes resources, as is a bit more appropriate to implement a basic sidecar injector controller (at least in its crude, demo-appropriate MVP form).
+While often used to build full-on Kubernetes _operators_ -- controllers that interact with _custom resources_ (see [What is the Kubernetes Operator Pattern?](/blog/what-is-the-kubernetes-operator-pattern/) for more on all that) -- `operator-sdk` can also be used to build controllers that interact with core, non-custom Kubernetes resources, as is a bit more appropriate for the above-described sidecar injector use case (at least in simple, demo-appropriate MVP form).
 
 To get started, first create a directory to home the controller codebase:
 
@@ -35,7 +35,7 @@ mkdir sidecar-injector
 cd sidecar-injector
 ```
 
-Next, use the `operator-sdk` to scaffold a controller codebase. For the purposes of this example, the controller will be built using Go (though it's worth noting other options exist). As seen below, the `--domain` option specifies a path prefix for the API group the controller's custom Kubernetes resources belong to. Because `sidecar-injector` will feature no custom resources, this value isn't super important. The `--repo` option specifies the name of the `sidecar-injector` Go module.
+Next, use the `operator-sdk` to scaffold a controller codebase. For the purposes of this example, the controller will be built in Go (though other options exist; a controller can be implemented using any language that can act as a client for the Kubernetes API). As seen below, the `--domain` option specifies a path prefix for the controller's custom resources' [API group](https://kubernetes.io/docs/reference/using-api/#api-groups). Because `sidecar-injector` will feature no custom resources, this value isn't super important. The `--repo` option specifies the name of the `sidecar-injector` Go module.
 
 ```
 operator-sdk init \
@@ -43,7 +43,7 @@ operator-sdk init \
   --repo=github.com/mdb/sidecar-injector
 ```
 
-Next, scaffold a controller. `--kind` specifies the controller will handle [Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/), and `--resource=false` specifies the controller does not deal with any custom resources:
+Next, scaffold a controller. `--kind` specifies the controller will handle [Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) (that is, it will monitor Deployment resources, ensuring the presence of a sidecar container). `--resource=false` specifies the controller does not deal with any custom resources:
 
 ```
 operator-sdk create api \
@@ -54,7 +54,7 @@ operator-sdk create api \
   --resource=false
 ```
 
-The `operator-sdk create api` command created a `controllers/deployment_controller.go` file, which will serve as the backbone of the `sidecar-injector` controller. Most notably, the `DeploymentReconciler#Reconcile` method will home the core of relevant control loop, _reconciling_ desired and actual state on Deployment resources by injecting a sidecar container to each Pod template:
+The `operator-sdk create api` command create a `controllers/deployment_controller.go` file whose code will serve as the backbone of the `sidecar-injector` controller. Most notably, the `DeploymentReconciler#Reconcile` method will home the core of relevant control loop, _reconciling_ desired and actual state on Deployment resources by injecting a sidecar container to each Pod template:
 
 ```
 tree controllers
@@ -69,7 +69,7 @@ func (r *DeploymentReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 ...
 ```
 
-However, before proceeding, note the following annotations:
+However, before proceeding, note the following:
 
 ```
 //+kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;watch;create;update;patch;delete
@@ -77,7 +77,7 @@ However, before proceeding, note the following annotations:
 //+kubebuilder:rbac:groups=apps,resources=deployments/finalizers,verbs=update
 ```
 
-These are used to generate and scaffold relevant code pertaining to the controller's required permissions during `sidecar-injector`'s build process (see the `Makefile` for more details and clues). However, in `sidecar-injector`'s case, not all these permissions are necessary. Remove the unnecessary permissions annotations, leaving only...
+These annotations are used to generate and scaffold relevant code pertaining to the controller's required permissions during `sidecar-injector`'s build process (see the `Makefile` for more details and clues). However, in `sidecar-injector`'s case, not all these permissions are necessary. Remove the unnecessary permissions annotations, leaving only...
 
 ```
 //+kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;watch;create;update;patch;delete
@@ -108,15 +108,15 @@ rules:
   - watch
 ```
 
-Next, begin building out `Reconcile`, as demonstrated by the following. Note the in-context code comment explanations:
+Next, it's necessary to begin iterating on `Reconcile`, as demonstrated by the following. Note the in-context code comment explanations:
 
 ```golang
 package controllers
 
 import (
-    ...
-	apierrors "k8s.io/apimachinery/pkg/api/errors"
-    ...
+  ...
+  apierrors "k8s.io/apimachinery/pkg/api/errors"
+  ...
 )
 
 ...
@@ -129,27 +129,27 @@ import (
 // When a Deployment is created or updated, it makes sure the Pod template features
 // the desired sidecar container. When a Pod is deleted, it ignores the deletion.
 func (r *DeploymentReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	log := log.FromContext(ctx)
+    log := log.FromContext(ctx)
 
-	// Fetch the Deployment from the Kubernetes API.
-	var deployment appsv1.Deployment
-	if err := r.Get(ctx, req.NamespacedName, &deployment); err != nil {
-		if apierrors.IsNotFound(err) {
-			// Ignore not-found errors that occur when Deployments are deleted.
-			return ctrl.Result{}, nil
-		}
+    // Fetch the Deployment from the Kubernetes API.
+    var deployment appsv1.Deployment
+    if err := r.Get(ctx, req.NamespacedName, &deployment); err != nil {
+      if apierrors.IsNotFound(err) {
+        // Ignore not-found errors that occur when Deployments are deleted.
+        return ctrl.Result{}, nil
+      }
 
-		log.Error(err, "unable to fetch Deployment")
+      log.Error(err, "unable to fetch Deployment")
 
-		return ctrl.Result{}, err
-	}
+      return ctrl.Result{}, err
+    }
 
-	return ctrl.Result{}, nil
+    return ctrl.Result{}, nil
 }
 ...
 ```
 
-After each code edit, run `make` to ensure `sidecar-injector` continues to successfullly compile to a `bin/manager` binary:
+After each code edit, run `make` to ensure `sidecar-injector` continues to successfullly compile to a `bin/manager` binary (this `manager` binary is the controller "manager;" an executable program and CLI responsible for running the controller itself; more on that later on):
 
 ```
 make
@@ -163,10 +163,10 @@ Now, add real logic to `Reconcile`, ensuring that a `busybox` sidecar container 
 
 ```golang
 import (
-    ...
-	"fmt"
-	corev1 "k8s.io/api/core/v1"
-    ...
+  ...
+  "fmt"
+  corev1 "k8s.io/api/core/v1"
+  ...
 )
 
 ...
@@ -179,72 +179,72 @@ import (
 // When a Deployment is created or updated, it makes sure the Pod template features
 // the desired sidecar container. When a Deployment is deleted, it ignores the deletion.
 func (r *DeploymentReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	log := log.FromContext(ctx)
+  log := log.FromContext(ctx)
 
-	// Fetch the Deployment from the Kubernetes API.
-	var deployment appsv1.Deployment
-	if err := r.Get(ctx, req.NamespacedName, &deployment); err != nil {
-		if apierrors.IsNotFound(err) {
-			// Ignore not-found errors that occur when Deployments are deleted.
-			return ctrl.Result{}, nil
-		}
+  // Fetch the Deployment from the Kubernetes API.
+  var deployment appsv1.Deployment
+  if err := r.Get(ctx, req.NamespacedName, &deployment); err != nil {
+    if apierrors.IsNotFound(err) {
+      // Ignore not-found errors that occur when Deployments are deleted.
+      return ctrl.Result{}, nil
+    }
 
-		log.Error(err, "unable to fetch Deployment")
+    log.Error(err, "unable to fetch Deployment")
 
-		return ctrl.Result{}, err
-	}
+    return ctrl.Result{}, err
+  }
 
   // sidecar is a simple busybox-based container that sleeps for 36000.
   // The sidecar container is always named "<deploymentname>-sidecar".
-	sidecar := corev1.Container{
-		Name:    fmt.Sprintf("%s-sidecar", deployment.Name),
-		Image:   "busybox",
-		Command: []string{"sleep"},
-		Args:    []string{"36000"},
-	}
+  sidecar := corev1.Container{
+    Name:    fmt.Sprintf("%s-sidecar", deployment.Name),
+    Image:   "busybox",
+    Command: []string{"sleep"},
+    Args:    []string{"36000"},
+  }
 
   // This is a crude way to ensure the controller doesn't attempt to add
   // redundant sidecar containers, which would result in an error a la:
   // Deployment.apps \"foo\" is invalid: spec.template.spec.containers[2].name: Duplicate value: \"foo-sidecar\"
-	for _, c := range deployment.Spec.Template.Spec.Containers {
-		if c.Name == sidecar.Name && c.Image == sidecar.Image {
-			return ctrl.Result{}, nil
-		}
-	}
+  for _, c := range deployment.Spec.Template.Spec.Containers {
+    if c.Name == sidecar.Name && c.Image == sidecar.Image {
+      return ctrl.Result{}, nil
+    }
+  }
 
   // Otherwise, add the sidecar to the deployment's containers.
-	deployment.Spec.Template.Spec.Containers = append(deployment.Spec.Template.Spec.Containers, sidecar)
+  deployment.Spec.Template.Spec.Containers = append(deployment.Spec.Template.Spec.Containers, sidecar)
 
-	if err := r.Update(ctx, &deployment); err != nil {
-		// The Deployment has been updated or deleted since initially readiing it.
-		if apierrors.IsConflict(err) || apierrors.IsNotFound(err) {
-			// Requeue the Deployment to try to reconciliate again.
-			return ctrl.Result{Requeue: true}, nil
-		}
+  if err := r.Update(ctx, &deployment); err != nil {
+    // The Deployment has been updated or deleted since initially readiing it.
+    if apierrors.IsConflict(err) || apierrors.IsNotFound(err) {
+      // Requeue the Deployment to try to reconciliate again.
+      return ctrl.Result{Requeue: true}, nil
+    }
 
-		log.Error(err, "unable to update Deployment")
+    log.Error(err, "unable to update Deployment")
 
-		return ctrl.Result{}, err
-	}
+    return ctrl.Result{}, err
+  }
 
-	return ctrl.Result{}, nil
+  return ctrl.Result{}, nil
 }
 ```
 
-Finally, edit `main.go` -- the controller program's entrypoint -- and ensure the controller only injects sidecars in the specified Kubernetes Namespace. By default, `sidecar-injector` targets the `default` namespace, but also accommodates overrides via the specification of a `-namespace` command line option when running `sidecar-injector` via its compiled binary.
+Finally, edit `main.go` -- the controller program's entrypoint that ultimately compiles to the `bin/manager` executable -- and ensure the controller only injects sidecars in the specified Kubernetes Namespace. By default, `sidecar-injector` targets the `default` namespace, but also accommodates overrides via the specification of a `-namespace` command line option when running `sidecar-injector` via its `manager` binary.
 
 ```golang
 func main() {
-	var metricsAddr string
-	var enableLeaderElection bool
-	var probeAddr string
-	var namespace string
-	flag.StringVar(&namespace, "namespace", "default", "The namespace in which to inject sidecars.")
+  var metricsAddr string
+  var enableLeaderElection bool
+  var probeAddr string
+  var namespace string
+  flag.StringVar(&namespace, "namespace", "default", "The namespace in which to inject sidecars.")
 ...
 
-	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
-		Namespace:              namespace,
-		Scheme:                 scheme,
+  mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
+    Namespace:              namespace,
+    Scheme:                 scheme,
 ...
 ```
 
@@ -259,7 +259,7 @@ Usage of ./bin/manager:
 ...
 ```
 
-Now, the controller can be test driven on a local Kubernetes cluster. Assuming you're running a local cluster via a tool like [kind](TODO), [minikube](TODO), or [Docker Desktop](TODO) -- and assuming you have `kubectl` installed and that its context is configured to target the local cluster, run `make run` to build and run `sidecar-injector` against the cluster:
+Now, the controller can be test driven on a local Kubernetes cluster. Assuming you're running a local cluster via a tool like [kind](https://kind.sigs.k8s.io/), [minikube](https://minikube.sigs.k8s.io/), or [Docker Desktop](https://docs.docker.com/desktop/kubernetes/) -- and assuming you have [`kubectl`](https://kubernetes.io/docs/reference/kubectl/) installed and that its context is configured to target the local cluster, run `make run` to build and run `sidecar-injector` against the cluster:
 
 ```
 make run
@@ -279,9 +279,7 @@ go run ./main.go
 ...
 ```
 
-Now, create an example `hello` deployment in the cluster's `default` namespace and verify that `sidecar-injector` properly injects a `hello-sidecar` busybox container.
-
-First, save the following to a `hello-deployment.yaml` file:
+Create an example `hello` deployment in the cluster's `default` namespace and verify that `sidecar-injector` properly injects a `hello-sidecar` busybox container. To do so, first save the following to a `hello-deployment.yaml` file:
 
 ```yaml
 apiVersion: apps/v1
@@ -326,11 +324,13 @@ kubectl get deployment/hello -o jsonpath="{.spec.template.spec.containers[1].ima
 busybox
 ```
 
-## Automated testing
-
 ## Building a container image
 
-When running `sidecar-injector` against a local cluster in development, `make run` does the trick. However, to run `sidecar-injector` on a real production Kubernetes cluster, it's first necessary to package the controller as an [OCI]() image. Note that `operator-sdk`
+When running `sidecar-injector` against a local cluster in development from _outside_ that cluster, `make run` does the trick. However, to run `sidecar-injector` on a real production Kubernetes cluster, it's typical to run the controller within the cluster as a Deployment, which requires packaging/publishing the controller as an [OCI](https://opencontainers.org/) image.
+
+Note that `operator-sdk` seeded the `sidecar-injector` codebase with a `Dockerfile` and some corresponding Make targets (such as `docker-build`) for building the associated image. However, it may be necessary to make a few tweaks.
+
+First, out of the box, `make docker-build` uses an `IMG` variable to produce a generically-named `controller:latest` image:
 
 ```Makefile
 ...
@@ -348,7 +348,7 @@ IMG ?= $(IMAGE_TAG_BASE):$(VERSION)
 ...
 ```
 
-...and change `IMAGE_TAG_BASE` to be an appropriate value. For example, I've changed the original `IMAGE_TAG_BASE` to reference my personal [DockerHub](TODO) repository:
+Also, `IMAGE_TAG_BASE` should probably be a more appropriate value. For example, I've changed the original `IMAGE_TAG_BASE` to reference my personal [DockerHub](https://hub.docker.com/u/clapclapexcitement) repository:
 
 ```Makefile
 ...
@@ -361,7 +361,7 @@ IMAGE_TAG_BASE ?= hub.docker.com/clapclapexcitement/sidecar-injector
 ...
 ```
 
-Note that, at least when using `operator-sdk` version, the templated `Dockerfile` assumes an `api` directory, despite that `sidecar-injector` has no corresponding custom resource definition:
+Additionally, at least in my case, the templated `Dockerfile` assumes an `api` directory, despite that `sidecar-injector` has no corresponding custom resource definition:
 
 ```
 make docker-build
@@ -376,7 +376,7 @@ make: *** [docker-build] Error 1
 
 To fix this, remove the `COPY api/ api/` from the `Dockerfile`.
 
-Now, build the `sidecar-injector` image:
+...and build the `sidecar-injector` image:
 
 ```
 make docker-build
@@ -385,8 +385,46 @@ make docker-build
 ...
 ```
 
-TODO:
-* is it true that 'make run' does not run an image?
-* what's up with the `config` dir? Should `config/manager` be edited to reflect the image name changes?
+With `docker-build` successfully producting an appropriately named image, the controller's CI/CD pipeline can build and publish this image to the desired registry from which it can be fetched when installed on a cluster.
+
+## Automated testing
+
+What about testing `sidecar-injector`? Testing's a big topic unto itself; much of its nuance is a bit out of scope for this brief intro. Nonetheless, the following offers an overview of some key patterns.
+
+### Local testing without a cluster
+
+Under the hood, `operator-sdk` leverages [kubebuilder](https://kubebuilder.io/) -- a lower level tool for extending Kubernetes -- and `kubebuilder` itself makes use of a few testing tools available for use in `operator-sdk`-generated projects such as `sidecar-injector`:
+
+* [envtest](https://pkg.go.dev/sigs.k8s.io/controller-runtime/pkg/envtest) runs a local Kubernetes control plane API, specifically for testing purposes.
+* [Ginkgo](http://onsi.github.io/ginkgo) is a Go testing framework
+
+Note that `operator-sdk` seeded the `sidecar-injector` codebase with a `controller/suite_test.go` file. As can be seen in the [complete sidecar-injector repository](https://github.com/mdb/sidecar-injector/blob/main/controllers/suite_test.go), this file accommodates some pre-test `BeforeSuite` and post-test `AfterSuite` setup/teardown hooks, ensuring a local control plane API and the `sidecar-injector` controller are run before the tests and stopped after the tests are executed.
+
+In turn [`controllers/deployment_controller_test.go`](https://github.com/mdb/sidecar-injector/blob/main/controllers/deployment_controller_test.go) offers example Ginkgo tests validating the `sidecar-injector` functions properly when a Deployment is created.
+
+For more information, `kubebuilder`'s [Writing controller tests](https://book.kubebuilder.io/cronjob-tutorial/writing-tests.html) documentation offers good insight.
+
+### End-to-end integration testing against a cluster
+
+In addition to `envtest`-based tests, there are also patterns for executing more robust end-to-end integration tests. By comparison, these end-to-end tests might attempt to build the controller, install it on a real Kubernetes cluster (often something akin to a local, `kind`-based development cluster), and verify its functionality within this real cluster.
+
+For an example of such end-to-end tests, see `operator-sdk`'s [memcached-operator example](https://github.com/operator-framework/operator-sdk/tree/v1.26.0/testdata/go/v3/memcached-operator/test/e2e). Also note the the corresponding [`test-e2e` Make target](https://github.com/operator-framework/operator-sdk/blob/v1.26.0/testdata/go/v3/memcached-operator/Makefile#L108-L110) used to invoke these tests.
+
+For more information, `operator-sdk`'s documentation notes a few learning resources on [e2e integration tests](https://sdk.operatorframework.io/docs/building-operators/golang/testing/#e2e-integration-tests).
+
+## Summary
+
+At a glance, `operator-sdk` generally offers a helpful toolkit for getting started with Kubernetes controller development, even when a controller reconciles core resources rather than custom resources. Nonetheless, a few notes and open questions remain, especially for `operator-sdk` newcomers...
+
+1. For a simple controller such as `sidecar-injector` -- which has no CRDs -- is the use of `operator-sdk` a bit overly complicated? Would [kubebuilder](https://kubebuilder.ior) or even just the [controller-gen](https://kubebuilder.io/reference/controller-gen.html) be a more appropriately minimal tool? Or perhaps no external framework is warrented, and `sidecar-injector` could be implemented even more minimally, as exemplified by [trstringer/k8s-controller-core-resource](https://github.com/trstringer/k8s-controller-core-resource)?
+2. Would `sidecar-injector` be more appropriately implemented as a [mutating admission webhook](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#mutatingadmissionwebhook)?
+3. `operator-sdk` scaffolds out code and directories not discussed above in detail (a `hack` directory, lots of `config/*` files, many additionally mysterious Make targets, such as `bundle`, etc.). What is all this stuff? Does `sidecar-injector` need it?
+4. What should `sidecar-injector`'s CI/CD process look like? How should versioning and releases work?
+5. How should `sidecar-injector` users install the controller on their own clusters? Should `sidecar-injector`'s codebase feature a [helm](https://helm.sh/) chart for users to utilize?
 
 ## Further reading
+
+* [Extending Kubernetes](https://kubernetes.io/docs/concepts/extend-kubernetes/#combining-new-apis-with-automation)
+* [Kubewatch, an example of Kubernetes custom controller](https://docs.bitnami.com/tutorials/kubewatch-an-example-of-kubernetes-custom-controller/)
+* [Build a Kubernetes Operator in six steps](https://developers.redhat.com/articles/2021/09/07/build-kubernetes-operator-six-steps)
+* [How to write Kubernetes custom controllers in Go](https://medium.com/speechmatics/how-to-write-kubernetes-custom-controllers-in-go-8014c4a04235)
