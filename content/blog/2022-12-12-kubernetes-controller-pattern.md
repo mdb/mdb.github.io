@@ -1,6 +1,6 @@
 ---
 title: What is the Kubernetes controller pattern?
-date: 2022-11-29
+date: 2022-12-12
 tags:
 - kubernetes
 - platform engineering
