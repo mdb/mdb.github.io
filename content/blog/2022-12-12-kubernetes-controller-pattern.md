@@ -402,7 +402,7 @@ What about testing `sidecar-injector`? Like CI/CD, testing's a big topic unto it
 
 ### Local testing without a cluster
 
-Under the hood, `operator-sdk` leverages [kubebuilder](https://kubebuilder.io/) -- a lower level tool for extending Kubernetes -- and `kubebuilder` itself makes use of a few testing tools also available for use in `operator-sdk`-generated projects:
+Under the hood, `operator-sdk` wraps [kubebuilder](https://kubebuilder.io/) and `kubebuilder` itself makes use of a few testing tools also available for use in `operator-sdk`-generated projects:
 
 * [envtest](https://pkg.go.dev/sigs.k8s.io/controller-runtime/pkg/envtest) runs a local Kubernetes control plane API, specifically for testing purposes.
 * [Ginkgo](http://onsi.github.io/ginkgo) is a Go testing framework
