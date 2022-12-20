@@ -16,7 +16,7 @@ _This intro also serves as a followup to [What is the Kubernetes Operator Patter
 
 In Kubernetes, controllers monitor the state of a cluster and make changes according to their implementation logic, as described by [Kubernetes documentation](https://kubernetes.io/docs/concepts/architecture/controller/). Through the controller pattern, Kubernetes functionality can be extended to also support custom, non-built-in use cases. A controller following in this pattern can be implemented in any language or runtime that can act as a client to the Kubernetes API. However, technologies such as [kubebuilder](https://kubebuilder.io/), [controller-gen](https://kubebuilder.io/reference/controller-gen.html), and [operator-sdk](https://sdk.operatorframework.io) offer tools to help controller development.
 
-The following provides an overview of how the [operator-sdk](https://sdk.operatorframework.io) might be leveraged to build a Kubernetes controller that injects sidecar containers to each Deployment pod within a targeted Kubernetes namespace (Note that `operator-sdk` itself leverages both `kubebuilder` and `controller-gen` under the hood; these more minimal tools can also be used independent of the `operator-sdk`). Again, all disclaimers apply: the following is largely intended as an overview and tour of my own introductory experience using the `operator-sdk`. It's not intended as an authority on controller implementation best practices; alternative approaches exist.
+The following provides an overview of how the [operator-sdk](https://sdk.operatorframework.io) might be leveraged to build a Kubernetes controller that injects sidecar containers to each Deployment pod within a targeted Kubernetes namespace (Note that `operator-sdk` itself leverages both `kubebuilder` and `controller-gen` under the hood; these tools can also be used independently from the `operator-sdk`). Again, all disclaimers apply: the following is largely intended as an overview and tour of my own introductory experience using the `operator-sdk`. It's not intended as an authority on controller implementation best practices; alternative approaches exist.
 
 ## Implementing a Custom Controller
 
@@ -65,7 +65,7 @@ operator-sdk create api \
   --resource=false
 ```
 
-The `operator-sdk create api` command creates a `controllers/deployment_controller.go`, which will serve as the backbone of the `sidecar-injector` controller. Most notably, the `DeploymentReconciler#Reconcile` method will home the core of relevant control loop, _reconciling_ desired and actual state on Deployment resources by injecting a sidecar container to each Pod template (stay tuned on `controllers/suite_test.go`; more on that later):
+The `operator-sdk create api` command creates a `controllers/deployment_controller.go`, which will serve as the backbone of the `sidecar-injector` controller. Most notably, the `DeploymentReconciler#Reconcile` method will home the core of relevant control loop, _reconciling_ desired and actual state on Deployment resources by injecting a sidecar container to each Pod template (stay tuned on `controllers/suite_test.go`; more on that down the road):
 
 ```
 tree controllers
@@ -88,7 +88,7 @@ However, before proceeding, note the following in `controllers/deployment_contro
 //+kubebuilder:rbac:groups=apps,resources=deployments/finalizers,verbs=update
 ```
 
-These annotations are used by `sidecar-injector`'s underling Make targets (see `Makefile` for details and clues) to generate and scaffold relevant code pertaining to the controller's required runtime [RBAC](https://en.wikipedia.org/wiki/Role-based_access_control) permissions. However, in `sidecar-injector`'s case, not all these permissions are necessary. Remove the unnecessary annotations, leaving only...
+These annotations are used by `sidecar-injector`'s underling Make targets (see `Makefile` for clues) to generate and scaffold relevant code pertaining to the controller's required runtime [RBAC](https://en.wikipedia.org/wiki/Role-based_access_control) permissions. However, in `sidecar-injector`'s case, not all these permissions are necessary. Remove the unnecessary annotations, leaving only...
 
 ```
 //+kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;watch;create;update;patch;delete
@@ -119,7 +119,7 @@ rules:
   - watch
 ```
 
-Next, it's necessary to begin iterating on `Reconcile`, as demonstrated by the following. Note the in-context code comment explanations:
+Next, it's necessary to begin iterating on `Reconcile`, as demonstrated by the following. Note the in-context code comment explanations (and check the [complete example repository](github.com/mdb/sidecar-injector/) if all this gets confusing):
 
 ```golang
 package controllers
@@ -160,7 +160,7 @@ func (r *DeploymentReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 ...
 ```
 
-After each code edit, run `make` to ensure `sidecar-injector` continues to successfullly compile to a `bin/manager` binary (again, this `manager` binary is the controller "manager;" an executable program and CLI responsible for running the controller itself; more on that later on):
+After each code edit, run `make` to ensure `sidecar-injector` continues to successfullly compile to a `bin/manager` binary (again, this `manager` binary is the controller "manager;" an executable program and CLI responsible for running the controller itself; more on that later):
 
 ```
 make
@@ -170,7 +170,7 @@ go vet ./...
 go build -o bin/manager main.go
 ```
 
-Now, add real logic to `Reconcile`, ensuring that a `busybox` sidecar container is present in every Deployment Pod:
+Now, add real logic to `Reconcile`, ensuring that a `busybox` sidecar container is present in every Deployment Pod (again, the in-context code comments aspire to color relevant details):
 
 ```golang
 import (
@@ -242,7 +242,7 @@ func (r *DeploymentReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 }
 ```
 
-Finally, edit `main.go` -- the controller program's entrypoint that ultimately compiles to the `bin/manager` executable -- and ensure the controller only injects sidecars in the specified Kubernetes [Namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/). By default, `sidecar-injector` targets the `default` namespace, but also accommodates overrides via the specification of a `-namespace` command line option when running `sidecar-injector` via its `manager` binary.
+Finally, edit `main.go` -- the controller program's entrypoint that ultimately compiles to the `bin/manager` executable -- and ensure the controller only injects sidecars in the specified Kubernetes [Namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/). By default, `sidecar-injector` targets the `default` namespace, but also accommodates overrides via the specification of a `-namespace` command line option when executing the `manager`.
 
 ```golang
 func main() {
@@ -270,7 +270,7 @@ Usage of ./bin/manager:
 ...
 ```
 
-Now, the controller can be test driven on a local Kubernetes cluster. Assuming you're running a local cluster via a tool like [kind](https://kind.sigs.k8s.io/), [minikube](https://minikube.sigs.k8s.io/), or [Docker Desktop](https://docs.docker.com/desktop/kubernetes/) -- and assuming you have [`kubectl`](https://kubernetes.io/docs/reference/kubectl/) installed and that its context is configured to target the local cluster, run `make run` to build and run `sidecar-injector` against the cluster:
+Now, the controller can be test driven on a local Kubernetes cluster. Assuming you're running a local cluster via a tool like [kind](https://kind.sigs.k8s.io/), [minikube](https://minikube.sigs.k8s.io/), or [Docker Desktop](https://docs.docker.com/desktop/kubernetes/) -- and assuming you have [`kubectl`](https://kubernetes.io/docs/reference/kubectl/) installed and that its context is configured to target the local cluster -- run `make run` to build and run `sidecar-injector` against the cluster:
 
 ```
 make run
@@ -290,7 +290,7 @@ go run ./main.go
 ...
 ```
 
-Create an example `hello` deployment in the cluster's `default` namespace and verify that `sidecar-injector` properly injects a `hello-sidecar` busybox container. To do so, first save the following to a `hello-deployment.yaml` file:
+Next, create an example `hello` deployment in the cluster's `default` namespace and verify that `sidecar-injector` properly injects a `hello-sidecar` busybox container. To do so, first save the following to a `hello-deployment.yaml` file:
 
 ```yaml
 apiVersion: apps/v1
@@ -314,7 +314,7 @@ spec:
         name: hello
 ```
 
-Then, create the `hello` deployment in the `default` namespace:
+Then, use `kubectl` to create the `hello` deployment in the `default` namespace:
 
 ```
 kubectl apply -f deployment.yaml --namespace default
@@ -394,11 +394,11 @@ make docker-build
 ...
 ```
 
-With `docker-build` successfully producing an appropriately named image, the controller's CI/CD pipeline can build and publish this image to the desired registry from which it can be fetched when installed on a cluster (although, implementing such a CI/CD pipeline is a bit out of scope for this simple reference tour).
+With `docker-build` successfully producing an appropriately named image, the controller's CI/CD pipeline can build and publish this image to the desired registry from which it can be fetched when installed on a cluster (although, implementing such a CI/CD pipeline is a bit beyond the scope of this introduction).
 
 ## Automated testing
 
-What about testing `sidecar-injector`? Like CI/CD, testing's a big topic unto itself; much of its nuance is beyond the scope of this intro. Nonetheless, the following offers an overview of some key patterns.
+What about testing `sidecar-injector`? Like CI/CD, testing's a big topic unto itself; much of its nuance is a bit much to adequately cover in this intro. Nonetheless, the following offers an overview of some key patterns.
 
 ### Local testing without a cluster
 
@@ -419,7 +419,7 @@ In addition to `envtest`-based tests, there are also patterns for executing more
 
 For an example of such end-to-end tests, see `operator-sdk`'s [memcached-operator example](https://github.com/operator-framework/operator-sdk/tree/v1.26.0/testdata/go/v3/memcached-operator/test/e2e). Also note the the corresponding [`test-e2e` Make target](https://github.com/operator-framework/operator-sdk/blob/v1.26.0/testdata/go/v3/memcached-operator/Makefile#L108-L110) used to invoke these tests.
 
-For more information, `operator-sdk`'s documentation notes a few learning resources on [e2e integration tests](https://sdk.operatorframework.io/docs/building-operators/golang/testing/#e2e-integration-tests).
+For more information, `operator-sdk`'s documentation provides a few learning resources on [e2e integration tests](https://sdk.operatorframework.io/docs/building-operators/golang/testing/#e2e-integration-tests).
 
 ## Summary
 
@@ -437,3 +437,7 @@ Through Kubernetes' controller pattern, functionality -- such as sidecar injecti
 * [Kubewatch, an example of Kubernetes custom controller](https://docs.bitnami.com/tutorials/kubewatch-an-example-of-kubernetes-custom-controller/)
 * [Build a Kubernetes Operator in six steps](https://developers.redhat.com/articles/2021/09/07/build-kubernetes-operator-six-steps)
 * [How to write Kubernetes custom controllers in Go](https://medium.com/speechmatics/how-to-write-kubernetes-custom-controllers-in-go-8014c4a04235)
+
+## Feedback
+
+Have I misprepresented anything? [Submit a PR](https://github.com/mdb/mdb.github.io) if you have improvement ideas.
