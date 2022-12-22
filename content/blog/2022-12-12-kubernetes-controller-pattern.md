@@ -24,7 +24,7 @@ Back to my colleague's original vision, as noted above:
 
 > A colleague recently relayed to me their vision for a microservices architecture involving the automatic injection of sidecar containers to all deployments' pods within a Kubernetes namespace.
 
-How might a custom controller be developed to satisfy this architecture? The [operator-sdk](https://sdk.operatorframework.io/) offers a toolkit for building such Kubernetes native applications. Once installed, the `operator-sdk` CLI can bootstrap a customer controller codebase and kickstart the development process.
+How might a custom controller be developed to satisfy this architecture? The [operator-sdk](https://sdk.operatorframework.io/) offers a toolkit for building such Kubernetes native applications. Once installed, the `operator-sdk` CLI can bootstrap a custom controller codebase and kickstart the development process.
 
 While often used to build full-on Kubernetes _operators_ -- controllers that interact with _custom resources_ (see [What is the Kubernetes Operator Pattern?](/blog/what-is-the-kubernetes-operator-pattern/) for more on all that) -- `operator-sdk` can also be used to build controllers that interact with core, non-custom Kubernetes resources, as is a bit more appropriate for the above-described sidecar injector use case (at least in its simple, demo-appropriate MVP form).
 
