@@ -91,3 +91,12 @@ curl \
 ## Gotchas
 
 Based on experimentation, it _seems_ requests to `repos/<OWNER>/<REPOSITORY>/dispatches` only trigger workflows whose `.github/workflows/*.yml` configuration exists in the repository's default branch.
+
+## 2022 update
+
+I created the [gh-dispatch](https://github.com/mdb/gh-dispatch/) `gh` CLI extension for triggering [repository_dispatch](https://docs.github.com/en/rest/repos/repos#create-a-repository-dispatch-event) and/or
+[workflow_dispatch](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#workflow_dispatch) events and watching the resulting GitHub Actions
+workflow run. The tool offers a CLI for performing `POST /repos/<OWNER>/<REPOSITORY>/dispatches` requests like those described above, and also enables users to watch the resulting GitHub Actions workflow run directly from the terminal:
+
+![demo](/images/blog/gh_dispatch_demo.gif)
+
