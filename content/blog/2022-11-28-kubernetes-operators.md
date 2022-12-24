@@ -137,7 +137,7 @@ Optionally, Kubernetes' [aggregation layer](https://kubernetes.io/docs/concepts/
 * Controllers leverage the [Reconciler Pattern](https://www.oreilly.com/library/view/cloud-native-infrastructure/9781491984291/ch04.html), just as core Kubernetes does in managing built-in, non-custom resources too.
 * Controllers often use methods exposed by the Kubernetes API to watch for key events pertaining to resources and act accordingly based on their business logic.
 
-While the specific implementation details are a bit beyond the scope of this introduction, [kubebuilder](https://book.kubebuilder.io/cronjob-tutorial/controller-overview.html) -- a framework for building Kubernetes APIs using CRDs in Go -- offers a useful overview of [What's in a Controller?](https://book.kubebuilder.io/cronjob-tutorial/controller-overview.html) Considering this overview, a Go-based `Foo` controller built using `kubebuilder` might start looking something like the following (big disclaimer: this is a crude and incomplete example that glosses over lotsa details):
+While the specific implementation details are a bit beyond the scope of this introduction, [kubebuilder](https://book.kubebuilder.io/cronjob-tutorial/controller-overview.html) -- a framework for building Kubernetes APIs using CRDs in Go -- offers a useful overview of [What's in a Controller?](https://book.kubebuilder.io/cronjob-tutorial/controller-overview.html) Considering this overview, a Go-based `Foo` controller built using `kubebuilder` might start looking something like the following (big disclaimer: this is a crude and incomplete example that glosses over lotsa details; see [What is the Kubernetes controller pattern?](/blog/what-is-the-kubernetes-controller-pattern/) for a more in-depth tutorial on controller implementation):
 
 ```golang
 package controllers
@@ -224,3 +224,4 @@ In closing, beware: these terms can be a bit confusing and tend to mean slightly
 * [Writing a Controller for Pod Labels](https://kubernetes.io/blog/2021/06/21/writing-a-controller-for-pod-labels/) illustrates the use of the controller pattern in absence of corresonding custom resources.
 * [Controllers and Operators](https://joshrosso.com/docs/2019/2019-10-13-controllers-and-operators/) offers a good overview of the controller pattern and when a controller qualifies as an operator.
 * As an interesting reference, [Oxidizing the Kubernetes Operator](https://www.pavel.cool/rust/rust-kubernetes-operators/) illustrates a pattern for authoring Rust-based operators.
+* My [What is the Kubernetes controller pattern?](/blog/what-is-the-kubernetes-controller-pattern/) post goes into a bit more depth on controller implementation how-tos
