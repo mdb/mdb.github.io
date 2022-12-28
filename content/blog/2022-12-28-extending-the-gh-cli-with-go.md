@@ -139,7 +139,7 @@ However, depending on context (org size, priorities, etc.), building a developer
 
 (In my experience, an organization-specific `gh` extension becomes especially attractive when it serves as an interface to other heavily-used GitHub features: GitHub Actions workflows, GitHub pages-hosted JSON endpoints, GitHub secrets, GitHub environments, etc.).
 
-A big disclaimer, though: all this `gh`-extenstion-facilitated developer experience talk is bit experimental and intended only as food for thought. Context and nuance matters, do your own thinkin'/assessin', your mileage may vary, maybe [YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it), etc.
+A big disclaimer, though: all this `gh`-extension-facilitated developer experience talk is bit experimental and intended only as food for thought. Context and nuance matters, do your own thinkin'/assessin', your mileage may vary, maybe [YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it), etc.
 
 ## Further reading
 
