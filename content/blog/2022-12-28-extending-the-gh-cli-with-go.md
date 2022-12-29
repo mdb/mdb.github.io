@@ -96,7 +96,7 @@ While a `gh` extension can be authored in any language, Go is an especially good
 
 1. The `gh` CLI itself is authored in Go.
 
-    Because `gh` itself is written in Go using the [Cobra framework](https://cobra.dev/), its source code offers lotsa helpful examples and patterns. For example, the `gh pr list` [implementation](https://github.com/cli/cli/blob/v2.21.1/pkg/cmd/pr/list/list.go) reveals how `gh` subcommands are declared as a [&cobra.Command](https://pkg.go.dev/github.com/spf13/cobra#Command).
+    Because `gh` itself is written in Go using the [Cobra framework](https://cobra.dev/), its source code offers lotsa helpful examples and patterns. For example, the `gh pr ls` [implementation](https://github.com/cli/cli/blob/v2.21.1/pkg/cmd/pr/list/list.go) reveals how `gh` subcommands are declared as a [&cobra.Command](https://pkg.go.dev/github.com/spf13/cobra#Command).
 
     Furthermore, the packages homed in https://github.com/cli/cli/ can also be imported by extension source code, which enables helpful reuse patterns. As an example, `gh-dispatch` leverages upstream https://github.com/cli/cli/ packages, particularly when [rendering output](https://github.com/mdb/gh-dispatch/blob/main/internal/dispatch/renderutils.go). A few other packages of note include...
 
