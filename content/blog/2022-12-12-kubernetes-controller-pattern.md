@@ -65,7 +65,7 @@ operator-sdk create api \
   --resource=false
 ```
 
-The `operator-sdk create api` command creates a `controllers/deployment_controller.go`, which will serve as the backbone of the `sidecar-injector` controller. Most notably, the `DeploymentReconciler#Reconcile` method will home the core of relevant control loop, _reconciling_ desired and actual state on Deployment resources by injecting a sidecar container to each Pod template (stay tuned on `controllers/suite_test.go`; more on that down the road):
+The `operator-sdk create api` command creates a `controllers/deployment_controller.go` file, which will serve as the backbone of the `sidecar-injector` controller. Most notably, the `DeploymentReconciler#Reconcile` method will home the core of relevant control loop, _reconciling_ desired and actual state on Deployment resources by injecting a sidecar container to each Pod template (stay tuned on `controllers/suite_test.go`; more on that down the road):
 
 ```
 tree controllers
@@ -425,7 +425,7 @@ For more information, `operator-sdk`'s documentation provides a few learning res
 
 Through Kubernetes' controller pattern, functionality -- such as sidecar injection logic -- can be natively baked into a cluster. At a glance, `operator-sdk` generally offers a helpful toolkit for getting started with Kubernetes controller development, even when a controller reconciles core resources rather than custom resources. Nonetheless, a few notes and open questions remain, especially for `operator-sdk` newcomers...
 
-1. For a simple controller such as `sidecar-injector` -- which has no CRDs -- is the use of `operator-sdk` a bit overly complicated? Would [kubebuilder](https://kubebuilder.ior) or even just the [controller-gen](https://kubebuilder.io/reference/controller-gen.html) be a more appropriately minimal tool? Or perhaps no external framework is warrented, and `sidecar-injector` could be implemented even more minimally, as exemplified by [trstringer/k8s-controller-core-resource](https://github.com/trstringer/k8s-controller-core-resource)?
+1. For a simple controller such as `sidecar-injector` -- which has no CRDs -- is the use of `operator-sdk` a bit overly complicated? Would [kubebuilder](https://kubebuilder.ior) or even just the [controller-gen](https://kubebuilder.io/reference/controller-gen.html) be a more appropriately minimal tool? Or perhaps no external framework is warranted, and `sidecar-injector` could be implemented even more minimally, as exemplified by [trstringer/k8s-controller-core-resource](https://github.com/trstringer/k8s-controller-core-resource)?
 2. In a real world scenario, would `sidecar-injector` be more appropriately implemented as a [mutating admission webhook](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#mutatingadmissionwebhook)?
 3. `operator-sdk` scaffolds out code and directories not discussed above in detail (a `hack` directory, lots of `config/*` files, many additionally mysterious Make targets, such as `bundle`, etc.). The [operator-sdk documentation](https://sdk.operatorframework.io/docs/overview/project-layout/) explains the project layout, but does `sidecar-injector` need all this stuff?
 4. What should `sidecar-injector`'s CI/CD process look like? How should versioning and releases work?
