@@ -122,24 +122,24 @@ While a `gh` extension can be authored in any language, Go is an especially good
 
 ## Bonus experimental idea: bootstrapping developer experience and platform engineering
 
-While `gh` extensions are useful in and of themselves (I use [gh-dash](https://github.com/dlvhdr/gh-dash) every day!), the ecosystem teases some broader possibilities: could a `gh` extension be a cornerstone of an organization's developer platform experience?
+While `gh` extensions can be useful in and of themselves (I use [gh-dash](https://github.com/dlvhdr/gh-dash) every day!), the ecosystem teases some broader possibilities: could a `gh` extension sensibly serve as the cornerstone of an organization's developer platform experience?
 
 In my experience, it's common for engineering leadership to fantasize about a cohesive internal developer platform, often facilitated via a purpose-built CLI, web portal, and/or API, and enabling developer efficiency via stuff like...
 
-* a standard interface to centralized automation, such as GitHub Actions workflows
-* automated software project and repository scaffolding
+* a standard interface to centralized automation
+* automated software project setup and repository scaffolding
 * the generation and maintenance of standard, templated CI/CD pipelines
 * the maintenance of source code repository best practices, such as [standard required status checks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks) and [required PR code review approvals](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/approving-a-pull-request-with-required-reviews)
-* per-team public cloud provider account provisioning and infrastructure setup
-* the management of role-based access control, secrets such as API credentials, and similar security-sensitive safeguards
+* per-team public cloud provider account provisioning and infrastructure configuration
+* sensible management of role-based access control, secrets (such as API credentials), adherence to the principle of least privilege and similar security-sensitive safeguards, etc.
 * a common interface to otherwise disparate tools, such as documentation, project management, dashboards, etc.
-* a general purpose mechanism for self-service and the discovery of ever-evolving internal capabilities
+* a general purpose mechanism for self-service and the discovery of ever-evolving internal platform capabilities
 
-However, depending on context (org size, priorities, etc.), building a developer platform involves labor and complexity that may jeopardize more business-critical efforts, especially when doing so invests in proprietary solutions to common needs. To varying degrees, open tools like [Backstage](https://backstage.io) and various [Internal Developer Platforms](https://internaldeveloperplatform.org/) aspire to help. Zooming out, even Kubernetes itself -- despite its complexity -- aspires to be an open, common, standard-ish platform. Technologies like [Kubevela](https://github.com/kubevela/kubevela) further enhance the Kubernetes platform experience. These are great tools. But, perhaps building on the ubiquity of the existing GitHub ecosystem via a custom `gh` extension might be a relatively low-effort, low-risk compliment to your organization's developer experience as well? Or maybe a sensible entrypoint before tools beyond GitHub are implicated?
+However, depending on context (org size, priorities, etc.), building a developer platform involves labor and complexity that may jeopardize more business-critical efforts, especially when doing so invests in proprietary solutions to common needs. To varying degrees, open tools like [Backstage](https://backstage.io) and various [Internal Developer Platforms](https://internaldeveloperplatform.org/) aim to help. Zooming out, even Kubernetes itself -- despite its complexity -- aspires to be an open, common, standard-ish platform. Technologies like [Kubevela](https://github.com/kubevela/kubevela), [Argo](https://argoproj.github.io/), and [Flux](https://fluxcd.io/) further enhance the Kubernetes platform experience, each in their own way. These are promising tools. But, perhaps building on the ubiquity of the existing GitHub ecosystem via a custom `gh` extension might be a relatively low-effort, low-risk compliment to your organization's developer experience as well? Or maybe a sensible entrypoint before tools beyond GitHub are implicated?
 
-(In my experience, an organization-specific `gh` extension becomes especially attractive when it serves as an interface to other heavily-used GitHub features: GitHub Actions workflows, GitHub pages-hosted JSON endpoints, GitHub secrets, GitHub environments, etc.).
+(In my experience, an organization-specific `gh` extension becomes especially attractive when it serves as an interface to other commonly-used GitHub features: GitHub Actions workflows, GitHub pages-hosted JSON endpoints, GitHub secrets, GitHub repository environments, GitHub template repositories, GitHub teams, `CODEOWNERS` files, etc.)
 
-A big disclaimer, though: all this `gh`-extension-facilitated developer experience talk is bit experimental and intended only as food for thought. Context and nuance matters, do your own thinkin'/assessin', your mileage may vary, maybe [YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it), etc.
+A big disclaimer, though: all this `gh`-extension-facilitated developer experience talk is bit experimental and intended only as food for thought. Context and nuance matters, do your own thinkin'/assessin', your mileage may vary, maybe [YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it), etc. Even in absence of perfectly comprehensive developer experience ambitions, the `gh` CLI and its community-maintained extensions have utility.
 
 ## Further reading
 
