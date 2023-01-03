@@ -141,7 +141,7 @@ However, depending on context (org size, engineering practices, priorities, etc.
 
 (In my experience, an organization-specific `gh` extension becomes especially attractive when it serves as an interface to other commonly-used GitHub features: GitHub Actions workflows, infrastructure-as-code automation, GitHub pages-hosted JSON endpoints, GitHub secrets, GitHub repository environments, GitHub template repositories, GitHub teams, etc. From this perspective, perhaps GitHub itself emerges as a practical foundation to a robust internal developer platform ecosystem, with a custom `gh` extension tying it all together as a cohesive user experience.)
 
-A big disclaimer, though: all this `gh`-extension-facilitated developer experience talk is bit experimental and intended only as food for thought. Context and nuance matters, do your own thinkin'/assessin', your mileage may vary, maybe [YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it), etc. Even in absence of perfectly comprehensive developer experience ambitions, the `gh` CLI and its community-maintained extensions have utility.
+A big disclaimer, though: all this `gh`-extension-facilitated developer experience talk is bit experimental and largely intended as food for thought. Context matters in nuanced ways, do your own thinkin'/assessin', your mileage may vary, maybe [YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it), etc. Plus, even in absence of big developer experience ambitions, the `gh` CLI and its community-maintained extensions have clear small-scale utility.
 
 ## Further reading
 
