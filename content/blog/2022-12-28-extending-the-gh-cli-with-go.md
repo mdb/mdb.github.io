@@ -58,6 +58,8 @@ A few extensions of note include...
 
 To see other community-maintained `gh` extensions, [browse GitHub repositories tagged with the "gh-extension" topic](https://github.com/topics/gh-extension).
 
+(And if you've got improvement ideas for `gh-dispatch`, [open a PR](https://github.com/mdb/gh-dispatch)!)
+
 ## How do gh extensions work?
 
 Under the hood, `gh` CLI extensions are `gh-`-prefixed executables located at a standard path (sidebar: this is similar to how [kubectl plugins](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/) work too). For example, on Mac OS, the executables live in `~/.local/share/gh/extensions`:
