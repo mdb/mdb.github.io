@@ -45,14 +45,14 @@ strCh := make(chan string) // a channel of strings
 intCh := make(chan int)    // a channel of ints
 ```
 
-In the case of the above channels, sends and receives block until the other side is ready. However, channels can also be buffered:
+The above _unbuffered_ channels only accept sends (`strCh <-`, for example) if a corresponding receive (`<- strCh`) is ready to receive the sent value. However, channels can also be _buffered_. Buffered channels accept a limited number of values without a corresponding receiver. Buffered channels are created by specifying a capacity when creating the channel:
 
 ```golang
-strCh := make(chan string, 100) // a buffered channel of length 100
-intCh := make(chan int, 100)    // a buffered channel of length 100
+strCh := make(chan string, 100) // a buffered channel of capacity 100
+intCh := make(chan int, 100)    // a buffered channel of capacity 100
 ```
 
-Sends to a buffered channels block only when the buffer is full. Receives block only when the buffer is empty.
+In other words, sends and receives to unbuffered channels block until the other side is ready. Sends to a buffered channels block only when the buffer is full. Receives block only when the buffer is empty.
 
 `close` is used to close a channel, indicating no more values will be sent. For example:
 
