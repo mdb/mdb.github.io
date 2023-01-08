@@ -31,11 +31,11 @@ chan<- string // send only; can be used to send strings
 <-chan int    // receive only; can be used to receive ints
 ```
 
-So, to elaborate:
+So, in other words, the `channel <-` syntax sends a value to a channel, while the `<- channel` syntax receives a value from a channel:
 
 ```golang
 ch <- s   // Send s to channel ch.
-s := <-ch // Receive from ch, and assign value to s.
+s := <-ch // Receive from ch and assign the value to s.
 ```
 
 `make` is used to create a channel:
@@ -45,7 +45,7 @@ strCh := make(chan string) // a channel of strings
 intCh := make(chan int)    // a channel of ints
 ```
 
-The above _unbuffered_ channels only accept sends (`strCh <-`, for example) if a corresponding receive (`<- strCh`) is ready to receive the sent value. However, channels can also be _buffered_. Buffered channels accept a limited number of values without a corresponding receiver. Buffered channels are created by specifying a capacity when creating the channel:
+The _unbuffered_ channels above only accept sends (`strCh <-`, for example) if a corresponding receive (`<- strCh`) is ready to receive the sent value. However, channels can also be _buffered_. Buffered channels accept a limited number of values without a corresponding receiver. Buffered channels are created by specifying a capacity when creating the channel:
 
 ```golang
 strCh := make(chan string, 100) // a buffered channel of capacity 100
@@ -297,3 +297,88 @@ func (c *Client) CollectHealthzs(urls []string) *Healthzs {
 ```
 
 For more insight on implementation details, check out [github.com/mdb/gossboss](https://github.com/mdb/gossboss). Do you have some ideas for how `gossboss` could be improved? Create a pull request.
+
+## Pitfalls
+
+### nil channels
+
+Sending to a `nil` channel blocks forever and causes deadlock:
+
+```golang
+var ch chan string
+ch<- "hello"
+```
+
+Similarly, receiving from a `nil` channel also blocks forever and causes
+deadlock:
+
+```golang
+var ch chan string
+<-ch
+```
+
+### Beware of leaked goroutines
+
+A leaked goroutine is a goroutine that is started and expected to terminate, but
+never does. As such, memory allocated for the Goroutine can't be released.
+
+For example, the following `leaky()` function starts a goroutine that blocks receiving
+from a channel. However, no value is ever sent to the channel, nor is the channel
+ever closed:
+
+```golang
+func leaky() {
+  ch := make(chan string)
+
+  go func() {
+    // <-ch blocks, waiting to receive a value from ch
+    str := <-ch
+
+    fmt.Println(str)
+  }()
+}
+```
+
+Alternatively, consider a more complex example. The following `leaky()` function
+returns `"cancelled"` in 3 seconds, before the goroutine can send `"hello"` to
+the unbuffered `ch` channel:
+
+```golang
+func leaky() string {
+  // Create a channel
+  ch := make(chan string)
+
+  // Establish a context that times out within 3 seconds
+  ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
+  defer cancel()
+
+  // Create a goroutine that sends "hello" to the ch channel after 10 seconds
+  go func() {
+    time.Sleep(10 * time.Second)
+    ch <- "hello"
+  }()
+
+  select {
+  case <-ctx.Done():
+    return "cancelled"
+  case result := <-ch:
+    return result
+  }
+}
+```
+
+This is problematic, as sending on the `ch` channel blocks execution until
+a receiver is available to receive the sent value. However, because `leaky()`
+returned `"cancelled"` after 3 seconds -- before the goroutine wrote `"hello"`
+to the `ch` channel -- there no longer is a `ch` receiver. This causes the
+goroutine to block indefinitely waiting for receipt of `"hello"`.
+
+However, making `ch` a _buffered_ channel with a capacity of `1` offers a simple fix:
+
+```golang
+ch := make(chan string, 1)
+```
+
+Through the use of a buffered channel, the goroutine can send `"hello"` on the
+channel, despite that there is no receiver. This ensures the memory for that
+goroutine will eventually be reclaimed.
