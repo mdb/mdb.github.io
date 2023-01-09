@@ -304,6 +304,29 @@ var ch chan string
 ch<- "hello"
 ```
 
+For example, the following programming errors with `fatal error: all goroutines are asleep - deadlock!`:
+
+```golang
+package main
+
+func main() {
+	var ch chan string
+	ch <- "hello"
+}
+```
+
+...which appears as:
+
+```
+go run main.go
+fatal error: all goroutines are asleep - deadlock!
+
+goroutine 1 [chan send (nil chan)]:
+main.main()
+        /Users/mdb/main.go:28 +0x25
+exit status 2
+```
+
 Similarly, receiving from a `nil` channel also blocks forever and causes
 deadlock:
 
