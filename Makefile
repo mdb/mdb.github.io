@@ -24,3 +24,13 @@ serve:
 		--publish=1313:1313 \
 		$(HUGO_IMAGE) \
 			server
+
+.PHONY: new
+new:
+	docker run \
+		--rm \
+		--tty \
+		--interactive \
+		--volume=$(PWD):/src \
+		$(HUGO_IMAGE) \
+			new content/blog/$(shell date +%Y-%m-%d)-$(title).md --kind default

@@ -25,3 +25,9 @@ make
 ## Deploy
 
 The `main` branch is continuously deployed via a [CD GitHub action workflow](https://github.com/mdb/mdb.github.io/actions?query=workflow%3ACD) to [GitHub pages](https://pages.github.com/).
+
+## Create a new blog post
+
+```
+make new title="Some Title"
+```
