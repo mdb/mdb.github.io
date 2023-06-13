@@ -4,24 +4,26 @@ GitHub notifications and pull request discussion</em>.</p><h2 id=problem>Problem
 and related discussions is challenging. The challenges are further compounded
 when working across multiple GitHub organizations on both open and closed source
 projects, and especially when working as a member of multiple GitHub teams
-within one or more organizations.</p><p>For example, some of the challenges may include:</p><ul><li>differentiating between extra curricular open source projects and employer
+within one or more organizations.</p><p>For example:</p><ul><li>differentiating between extra curricular open source projects and employer
 projects</li><li>differentiating between work associated with different teams within the same
-project</li><li>differentiating between open, closed, merged, and draft PRs</li><li>giving priority to employer projects during formal working hours</li><li>staying abreast of ongoing code review conversation on my own open pull
-requests</li><li>staying abreast of ongoing code review conversation on my own <em>closed</em> pull
-requests, if/when comments appear after the PRs have been merged</li><li>staying abreast of instances where my or my team&rsquo;s code review is requested</li><li>staying abreast of ongoing conversation following my code review</li><li>staying abreast of instances where I&rsquo;m mentioned in conversation, but when my
-review has not been formally requested</li><li>staying abreast of relevant ongoing conversation on my others&rsquo; <em>closed</em> PRs,
-after the PRs have been merged</li><li>monitoring discussion of interest on both open and closed PRs where my
-review has not been explicitly requested and where I&rsquo;ve not been explicitly mentioned</li><li>being able to further filter and/or create arbitrary categorizations of the
-above-cited flavors of discussions</li></ul><p>(Much of the challenges above specifically mention pull requests, but also apply
-to GitHub issues. For example, perhaps your employer uses Jira rather than GitHub
-issues, but your extra curricular open source work is tracked via GitHub issues.)</p><h2 id=solution>Solution</h2><p>Different techniques and tooling exists for managing all this, though <code>gh-dash</code>
-has been my favorite for a few years.</p><p><a href=https://github.com/dlvhdr/gh-dash>gh-dash</a> is a community-maintained <a href=/blog/extending-the-gh-cli-with-go/>extension to the gh CLI</a>.
+project</li><li>differentiating between work on different repositories within the same GitHub
+organization</li><li>differentiating between open, closed, merged, and draft PRs</li><li>giving priority to employer projects during formal working hours</li><li>keeping up with ongoing code review conversation on my own open pull
+requests</li><li>keeping up with ongoing code review conversation on my own <em>closed</em> pull
+requests, if/when comments appear after the PRs have been merged</li><li>getting notified of instances where my or my team&rsquo;s code review is requested</li><li>keeping up with ongoing conversation following submission of my code review</li><li>discovering instances where I&rsquo;m mentioned in conversation, but when my
+review has not been formally requested</li><li>discovering relevant ongoing conversation on others&rsquo; <em>closed</em> PRs, after the
+PRs have been merged</li><li>following important discussion on both open and closed PRs where my review
+has not been explicitly requested and where I&rsquo;ve not been explicitly mentioned</li><li>being able to further filter and/or create sub-categorizations of all of the above</li></ul><p>(Much of the challenges above mention pull requests, but also apply to GitHub
+issues. For example, perhaps your employer uses Jira rather than GitHub issues,
+but your extra curricular open source work is tracked via GitHub issues.)</p><h2 id=solution>Solution</h2><p>Other techniques and tooling exists for managing all this (email, Slack,
+GitHub&rsquo;s in-built notifications UI, etc.), though <code>gh-dash</code> has been my favorite
+for a few years.</p><p><a href=https://github.com/dlvhdr/gh-dash>gh-dash</a> is a community-maintained <a href=/blog/extending-the-gh-cli-with-go/>extension to the gh CLI</a>.
 It offers a customizeable terminal dashboard for filtering, sorting, and browsing
-GitHub pull requests, issues, and surrounding discussion and code reviews.</p><p>Installation:</p><p>After <a href=https://cli.github.com/manual/installation>installing the gh CLI</a>,
+GitHub pull requests, issues, and surrounding discussion and code reviews.</p><h2 id=installation>Installation</h2><p>After <a href=https://cli.github.com/manual/installation>installing the gh CLI</a>,
 install the <code>gh-dash</code> extension via <code>gh extension install</code>:</p><pre tabindex=0><code>gh extension install dlvhdr/gh-dash
-</code></pre><p>Then, launch it via <code>gh dash</code>:</p><img src=https://user-images.githubusercontent.com/6196971/198704107-6775a0ba-669d-418b-9ae9-59228aaa84d1.gif><h3 id=features-of-note>Features of note</h3><ul><li>the bold PRs are open non-draft PRs</li><li>the muted PRs have are draft PRs, merged PRs, or closed PRs (as indicated by
-their icon)</li><li>the PRs are ordered by activity, so I can keep up with any ongoing relevant discussion on
-closed/merged PRs</li><li>additional icons represent details like code review status, required status
+</code></pre><p>Then, launch it via <code>gh dash</code>:</p><img src=https://user-images.githubusercontent.com/6196971/198704107-6775a0ba-669d-418b-9ae9-59228aaa84d1.gif><h3 id=features-of-note>Features of note</h3><ul><li>open, non-draft PRs are displayed in the bold</li><li>draft PRs, merged PRs, or closed PRs (as indicated by their icon) are
+displayed in non-bold muted text (or hidden entirely, depending on
+configuration)</li><li>PRs are ordered by activity, so I can keep up with any ongoing discussion on
+closed and merged PRs</li><li>additional icons represent details like code review status, required status
 checks, etc.</li><li><code>?</code> toggles a help panel showing <code>gh-dash</code>&rsquo;s supported key commands</li></ul><p>A few key command highlights:</p><ul><li><code>r</code> refreshes the dashboard (refreshes also occur automatically at a configured interval)</li><li><code>s</code> toggles between PR and issue views</li><li><code>h</code> and <code>j</code> navigate horizontally between tabbed categorizations of PRs
 and issues, within each view</li><li><code>p</code> toggles a preview window; <code>control d</code> and <code>control u</code> scroll the
 preview panel up and down respectivel. <code>c</code> allows you to comment directly
