@@ -21,43 +21,45 @@ when working across multiple GitHub organizations on both open and closed source
 projects, and especially when working as a member of multiple GitHub teams
 within one or more organizations.
 
-For example, some of the challenges may include:
+For example:
 
 * differentiating between extra curricular open source projects and employer
   projects
 * differentiating between work associated with different teams within the same
   project
+* differentiating between work on different repositories within the same GitHub
+  organization
 * differentiating between open, closed, merged, and draft PRs
 * giving priority to employer projects during formal working hours
-* staying abreast of ongoing code review conversation on my own open pull
+* keeping up with ongoing code review conversation on my own open pull
   requests
-* staying abreast of ongoing code review conversation on my own _closed_ pull
+* keeping up with ongoing code review conversation on my own _closed_ pull
   requests, if/when comments appear after the PRs have been merged
-* staying abreast of instances where my or my team's code review is requested
-* staying abreast of ongoing conversation following my code review
-* staying abreast of instances where I'm mentioned in conversation, but when my
+* getting notified of instances where my or my team's code review is requested
+* keeping up with ongoing conversation following submission of my code review
+* discovering instances where I'm mentioned in conversation, but when my
   review has not been formally requested
-* staying abreast of relevant ongoing conversation on my others' _closed_ PRs,
-  after the PRs have been merged
-* monitoring discussion of interest on both open and closed PRs where my
-  review has not been explicitly requested and where I've not been explicitly mentioned
-* being able to further filter and/or create arbitrary categorizations of the
-  above-cited flavors of discussions
+* discovering relevant ongoing conversation on others' _closed_ PRs, after the
+  PRs have been merged
+* following important discussion on both open and closed PRs where my review
+  has not been explicitly requested and where I've not been explicitly mentioned
+* being able to further filter and/or create sub-categorizations of all of the above
 
-(Much of the challenges above specifically mention pull requests, but also apply
-to GitHub issues. For example, perhaps your employer uses Jira rather than GitHub
-issues, but your extra curricular open source work is tracked via GitHub issues.)
+(Much of the challenges above mention pull requests, but also apply to GitHub
+issues. For example, perhaps your employer uses Jira rather than GitHub issues,
+but your extra curricular open source work is tracked via GitHub issues.)
 
 ## Solution
 
-Different techniques and tooling exists for managing all this, though `gh-dash`
-has been my favorite for a few years.
+Other techniques and tooling exists for managing all this (email, Slack,
+GitHub's in-built notifications UI, etc.), though `gh-dash` has been my favorite
+for a few years.
 
 [gh-dash](https://github.com/dlvhdr/gh-dash) is a community-maintained [extension to the gh CLI](/blog/extending-the-gh-cli-with-go/).
 It offers a customizeable terminal dashboard for filtering, sorting, and browsing
 GitHub pull requests, issues, and surrounding discussion and code reviews.
 
-Installation:
+## Installation
 
 After [installing the gh CLI](https://cli.github.com/manual/installation),
 install the `gh-dash` extension via `gh extension install`:
@@ -72,11 +74,12 @@ Then, launch it via `gh dash`:
 
 ### Features of note
 
-* the bold PRs are open non-draft PRs
-* the muted PRs have are draft PRs, merged PRs, or closed PRs (as indicated by
-  their icon)
-* the PRs are ordered by activity, so I can keep up with any ongoing relevant discussion on
-  closed/merged PRs
+* open, non-draft PRs are displayed in the bold
+* draft PRs, merged PRs, or closed PRs (as indicated by their icon) are
+  displayed in non-bold muted text (or hidden entirely, depending on
+  configuration)
+* PRs are ordered by activity, so I can keep up with any ongoing discussion on
+  closed and merged PRs
 * additional icons represent details like code review status, required status
   checks, etc.
 * `?` toggles a help panel showing `gh-dash`'s supported key commands
