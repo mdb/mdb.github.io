@@ -82,7 +82,22 @@ Plan: 1 to add, 0 to change, 0 to destroy.
 
 How can [OPA](https://openpolicyagent.org) be used to codify a policy guarding against unwanted configuration? For example, how could OPA be used to ensure that `var.greeting` never has an inappropriate greeting value, such as `"goodbye"`? How could OPA's [Rego](https://www.openpolicyagent.org/docs/latest/policy-language/) policy language express such a policy?
 
-The following `policy.rego` file offers an example:
+Admittedly, this is a contrived and perhaps unrealistic example. After all,
+Terraform [custom conditions](https://developer.hashicorp.com/terraform/language/expressions/custom-conditions) could enable enforcement in native Terraform:
+
+```hcl
+variable greeting {
+  description = "The greeting to echo from the greet.sh script"
+  value       = "hello"
+
+  validation {
+    condition     = var.greeting != "goodbye"
+    error_message = "The greeting value must be an appropriate greeting"
+  }
+}
+```
+
+Nonetheless, the following `policy.rego` file offers an OPA example:
 
 ```txt
 package terraform.analysis
@@ -175,6 +190,8 @@ While the `has_acceptable_greeting` example is quite simple and fairly contrived
 * ensure AWS security groups never allow ingress on port 22
 * protect against destructive actions on critical resources
 * verify the intended DNS record modifications during a Terraform-orchestrated DNS-based [blue/green deployment](https://martinfowler.com/bliki/BlueGreenDeployment.html)
+* ensure an ECR repository marked for destruction does not home OCI images used
+  by active ECR task definitions
 
 ## Policy tests
 
