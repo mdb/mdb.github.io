@@ -18,7 +18,7 @@ First, let's establish a foundation, especially for those who may be less famili
 
 ### Terraform fundamentals
 
-Terraform enables users to describe infrastructure resources -- and their dependency relationships -- in `.tf` files using [HCL](https://github.com/hashicorp/hcl), and to automate the creation and ongoing management of that infrastructure via the Terraform command line inferface.
+Terraform enables users to describe infrastructure resources -- and their dependency relationships -- in `.tf` files using [HCL](https://github.com/hashicorp/hcl), and to automate the creation and ongoing management of that infrastructure via the Terraform command line interface.
 
 HCL configurations often describe resources associated with cloud infrastructure services such as AWS, OpenStack, or Kubernetes, but they might also describe less cloudy resources, such as local files. For example, the following configuration creates a Digital Ocean droplet, a DNSSimple A record, and a local file documenting the resulting droplet's IP address:
 
