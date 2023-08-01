@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function populateIgFeed(data) {
     const galleries = document.querySelectorAll('ul.ig-feed'),
-      items = data.slice(0, 8).map(image => {
+      items = data.slice(0, 12).map(image => {
         return `
           <li class="item">
             <a class="thumbnail" href="${image.permalink}">
