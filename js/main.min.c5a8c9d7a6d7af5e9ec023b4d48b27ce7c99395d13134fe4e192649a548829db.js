@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded",()=>{function t(e){e.style.transition="opacity 2s",e.style.opacity="1"}function r(){const e=document.getElementsByTagName("img");for(let n of e)n.complete&&t(n),n.addEventListener("load",()=>{t(n)})}function s(e){const t=document.querySelectorAll("ul.ig-feed"),n=e.slice(0,8).map(e=>`
+document.addEventListener("DOMContentLoaded",()=>{function t(e){e.style.transition="opacity 2s",e.style.opacity="1"}function r(){const e=document.getElementsByTagName("img");for(let n of e)n.complete&&t(n),n.addEventListener("load",()=>{t(n)})}function s(e){const t=document.querySelectorAll("ul.ig-feed"),n=e.slice(0,12).map(e=>`
           <li class="item">
             <a class="thumbnail" href="${e.permalink}">
               <img src="${e.media_url}" />
