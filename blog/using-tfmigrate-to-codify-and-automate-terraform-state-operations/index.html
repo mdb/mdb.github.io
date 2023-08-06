@@ -1,0 +1,214 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>Using tfmigrate to Codify and Automate Terraform state operations | Mike Ball</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=generator content="Hugo 0.101.0"><meta name=ROBOTS content="INDEX, FOLLOW"><link rel=stylesheet href=/main.min.1793cf78540015f52d445efeea219c2a3ab4bc17725ba6b8caf459edd42ba3ae.css></head><body class=blog-post><header><div class=mark><a href=/>Mike Ball</a></div><button>Toggle Navigation</button><div class=nav-wrap><nav class=primary><ul><li><a href=/blog>Blog</a></li><li><a href=#about>About</a></li></ul></nav><nav class=secondary><ul><li><a href=https://github.com/mdb>GitHub</a></li><li><a href=https://instagram.com/clapclapexcitement>Instagram</a></li></ul></nav><nav class=tertiary><ul><li><a href=https://tiendah.bigcartel.com>Shop</a></li><li><a href=#about>Contact</a></li></ul></nav></div></header><main role=main><div class=blog-post><aside class=divider><a href=/blog/>Blog</a></aside><time>August 6, 2023</time><article><header><h1>Using tfmigrate to Codify and Automate Terraform state operations</h1></header><div><p><em>An overview illustrating how <a href=https://github.com/minamijoyo/tfmigrate>tfmigrate</a>
+can be used to codify and automate complex Terraform state operations. The
+corresponding reference example code can be viewed at <a href=https://github.com/mdb/tfmigrate-demo>github.com/mdb/tfmigrate</a>.</em></p><h2 id=problem>Problem</h2><p>The <code>terraform</code> CLI exposes a suite of <a href=https://developer.hashicorp.com/terraform/cli/commands/state>state commands</a>
+for advanced state management. However, these commands often require engineers
+to employ error-prone, manual, and ad hoc invocations of the <code>terraform</code> CLI
+out-of-band of CI/CD and code review.</p><p>How can we automate the migration of a Terraform-managed resource from
+one root module project configuration to a different root module project
+configuration, each using different S3 <a href=https://developer.hashicorp.com/terraform/language/state/remote>remote states</a>?</p><p>And what if each root module project uses a different version of Terraform?</p><p>How can the solution utilize a GitOps workflow in which operations are codified,
+and subject to code review, continuous integration quality checks, and continuous
+delivery deployment automation, similar to other Terraform operations?</p><h2 id=solution>Solution</h2><p>Use <a href=https://github.com/minamijoyo/tfmigrate>tfmigrate</a> in concert with <a href=https://github.com/tfutils/tfenv>tfenv</a>.</p><h2 id=demo>Demo</h2><p><a href=https://github.com/mdb/tfmigrate-demo>mdb/tfmigrate-demo</a> offers a demo, and
+utilizes Github Actions as the underlying CI/CD platform.</p><h3 id=overview>Overview</h3><p>Within <a href=https://github.com/mdb/tfmigrate-demo>mdb/tfmigrate-demo</a>&mldr;</p><ul><li><code>bootstrap</code> is a minimal Terraform project that creates a <a href=https://localstack.cloud/>localstack</a>
+<code>tfmigrate-demo</code> S3 bucket for use hosting <code>project-one</code> and <code>project-two</code>&rsquo;s
+Terraform remote states</li><li><code>project-one</code> is a minimal Terraform 0.13.7 project that creates <code>foo.txt</code> and
+<code>bar.txt</code> files and uses <code>s3://tfmigrate-demo/project-one/terraform.tfstate</code> as
+its remote state backend.</li><li><code>project-two</code> is a minimal Terraform 1.4.6 project that creates a <code>baz.txt</code> file
+and uses <code>bar.txt</code> file and uses <code>s3://tfmigrate-demo/project-two/terraform.tfstate</code>
+as its remote state backend.</li><li><code>project-one</code> and <code>project-two</code> each feature a <code>.terraform-version</code> file. This
+ensures <a href=https://github.com/tfutils/tfenv>tfenv</a> selects the proper Terraform
+for use in each project.</li><li><code>migration.hcl</code> is a <a href=https://github.com/minamijoyo/tfmigrate>tfmigrate</a> migration that orchestrates the migration
+of <code>local_file.bar</code> from management in <code>project-one</code> to management in <code>project-two</code>.
+<code>tfmigrate</code> enables teams to codify migrations as HCL, subjecting the
+migrations to code review and CI/CD, alongside terraform HCL configurations.</li></ul><p>See <a href=https://github.com/mdb/tfmigrate-demo/pull/2>PR 2</a> for an example GitHub
+Actions workflow that fails its <code>tfmigrate plan</code> step. See <a href=https://github.com/mdb/tfmigrate-demo/pull/3>PR 3</a> for an example
+GitHub Actions workflow that successfully performs a <code>tfmigrate apply</code>.</p><p>See <a href=https://github.com/mdb/tfmigrate-demo/blob/main/.github/workflows/pr.yaml>.github/workflows/pr.yaml</a>
+for the GitHub Actions workflow configuration.</p><h3 id=self-guided-tutorial>Self-guided tutorial</h3><p>In alternative to the <a href=https://github.com/mdb/tfmigrate-demo/actions>GitHub Actions-based demo</a>,
+the following steps offer a self-guided tutorial. These steps assumes Docker is
+running, and that <a href=https://github.com/minamijoyo/tfmigrate>tfmigrate</a> and <a href=https://github.com/tfutils/tfenv>tfenv</a> are both installed.</p><ol><li><p>Install the Terraform versions used by <code>project-one</code> and <code>project-two</code> via <code>tfenv</code>:</p><pre tabindex=0><code>TFENV_ARCH=amd64 tfenv install v$(cat project-one/.terraform-version) \
+  &amp;&amp; tfenv install v$(cat project-two/.terraform-version)
+</code></pre></li><li><p>Start a <code>localstack</code>-based mock AWS environment:</p><pre tabindex=0><code>docker-compose up \
+  --detach \
+  --build
+</code></pre></li><li><p>Create a local <code>localstack</code> <code>tfmigrate-demo</code> AWS S3 bucket for homing
+<code>project-one</code>&rsquo;s and <code>project-two</code>&rsquo;s S3 remote state:</p><pre tabindex=0><code>cd bootstrap \
+  &amp;&amp; terraform init \
+  &amp;&amp; terraform plan \
+  &amp;&amp; terraform apply \
+    -auto-approve
+</code></pre></li><li><p>Create an initial <code>project-one</code> Terraform configuration. This creates local
+<code>foo.txt</code> (<code>local_file.foo</code>) and <code>bar.txt</code> (<code>local_file.bar</code>) files:</p><pre tabindex=0><code>cd project-one \
+  &amp;&amp; terraform init \
+  &amp;&amp; terraform plan \
+  &amp;&amp; terraform apply \
+    -auto-approve
+</code></pre></li><li><p>Create an initial <code>project-two</code> Terraform configuration. This creates a local
+<code>baz.txt</code> (<code>local_file.baz</code>) file:</p><pre tabindex=0><code>cd project-two \
+  &amp;&amp; terraform init \
+  &amp;&amp; terraform plan \
+  &amp;&amp; terraform apply \
+    -auto-approve
+</code></pre></li><li><p>Next, use <a href=https://github.com/minamijoyo/tfmigrate>tfmigrate</a> to <code>plan</code> the
+migration of <code>local_file.bar</code> from <code>project-one</code>&rsquo;s Terraform state to
+<code>project-two</code>&rsquo;s Terraform state using the migration instructions codified in
+<code>migration.hcl</code>, which move <code>local_file.bar</code> from <code>project-one</code> to
+<code>project-two</code>.</p><p>Note that <code>tfmigrate plan</code> will &ldquo;dry run&rdquo; the migration using a local, dummy
+copy of each project&rsquo;s remote state and will performs a <code>terraform plan</code>,
+erroring if the migration results in any unexpected plan changes.</p><p>Also note that <code>tfmigrate</code> automatically uses the correct <code>terraform</code> CLI version
+required by each project, as each project&rsquo;s <code>.terraform-version</code> file triggers
+<code>tfenv</code> to ensure the correct version is used.</p><p>Initially, observe that <code>tfmigrate plan migration.hcl</code> fails, as <code>local_file.bar</code>&rsquo;s
+HCL recource declaration has not moved from <code>project-one</code> to <code>project-two</code>; it
+still lives in <code>project-one/main.tf</code>:</p><pre tabindex=0><code>tfmigrate plan migration.hcl
+2023/08/02 14:07:17 [INFO] [runner] load migration file: migration.hcl
+2023/08/02 14:07:17 [INFO] [migrator] multi start state migrator plan
+2023/08/02 14:07:18 [INFO] [migrator@project-one] terraform version: 0.13.7
+2023/08/02 14:07:18 [INFO] [migrator@project-one] initialize work dir
+2023/08/02 14:07:20 [INFO] [migrator@project-one] get the current remote state
+2023/08/02 14:07:22 [INFO] [migrator@project-one] override backend to local
+2023/08/02 14:07:22 [INFO] [executor@project-one] create an override file
+2023/08/02 14:07:22 [INFO] [migrator@project-one] creating local workspace folder in: project-one/terraform.tfstate.d/default
+2023/08/02 14:07:22 [INFO] [executor@project-one] switch backend to local
+2023/08/02 14:07:23 [INFO] [migrator@project-two] terraform version: 1.4.6
+2023/08/02 14:07:23 [INFO] [migrator@project-two] initialize work dir
+2023/08/02 14:07:26 [INFO] [migrator@project-two] get the current remote state
+2023/08/02 14:07:27 [INFO] [migrator@project-two] override backend to local
+2023/08/02 14:07:27 [INFO] [executor@project-two] create an override file
+2023/08/02 14:07:27 [INFO] [migrator@project-two] creating local workspace folder in: project-two/terraform.tfstate.d/default
+2023/08/02 14:07:27 [INFO] [executor@project-two] switch backend to local
+2023/08/02 14:07:28 [INFO] [migrator] compute new states (project-one =&gt; project-two)
+2023/08/02 14:07:28 [INFO] [migrator@project-one] check diffs
+2023/08/02 14:07:29 [INFO] [migrator@project-two] check diffs
+2023/08/02 14:07:30 [ERROR] [migrator@project-two] unexpected diffs
+2023/08/02 14:07:30 [INFO] [executor@project-two] remove the override file
+2023/08/02 14:07:30 [INFO] [executor@project-two] remove the workspace state folder
+2023/08/02 14:07:30 [INFO] [executor@project-two] switch back to remote
+2023/08/02 14:07:32 [INFO] [executor@project-one] remove the override file
+2023/08/02 14:07:32 [INFO] [executor@project-one] remove the workspace state folder
+2023/08/02 14:07:32 [INFO] [executor@project-one] switch back to remote
+terraform plan command returns unexpected diffs: failed to run command (exited 2): terraform plan -state=/var/folders/46/sz1dzp417x7fk46kb3jv8cn00000gp/T/tmp170371809 -out=/var/folders/46/sz1dzp417x7fk46kb3jv8cn00000gp/T/tfplan2614290330 -input=false -no-
+color -detailed-exitcode
+stdout:
+local_file.baz: Refreshing state... [id=5fc5caaa8d04abb85be16b17953cd1a6e3ed549b]
+local_file.bar: Refreshing state... [id=4bf3e335199107182c6f7638efaad377acc7f452]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # local_file.bar will be created
+  + resource &#34;local_file&#34; &#34;bar&#34; {
+      + content              = &#34;Hi!&#34;
+      + content_base64sha256 = (known after apply)
+      + content_base64sha512 = (known after apply)
+      + content_md5          = (known after apply)
+      + content_sha1         = (known after apply)
+      + content_sha256       = (known after apply)
+      + content_sha512       = (known after apply)
+      + directory_permission = &#34;0777&#34;
+      + file_permission      = &#34;0777&#34;
+      + filename             = &#34;./../bar.txt&#34;
+      + id                   = (known after apply)
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: /var/folders/46/sz1dzp417x7fk46kb3jv8cn00000gp/T/tfplan2614290330
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply &#34;/var/folders/46/sz1dzp417x7fk46kb3jv8cn00000gp/T/tfplan2614290330&#34;
+
+stderr:
+</code></pre></li><li><p>Next, remove the <code>local_file.bar</code> declaration from <code>project-one/main.tf</code> and add
+it to <code>project-two/main.tf</code>, such that each project configuration reflects the
+desired migration end state:</p><p><code>project-one/main.tf</code> should appear as:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;local_file&#34; &#34;foo&#34;</span> {
+</span></span><span style=display:flex><span> content  <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Hi&#34;</span>
+</span></span><span style=display:flex><span> filename <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;${path.module}/../foo.txt&#34;</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><code>project-two/main.tf</code> should now appear as:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;local_file&#34; &#34;baz&#34;</span> {
+</span></span><span style=display:flex><span>  content  <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Hi&#34;</span>
+</span></span><span style=display:flex><span>  filename <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;${path.module}/../baz.txt&#34;</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;local_file&#34; &#34;bar&#34;</span> {
+</span></span><span style=display:flex><span>  content  <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Hi&#34;</span>
+</span></span><span style=display:flex><span>  filename <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;${path.module}/../bar.txt&#34;</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div></li><li><p>Re-run <code>tfmigrate plan migration.hcl</code>; now it&rsquo;s successful:</p><pre tabindex=0><code>tfmigrate plan migration.hcl
+2023/08/02 14:39:19 [INFO] [runner] load migration file: migration.hcl
+2023/08/02 14:39:19 [INFO] [migrator] multi start state migrator plan
+2023/08/02 14:39:20 [INFO] [migrator@project-one] terraform version: 0.13.7
+2023/08/02 14:39:20 [INFO] [migrator@project-one] initialize work dir
+2023/08/02 14:39:23 [INFO] [migrator@project-one] get the current remote state
+2023/08/02 14:39:24 [INFO] [migrator@project-one] override backend to local
+2023/08/02 14:39:24 [INFO] [executor@project-one] create an override file
+2023/08/02 14:39:24 [INFO] [migrator@project-one] creating local workspace folder in: project-one/terraform.tfstate.d/default
+2023/08/02 14:39:24 [INFO] [executor@project-one] switch backend to local
+2023/08/02 14:39:25 [INFO] [migrator@project-two] terraform version: 1.4.6
+2023/08/02 14:39:25 [INFO] [migrator@project-two] initialize work dir
+2023/08/02 14:39:28 [INFO] [migrator@project-two] get the current remote state
+2023/08/02 14:39:30 [INFO] [migrator@project-two] override backend to local
+2023/08/02 14:39:30 [INFO] [executor@project-two] create an override file
+2023/08/02 14:39:30 [INFO] [migrator@project-two] creating local workspace folder in: project-two/terraform.tfstate.d/default
+2023/08/02 14:39:30 [INFO] [executor@project-two] switch backend to local
+2023/08/02 14:39:30 [INFO] [migrator] compute new states (project-one =&gt; project-two)
+2023/08/02 14:39:30 [INFO] [migrator@project-one] check diffs
+2023/08/02 14:39:31 [INFO] [migrator@project-two] check diffs
+2023/08/02 14:39:32 [INFO] [executor@project-two] remove the override file
+2023/08/02 14:39:32 [INFO] [executor@project-two] remove the workspace state folder
+2023/08/02 14:39:32 [INFO] [executor@project-two] switch back to remote
+2023/08/02 14:39:34 [INFO] [executor@project-one] remove the override file
+2023/08/02 14:39:34 [INFO] [executor@project-one] remove the workspace state folder
+2023/08/02 14:39:34 [INFO] [executor@project-one] switch back to remote
+2023/08/02 14:39:36 [INFO] [migrator] multi state migrator plan success!
+</code></pre></li><li><p>Finally, to perform the migration, <code>apply</code> the <code>migration.hcl</code>:</p><pre tabindex=0><code>tfmigrate apply migration.hcl
+2023/08/02 14:41:20 [INFO] [runner] load migration file: migration.hcl
+2023/08/02 14:41:20 [INFO] [migrator] start multi state migrator plan phase for apply
+2023/08/02 14:41:20 [INFO] [migrator@project-one] terraform version: 0.13.7
+2023/08/02 14:41:20 [INFO] [migrator@project-one] initialize work dir
+2023/08/02 14:41:23 [INFO] [migrator@project-one] get the current remote state
+2023/08/02 14:41:25 [INFO] [migrator@project-one] override backend to local
+2023/08/02 14:41:25 [INFO] [executor@project-one] create an override file
+2023/08/02 14:41:25 [INFO] [migrator@project-one] creating local workspace folder in: project-one/terraform.tfstate.d/default
+2023/08/02 14:41:25 [INFO] [executor@project-one] switch backend to local
+2023/08/02 14:41:25 [INFO] [migrator@project-two] terraform version: 1.4.6
+2023/08/02 14:41:25 [INFO] [migrator@project-two] initialize work dir
+2023/08/02 14:41:28 [INFO] [migrator@project-two] get the current remote state
+2023/08/02 14:41:30 [INFO] [migrator@project-two] override backend to local
+2023/08/02 14:41:30 [INFO] [executor@project-two] create an override file
+2023/08/02 14:41:30 [INFO] [migrator@project-two] creating local workspace folder in: project-two/terraform.tfstate.d/default
+2023/08/02 14:41:30 [INFO] [executor@project-two] switch backend to local
+2023/08/02 14:41:31 [INFO] [migrator] compute new states (project-one =&gt; project-two)
+2023/08/02 14:41:31 [INFO] [migrator@project-one] check diffs
+2023/08/02 14:41:32 [INFO] [migrator@project-two] check diffs
+2023/08/02 14:41:32 [INFO] [executor@project-two] remove the override file
+2023/08/02 14:41:32 [INFO] [executor@project-two] remove the workspace state folder
+2023/08/02 14:41:32 [INFO] [executor@project-two] switch back to remote
+2023/08/02 14:41:35 [INFO] [executor@project-one] remove the override file
+2023/08/02 14:41:35 [INFO] [executor@project-one] remove the workspace state folder
+2023/08/02 14:41:35 [INFO] [executor@project-one] switch back to remote
+2023/08/02 14:41:38 [INFO] [migrator] start multi state migrator apply phase
+2023/08/02 14:41:38 [INFO] [migrator@project-two] push the new state to remote
+2023/08/02 14:41:40 [INFO] [migrator@project-one] push the new state to remote
+2023/08/02 14:41:42 [INFO] [migrator] multi state migrator apply success!
+</code></pre></li><li><p>To verify <code>project-one</code> and <code>project-two</code> have no outstanding post-migration Terraform plan diffs:</p></li></ol><pre tabindex=0><code>cd project-one \
+  &amp;&amp; terraform init \
+  &amp;&amp; terraform plan \
+  &amp;&amp; terraform apply \
+    -auto-approve
+
+...
+
+No changes. Infrastructure is up-to-date.
+</code></pre><pre tabindex=0><code>cd project-two \
+  &amp;&amp; terraform init \
+  &amp;&amp; terraform plan \
+  &amp;&amp; terraform apply \
+    -auto-approve
+...
+
+No changes. Infrastructure is up-to-date.
+</code></pre></div><ul class=tags><li><a href=/tags/terraform>terraform</a></li><li><a href=/tags/tfmigrate>tfmigrate</a></li><li><a href=/tags/gitops>gitops</a></li></ul></article></div></main><footer><section><h1 id=about>Info</h1><div><h2>Mike Ball</h2><p>I live in Philadelphia and work as a multi-disciplinary software engineer & designer.</p><p>Over the years, I've developed front end web applications, built backend services, automated cloud infrastructure management, designed CI/CD pipelines for high scale distributed systems, and contributed to numerous open source software projects.</p><p>I've also worked in graphic and UX design. Buy prints of my illustrations at <a href=https://tiendah.bigcartel.com>Tiendah</a>.</div><div class=double><h2>Shop Tiendah</h2><ul class="gallery store-feed"></ul><h2>Instagram</h2><ul class="gallery ig-feed"></ul></div><div><h2>Etc.</h2><ul><li><a href=http://github.com/mdb>GitHub</a></li><li><a href=http://twitter.com/clapexcitement>Twitter</a></li><li><a href=https://instagram.com/clapclapexcitement>Instagram</a></li><li><a href=/index.xml>RSS Feed</a></li><li><a href=https://tiendah.bigcartel.com>Shop Tiendah</a></li></ul><h2>Contact</h2><p>Interested in working with me? <a href=mailto:mikedball@gmail.com>Get in touch</a>.</p></div></section></footer><script type=text/javascript src=/js/main.min.c5a8c9d7a6d7af5e9ec023b4d48b27ce7c99395d13134fe4e192649a548829db.js></script>
+<script type=text/javascript>(function(e,t,n,s,o,i,a){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,i=t.createElement(n),a=t.getElementsByTagName(n)[0],i.async=1,i.src=s,a.parentNode.insertBefore(i,a)})(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-54324621-1","auto"),ga("send","pageview")</script></body></html>
