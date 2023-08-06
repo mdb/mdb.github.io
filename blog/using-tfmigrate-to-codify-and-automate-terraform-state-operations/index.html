@@ -13,7 +13,7 @@ utilizes Github Actions as the underlying CI/CD platform.</p><h3 id=overview>Ove
 Terraform remote states</li><li><code>project-one</code> is a minimal Terraform 0.13.7 project that creates <code>foo.txt</code> and
 <code>bar.txt</code> files and uses <code>s3://tfmigrate-demo/project-one/terraform.tfstate</code> as
 its remote state backend.</li><li><code>project-two</code> is a minimal Terraform 1.4.6 project that creates a <code>baz.txt</code> file
-and uses <code>bar.txt</code> file and uses <code>s3://tfmigrate-demo/project-two/terraform.tfstate</code>
+and uses <code>s3://tfmigrate-demo/project-two/terraform.tfstate</code>
 as its remote state backend.</li><li><code>project-one</code> and <code>project-two</code> each feature a <code>.terraform-version</code> file. This
 ensures <a href=https://github.com/tfutils/tfenv>tfenv</a> selects the proper Terraform
 for use in each project.</li><li><code>migration.hcl</code> is a <a href=https://github.com/minamijoyo/tfmigrate>tfmigrate</a> migration that orchestrates the migration
