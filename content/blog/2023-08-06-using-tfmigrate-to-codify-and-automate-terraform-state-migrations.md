@@ -6,8 +6,7 @@ tags:
 - tfmigrate
 - gitops
 thumbnail: terraform3_thumb.png
-teaser: "A demo illustrating the use of `tfmigrate` for automating
-complex Terraform state operations."
+teaser: "A demo illustrating the use of `tfmigrate` for automating complex Terraform state operations."
 ---
 
 _An overview illustrating how [tfmigrate](https://github.com/minamijoyo/tfmigrate)
@@ -17,8 +16,8 @@ corresponding reference example code can be viewed at [github.com/mdb/tfmigrate]
 ## Problem
 
 The `terraform` CLI exposes a suite of [state commands](https://developer.hashicorp.com/terraform/cli/commands/state)
-for advanced state management. However, these commands often require engineers
-to employ error-prone, manual, and ad hoc invocations of the `terraform` CLI
+for advanced state management. However, these commands often require that engineers
+employ error-prone, manual, and ad hoc invocations of the `terraform` CLI
 out-of-band of CI/CD and code review.
 
 How can we automate the migration of a Terraform-managed resource from
@@ -27,9 +26,10 @@ configuration, each using different S3 [remote states](https://developer.hashico
 
 And what if each root module project uses a different version of Terraform?
 
-How can the solution utilize a GitOps workflow in which operations are codified,
-and subject to code review, continuous integration quality checks, and continuous
-delivery deployment automation, similar to other Terraform operations?
+How can the solution utilize a GitOps workflow in which state migration operations
+are codified, and subject to code review, continuous integration quality checks,
+and continuous delivery automation, similar to other Terraform operations, or
+even [database migrations](https://edgeguides.rubyonrails.org/active_record_migrations.html)?
 
 ## Solution
 
@@ -73,6 +73,13 @@ for the GitHub Actions workflow configuration.
 In alternative to the [GitHub Actions-based demo](https://github.com/mdb/tfmigrate-demo/actions),
 the following steps offer a self-guided tutorial. These steps assumes Docker is
 running, and that [tfmigrate](https://github.com/minamijoyo/tfmigrate) and [tfenv](https://github.com/tfutils/tfenv) are both installed.
+
+1. Clone `tfmigrate-demo`:
+
+    ```
+    git clone https://github.com/mdb/tfmigrate-demo.git \
+      && cd tfmigrate-demo
+    ```
 
 1. Install the Terraform versions used by `project-one` and `project-two` via `tfenv`:
 
@@ -324,3 +331,24 @@ running, and that [tfmigrate](https://github.com/minamijoyo/tfmigrate) and [tfen
 
   No changes. Infrastructure is up-to-date.
   ```
+
+## A real world GitOps workflow
+
+The steps described above are a bit contrived, in large part because `tfmigrate-demo`
+uses ephemeral local Terraform projects whose resources and state aren't persistant.
+
+A real world GitOps-esque team workflow against an existing project might look more like...
+
+1. Open a PR containing the desired `tfmigrate` migration HCL and desired Terraform
+   configuration changes.
+2. CI detects the presence of a `tfmigrate` migration HCL and verifies the
+   changes via `tfmigrate plan`.
+3. Following successful CI and code review approval, the PR is merged.
+4. CI/CD detects the presence of the new `tfmigrate` migration HCL  and performs
+   `tfmigrate plan` and `tfmigrate apply` to perform the migration, similar to
+   what's done via `terraform plan` and `terraform apply` for other Terraform
+   changes.
+
+While `tfmigrate-demo` largely focuses on inter-state move operations,
+`tfmigrate` supports [other operations](https://github.com/minamijoyo/tfmigrate#migration-file) too,
+including `state rm` and `state import`.
