@@ -309,28 +309,62 @@ running, and that [tfmigrate](https://github.com/minamijoyo/tfmigrate) and [tfen
 
 1. To verify `project-one` and `project-two` have no outstanding post-migration Terraform plan diffs:
 
-  ```
-  cd project-one \
-    && terraform init \
-    && terraform plan \
-    && terraform apply \
-      -auto-approve
+    ```
+    cd project-one \
+      && terraform init \
+      && terraform plan \
+      && terraform apply \
+        -auto-approve
 
-  ...
+    ...
 
-  No changes. Infrastructure is up-to-date.
-  ```
+    No changes. Infrastructure is up-to-date.
+    ```
 
-  ```
-  cd project-two \
-    && terraform init \
-    && terraform plan \
-    && terraform apply \
-      -auto-approve
-  ...
+    ```
+    cd project-two \
+      && terraform init \
+      && terraform plan \
+      && terraform apply \
+        -auto-approve
+    ...
 
-  No changes. Infrastructure is up-to-date.
-  ```
+    No changes. Infrastructure is up-to-date.
+    ```
+
+1. Check `tfmigrate `migration history
+
+    `.tfmigrate.hcl` configures `tfmigrate`'s [history](https://github.com/minamijoyo/tfmigrate#history-block),
+    which records migration history and status as a JSON document.
+
+    To view the history JSON:
+
+    ```
+    curl http://localhost.localstack.cloud:4566/tfmigrate-demo/tfmigrate/history.json
+    {
+        "version": 1,
+        "records": {
+            "migration.hcl": {
+                "type": "multi_state",
+                "name": "mv_local_file_bar",
+                "applied_at": "2023-08-09T10:22:59.897417-04:00"
+            }
+        }
+    }
+    ```
+
+    `tfmigrate list` can also be used to view migrations:
+
+    ```
+    tfmigrate list
+    migration.hcl
+    ```
+
+    `tfmigrate list --status=unapplied` reports any outstanding, unapplied migrations:
+
+    ```
+    tfmigrate list --status=unapplied
+    ```
 
 ## A real world GitOps workflow
 
