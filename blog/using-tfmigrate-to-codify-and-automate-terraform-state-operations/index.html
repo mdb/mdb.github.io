@@ -196,7 +196,7 @@ desired migration end state:</p><p><code>project-one/main.tf</code> should appea
 2023/08/02 14:41:38 [INFO] [migrator@project-two] push the new state to remote
 2023/08/02 14:41:40 [INFO] [migrator@project-one] push the new state to remote
 2023/08/02 14:41:42 [INFO] [migrator] multi state migrator apply success!
-</code></pre></li><li><p>To verify <code>project-one</code> and <code>project-two</code> have no outstanding post-migration Terraform plan diffs:</p></li></ol><pre tabindex=0><code>cd project-one \
+</code></pre></li><li><p>To verify <code>project-one</code> and <code>project-two</code> have no outstanding post-migration Terraform plan diffs:</p><pre tabindex=0><code>cd project-one \
   &amp;&amp; terraform init \
   &amp;&amp; terraform plan \
   &amp;&amp; terraform apply \
@@ -213,7 +213,22 @@ No changes. Infrastructure is up-to-date.
 ...
 
 No changes. Infrastructure is up-to-date.
-</code></pre><h2 id=a-real-world-gitops-workflow>A real world GitOps workflow</h2><p>The steps described above are a bit contrived, in large part because <code>tfmigrate-demo</code>
+</code></pre></li><li><p>Check <code>tfmigrate </code>migration history</p><p><code>.tfmigrate.hcl</code> configures <code>tfmigrate</code>&rsquo;s <a href=https://github.com/minamijoyo/tfmigrate#history-block>history</a>,
+which records migration history and status as a JSON document.</p><p>To view the history JSON:</p><pre tabindex=0><code>curl http://localhost.localstack.cloud:4566/tfmigrate-demo/tfmigrate/history.json
+{
+    &#34;version&#34;: 1,
+    &#34;records&#34;: {
+        &#34;migration.hcl&#34;: {
+            &#34;type&#34;: &#34;multi_state&#34;,
+            &#34;name&#34;: &#34;mv_local_file_bar&#34;,
+            &#34;applied_at&#34;: &#34;2023-08-09T10:22:59.897417-04:00&#34;
+        }
+    }
+}
+</code></pre><p><code>tfmigrate list</code> can also be used to view migrations:</p><pre tabindex=0><code>tfmigrate list
+migration.hcl
+</code></pre><p><code>tfmigrate list --status=unapplied</code> reports any outstanding, unapplied migrations:</p><pre tabindex=0><code>tfmigrate list --status=unapplied
+</code></pre></li></ol><h2 id=a-real-world-gitops-workflow>A real world GitOps workflow</h2><p>The steps described above are a bit contrived, in large part because <code>tfmigrate-demo</code>
 uses ephemeral local Terraform projects whose resources and state aren&rsquo;t persistant.</p><p>A real world GitOps-esque team workflow against an existing project might look more like&mldr;</p><ol><li>Open a PR containing the desired <code>tfmigrate</code> migration HCL and desired Terraform
 configuration changes.</li><li>CI detects the presence of a <code>tfmigrate</code> migration HCL and verifies the
 changes via <code>tfmigrate plan</code>.</li><li>Following successful CI and code review approval, the PR is merged.</li><li>CI/CD detects the presence of the new <code>tfmigrate</code> migration HCL and performs
