@@ -60,6 +60,9 @@ Within [mdb/tfmigrate-demo](https://github.com/mdb/tfmigrate-demo)...
   of `local_file.bar` from management in `project-one` to management in `project-two`.
   `tfmigrate` enables teams to codify migrations as HCL, subjecting the
   migrations to code review and CI/CD, alongside terraform HCL configurations.
+* `.tfmigrate.hcl` is a `tfmigrate` configuration file specifying that
+  `tfmigrate`'s migration history be persisted to
+  `s3://tfmigrate-demo/tfmigrate/history.json`.
 
 See [PR 2](https://github.com/mdb/tfmigrate-demo/pull/2) for an example GitHub
 Actions workflow that fails its `tfmigrate plan` step. See [PR 3](https://github.com/mdb/tfmigrate-demo/pull/3) for an example
@@ -128,6 +131,28 @@ running, and that [tfmigrate](https://github.com/minamijoyo/tfmigrate) and [tfen
         -auto-approve
     ```
 
+1. Run use [tfmigrate](https://github.com/minamijoyo/tfmigrate) to list any outstanding migrations:
+
+    ```
+    tfmigrate list --status=unapplied
+    2023/08/15 19:30:44 [INFO] AWS Auth provider used: "StaticProvider"
+    migration.hcl
+    ```
+
+    Based on `tfmigrate list`'s output, the `migration.hcl` file contains an
+    unapplied migration that seeks to move `local_file.bar` from `project-one` to `project-two`:
+
+    ```hcl
+    migration "multi_state" "mv_local_file_bar" {
+      from_dir = "project-one"
+      to_dir   = "project-two"
+
+      actions = [
+        "mv local_file.bar local_file.bar",
+      ]
+    }
+    ```
+
 1. Next, use [tfmigrate](https://github.com/minamijoyo/tfmigrate) to `plan` the
    migration of `local_file.bar` from `project-one`'s Terraform state to
    `project-two`'s Terraform state using the migration instructions codified in
@@ -147,48 +172,54 @@ running, and that [tfmigrate](https://github.com/minamijoyo/tfmigrate) and [tfen
     still lives in `project-one/main.tf`:
 
     ```
-    tfmigrate plan migration.hcl
-    2023/08/02 14:07:17 [INFO] [runner] load migration file: migration.hcl
-    2023/08/02 14:07:17 [INFO] [migrator] multi start state migrator plan
-    2023/08/02 14:07:18 [INFO] [migrator@project-one] terraform version: 0.13.7
-    2023/08/02 14:07:18 [INFO] [migrator@project-one] initialize work dir
-    2023/08/02 14:07:20 [INFO] [migrator@project-one] get the current remote state
-    2023/08/02 14:07:22 [INFO] [migrator@project-one] override backend to local
-    2023/08/02 14:07:22 [INFO] [executor@project-one] create an override file
-    2023/08/02 14:07:22 [INFO] [migrator@project-one] creating local workspace folder in: project-one/terraform.tfstate.d/default
-    2023/08/02 14:07:22 [INFO] [executor@project-one] switch backend to local
-    2023/08/02 14:07:23 [INFO] [migrator@project-two] terraform version: 1.4.6
-    2023/08/02 14:07:23 [INFO] [migrator@project-two] initialize work dir
-    2023/08/02 14:07:26 [INFO] [migrator@project-two] get the current remote state
-    2023/08/02 14:07:27 [INFO] [migrator@project-two] override backend to local
-    2023/08/02 14:07:27 [INFO] [executor@project-two] create an override file
-    2023/08/02 14:07:27 [INFO] [migrator@project-two] creating local workspace folder in: project-two/terraform.tfstate.d/default
-    2023/08/02 14:07:27 [INFO] [executor@project-two] switch backend to local
-    2023/08/02 14:07:28 [INFO] [migrator] compute new states (project-one => project-two)
-    2023/08/02 14:07:28 [INFO] [migrator@project-one] check diffs
-    2023/08/02 14:07:29 [INFO] [migrator@project-two] check diffs
-    2023/08/02 14:07:30 [ERROR] [migrator@project-two] unexpected diffs
-    2023/08/02 14:07:30 [INFO] [executor@project-two] remove the override file
-    2023/08/02 14:07:30 [INFO] [executor@project-two] remove the workspace state folder
-    2023/08/02 14:07:30 [INFO] [executor@project-two] switch back to remote
-    2023/08/02 14:07:32 [INFO] [executor@project-one] remove the override file
-    2023/08/02 14:07:32 [INFO] [executor@project-one] remove the workspace state folder
-    2023/08/02 14:07:32 [INFO] [executor@project-one] switch back to remote
-    terraform plan command returns unexpected diffs: failed to run command (exited 2): terraform plan -state=/var/folders/46/sz1dzp417x7fk46kb3jv8cn00000gp/T/tmp170371809 -out=/var/folders/46/sz1dzp417x7fk46kb3jv8cn00000gp/T/tfplan2614290330 -input=false -no-
-    color -detailed-exitcode
+    tfmigrate plan
+    2023/08/15 19:40:23 [INFO] AWS Auth provider used: "StaticProvider"
+    2023/08/15 19:40:23 [INFO] [runner] unapplied migration files: [migration.hcl]
+    2023/08/15 19:40:23 [INFO] [runner] load migration file: migration.hcl
+    2023/08/15 19:40:23 [INFO] [migrator] multi start state migrator plan
+    2023/08/15 19:40:24 [INFO] [migrator@project-one] terraform version: 0.13.7
+    2023/08/15 19:40:24 [INFO] [migrator@project-one] initialize work dir
+    2023/08/15 19:40:24 [INFO] [migrator@project-one] get the current remote state
+    2023/08/15 19:40:24 [INFO] [migrator@project-one] override backend to local
+    2023/08/15 19:40:24 [INFO] [executor@project-one] create an override file
+    2023/08/15 19:40:24 [INFO] [migrator@project-one] creating local workspace folder in: project-one/terraform.tfstate.d/default
+    2023/08/15 19:40:24 [INFO] [executor@project-one] switch backend to local
+    2023/08/15 19:40:25 [INFO] [migrator@project-two] terraform version: 1.4.6
+    2023/08/15 19:40:25 [INFO] [migrator@project-two] initialize work dir
+    2023/08/15 19:40:26 [INFO] [migrator@project-two] get the current remote state
+    2023/08/15 19:40:26 [INFO] [migrator@project-two] override backend to local
+    2023/08/15 19:40:26 [INFO] [executor@project-two] create an override file
+    2023/08/15 19:40:26 [INFO] [migrator@project-two] creating local workspace folder in: project-two/terraform.tfstate.d/default
+    2023/08/15 19:40:26 [INFO] [executor@project-two] switch backend to local
+    2023/08/15 19:40:27 [INFO] [migrator] compute new states (project-one => project-two)
+    2023/08/15 19:40:27 [INFO] [migrator@project-one] check diffs
+    2023/08/15 19:40:28 [ERROR] [migrator@project-one] unexpected diffs
+    2023/08/15 19:40:28 [INFO] [executor@project-two] remove the override file
+    2023/08/15 19:40:28 [INFO] [executor@project-two] remove the workspace state folder
+    2023/08/15 19:40:28 [INFO] [executor@project-two] switch back to remote
+    2023/08/15 19:40:28 [INFO] [executor@project-one] remove the override file
+    2023/08/15 19:40:28 [INFO] [executor@project-one] remove the workspace state folder
+    2023/08/15 19:40:28 [INFO] [executor@project-one] switch back to remote
+    terraform plan command returns unexpected diffs in project-one from_dir: failed to run command (exited 2): terraform plan -state=/var/folders/46/sz1dzp417x7fk46kb3jv8cn00000gp/T/tmp3859825156 -out=/var/folders/46/sz1dzp417x7fk46kb3jv8cn00000gp/T/tfplan265876470 -input=false -no-color -
+    detailed-exitcode
     stdout:
-    local_file.baz: Refreshing state... [id=5fc5caaa8d04abb85be16b17953cd1a6e3ed549b]
-    local_file.bar: Refreshing state... [id=4bf3e335199107182c6f7638efaad377acc7f452]
+    Refreshing Terraform state in-memory prior to plan...
+    The refreshed state will be used to calculate this plan, but will not be
+    persisted to local or remote state storage.
 
-    Terraform used the selected providers to generate the following execution
-    plan. Resource actions are indicated with the following symbols:
+    local_file.foo: Refreshing state... [id=94dd9e08c129c785f7f256e82fbe0a30e6d1ae40]
+
+    ------------------------------------------------------------------------
+
+    An execution plan has been generated and is shown below.
+    Resource actions are indicated with the following symbols:
       + create
 
     Terraform will perform the following actions:
 
       # local_file.bar will be created
       + resource "local_file" "bar" {
-          + content              = "Hi!"
+          + content              = "Hi"
           + content_base64sha256 = (known after apply)
           + content_base64sha512 = (known after apply)
           + content_md5          = (known after apply)
@@ -203,12 +234,13 @@ running, and that [tfmigrate](https://github.com/minamijoyo/tfmigrate) and [tfen
 
     Plan: 1 to add, 0 to change, 0 to destroy.
 
-    ─────────────────────────────────────────────────────────────────────────────
+    ------------------------------------------------------------------------
 
-    Saved the plan to: /var/folders/46/sz1dzp417x7fk46kb3jv8cn00000gp/T/tfplan2614290330
+    This plan was saved to: /var/folders/46/sz1dzp417x7fk46kb3jv8cn00000gp/T/tfplan265876470
 
     To perform exactly these actions, run the following command to apply:
-        terraform apply "/var/folders/46/sz1dzp417x7fk46kb3jv8cn00000gp/T/tfplan2614290330"
+        terraform apply "/var/folders/46/sz1dzp417x7fk46kb3jv8cn00000gp/T/tfplan265876470"
+
 
     stderr:
     ```
@@ -243,69 +275,42 @@ running, and that [tfmigrate](https://github.com/minamijoyo/tfmigrate) and [tfen
 1. Re-run `tfmigrate plan migration.hcl`; now it's successful:
 
    ```
-   tfmigrate plan migration.hcl
-   2023/08/02 14:39:19 [INFO] [runner] load migration file: migration.hcl
-   2023/08/02 14:39:19 [INFO] [migrator] multi start state migrator plan
-   2023/08/02 14:39:20 [INFO] [migrator@project-one] terraform version: 0.13.7
-   2023/08/02 14:39:20 [INFO] [migrator@project-one] initialize work dir
-   2023/08/02 14:39:23 [INFO] [migrator@project-one] get the current remote state
-   2023/08/02 14:39:24 [INFO] [migrator@project-one] override backend to local
-   2023/08/02 14:39:24 [INFO] [executor@project-one] create an override file
-   2023/08/02 14:39:24 [INFO] [migrator@project-one] creating local workspace folder in: project-one/terraform.tfstate.d/default
-   2023/08/02 14:39:24 [INFO] [executor@project-one] switch backend to local
-   2023/08/02 14:39:25 [INFO] [migrator@project-two] terraform version: 1.4.6
-   2023/08/02 14:39:25 [INFO] [migrator@project-two] initialize work dir
-   2023/08/02 14:39:28 [INFO] [migrator@project-two] get the current remote state
-   2023/08/02 14:39:30 [INFO] [migrator@project-two] override backend to local
-   2023/08/02 14:39:30 [INFO] [executor@project-two] create an override file
-   2023/08/02 14:39:30 [INFO] [migrator@project-two] creating local workspace folder in: project-two/terraform.tfstate.d/default
-   2023/08/02 14:39:30 [INFO] [executor@project-two] switch backend to local
-   2023/08/02 14:39:30 [INFO] [migrator] compute new states (project-one => project-two)
-   2023/08/02 14:39:30 [INFO] [migrator@project-one] check diffs
-   2023/08/02 14:39:31 [INFO] [migrator@project-two] check diffs
-   2023/08/02 14:39:32 [INFO] [executor@project-two] remove the override file
-   2023/08/02 14:39:32 [INFO] [executor@project-two] remove the workspace state folder
-   2023/08/02 14:39:32 [INFO] [executor@project-two] switch back to remote
-   2023/08/02 14:39:34 [INFO] [executor@project-one] remove the override file
-   2023/08/02 14:39:34 [INFO] [executor@project-one] remove the workspace state folder
-   2023/08/02 14:39:34 [INFO] [executor@project-one] switch back to remote
-   2023/08/02 14:39:36 [INFO] [migrator] multi state migrator plan success!
+
     ```
 
 1. Finally, to perform the migration, `apply` the `migration.hcl`:
 
-   ```
-   tfmigrate apply migration.hcl
-   2023/08/02 14:41:20 [INFO] [runner] load migration file: migration.hcl
-   2023/08/02 14:41:20 [INFO] [migrator] start multi state migrator plan phase for apply
-   2023/08/02 14:41:20 [INFO] [migrator@project-one] terraform version: 0.13.7
-   2023/08/02 14:41:20 [INFO] [migrator@project-one] initialize work dir
-   2023/08/02 14:41:23 [INFO] [migrator@project-one] get the current remote state
-   2023/08/02 14:41:25 [INFO] [migrator@project-one] override backend to local
-   2023/08/02 14:41:25 [INFO] [executor@project-one] create an override file
-   2023/08/02 14:41:25 [INFO] [migrator@project-one] creating local workspace folder in: project-one/terraform.tfstate.d/default
-   2023/08/02 14:41:25 [INFO] [executor@project-one] switch backend to local
-   2023/08/02 14:41:25 [INFO] [migrator@project-two] terraform version: 1.4.6
-   2023/08/02 14:41:25 [INFO] [migrator@project-two] initialize work dir
-   2023/08/02 14:41:28 [INFO] [migrator@project-two] get the current remote state
-   2023/08/02 14:41:30 [INFO] [migrator@project-two] override backend to local
-   2023/08/02 14:41:30 [INFO] [executor@project-two] create an override file
-   2023/08/02 14:41:30 [INFO] [migrator@project-two] creating local workspace folder in: project-two/terraform.tfstate.d/default
-   2023/08/02 14:41:30 [INFO] [executor@project-two] switch backend to local
-   2023/08/02 14:41:31 [INFO] [migrator] compute new states (project-one => project-two)
-   2023/08/02 14:41:31 [INFO] [migrator@project-one] check diffs
-   2023/08/02 14:41:32 [INFO] [migrator@project-two] check diffs
-   2023/08/02 14:41:32 [INFO] [executor@project-two] remove the override file
-   2023/08/02 14:41:32 [INFO] [executor@project-two] remove the workspace state folder
-   2023/08/02 14:41:32 [INFO] [executor@project-two] switch back to remote
-   2023/08/02 14:41:35 [INFO] [executor@project-one] remove the override file
-   2023/08/02 14:41:35 [INFO] [executor@project-one] remove the workspace state folder
-   2023/08/02 14:41:35 [INFO] [executor@project-one] switch back to remote
-   2023/08/02 14:41:38 [INFO] [migrator] start multi state migrator apply phase
-   2023/08/02 14:41:38 [INFO] [migrator@project-two] push the new state to remote
-   2023/08/02 14:41:40 [INFO] [migrator@project-one] push the new state to remote
-   2023/08/02 14:41:42 [INFO] [migrator] multi state migrator apply success!
-   ```
+    ```
+    tfmigrate plan
+    2023/08/15 19:41:16 [info] aws auth provider used: "staticprovider"
+    2023/08/15 19:41:16 [info] [runner] unapplied migration files: [migration.hcl]
+    2023/08/15 19:41:16 [info] [runner] load migration file: migration.hcl
+    2023/08/15 19:41:16 [info] [migrator] multi start state migrator plan
+    2023/08/15 19:41:17 [info] [migrator@project-one] terraform version: 0.13.7
+    2023/08/15 19:41:17 [info] [migrator@project-one] initialize work dir
+    2023/08/15 19:41:17 [info] [migrator@project-one] get the current remote state
+    2023/08/15 19:41:17 [info] [migrator@project-one] override backend to local
+    2023/08/15 19:41:17 [info] [executor@project-one] create an override file
+    2023/08/15 19:41:17 [info] [migrator@project-one] creating local workspace folder in: project-one/terraform.tfstate.d/default
+    2023/08/15 19:41:17 [info] [executor@project-one] switch backend to local
+    2023/08/15 19:41:18 [info] [migrator@project-two] terraform version: 1.4.6
+    2023/08/15 19:41:18 [info] [migrator@project-two] initialize work dir
+    2023/08/15 19:41:19 [info] [migrator@project-two] get the current remote state
+    2023/08/15 19:41:19 [info] [migrator@project-two] override backend to local
+    2023/08/15 19:41:19 [info] [executor@project-two] create an override file
+    2023/08/15 19:41:19 [info] [migrator@project-two] creating local workspace folder in: project-two/terraform.tfstate.d/default
+    2023/08/15 19:41:19 [info] [executor@project-two] switch backend to local
+    2023/08/15 19:41:19 [info] [migrator] compute new states (project-one => project-two)
+    2023/08/15 19:41:20 [info] [migrator@project-one] check diffs
+    2023/08/15 19:41:21 [info] [migrator@project-two] check diffs
+    2023/08/15 19:41:21 [info] [executor@project-two] remove the override file
+    2023/08/15 19:41:21 [info] [executor@project-two] remove the workspace state folder
+    2023/08/15 19:41:21 [info] [executor@project-two] switch back to remote
+    2023/08/15 19:41:22 [info] [executor@project-one] remove the override file
+    2023/08/15 19:41:22 [info] [executor@project-one] remove the workspace state folder
+    2023/08/15 19:41:22 [info] [executor@project-one] switch back to remote
+    2023/08/15 19:41:22 [info] [migrator] multi state migrator plan success!
+    ```
 
 1. To verify `project-one` and `project-two` have no outstanding post-migration Terraform plan diffs:
 
@@ -353,14 +358,14 @@ running, and that [tfmigrate](https://github.com/minamijoyo/tfmigrate) and [tfen
     }
     ```
 
-    `tfmigrate list` can also be used to view migrations:
+    `tfmigrate list` can also be used to view all migrations:
 
     ```
     tfmigrate list
     migration.hcl
     ```
 
-    `tfmigrate list --status=unapplied` reports any outstanding, unapplied migrations:
+    Alternatively, `tfmigrate list --status=unapplied` reports any outstanding, unapplied migrations:
 
     ```
     tfmigrate list --status=unapplied
