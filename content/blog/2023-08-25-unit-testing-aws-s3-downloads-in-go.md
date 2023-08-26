@@ -192,6 +192,9 @@ func TestDownload(t *testing.T) {
         t.Error(err)
       }
 
+      newFileName := u.Path[strings.LastIndex(u.Path, "/")+1:]
+      t.Cleanup(func() { os.Remove(newFileName) })
+
       s3o := s3object.New(u, s3object.WithDownloader(testDownloader()))
 
       err = s3o.Download(u)
@@ -212,7 +215,6 @@ func TestDownload(t *testing.T) {
         t.Fatalf("unable to read file: %v", err)
       }
 
-      newFileName := u.Path[strings.LastIndex(u.Path, "/")+1:]
       newFileContent, err := ioutil.ReadFile(newFileName)
       if err != nil {
         t.Fatalf("unable to read file: %v", err)
@@ -220,11 +222,6 @@ func TestDownload(t *testing.T) {
 
       if string(originalFileContent) != string(newFileContent) {
         t.Errorf("expected %s contents to equal %s", newFileName, test.path)
-      }
-
-      err = os.Remove(newFileName)
-      if err != nil {
-        t.Fatalf("unable to remove file: %v", err)
       }
     })
   }
