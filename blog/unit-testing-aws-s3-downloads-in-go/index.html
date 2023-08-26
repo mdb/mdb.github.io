@@ -157,6 +157,9 @@ option enables the <code>s3object.Object</code> under test to use the
 </span></span><span style=display:flex><span>        <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Error</span>(<span style=color:#a6e22e>err</span>)
 </span></span><span style=display:flex><span>      }
 </span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>newFileName</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>u</span>.<span style=color:#a6e22e>Path</span>[<span style=color:#a6e22e>strings</span>.<span style=color:#a6e22e>LastIndex</span>(<span style=color:#a6e22e>u</span>.<span style=color:#a6e22e>Path</span>, <span style=color:#e6db74>&#34;/&#34;</span>)<span style=color:#f92672>+</span><span style=color:#ae81ff>1</span>:]
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Cleanup</span>(<span style=color:#66d9ef>func</span>() { <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Remove</span>(<span style=color:#a6e22e>newFileName</span>) })
+</span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>      <span style=color:#a6e22e>s3o</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>s3object</span>.<span style=color:#a6e22e>New</span>(<span style=color:#a6e22e>u</span>, <span style=color:#a6e22e>s3object</span>.<span style=color:#a6e22e>WithDownloader</span>(<span style=color:#a6e22e>testDownloader</span>()))
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>      <span style=color:#a6e22e>err</span> = <span style=color:#a6e22e>s3o</span>.<span style=color:#a6e22e>Download</span>(<span style=color:#a6e22e>u</span>)
@@ -177,7 +180,6 @@ option enables the <code>s3object.Object</code> under test to use the
 </span></span><span style=display:flex><span>        <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Fatalf</span>(<span style=color:#e6db74>&#34;unable to read file: %v&#34;</span>, <span style=color:#a6e22e>err</span>)
 </span></span><span style=display:flex><span>      }
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>newFileName</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>u</span>.<span style=color:#a6e22e>Path</span>[<span style=color:#a6e22e>strings</span>.<span style=color:#a6e22e>LastIndex</span>(<span style=color:#a6e22e>u</span>.<span style=color:#a6e22e>Path</span>, <span style=color:#e6db74>&#34;/&#34;</span>)<span style=color:#f92672>+</span><span style=color:#ae81ff>1</span>:]
 </span></span><span style=display:flex><span>      <span style=color:#a6e22e>newFileContent</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>ioutil</span>.<span style=color:#a6e22e>ReadFile</span>(<span style=color:#a6e22e>newFileName</span>)
 </span></span><span style=display:flex><span>      <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
 </span></span><span style=display:flex><span>        <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Fatalf</span>(<span style=color:#e6db74>&#34;unable to read file: %v&#34;</span>, <span style=color:#a6e22e>err</span>)
@@ -185,11 +187,6 @@ option enables the <code>s3object.Object</code> under test to use the
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>      <span style=color:#66d9ef>if</span> string(<span style=color:#a6e22e>originalFileContent</span>) <span style=color:#f92672>!=</span> string(<span style=color:#a6e22e>newFileContent</span>) {
 </span></span><span style=display:flex><span>        <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;expected %s contents to equal %s&#34;</span>, <span style=color:#a6e22e>newFileName</span>, <span style=color:#a6e22e>test</span>.<span style=color:#a6e22e>path</span>)
-</span></span><span style=display:flex><span>      }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>err</span> = <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Remove</span>(<span style=color:#a6e22e>newFileName</span>)
-</span></span><span style=display:flex><span>      <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
-</span></span><span style=display:flex><span>        <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Fatalf</span>(<span style=color:#e6db74>&#34;unable to remove file: %v&#34;</span>, <span style=color:#a6e22e>err</span>)
 </span></span><span style=display:flex><span>      }
 </span></span><span style=display:flex><span>    })
 </span></span><span style=display:flex><span>  }
