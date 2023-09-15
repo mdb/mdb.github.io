@@ -69,9 +69,30 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(populateShopFeed);
   }
 
+  function populateGhFeed(data) {
+    const galleries = document.querySelectorAll('ul.gh-feed'),
+      items = data.map(contribution => {
+        return `
+          <li class="item">
+            <a href="${contribution.url}">
+              ${contribution.repo}
+            </a>
+          </li>`;
+      }).join('');
+
+    galleries.forEach(gallery => gallery.innerHTML = items);
+  }
+
+  function fetchGhFeed() {
+    return fetch('https://mikeball.info/ig-feed/feeds/github-contributions.json')
+      .then(response => response.json())
+      .then(populateGhFeed);
+  }
+
   Promise.all([
     fetchIgFeed(),
     fetchShopFeed()
+    // fetchGhFeed()
   ]).then(fadeInImages);
 
   const button = document.getElementsByTagName('button')[0],

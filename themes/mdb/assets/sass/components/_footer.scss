@@ -36,6 +36,12 @@ footer {
       color: $link_color;
     }
 
+    h2 {
+      padding-bottom: 10px;
+      font-size: 125%;
+      border-bottom: $inverse_divider;
+    }
+
     div {
       float: left;
       width: 25%;
@@ -66,12 +72,6 @@ footer {
         }
       }
 
-      h2 {
-        padding-bottom: 10px;
-        font-size: 125%;
-        border-bottom: $inverse_divider;
-      }
-
       ul.gallery.store-feed {
         // hack to align columns
         margin-bottom: $big_spacer - 1;
@@ -89,10 +89,25 @@ footer {
           @include breakpoint(desktop) {
             height: auto;
           }
-
           .details {
             display: none;
           }
+        }
+      }
+    }
+
+    ul.gh-feed {
+      columns: 4;
+      -webkit-columns: 4;
+      -moz-columns: 4;
+      width: 100%;
+
+      li {
+        // TODO: this is a best guess value.
+        margin-bottom: 5px;
+
+        a {
+          color: $inverse_text_color;
         }
       }
     }
