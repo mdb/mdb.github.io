@@ -112,5 +112,15 @@ ul.gallery.ig-feed {
   li.item {
     height: auto;
     padding-bottom: 0;
+
+    &:nth-child(n+13) {
+      display: none;
+    }
+  }
+
+  &.full-feed {
+    li:nth-child(n+13) {
+      display: block;
+    }
   }
 }
