@@ -11,7 +11,7 @@ teaser: "A demo illustrating the use of `tfmigrate` for automating complex Terra
 
 _An overview illustrating how [tfmigrate](https://github.com/minamijoyo/tfmigrate)
 can be used to codify and automate complex Terraform state operations. The
-corresponding reference example code can be viewed at [github.com/mdb/tfmigrate](https://github.com/mdb/tfmigrate-demo)._
+corresponding reference example code can be viewed at [github.com/mdb/tfmigrate-demo](https://github.com/mdb/tfmigrate-demo)._
 
 ## Problem
 
