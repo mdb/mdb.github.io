@@ -192,6 +192,29 @@ resource "aws_db_instance" "rds" {
 ...
 ```
 
+Alternatively, maybe it's unnecessary to expose the ability to specify
+`instance_class` via a variable _at all_; perhaps the `var.rds_instance_class`
+can be removed entirely in favor of a private `local` variable:
+
+```hcl
+locals {
+  # The 'logical' environment name (prod, staging, dev etc.)
+  # taken from the terraform.workspace (prod-aws-us-east-1, for example)
+  environment = "${split("-", terraform.workspace)[0]}"
+
+  rds_instance_class = {
+    staging    = "db.t3.micro"
+    production = "db.m5.8xlarge"
+  }
+}
+```
+
+```hcl
+resource "aws_db_instance" "rds" {
+  instance_class = local.rds_instance_class[local.environment]
+...
+```
+
 ## Summary
 
 In summary, the use of [Terraform workspaces](https://www.terraform.io/docs/language/state/workspaces.html) -- as well as the adoption of a sufficiently granular workspaces -- may help facilitate logical and safe multi-environment Terraform practices and code simplification.
