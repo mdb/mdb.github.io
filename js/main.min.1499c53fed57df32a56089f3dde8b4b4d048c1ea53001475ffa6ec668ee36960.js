@@ -1,9 +1,9 @@
-document.addEventListener("DOMContentLoaded",()=>{function t(e){e.style.transition="opacity 2s",e.style.opacity="1"}function s(){const e=document.getElementsByTagName("img");for(let n of e)n.complete&&t(n),n.addEventListener("load",()=>{t(n)})}function r(e){const t=document.querySelectorAll("ul.ig-feed"),n=e.map(e=>`
+document.addEventListener("DOMContentLoaded",()=>{function t(e){e.style.transition="opacity 2s",e.style.opacity="1"}function s(){const e=document.getElementsByTagName("img");for(let n of e)n.complete&&t(n),n.addEventListener("load",()=>{t(n)})}function r(e){const t=document.querySelectorAll("ul.ig-feed"),n=e.data.map(e=>`
           <li class="item">
             <a class="thumbnail" href="${e.permalink}">
               <img src="${e.github_media_url}" />
             </a>
-          </li>`).join("");t.forEach(e=>e.innerHTML=n)}function c(){return fetch("https://mikeball.info/feeder/feeds/instagram-media.json").then(e=>e.json()).then(r)}function o(e){const t=document.querySelectorAll("ul.store-feed"),n=e.slice(0,4).map(e=>{const t=`https://tiendah.bigcartel.com/${e.url}`;return`
+          </li>`).join("");t.forEach(e=>e.innerHTML=n)}function c(e){return e=e||"https://mikeball.info/feeder/feeds/instagram-media-0.json",fetch(e).then(e=>e.json()).then(r)}function o(e){const t=document.querySelectorAll("ul.store-feed"),n=e.slice(0,4).map(e=>{const t=`https://tiendah.bigcartel.com/${e.url}`;return`
           <li class="item">
             <a class="thumbnail" href="${t}">
               <img src="${e.images[0].secure_url}" />
