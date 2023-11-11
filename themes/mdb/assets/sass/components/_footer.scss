@@ -89,8 +89,19 @@ footer {
           @include breakpoint(desktop) {
             height: auto;
           }
+
           .details {
             display: none;
+          }
+        }
+      }
+
+      ul.gallery.ig-feed {
+        li, li a {
+          height: 108px;
+
+          @include breakpoint(desktop) {
+            height: 200px;
           }
         }
       }
