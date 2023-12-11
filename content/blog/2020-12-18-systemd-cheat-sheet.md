@@ -93,7 +93,7 @@ WantedBy=multi-user.target
 A few examples of working with `journalctl`:
 
 * `journalctl` - outputs the `systemd` logs
-* `journalctl -u something -f` - outputs the logs for a service (Note that `journalctl` is a separate command and process for managing)
+* `journalctl -u something -f` - outputs the logs for a service
 * `journalctl --since yesterday` or `journalctl --since 09:00 --until "1 hour ago"` can be used to filter logs to a specific window of time
 * `journalctl -p err -b` - shows only log entries logged at the error level or above
 * `journalctl -o json-pretty` - shows logs in formatted JSON (other output options exist, too)
