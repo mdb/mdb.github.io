@@ -4,6 +4,7 @@ date: 2023-05-20T13:35:02Z
 tags:
 thumbnail:
 teaser:
+draft: true
 ---
 
 _Recently, I've been working in a large Go monorepo. A refreshed Vim
