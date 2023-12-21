@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>slos on Mike Ball</title><link>/tags/slos/</link><description>Recent content in slos on Mike Ball</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 07 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="/tags/slos/index.xml" rel="self" type="application/rss+xml"/><item><title>SLOs</title><link>/blog/slos/</link><pubDate>Tue, 07 Mar 2023 00:00:00 +0000</pubDate><guid>/blog/slos/</guid><description>Service level objectives &amp;ndash; SLOs &amp;ndash; are a mechanism for understanding and planning reliability.
+Definitions service level indicator (SLI) - a key metric for a system that describes its operational health
+Example: the percentage of video starts that encounter an error
+service level objective (SLO) - a target for an SLI
+Example: 99.9% of video starts do not encounter an error
+service level agreement (SLA) - what happens when an SLO is met or missed</description></item></channel></rss>
