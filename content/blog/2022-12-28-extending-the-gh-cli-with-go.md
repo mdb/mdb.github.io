@@ -27,6 +27,10 @@ Out of the box, the [gh CLI](https://cli.github.com/) supports a collection of c
 
 `gh` can be installed via common package managers (`brew install gh` on Mac OS). It's also preinstalled on all [GitHub-hosted Actions runners](https://docs.github.com/en/actions/using-workflows/using-github-cli-in-workflows) and available for use in GitHub Actions CI/CD pipelines, as demonstrated by [mdb/ensure-unpublished-release-action's release pipeline](https://github.com/mdb/ensure-unpublished-release-action/blob/main/.github/workflows/test.yml#L68), which invokes `gh release create` to publish [GitHub releases](https://github.com/mdb/ensure-unpublished-release-action/releases).
 
+## Aliases
+
+Beyond its built-in commands, `gh` supports the creation of custom [alias](https://cli.github.com/manual/gh_alias) commands.
+
 ## Extensions
 
 Beyond its built-in features, `gh` can be extended to support custom commands. I recently created the [gh-dispatch](https://github.com/mdb/gh-dispatch) extension for triggering [repository_dispatch](https://docs.github.com/en/rest/repos/repos#create-a-repository-dispatch-event) and/or [workflow_dispatch](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#workflow_dispatch) events and watching the resulting [GitHub Actions workflow run](https://github.com/mdb/gh-dispatch/actions/runs/3509863404). Once installed, the extension provides a `gh dispatch` command:
