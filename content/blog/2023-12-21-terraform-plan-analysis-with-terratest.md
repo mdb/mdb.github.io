@@ -54,3 +54,7 @@ output, effectively offering a Go-based alternative to tools like OPA and simila
 example of how `terratest` could be integrated with a CI/CD pipeline. Its
 `README.md` offers detailed explanation of its [GitHub Actions CI/CD pipeline](https://github.com/mdb/terratest-tf-plan-demo#github-actions),
 as well as [instructions](https://github.com/mdb/terratest-tf-plan-demo#run-terratest-tf-plan-demo-locally) for running the tests locally.
+
+## OPA
+
+Alternatively, OPA may satisfy your needs. [Terraform Plan Validation With Open Policy Agent](/blog/terraform-plan-validation-with-open-policy-agent/) offers more on OPA.
