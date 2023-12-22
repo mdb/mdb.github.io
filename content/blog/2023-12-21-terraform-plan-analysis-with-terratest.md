@@ -58,3 +58,8 @@ as well as [instructions](https://github.com/mdb/terratest-tf-plan-demo#run-terr
 ## OPA
 
 Alternatively, OPA may satisfy your needs. [Terraform Plan Validation With Open Policy Agent](/blog/terraform-plan-validation-with-open-policy-agent/) offers more on OPA.
+
+## More reading
+
+[terratest PR 1309](https://github.com/gruntwork-io/terratest/pull/1309) enabled
+this capability. [terratest issue 1308](https://github.com/gruntwork-io/terratest/issues/1308) elaborates a bit on use-case.
