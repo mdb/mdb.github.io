@@ -20,6 +20,17 @@ div.blog-post {
     img {
       width: 100%;
     }
+
+    div.note {
+      background: #f4f4f4;
+      padding: $spacer;
+      border: $divider;
+      margin-bottom: $big_spacer;
+
+      p:last-of-type {
+        margin-bottom: 0;
+      }
+    }
   }
 
   article,

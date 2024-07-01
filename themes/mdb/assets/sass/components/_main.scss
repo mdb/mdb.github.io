@@ -49,6 +49,11 @@ main {
       &.mermaid {
         background: none;
         border: 1px solid #e1e1e8;
+
+        svg {
+          margin: 0 auto;
+          display: block;
+        }
       }
 
       code {
