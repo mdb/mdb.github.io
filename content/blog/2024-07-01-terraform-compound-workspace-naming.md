@@ -15,6 +15,10 @@ display_toc: true
 
 ## Problem statement
 
+As my colleague [Brian Tajuddin posits](https://www.briantajuddin.com/never-just-one/) in his _rule of never just one_:
+
+> Writing software these days involves asking the question "How many?" over and over again. There is one answer that's always wrong.
+
 You need to create and manage similar cloud infrastructure across many
 different AWS account/region combinations serving different logical
 environments, such as `dev`, `staging`, `prod`, etc.
