@@ -1,0 +1,581 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>Scalable Terraform patterns: compound workspace names | Mike Ball</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=generator content="Hugo 0.101.0"><meta name=ROBOTS content="INDEX, FOLLOW"><link rel=stylesheet href=/main.min.c5cd7095f5e0084c9c1443dd669fe45e35b608fb90a8fd34626d2125428e076f.css></head><body class=blog-post><header><div class=mark><a href=/>Mike Ball</a></div><button>Toggle Navigation</button><div class=nav-wrap><nav class=primary><ul><li><a href=/blog>Blog</a></li><li><a href=#about>About</a></li></ul></nav><nav class=secondary><ul><li><a href=https://github.com/mdb>GitHub</a></li><li><a href=https://instagram.com/clapclapexcitement>Instagram</a></li></ul></nav><nav class=tertiary><ul><li><a href=https://tiendah.bigcartel.com>Shop</a></li><li><a href=#about>Contact</a></li></ul></nav></div></header><main role=main><div class=blog-post><aside class=divider><a href=/blog/>Blog</a></aside><time>June 11, 2024</time><article><header><h1>Scalable Terraform patterns: compound workspace names</h1></header><div><p><em>I&rsquo;ve been Terraforming for almost a decade (wow!). When designing infrastructure-as-code automation managing large scale, globally distributed, highly available cloud infrastructure, I&rsquo;ve often used a <strong>compound Terrraform <a href=https://developer.hashicorp.com/terraform/language/state/workspaces>workspace</a> name pattern</strong>. In my experience, the compound workspace name pattern helps facilitate scalable, maintainable, and repeatable Terraform. This is my overview of the practice.</em></p><nav id=TableOfContents><ul><li><a href=#problem-statement>Problem statement</a></li><li><a href=#solution-overview>Solution overview</a></li><li><a href=#more-explanation-whats-this-solve-for>More explanation: What&rsquo;s this solve for?</a><ul><li><a href=#derive-context-from-the-workspace-name>Derive context from the workspace name</a></li><li><a href=#eliminate-bespoke-redundant-terraform-projects>Eliminate bespoke, redundant Terraform projects</a></li><li><a href=#avoid-redeclaring-state-configuration-over-and-over>Avoid redeclaring state configuration over and over</a></li><li><a href=#logically-subdivide-an-environment-into-a-collection-of-independent-isolated-failure-domains>Logically subdivide an environment into a collection of independent, isolated failure domains</a></li><li><a href=#encode-logic-within-the-terraform-configuration-itself-rather-than-via-brittle-complex-orchestration-scripting>Encode logic within the Terraform configuration itself, rather than via brittle, complex orchestration scripting</a></li><li><a href=#guarantee-uniformity-while-accommodating-heterogeneity>Guarantee uniformity while accommodating heterogeneity</a></li><li><a href=#accommodate-new-accounts-regions-environments-etc-without-requiring-new-terraform-code>Accommodate new accounts, regions, environments, etc. without requiring new Terraform code</a></li><li><a href=#create-logical-relationships-between-resources-spanning-multiple-terraform-projects>Create logical relationships between resources spanning multiple Terraform projects</a></li><li><a href=#enforce-governance-via-policy-as-code-constraints-expressed-in-native-terraform-hcl>Enforce governance via policy-as-code constraints expressed in native Terraform HCL</a></li></ul></li><li><a href=#faqs>FAQs</a><ul><li><a href=#whats-the-point-of-the-aws_account_id_-prefix-why-not-simply-use-env_region-workspace-names>What&rsquo;s the point of the <code>${AWS_ACCOUNT_ID}_</code> prefix? Why not simply use <code>${ENV}_${REGION}</code> workspace names?</a></li><li><a href=#what-about-terragrunthttpsterragruntgruntworkio>What about <a href=https://terragrunt.gruntwork.io/>terragrunt</a>?</a></li><li><a href=#hows-all-this-relate-to-terraform-child-moduleshttpsdeveloperhashicorpcomterraformlanguagemoduleschild-modules-arent-child-modules-intended-to-enable-reuse>How&rsquo;s all this relate to <a href=https://developer.hashicorp.com/terraform/language/modules#child-modules>Terraform child modules</a>? Aren&rsquo;t child modules intended to enable reuse?</a></li><li><a href=#couldnt-the-workspace-encoded-data-like-region-be-an-input-variablehttpsdeveloperhashicorpcomterraformlanguagevaluesvariables>Couldn&rsquo;t the workspace-encoded data, like <code>region</code>, be an <a href=https://developer.hashicorp.com/terraform/language/values/variables>input variable</a>?</a></li><li><a href=#why-is-the-compound-name-underscore-delimited>Why is the compound name underscore-delimited?</a></li><li><a href=#what-about-non-aws-providers>What about non-AWS providers?</a></li><li><a href=#what-about-global-configurations>What about &ldquo;global&rdquo; configurations?</a></li></ul></li></ul></nav><h2 id=problem-statement>Problem statement</h2><p>You need to create and manage similar cloud infrastructure across many
+different AWS account/region combinations serving different logical
+environments, such as <code>dev</code>, <code>staging</code>, <code>prod</code>, etc.</p><p>For the most part, each environment should be the same as the others,
+infrastructure-wise. However, there may also be necessary differences. For example:</p><ul><li>a <code>dev</code> environment may consist of a single AWS region, while <code>prod</code> is
+composed of multiple AWS regions.</li><li><code>prod</code>&rsquo;s <code>us-west-2</code> region may require less compute redundancy than its
+<code>us-east-1</code> region.</li><li><code>staging</code>&rsquo;s <code>foo-staging</code> S3 bucket is homed in its <code>us-west-2</code> region, but
+used by both its <code>us-west-2</code> and <code>us-east-1</code> regions.</li></ul><p>How can Terraform be modeled in a scalable, reasonably <a href=https://en.wikipedia.org/wiki/Don%27t_repeat_yourself>DRY</a>
+fashion to serve all necessary account, region, and environment combinations
+(including currently-unknown future combinations)? How can the Terraform be structured to
+enforce security best practices, uniformity, and logically isolated failure domains,
+while also accommodating necessary heterogeneity when/where an environment must
+intentionally deviate from the others?</p><p>(Or, said a bit differently: how can corresponding Terraform infrastructure-as-code
+be efficiently developed, CI&rsquo;d, and CD&rsquo;d without jamming all environments&rsquo; configuration
+into a tightly coupled monolithic mess, or subdividing and distributing it across
+an unmaintainable sprawl of problematically granular and redundant projects?)</p><h2 id=solution-overview>Solution overview</h2><p>In my experience, utilizing Terraform&rsquo;s often-overlooked <a href=https://developer.hashicorp.com/terraform/language/state/workspaces>workspaces</a>
+feature alongside an underscore-delimited <em>compound workspace naming convention</em> enables elegant, scalable
+Terraform reuse patterns, as well as logical infrastructure segmentation.</p><p>I call this the <strong>compound workspace name pattern</strong>.</p><p>Your own mileage may vary (the pattern can be according to your organization&rsquo;s needs and
+preferences), but <code>${AWS_ACCOUNT_ID}_${ENV}_${AWS_REGION}</code>-style
+workspace names have often worked well for me. For example:</p><ul><li><code>123_prod_us-west-2</code></li><li><code>123_prod_us-east-1</code></li><li><code>456_staging_us-east-1</code></li><li><code>789_dev_us-east-1</code></li></ul><p>If necessary, additional, more descriptive qualifier suffixes can be appended,
+too. For example:</p><ul><li><code>123_prod_us-east-1_blue</code></li><li><code>123_prod_us-east-1_green</code></li><li><code>789_dev_us-east-1_pull-request-2</code></li><li><code>789_dev_us-east-1_commit-1234567</code></li></ul><p>So, what&rsquo;s this solve for, exactly? Read on&mldr;</p><div class=note><p>👋 NOTE: This overview largely focuses on AWS, but the compound workspace name
+pattern can be used against with cloud providers too, or even SaaS providers
+like GitHub, Datadog, PagerDuty, etc. However, doing so may require tweaking the
+pattern a bit, as AWS account ID and AWS region are
+likely not applicable in non-AWS contexts. For example, a compound workspace name
+pattern for Terraforming GitHub could be <code>${GITHUB_ENTERPRISE_NAME}_${GITHUB_ORG_NAME}</code>.</p><p>Need a lil' more technical context on workspaces before reading more? See <a href=/blog/using-terraform-workspaces/>Using Terraform workspaces</a>
+for some background on Terraform's <a href=https://developer.hashicorp.com/terraform/language/state/workspaces>workspaces</a> feature.</p></div><h2 id=more-explanation-whats-this-solve-for>More explanation: What&rsquo;s this solve for?</h2><h3 id=derive-context-from-the-workspace-name>Derive context from the workspace name</h3><p>Using <a href=https://developer.hashicorp.com/terraform/language/values/locals>Terraform locals</a>,
+context can be derived dynamically from the <code>_</code>-delimited compound workspace name; those
+<code>local</code> values can be used throughout other parts of the Terraform configuration:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>locals</span> {
+</span></span><span style=display:flex><span>  workspace_parts <span style=color:#f92672>=</span> <span style=color:#66d9ef>split</span>(<span style=color:#e6db74>&#34;_&#34;</span>, <span style=color:#66d9ef>terraform</span>.<span style=color:#66d9ef>workspace</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  account_id <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>  env        <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>  region     <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>2</span>]
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>For example, resource names and tag values can utilize the context encoded in
+the <code>local</code>s and derived from the workspace name:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;aws_thing&#34; &#34;foo&#34;</span> {
+</span></span><span style=display:flex><span>  name <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;foo-${local.env}&#34;</span>
+</span></span><span style=display:flex><span>  tags <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>    workspace <span style=color:#f92672>=</span> <span style=color:#66d9ef>terraform</span>.<span style=color:#66d9ef>workspace</span>
+</span></span><span style=display:flex><span>    env       <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>env</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  ...
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>As a result, the use of compound workspace names helps limit (or even altogether omit) a Terraform
+project&rsquo;s <a href=https://developer.hashicorp.com/terraform/language/values/variables>input variables</a>,
+in effect simplifying the project&rsquo;s public interface and thereby making it more
+reliable in its behavior and more simple to use.</p><p>In other words, the compound workspace names replace the practice of maintaining
+&ndash; and properly establishing &ndash; per-<code>apply</code> input variables. Error-prone and
+sometimes-awkward-to-orchestrate-in-CI/CD stuff like this is often no longer necessary:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#75715e># Maintain per-apply TF vars.
+</span></span></span><span style=display:flex><span><span style=color:#75715e># Conditionally set their values with each apply:
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>terraform</span> <span style=color:#66d9ef>plan</span> \
+</span></span><span style=display:flex><span>  -var<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;region=${region}&#34;</span> \
+</span></span><span style=display:flex><span>  -var<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;env=${env}&#34;</span> \
+</span></span><span style=display:flex><span>  -var<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;account=${aws_account}&#34;</span>
+</span></span></code></pre></div><p>Or&mldr;</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#75715e># Maintain per-apply TF vars tfvars files.
+</span></span></span><span style=display:flex><span><span style=color:#75715e># Conditionally select and use the correct file with each apply:
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>terraform</span> <span style=color:#66d9ef>plan</span> \
+</span></span><span style=display:flex><span>  -var-file<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;${tf_vars_file_name}.tfvars&#34;</span>
+</span></span></code></pre></div><div class=note><p>👋 NOTE: I'm not suggesting the use of <a href=https://developer.hashicorp.com/terraform/language/values/variables>input variables</a>
+is always bad; I'm merely suggesting they should be limited to only those which
+are absolutely necessary, and no more (as is the case for any programming
+interface, right?).</p></div><p>PS: The <code>locals</code>-encoded context derived from compound workspace names also enables
+expressing more complex logic natively in Terraform (stay tuned; more on this in the following sections):</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;aws_thing&#34;</span> <span style=color:#e6db74>&#34;foo&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>count</span> = <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>env</span> = <span style=color:#e6db74>&#34;prod&#34;</span> <span style=color:#f92672>?</span> <span style=color:#ae81ff>2</span> <span style=color:#f92672>:</span> <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>  ...
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=eliminate-bespoke-redundant-terraform-projects>Eliminate bespoke, redundant Terraform projects</h3><p>Compound workspace names also head off another anti-pattern I&rsquo;ve seen over the years: a tendency to maintain redundant, drift-vulnerable configurations
+spanning an ever-growing collection of separate, per-environment Terraform <a href=https://developer.hashicorp.com/terraform/language/files#the-root-module>root module</a>
+projects, each redeclaring the same types of infrastructure (and also heads off another,
+kinda-outlandish-and-hard-to-maintain-and-unnecessary practice I&rsquo;ve seen: dynamically generating
+multiple Terraform root module projects as ephemeral build artifacts).</p><p>For example, a <code>dev</code> project that doesn&rsquo;t utilize Terraform workspaces might
+configure a resource:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;aws_s3_bucket&#34; &#34;foo-dev&#34;</span> {
+</span></span><span style=display:flex><span>  bucket <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;foo-dev&#34;</span>
+</span></span><span style=display:flex><span>  ...
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>&mldr;whose configuration is redeclared in separate <code>staging</code> and <code>prod</code> projects:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;aws_s3_bucket&#34; &#34;foo-staging&#34;</span> {
+</span></span><span style=display:flex><span>  bucket <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;foo-staging&#34;</span>
+</span></span><span style=display:flex><span>  ...
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;aws_s3_bucket&#34; &#34;foo-prod&#34;</span> {
+</span></span><span style=display:flex><span>  bucket <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;foo-prod&#34;</span>
+</span></span><span style=display:flex><span>  ...
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><div class=note><p>👋 NOTE: While the use of <a href=https://developer.hashicorp.com/terraform/language/modules#child-modules>child modules</a> may facilitate some additional DRY reuse, it's still necessary
+to instantiate these modules with context-specific input variables at a <code>apply</code> time too.</p></div><p>At scale, this anti-pattern results in a sprawl of bespoke, drift-vulnerable,
+environment-and-region-dedicated projects:</p><pre class=mermaid>graph LR;
+  subgraph production[prod AWS account]
+    prod-account-us-east-1[us-east-1];
+    prod-account-us-west-2[us-west-2];
+  end
+      
+  subgraph staging[staging AWS account]
+    staging-account-us-east-1[us-east-1];
+    staging-account-us-west-2[us-west-2];
+  end
+
+  subgraph dev[dev AWS account]
+    dev-account-us-east-1[us-east-1];
+  end
+      
+  prod-us-east-1[TF project]-->|apply|prod-account-us-east-1;
+  prod-us-west-2[TF project]-->|apply|prod-account-us-west-2;
+  staging-us-east-1[TF project]-->|apply|staging-account-us-east-1;
+  staging-us-west-2[TF project]-->|apply|staging-account-us-west-2;
+  dev-us-east-1[TF project]-->|apply|dev-account-us-east-1;
+</pre><p>Instead, leveraging compound workspace names, a single root module project can be re-used
+across all target workspaces:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>locals</span> {
+</span></span><span style=display:flex><span>  workspace_parts <span style=color:#f92672>=</span> <span style=color:#66d9ef>split</span>(<span style=color:#e6db74>&#34;_&#34;</span>, <span style=color:#66d9ef>terraform</span>.<span style=color:#66d9ef>workspace</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  account_id <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>  env        <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>  region     <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>2</span>]
+</span></span><span style=display:flex><span>}<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e># a single Terraform root module can be applied
+</span></span></span><span style=display:flex><span><span style=color:#75715e># many times against different target workspaces
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;aws_s3_bucket&#34; &#34;foo&#34;</span> {
+</span></span><span style=display:flex><span>  bucket <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;foo-${local.env}&#34;</span>
+</span></span><span style=display:flex><span>  ...
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><pre class=mermaid>graph LR;
+  subgraph production[prod AWS account]
+    prod-account-us-east-1[us-east-1];
+    prod-account-us-west-2[us-west-2];
+  end
+
+  subgraph staging[staging AWS account]
+    staging-account-us-east-1[us-east-1];
+    staging-account-us-west-2[us-west-2];
+  end
+
+  subgraph dev[dev AWS account]
+    dev-account-us-east-1[us-east-1];
+  end
+
+  A[TF project]-->|apply|prod-account-us-east-1;
+  A[TF project]-->|apply|prod-account-us-west-2;
+  A[TF project]-->|apply|staging-account-us-east-1;
+  A[TF project]-->|apply|staging-account-us-west-2;
+  A[TF project]-->|apply|dev-account-us-east-1;
+</pre><div class=note><p>👋 NOTE: I'm not necessarily suggesting all infrastructure be managed by a single, "monolithic" Terraform project.</p><p>Depending on needs and scale, it's likely advantagious to logically isolate
+infrastructure-as-code across purpose-scoped layers. In other words, networking resources like VPC configuration could (should?) live in a networking-focused Terraform
+root module project separate from projects homing higher level application resources,
+like application load balancers.</p><p>Moreso, I'm suggesting a compound workspace naming convention can
+offer a scalable pattern through which each purpose-scoped Terraform root module project
+can be re-used across contexts and applied multiple times against as many target
+workspaces as needed.</p></div><h3 id=avoid-redeclaring-state-configuration-over-and-over>Avoid redeclaring state configuration over and over</h3><p>Similar to how workspaces negate the need to redeclare resources across redundant
+Terraform root module projects, but deserving a special callout of its own: the
+use of workspaces eliminate the need to maintain multiple Terraform state configurations, too.</p><p>Without the use of workspaces, it&rsquo;s necessary to maintain many per-<code>apply</code> <a href=https://developer.hashicorp.com/terraform/language/settings/backends/configuration>Terraform
+backend</a> configurations:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>terraform</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>backend</span> <span style=color:#e6db74>&#34;s3&#34;</span> {
+</span></span><span style=display:flex><span>    bucket <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;tf-state&#34;</span>
+</span></span><span style=display:flex><span>    key    <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;prod/us-east-1/terraform.tfstate&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>terraform</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>backend</span> <span style=color:#e6db74>&#34;s3&#34;</span> {
+</span></span><span style=display:flex><span>    bucket <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;tf-state&#34;</span>
+</span></span><span style=display:flex><span>    key    <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;prod/us-west-2/terraform.tfstate&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>terraform</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>backend</span> <span style=color:#e6db74>&#34;s3&#34;</span> {
+</span></span><span style=display:flex><span>    bucket <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;tf-state&#34;</span>
+</span></span><span style=display:flex><span>    key    <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;dev/us-east-1/terraform.tfstate&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Instead, via workspaces, a single Terraform backend state configuration scales to
+serve many distinct <code>apply</code> target workspaces, automatically ensuring each
+workspace&rsquo;s state is persisted to a distinct object path without having to
+redeclare the <code>terraform.backend</code> configuration:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>terraform</span> {<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # Terraform automatically saves each workspace&#39;s state to a distinct,
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # workspace-specific object path:
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # s3://${BUCKET}/env:/${terraform.workspace}/${KEY}
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  #
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # If no workspace is specified, Terraform uses the &#39;default&#39; workspace and saves
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # the state to:
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # s3://${BUCKET}/${KEY}
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>backend</span> <span style=color:#e6db74>&#34;s3&#34;</span> {<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>    # Sidebar: Often, IME, it&#39;s useful to home this S3 bucket -- and thereby all
+</span></span></span><span style=display:flex><span><span style=color:#75715e>    # workspaces&#39; Terraform state files -- in a central &#34;management&#34; AWS account.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    bucket <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;tf-state&#34;</span>
+</span></span><span style=display:flex><span>    key    <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;terraform.tfstate&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>In effect, multiple environment-dedicated Terraform state configurations can be
+collapsed to a single configuration in a single project.</p><div class=note><p>👋 NOTE: In my experience, it's beneficial (and perhaps even <em>necessary</em>, depending on
+compliance requirements) to home Terraform state in a central "management" AWS account,
+separate from user-servicing application infrastructure, hence its depiction as such in the following graphs.</p><p>Plus, admittedly, scaling a single backend configuration across all workspaces
+requires all workspaces' Terraform states live in the same S3 bucket in the same account given that AWS requires S3 bucket names to be globally unique across all accounts.</p></div><p>So, instead of project sprawl akin to this:</p><pre class=mermaid>graph LR;
+  subgraph production[prod AWS account]
+    prod-account-us-east-1[us-east-1];
+    prod-account-us-west-2[us-west-2];
+  end
+      
+  subgraph staging[staging AWS account]
+    staging-account-us-east-1[us-east-1];
+    staging-account-us-west-2[us-west-2];
+  end
+
+  subgraph dev[dev AWS account]
+    dev-account-us-east-1[us-east-1];
+  end
+      
+  subgraph tfstate[TF state AWS account]
+    prod-us-east-1-state[state]-->prod-account-us-east-1;
+    prod-us-west-2-state[state]-->prod-account-us-west-2;
+    staging-us-east-1-state[state]-->staging-account-us-east-1;
+    staging-us-west-2-state[state]-->staging-account-us-west-2;
+    dev-us-east-1-state[state]-->dev-account-us-east-1;
+  end
+      
+  prod-us-east-1[TF project w/ bespoke backend config]-->|apply|prod-us-east-1-state;
+  prod-us-west-2[TF project w/ bespoke backend config]-->|apply|prod-us-west-2-state;
+  staging-us-east-1[TF project w/ bespoke backend config]-->|apply|staging-us-east-1-state;
+  staging-us-west-2[TF project w/ bespoke backend config]-->|apply|staging-us-west-2-state;
+  dev-us-east-1[TF project w/ bespoke backend config]-->|apply|dev-us-east-1-state;
+</pre><p>A single project with a single state configuration can be applied multiple times
+against target workspaces:</p><pre class=mermaid>graph LR;
+  subgraph production[prod AWS account]
+    prod-account-us-east-1[us-east-1];
+    prod-account-us-west-2[us-west-2];
+  end
+
+  subgraph staging[staging AWS account]
+    staging-account-us-east-1[us-east-1];
+    staging-account-us-west-2[us-west-2];
+  end
+
+  subgraph dev[dev AWS account]
+    dev-account-us-east-1[us-east-1];
+  end
+
+  subgraph tfstate[TF state AWS account]
+    prod-us-east-1-state[state]-->prod-account-us-east-1;
+    prod-us-west-2-state[state]-->prod-account-us-west-2;
+    staging-us-east-1-state[state]-->staging-account-us-east-1;
+    staging-us-west-2-state[state]-->staging-account-us-west-2;
+    dev-us-east-1-state[state]-->dev-account-us-east-1;
+  end
+
+  A[TF project w/ single backend config declaration]-->|apply|prod-us-east-1-state;
+  A-->|apply|prod-us-west-2-state;
+  A-->|apply|staging-us-east-1-state;
+  A-->|apply|staging-us-west-2-state;
+  A-->|apply|dev-us-east-1-state;
+</pre><h3 id=logically-subdivide-an-environment-into-a-collection-of-independent-isolated-failure-domains>Logically subdivide an environment into a collection of independent, isolated failure domains</h3><p>Often, in my experience, teams struggle in identifying how best to logically
+model Terraform to operate on sensibly isolated subsets of infrastructure, while
+also gracefully accommodating unknown scaling needs in the future. The compound
+workspace name pattern helps here, too.</p><p>Because each <code>${AWS_ACCOUNT_ID}_${AWS_REGION}_${ENV}</code>-named workspace operates
+on its own logical subgroup of infrastructure managed by its own <a href=https://developer.hashicorp.com/terraform/language/state>Terraform
+state</a>, <code>prod</code>&rsquo;s <code>us-east-1</code>
+infrastructure can be <code>terraform apply</code>&rsquo;d separately and independently from <code>prod</code>&rsquo;s'
+<code>us-east-1</code> infrastructure. In effect, this limits the failure domain of Terraform
+operations.</p><p>It offers some other benefits, too:</p><ul><li>it enables progressive deployment patterns; infrastructure changes can be
+incrementally introduced to subsets of infrastructure</li><li>individual workspace-defined subgroups of infrastructure can be destroyed (and
+recreated afresh) in isolation, if ever that&rsquo;s necessary.</li><li>it paves a path towards global traffic management; a separate layer of
+Terraform can traffic shape across the workspaces via tools like <a href=https://aws.amazon.com/global-accelerator/>global
+accellerator</a>, <a href=https://aws.amazon.com/cloudfront/>cloudfront</a>, other CDN providers, or even just <a href=https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-weighted.html>weighted Route53 records</a>.
+This is particularly useful in <code>prod</code> for orchestrating weighted traffic
+routing and automated failover:</li></ul><pre class=mermaid>flowchart BT;
+  subgraph production[prod AWS account]
+    prod-account-us-east-1[us-east-1];
+    prod-account-us-east-2[us-east-2];
+    prod-account-us-west-1[us-west-1];
+    prod-account-us-west-2[us-west-2];
+    A[TF-managed global traffic management routing infrastructure]-->|25%|prod-account-us-east-1
+    A-->|25%|prod-account-us-east-2
+    A-->|50%|prod-account-us-west-1
+    A-.-|0%|prod-account-us-west-2
+  end
+
+  B[user requests]-->A
+</pre><h3 id=encode-logic-within-the-terraform-configuration-itself-rather-than-via-brittle-complex-orchestration-scripting>Encode logic within the Terraform configuration itself, rather than via brittle, complex orchestration scripting</h3><p>In my experience with Terraform, difficult-to-maintain complexity and
+brittleness often accumulates in &ldquo;wrapper orchestration,&rdquo; such as shell scripts
+and pipeline YAML that invokes <code>terraform</code> in CI/CD automation.</p><p>Often, the wrapper orchestration features special casing and branch logic that
+could be better expressed natively within the Terraform HCL itself. For example:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span><span style=color:#66d9ef>if</span> <span style=color:#f92672>[[</span> <span style=color:#e6db74>&#34;</span><span style=color:#e6db74>${}</span><span style=color:#e6db74>&#34;</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;prod&#34;</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#e6db74>&#34;</span><span style=color:#e6db74>${}</span><span style=color:#e6db74>&#34;</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;us-west-2&#34;</span> <span style=color:#f92672>]]</span>; <span style=color:#66d9ef>then</span>
+</span></span><span style=display:flex><span>  create_bucket<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;false&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>else</span>
+</span></span><span style=display:flex><span>  create_bucket<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;true&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>fi</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>terraform plan <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -var <span style=color:#e6db74>&#34;create_bucket=</span><span style=color:#e6db74>${</span>create_bucket<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>
+</span></span></code></pre></div><p>Instead, this logic could be expressed natively within the Terraform configuration itself:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>locals</span> {
+</span></span><span style=display:flex><span>  workspace_parts <span style=color:#f92672>=</span> <span style=color:#66d9ef>split</span>(<span style=color:#e6db74>&#34;_&#34;</span>, <span style=color:#66d9ef>terraform</span>.<span style=color:#66d9ef>workspace</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  account_id <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>  env        <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>  region     <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>2</span>]
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  bucket_count <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>    prod_us-west-2 <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  default_bucket_count <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;aws_s3_bucket&#34; &#34;bucket&#34;</span> {
+</span></span><span style=display:flex><span>  count <span style=color:#f92672>=</span> <span style=color:#66d9ef>try</span>(<span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>bucket_count</span>[<span style=color:#e6db74>&#34;${local.env}_${local.region}&#34;</span>], <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>default_bucket_count</span>)
+</span></span><span style=display:flex><span>  ...
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>As a result, the wrapper orchestration can be simplified; the Terraform
+is more declarative, portable, self-contained, repeatable, and reliably consistent across
+invocation contexts. It&rsquo;s no longer necessary to ensure <code>plan</code> and <code>apply</code> are always
+provided the correct set of variables; the correct values are derived from the workspace
+name within the Terraform itself (plus, the practice makes it easier to migrate between CI/CD platforms if ever
+that&rsquo;s necessary).</p><p>While compound workspace naming isn&rsquo;t entirely to credit, the <code>_</code>-delimited workspace
+naming convention offers a foundation through which best practices can easily
+take root, and logic is declaratively codified in Terraform itself.</p><h3 id=guarantee-uniformity-while-accommodating-heterogeneity>Guarantee uniformity while accommodating heterogeneity</h3><p>Because all workspaces are managed via the same Terraform configuration,
+uniformity across environments is fairly guaranteed. At the same time,
+per-environment &ndash; or per-region &ndash; variability can be easily accommodated too.</p><p>For example, the compound workspace name offers a toehold through which Terraform can
+natively express that a particular S3 bucket be created everywhere <em>except</em>
+<code>prod</code>&rsquo;s <code>us-west-2</code> region:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>locals</span> {
+</span></span><span style=display:flex><span>  workspace_parts <span style=color:#f92672>=</span> <span style=color:#66d9ef>split</span>(<span style=color:#e6db74>&#34;_&#34;</span>, <span style=color:#66d9ef>terraform</span>.<span style=color:#66d9ef>workspace</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  account_id <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>  env        <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>  region     <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>2</span>]
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  bucket_count <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>    prod_us-west-2 <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  default_bucket_count <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;aws_s3_bucket&#34; &#34;bucket&#34;</span> {
+</span></span><span style=display:flex><span>  count <span style=color:#f92672>=</span> <span style=color:#66d9ef>try</span>(<span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>bucket_count</span>[<span style=color:#e6db74>&#34;${local.env}_${local.region}&#34;</span>], <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>default_bucket_count</span>)
+</span></span><span style=display:flex><span>  ...
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>As such, intentional deviation is codified in a clear, discoverable, self-evident,
+fashion.</p><h3 id=accommodate-new-accounts-regions-environments-etc-without-requiring-new-terraform-code>Accommodate new accounts, regions, environments, etc. without requiring new Terraform code</h3><p>Adding support for additional account/environment/region combinations generally
+requires no real Terraform development; simply <code>apply</code> the existing Terraform
+against a new workspace.</p><p>For example, consider a <code>prod</code> environment composed of infrastructure in <code>us-east-1</code>
+and <code>us-west-2</code>. Establishing a third <code>us-east-2</code> <code>prod</code> region is fairly low
+effort: <code>apply</code> to a new <code>${AWS_ACCOUNT_ID}_prod_us-east-1</code> workspace:</p><pre class=mermaid>graph LR;
+  subgraph production[prod AWS account 123]
+    prod-account-us-east-1[us-east-1];
+    prod-account-us-west-2[us-west-2];
+    prod-account-us-east-2[us-east-2];
+  end
+
+  A[TF project]-->|apply 123_prod_us-east-1|prod-account-us-east-1;
+  A-->|apply 123_prod_us-west-2|prod-account-us-west-2;
+  A-->|apply 123_prod_us-east-2|prod-account-us-east-2;
+</pre><div class=note><p>👋 NOTE: In <a href=https://github.com/mdb/tf-workspaces-demo/>tf-workspaces-demo</a> I offer a demo, showing how adding
+support for additional accounts, environments, and/or regions to the GitHub
+Actions-based CI/CD pipeline merely requires adding the new workspace name to a
+<a href=https://github.com/mdb/tf-workspaces-demo/blob/main/workspaces.json>workspaces.json</a> configuration file
+(Admittedly, this might be a bit more complex in a real world scenario, though my point
+remains: the Terraform and CI/CD pipelines scale to accommodate new
+tenancy relatively easily).</p></div><p>The compound workspace naming pattern also enables the creation of additional logical <em>subgroupings</em> of existing
+account/region/environment combinations. For example, <code>_blue</code> and <code>_green</code> suffixes could be used to enable blue/green infrastructure deployments via
+distinct <code>1234_prod_us-west-2_blue</code> and <code>1234_prod_us-west-2_green</code> workspaces:</p><pre class=mermaid>graph LR;
+  subgraph production[prod AWS account]
+    subgraph us-east-1
+      prod-account-us-east-1-blue[blue];
+      prod-account-us-east-1-green[green];
+    end
+    subgraph us-west-2
+      prod-account-us-west-2-blue[blue];
+      prod-account-us-west-2-green[green];
+    end
+  end
+
+  A[TF project]-->|apply 123_prod_us-east-1_blue|prod-account-us-east-1-blue;
+  A-->|apply 123_prod_us-east-1_green|prod-account-us-east-1-green;
+  A-->|apply 123_prod_us-west-2_blue|prod-account-us-west-2-blue;
+  A-->|apply 123_prod_us-west-2_green|prod-account-us-west-2-green;
+</pre><p>&mldr;or one-off experimental subset deployments could leverage an additional
+<code>_${DESCRIPTOR}</code> workspace suffix, such as <code>${AWS_ACCOUNT_ID}_${ENV}_${REGION}_2024-06-30-experiment</code>,
+to establish even more granular &ldquo;sub-environment&rdquo; workspaces:</p><pre class=mermaid>graph LR;
+  subgraph production[prod AWS account]
+    subgraph us-east-1
+      prod-account-us-east-1-experiment[experiment];
+    end
+    subgraph us-west-2
+    end
+  end
+
+  A[TF project]-->|apply 123_prod_us-east-1|us-east-1;
+  A-->|apply 123_prod_us-east-1_experiment|prod-account-us-east-1-experiment;
+  A-->|apply 123_prod_us-west-2|us-west-2;
+</pre><p>&mldr;or ephemeral pull-request-based deployments could leverage per-PR
+workspace names a la <code>${AWS_ACCOUNT}_dev_us-east-1_pr-1</code>, for example, enabling
+previewing, demoing, and testing PR code in advance of a merge to <code>main</code>:</p><pre class=mermaid>graph LR;
+  subgraph dev[dev AWS account]
+    subgraph us-east-1
+      dev-account-us-east-1-pr-1[PR 1];
+      dev-account-us-east-1-pr-2[PR 2];
+    end
+  end
+
+  A[TF project]-->|apply 456_dev_us-east-1_pr-1|dev-account-us-east-1-pr-1;
+  A-->|apply 456_dev_us-east-1_pr-2|dev-account-us-east-1-pr-2;
+</pre><h3 id=create-logical-relationships-between-resources-spanning-multiple-terraform-projects>Create logical relationships between resources spanning multiple Terraform projects</h3><p>Compound workspace naming also offers a standardized pattern
+for expressing and managing dependency relationships between infrastructure
+resources managed by <em>separate</em> Terraform projects dedicated to different
+layers of concern. For example:</p><ul><li>foundational VPC and networking configuration might be managed by a
+<code>terraform-vpc</code> project, while a higher level <code>terraform-eks</code> project manages the
+deployment of EKS clusters to the resulting VPCs.</li><li>a <code>terraform-dns</code> project might manage common, foundational DNS infrastructure,
+such as a <code>.foo.bar</code> zone, while <code>terraform-my-application</code> manages <code>my-application</code>-specific resources</li></ul><p>So, how could <code>terraform-eks</code> dynamically consume the necessary VPC details without
+requiring that such details be passed as hard-coded <a href=https://developer.hashicorp.com/terraform/language/values/variables>input variables</a>, or fetched from <a href=https://developer.hashicorp.com/terraform/language/values/outputs>outputs</a> via a <a href=https://developer.hashicorp.com/terraform/language/state/remote-state-data>terraform_remote_state data source</a>, or making bittle, hard-to-scale
+assumptions that tightly couple it to <code>terraform-vpc</code> and the VPCs&rsquo; exact infrastructure-as-code implementation?</p><p>A common workspace naming convention offers a toehold for expressing and resolving
+dependency relationshps via Terraform <a href=https://developer.hashicorp.com/terraform/language/data-sources>data
+sources</a> and
+standardized tagging:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>data</span> <span style=color:#e6db74>&#34;aws_vpc&#34; &#34;vpc&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>tags</span> {
+</span></span><span style=display:flex><span>    Workspace <span style=color:#f92672>=</span> <span style=color:#66d9ef>terraform</span>.<span style=color:#66d9ef>workspace</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>    # Alternatively, this could also leverage other tags.
+</span></span></span><span style=display:flex><span><span style=color:#75715e>    # For example:
+</span></span></span><span style=display:flex><span><span style=color:#75715e>    # Env = local.env
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>data</span> <span style=color:#e6db74>&#34;aws_subnet_ids&#34; &#34;subnets&#34;</span> {
+</span></span><span style=display:flex><span>  vpc_id <span style=color:#f92672>=</span> <span style=color:#66d9ef>data</span>.<span style=color:#66d9ef>aws_vpc</span>.<span style=color:#66d9ef>vpc</span>.<span style=color:#66d9ef>id</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;aws_eks_cluster&#34; &#34;cluster&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>vpc_config</span> {
+</span></span><span style=display:flex><span>    subnet_ids <span style=color:#f92672>=</span> <span style=color:#66d9ef>data</span>.<span style=color:#66d9ef>aws_subnet_ids</span>.<span style=color:#66d9ef>subnets</span>.<span style=color:#66d9ef>ids</span>
+</span></span><span style=display:flex><span>  ...
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>As such, <code>terraform-eks</code> is agnostic to the VPC&rsquo;s infrastructure-as-code implementation; it merely
+configures the subnets homed within the VPC whose <code>Workspace</code> tag corresponds
+to its own <code>terraform.workspace</code>.</p><p>Similarly, <code>terraform-my-application</code> can dynamically fetch the DNS zone corresponding
+to its <code>terraform.workspace</code>:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#75715e># https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route53_zone#tags
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>data</span> <span style=color:#e6db74>&#34;aws_route53_zone&#34; &#34;zone&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>tags</span> {
+</span></span><span style=display:flex><span>    Workspace <span style=color:#f92672>=</span> <span style=color:#66d9ef>terraform</span>.<span style=color:#66d9ef>workspace</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>    # Alternatively, this could also leverage other tags.
+</span></span></span><span style=display:flex><span><span style=color:#75715e>    # For example:
+</span></span></span><span style=display:flex><span><span style=color:#75715e>    # Env = local.env
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;aws_route53_record&#34; &#34;my-application&#34;</span> {
+</span></span><span style=display:flex><span>  zone_id <span style=color:#f92672>=</span> <span style=color:#66d9ef>data</span>.<span style=color:#66d9ef>aws_route53_zone</span>.<span style=color:#66d9ef>zone</span>.<span style=color:#66d9ef>zone_id</span>
+</span></span><span style=display:flex><span>  ...
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>These are fairly crude, contrived examples, but more advanced applications are possible
+too.</p><h3 id=enforce-governance-via-policy-as-code-constraints-expressed-in-native-terraform-hcl>Enforce governance via policy-as-code constraints expressed in native Terraform HCL</h3><p>Security, reliability, and governance guardrails can be baked into the Terraform
+configuration and expressed as native HCL (rather than bolted on via an additional
+complexity-adding tool, such as <a href=https://mikeball.info/blog/terraform-plan-validation-with-open-policy-agent/>OPA</a>, <a href=https://mikeball.info/blog/automated-terraform-plan-analysis-with-terratest/>Terratest</a> or <a href=https://www.checkov.io/>checkov</a>). The compound
+workspace naming scheme helps here, too.</p><p>For example, the <code>terraform.workspace</code> can be used to impose an <a href=https://registry.terraform.io/providers/hashicorp/aws/latest/docs#allowed_account_ids>allowed_account_ids</a>
+constraint on the AWS provider configuration. This ensures an environment is never
+<code>plan</code>/<code>apply</code>&rsquo;d to the wrong AWS account:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>locals</span> {
+</span></span><span style=display:flex><span>  workspace_parts <span style=color:#f92672>=</span> <span style=color:#66d9ef>split</span>(<span style=color:#e6db74>&#34;_&#34;</span>, <span style=color:#66d9ef>terraform</span>.<span style=color:#66d9ef>workspace</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  account_id <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>  region     <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>  env        <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>2</span>]
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  supported_accounts_per_env <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>    prod     <span style=color:#f92672>=</span> [<span style=color:#e6db74>&#34;123&#34;</span>]
+</span></span><span style=display:flex><span>    dev      <span style=color:#f92672>=</span> [<span style=color:#e6db74>&#34;456&#34;</span>]
+</span></span><span style=display:flex><span>    staging  <span style=color:#f92672>=</span> [<span style=color:#e6db74>&#34;789&#34;</span>]
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>provider</span> <span style=color:#e6db74>&#34;aws&#34;</span> {<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # Ensure an environment is never plan/apply&#39;d against the wrong account.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  allowed_account_ids <span style=color:#f92672>=</span> [<span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>supported_accounts_per_env</span>[<span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>env</span>]]
+</span></span><span style=display:flex><span>...
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Similarly, the <code>terraform.workspace</code> value can drive <a href=https://developer.hashicorp.com/terraform/language/expressions/custom-conditions>custom conditions</a>
+that validate a configuration and protect against unintended and problematic
+operations. Consider the following kinda-contrived-but-hopefully-still-helpful
+example:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>locals</span> {
+</span></span><span style=display:flex><span>  workspace_parts <span style=color:#f92672>=</span> <span style=color:#66d9ef>split</span>(<span style=color:#e6db74>&#34;_&#34;</span>, <span style=color:#66d9ef>terraform</span>.<span style=color:#66d9ef>workspace</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  account_id <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>  env        <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>  region     <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>2</span>]
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>data</span> <span style=color:#e6db74>&#34;aws_subnet&#34; &#34;application&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>filter</span> {
+</span></span><span style=display:flex><span>    name   <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;tag:TerraformWorkspace&#34;</span>
+</span></span><span style=display:flex><span>    values <span style=color:#f92672>=</span> [<span style=color:#66d9ef>terraform</span>.<span style=color:#66d9ef>workspace</span>]
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;aws_security_group_rule&#34; &#34;ingress&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>ingress</span> {
+</span></span><span style=display:flex><span>    cidr_blocks <span style=color:#f92672>=</span> [<span style=color:#66d9ef>data</span>.<span style=color:#66d9ef>aws_subnet</span>.<span style=color:#66d9ef>application</span>.<span style=color:#66d9ef>cidr_block</span>]
+</span></span><span style=display:flex><span>    ...
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>lifecycle</span> {<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>    # Never allow ingress to non-prod environments from the world.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>precondition</span> {
+</span></span><span style=display:flex><span>      condition     <span style=color:#f92672>=</span> data.aws_subnet.application.cider_block !<span style=color:#f92672>=</span> &#34;0.0.0.0/0&#34; || local.env <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;prod&#34;</span>
+</span></span><span style=display:flex><span>      error_message <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Ingress to non-prod environment must not include 0.0.0.0/0.&#34;</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  ...
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><div class=note><p>👋 NOTE: I've got no beef with the aforementioned policy-as-code tools. In fact, I
+quite like 'em and appreciate that free, non-<a href=https://developer.hashicorp.com/terraform/cloud-docs/policy-enforcement/sentinel>sentinal</a>
+open source options exists. But why require additional
+complexity in scenarios where native Terraform can do the job?</p></div><h2 id=faqs>FAQs</h2><h3 id=whats-the-point-of-the-aws_account_id_-prefix-why-not-simply-use-env_region-workspace-names>What&rsquo;s the point of the <code>${AWS_ACCOUNT_ID}_</code> prefix? Why not simply use <code>${ENV}_${REGION}</code> workspace names?</h3><p>YMMV! You could simplify the workspace naming convention to <code>${ENV}_${REGION}</code>, then
+dynamically select the correct account ID via logic like the following:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>locals</span> {
+</span></span><span style=display:flex><span>  account_ids <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>    dev     <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;123&#34;</span>
+</span></span><span style=display:flex><span>    staging <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;456&#34;</span>
+</span></span><span style=display:flex><span>    prod    <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;789&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  workspace_parts <span style=color:#f92672>=</span> <span style=color:#66d9ef>split</span>(<span style=color:#e6db74>&#34;_&#34;</span>, <span style=color:#66d9ef>terraform</span>.<span style=color:#66d9ef>workspace</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  env    <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>  region <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>workspace_parts</span>[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>provider</span> <span style=color:#e6db74>&#34;aws&#34;</span> {
+</span></span><span style=display:flex><span>  allowed_account_ids <span style=color:#f92672>=</span> [<span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>account_ids</span>[<span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>env</span>]]
+</span></span><span style=display:flex><span>  region              <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>region</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>However, prefixing the workspace name with an account ID accounts for the
+possibility that an environment, such as <code>prod</code>, may be composed of resources
+spanning multiple AWS accounts, as is common in large organizations.</p><div class=note><p>👋 NOTE: If it tastes better, the compound workspace name scheme could also be tweaked
+a bit, based on your needs and preferences: <code>${ENV}_${AWS_ACCOUNT_ID}_${AWS_REGION}</code>, for example. Really, I tend to think the important part is maintaining a pattern that can be reliably <a href=https://developer.hashicorp.com/terraform/language/functions/split>parsed</a> in a scalable fashion, especially if/when it's necessary to append additional qualifer suffixes.</p></div><h3 id=what-about-terragrunthttpsterragruntgruntworkio>What about <a href=https://terragrunt.gruntwork.io/>terragrunt</a>?</h3><p>In some ways, <a href=https://terragrunt.gruntwork.io/>terragrunt</a> claims to solve some of
+the above-described repeatability challenges by wrapping and extending core Terraform
+functionality. In many contexts, <a href=https://terragrunt.gruntwork.io/>terragrunt</a> (and similar tools)
+are great. However, their use invites additional complexity (and, in turn, invites additional questions about
+how best to structure IaC across account, region, and environment boundaries). Often,
+in my experience, well-modeled Terraform workspaces are sufficient without the additional
+tooling.</p><h3 id=hows-all-this-relate-to-terraform-child-moduleshttpsdeveloperhashicorpcomterraformlanguagemoduleschild-modules-arent-child-modules-intended-to-enable-reuse>How&rsquo;s all this relate to <a href=https://developer.hashicorp.com/terraform/language/modules#child-modules>Terraform child modules</a>? Aren&rsquo;t child modules intended to enable reuse?</h3><p>Generally, Terraform child modules and workspaces address slightly different
+problems; their use is not mutually exclusive.</p><p>Workspaces facilitate the ability to apply a single Terraform project configuration against multiple
+target contexts (each with a corresponding isolated Terraform <a href=https://developer.hashicorp.com/terraform/language/state>state</a>). By contrast, child modules are more simply generic
+abstractions of opinionated Terraform &ldquo;recipes.&rdquo;</p><p>Modules often target specific resources (or combinations of resources), but are
+largely agnostic to the surrounding project context. Child modules can be consumed by and used
+within parent Terraform projects, though they cannot be applied independently;
+they have no project-specific <a href=https://developer.hashicorp.com/terraform/language/state>state</a>
+and <a href=https://developer.hashicorp.com/terraform/language/providers>provider</a> configuration.
+As such, child modules enable reuse and <a href=https://developer.hashicorp.com/terraform/language/modules/develop/composition>composability</a> &ndash; and/or enforce best practices governance &ndash; along different dimensions of concern.</p><h3 id=couldnt-the-workspace-encoded-data-like-region-be-an-input-variablehttpsdeveloperhashicorpcomterraformlanguagevaluesvariables>Couldn&rsquo;t the workspace-encoded data, like <code>region</code>, be an <a href=https://developer.hashicorp.com/terraform/language/values/variables>input variable</a>?</h3><p>Rather than being encoded in the compound workspace naming convention, the
+Terraform project could utilize a <code>var.region</code> input variable, yes.</p><p>However, in my experience, this can lead to two problems:</p><ol><li>Workspace naming collision. For example, <code>123_dev</code>&rsquo;s <code>us-east-1</code> and <code>123_dev</code>&rsquo;s <code>us-west-2</code> deployments would no longer have unique workspace names.</li><li>Workspace S3 state collision. For example, Terraform would attempt to use <code>s3://${BUCKET}/env:/123_dev/terraform.tfstate</code> for both <code>123_dev</code>&rsquo;s <code>us-east-1</code> and <code>123_dev</code>&rsquo;s <code>us-west-2</code> applications.</li></ol><p>(And a third, bonus problem: CI/CD automation must now express when/where/how to
+set <code>var.region</code> and therefore incur additional complexity. And <em>and</em>: I like to
+use as few input variables as possible to keep Terraform projects&rsquo; public interface
+simple, as I mention earlier on.)</p><h3 id=why-is-the-compound-name-underscore-delimited>Why is the compound name underscore-delimited?</h3><p>By using an <code>_</code> to delimit the parts of the compound workspace name, Terraform&rsquo;s
+<a href=https://developer.hashicorp.com/terraform/language/functions/split>split</a>
+function can be used to parse the workspace name:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#a6e22e>locals</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>workspace_parts</span> = split(<span style=color:#e6db74>&#34;_&#34;</span>, <span style=color:#a6e22e>terraform</span>.<span style=color:#a6e22e>workspace</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>account_id</span> = <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>workspace_parts</span>[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>env</span>        = <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>workspace_parts</span>[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>region</span>     = <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>workspace_parts</span>[<span style=color:#ae81ff>2</span>]
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>The <code>_</code> delimination is reasonably easy for humans to read and understand, and
+preserves AWS&rsquo;s <code>-</code>-delimited region names when those region names appear as
+part of the compound workspace name.</p><p>Plus, over time &ndash; if/when needed &ndash; additional qualifier suffixes can be
+appended to projects that need more granular workspaces in a nonbreaking
+fashion. These additional qualifiers can use <code>-</code> to facilitate human readability,
+as well as machine parsing:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#a6e22e>locals</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>workspace_parts</span> = split(<span style=color:#e6db74>&#34;_&#34;</span>, <span style=color:#a6e22e>terraform</span>.<span style=color:#a6e22e>workspace</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>account_id</span> = <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>workspace_parts</span>[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>env</span>        = <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>workspace_parts</span>[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>region</span>     = <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>workspace_parts</span>[<span style=color:#ae81ff>2</span>]<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # optionally parse an additional _pr-${PR_NUMBER} workspace name part.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#a6e22e>pr</span>        = try(<span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>workspace_parts</span>[<span style=color:#ae81ff>3</span>], <span style=color:#e6db74>&#34;&#34;</span>)
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>pr_number</span> = <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>pull_request</span> <span style=color:#f92672>!=</span> <span style=color:#e6db74>&#34;&#34;</span> <span style=color:#f92672>?</span> split(<span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>pull_request</span>, <span style=color:#e6db74>&#34;-&#34;</span>)[<span style=color:#ae81ff>1</span>] <span style=color:#f92672>:</span> <span style=color:#e6db74>&#34;&#34;</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=what-about-non-aws-providers>What about non-AWS providers?</h3><p>How does the compound workspace naming scheme work with non-AWS providers, such
+as GitHub, Datadog, Grafana, etc.?</p><p>Often, I recommend tweaking the workspace naming scheme according to needs and
+context. A few example options include:</p><ul><li><code>${DATADOG_ACCOUNT_ID}_${ENV}</code></li><li><code>${GITHUB_ENTERPRISE_NAME}_${GITHUB_ORG}</code></li><li><code>${ENV}</code> (I admit: in some contexts, a simple ol&rsquo; environment name is good enough)</li></ul><h3 id=what-about-global-configurations>What about &ldquo;global&rdquo; configurations?</h3><p>Generally, I recommend a few approaches when dealing with &ldquo;global&rdquo; configuration
+that isn&rsquo;t necessarily associated with an AWS region or a particular environment (For example:
+a Route53 zone that is not associated with a region and is used across all environments).</p><p>You&rsquo;ll need to decide which approach is most appropriate for your context. Options include:</p><ol><li><code>${AWS_ACCOUNT_ID}_${ENV}_${AWS_REGION}</code> - continue with the standard
+compound naming pattern. Use <a href=https://developer.hashicorp.com/terraform/language/expressions/conditionals>conditional logic</a>
+and a <a href=https://developer.hashicorp.com/terraform/language/meta-arguments/count>count = 0</a> to control
+the workspaces responsible for the resources&rsquo; management.</li><li><code>${AWS_ACCOUNT_ID}_${ENV}_global</code> - maintain non-region-specific &ldquo;global&rdquo;
+workspaces within each environment, as needed.</li><li><code>${AWS_ACCOUNT_ID}_global</code> - maintain non-environment-and-region-specific
+&ldquo;global&rdquo; workspaces within each account, as needed.</li></ol></div><ul class=tags><li><a href=/tags/terraform>terraform</a></li><li><a href=/tags/terraform-pattern>terraform-pattern</a></li><li><a href=/tags/iac>iac</a></li><li><a href=/tags/aws>aws</a></li></ul></article></div></main><footer><section><h1 id=about>Info</h1><div><h2>Mike Ball</h2><p>I live in Philadelphia and work as a multi-disciplinary software engineer & designer.</p><p>Over the years, I've developed front end web applications, built backend services, automated cloud infrastructure management, designed CI/CD pipelines for high scale distributed systems, and contributed to numerous open source software projects.</p><p>I've also worked in graphic and UX design. Buy prints of my illustrations at <a href=https://tiendah.bigcartel.com>Tiendah</a>.</div><div class=double><h2>Shop Tiendah</h2><ul class="gallery store-feed"></ul><h2>Instagram</h2><ul class="gallery ig-feed"></ul></div><div><h2>Etc.</h2><ul><li><a href=http://github.com/mdb>GitHub</a></li><li><a href=http://twitter.com/clapexcitement>Twitter</a></li><li><a href=https://instagram.com/clapclapexcitement>Instagram</a></li><li><a href=/index.xml>RSS Feed</a></li><li><a href=https://tiendah.bigcartel.com>Shop Tiendah</a></li></ul><h2>Contact</h2><p>Interested in working with me? <a href=mailto:mikedball@gmail.com>Get in touch</a>.</p></div></section></footer><script type=text/javascript src=/js/main.min.1499c53fed57df32a56089f3dde8b4b4d048c1ea53001475ffa6ec668ee36960.js></script>
+<script type=text/javascript>(function(e,t,n,s,o,i,a){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,i=t.createElement(n),a=t.getElementsByTagName(n)[0],i.async=1,i.src=s,a.parentNode.insertBefore(i,a)})(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-54324621-1","auto"),ga("send","pageview")</script><script type=module>
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+      </script></body></html>
