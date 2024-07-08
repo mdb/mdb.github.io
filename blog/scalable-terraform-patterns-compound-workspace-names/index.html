@@ -442,7 +442,18 @@ to its <code>terraform.workspace</code>:</p><div class=highlight><pre tabindex=0
 </span></span><span style=display:flex><span>  zone_id <span style=color:#f92672>=</span> <span style=color:#66d9ef>data</span>.<span style=color:#66d9ef>aws_route53_zone</span>.<span style=color:#66d9ef>zone</span>.<span style=color:#66d9ef>zone_id</span>
 </span></span><span style=display:flex><span>  ...
 </span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p>These are fairly crude, contrived examples, but more advanced applications are possible
+</span></span></code></pre></div><pre class=mermaid>flowchart LR;
+  subgraph production[prod AWS account]
+    subgraph zone[DNS zone]
+      prod-us-east-1-record[prod us-east-1 DNS record];
+      prod-us-west-2-record[prod us-west-2 DNS record];
+    end
+  end
+
+  A[TF project 1]-->|apply|zone;
+  B[TF project 2]-->|apply 123_prod_us-east-1|prod-us-east-1-record;
+  B-->|apply 123_prod_us-west-2|prod-us-west-2-record;
+</pre><p>These are fairly crude, contrived examples, but more advanced applications are possible
 too.</p><h3 id=enforce-governance-via-policy-as-code-constraints-expressed-in-native-terraform-hcl>Enforce governance via policy-as-code constraints expressed in native Terraform HCL</h3><p>Security, reliability, and governance guardrails &ndash; or even functional testing,
 to some extent &ndash; can be baked into the Terraform
 configuration and expressed as native HCL (rather than bolted on via an additional
