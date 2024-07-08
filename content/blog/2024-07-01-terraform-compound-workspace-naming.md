@@ -49,7 +49,7 @@ Terraform reuse patterns, as well as logical infrastructure segmentation.
 
 I call this the **compound workspace name pattern**.
 
-Your own mileage may vary (the pattern can be according to your organization's needs and
+Your own mileage may vary (the exact name pattern can be adapted to your organization's needs and
 preferences), but `${AWS_ACCOUNT_ID}_${ENV}_${AWS_REGION}`-style
 workspace names have often worked well for me. For example:
 
@@ -70,7 +70,7 @@ So, what's this solve for, exactly? Read on...
 
 <div class="note">
 <p>👋 NOTE: This overview largely focuses on AWS, but the compound workspace name
-pattern can be used against with cloud providers too, or even SaaS providers
+pattern can be used against non-AWS infrastructure providers too, or even SaaS providers
 like GitHub, Datadog, PagerDuty, etc. However, doing so may require tweaking the
 pattern a bit, as AWS account ID and AWS region are
 likely not applicable in non-AWS contexts. For example, a compound workspace name
@@ -80,6 +80,8 @@ for some background on Terraform's <a href="https://developer.hashicorp.com/terr
 </div>
 
 ## More explanation: What's this solve for?
+
+The Terraform compound workspace naming pattern seeks to enable efficient, scalabile, testable, reliable, and maintainable cloud infrastructure management.
 
 ### Derive context from the workspace name
 
@@ -114,7 +116,7 @@ resource "aws_thing" "foo" {
 As a result, the use of compound workspace names helps limit (or even altogether omit) a Terraform
 project's [input variables](https://developer.hashicorp.com/terraform/language/values/variables),
 in effect simplifying the project's public interface and thereby making it more
-reliable in its behavior and more simple to use.
+reliable in its behavior, more maintainable, and more simple to use.
 
 In other words, the compound workspace names replace the practice of maintaining
 -- and properly establishing -- per-`apply` input variables. Error-prone and
@@ -157,7 +159,7 @@ resource "aws_thing" "foo" {
 
 ### Eliminate bespoke, redundant Terraform projects
 
-Compound workspace names also head off another anti-pattern I've seen over the years: a tendency to maintain redundant, drift-vulnerable configurations
+Compound workspace names also head off another anti-pattern I've seen over the years: a tendency to create redundant, drift-vulnerable configurations
 spanning an ever-growing collection of separate, per-environment Terraform [root module](https://developer.hashicorp.com/terraform/language/files#the-root-module)
 projects, each redeclaring the same types of infrastructure (and also heads off another,
 kinda-outlandish-and-hard-to-maintain-and-unnecessary practice I've seen: dynamically generating
@@ -195,7 +197,8 @@ to instantiate these modules with context-specific input variables at a <code>ap
 </div>
 
 At scale, this anti-pattern results in a sprawl of bespoke, drift-vulnerable,
-environment-and-region-dedicated projects:
+environment-and-region-dedicated projects that are hard to maintain and fail to
+ensure reliably consistent infrastructure:
 
 ```mermaid
 graph LR;
@@ -423,13 +426,13 @@ on its own logical subgroup of infrastructure managed by its own [Terraform
 state](https://developer.hashicorp.com/terraform/language/state), `prod`'s `us-east-1`
 infrastructure can be `terraform apply`'d separately and independently from `prod`'s'
 `us-east-1` infrastructure. In effect, this limits the failure domain of Terraform
-operations.
+operations, ensuring better reliability of Terraform operations.
 
 It offers some other benefits, too:
 
-* it enables progressive deployment patterns; infrastructure changes can be
+* it enables testability via progressive deployment patterns; infrastructure changes can be
   incrementally introduced to subsets of infrastructure
-* individual workspace-defined subgroups of infrastructure can be destroyed (and
+* individual workspace-defined subgroups of infrastructure can be efficiently destroyed (and
   recreated afresh) in isolation, if ever that's necessary.
 * it paves a path towards global traffic management; a separate layer of
   Terraform can traffic shape across the workspaces via tools like [global
@@ -510,7 +513,7 @@ take root, and logic is declaratively codified in Terraform itself.
 ### Guarantee uniformity while accommodating heterogeneity
 
 Because all workspaces are managed via the same Terraform configuration,
-uniformity across environments is fairly guaranteed. At the same time,
+reliable uniformity across environments is fairly guaranteed. At the same time,
 per-environment -- or per-region -- variability can be easily accommodated too.
 
 For example, the compound workspace name offers a toehold through which Terraform can
@@ -545,7 +548,8 @@ fashion.
 
 Adding support for additional account/environment/region combinations generally
 requires no real Terraform development; simply `apply` the existing Terraform
-against a new workspace.
+against a new workspace, reducing the lead associated with new environments'
+creation.
 
 For example, consider a `prod` environment composed of infrastructure in `us-east-1`
 and `us-west-2`. Establishing a third `us-east-2` `prod` region is fairly low
@@ -635,7 +639,7 @@ graph LR;
 
 ### Create logical relationships between resources spanning multiple Terraform projects
 
-Compound workspace naming also offers a standardized pattern
+Compound workspace naming also offers a simple, standardized, and maintainable pattern
 for expressing and managing dependency relationships between infrastructure
 resources managed by _separate_ Terraform projects dedicated to different
 layers of concern. For example:
@@ -700,12 +704,27 @@ resource "aws_route53_record" "my-application" {
 }
 ```
 
+```mermaid
+flowchart LR;
+  subgraph production[prod AWS account]
+    subgraph zone[DNS zone]
+      prod-us-east-1-record[prod us-east-1 DNS record];
+      prod-us-west-2-record[prod us-west-2 DNS record];
+    end
+  end
+
+  A[TF project 1]-->|apply|zone;
+  B[TF project 2]-->|apply 123_prod_us-east-1|prod-us-east-1-record;
+  B-->|apply 123_prod_us-west-2|prod-us-west-2-record;
+```
+
 These are fairly crude, contrived examples, but more advanced applications are possible
 too.
 
 ### Enforce governance via policy-as-code constraints expressed in native Terraform HCL
 
-Security, reliability, and governance guardrails can be baked into the Terraform
+Security, reliability, and governance guardrails -- or even functional testing,
+to some extent -- can be baked into the Terraform
 configuration and expressed as native HCL (rather than bolted on via an additional
 complexity-adding tool, such as [OPA](https://mikeball.info/blog/terraform-plan-validation-with-open-policy-agent/), [Terratest](https://mikeball.info/blog/automated-terraform-plan-analysis-with-terratest/) or [checkov](https://www.checkov.io/)). The compound
 workspace naming scheme helps here, too.
