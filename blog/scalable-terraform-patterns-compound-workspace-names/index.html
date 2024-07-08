@@ -248,7 +248,7 @@ against target workspaces:</p><pre class=mermaid>graph LR;
 </pre><h3 id=logically-subdivide-an-environment-into-a-collection-of-independent-isolated-failure-domains>Logically subdivide an environment into a collection of independent, isolated failure domains</h3><p>Often, in my experience, teams struggle in identifying how best to logically
 model Terraform to operate on sensibly isolated subsets of infrastructure, while
 also gracefully accommodating unknown scaling needs in the future. The compound
-workspace name pattern helps here, too.</p><p>Because each <code>${AWS_ACCOUNT_ID}_${AWS_REGION}_${ENV}</code>-named workspace operates
+workspace name pattern helps here, too.</p><p>Because each <code>${AWS_ACCOUNT_ID}_${ENV}_${AWS_REGION}</code>-named workspace operates
 on its own logical subgroup of infrastructure managed by its own <a href=https://developer.hashicorp.com/terraform/language/state>Terraform
 state</a>, <code>prod</code>&rsquo;s <code>us-east-1</code>
 infrastructure can be <code>terraform apply</code>&rsquo;d separately and independently from <code>prod</code>&rsquo;s'
