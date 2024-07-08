@@ -19,7 +19,7 @@ As my colleague [Brian Tajuddin posits](https://www.briantajuddin.com/never-just
 
 > Writing software these days involves asking the question "How many?" over and over again. There is one answer that's always wrong.
 
-You need to create and manage similar cloud infrastructure across many
+So, here we are: you need to create and manage similar cloud infrastructure across many
 different AWS account/region combinations serving different logical
 environments, such as `dev`, `staging`, `prod`, etc.
 
@@ -425,7 +425,7 @@ model Terraform to operate on sensibly isolated subsets of infrastructure, while
 also gracefully accommodating unknown scaling needs in the future. The compound
 workspace name pattern helps here, too.
 
-Because each `${AWS_ACCOUNT_ID}_${AWS_REGION}_${ENV}`-named workspace operates
+Because each `${AWS_ACCOUNT_ID}_${ENV}_${AWS_REGION}`-named workspace operates
 on its own logical subgroup of infrastructure managed by its own [Terraform
 state](https://developer.hashicorp.com/terraform/language/state), `prod`'s `us-east-1`
 infrastructure can be `terraform apply`'d separately and independently from `prod`'s'
@@ -902,9 +902,8 @@ The `_` delimination is reasonably easy for humans to read and understand, and
 preserves AWS's `-`-delimited region names when those region names appear as
 part of the compound workspace name.
 
-Plus, over time -- if/when needed -- additional qualifier suffixes can be
-appended to projects that need more granular workspaces in a nonbreaking
-fashion. These additional qualifiers can use `-` to facilitate human readability,
+Plus, additional, nonbreaking qualifier suffixes can be
+appended if/when increasingly granular workspaces are needed. These additional qualifiers can use `-` to facilitate human readability,
 as well as machine parsing:
 
 ```terraform
