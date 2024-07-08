@@ -566,7 +566,7 @@ function can be used to parse the workspace name:</p><div class=highlight><pre t
 </span></span></code></pre></div><p>The <code>_</code> delimination is reasonably easy for humans to read and understand, and
 preserves AWS&rsquo;s <code>-</code>-delimited region names when those region names appear as
 part of the compound workspace name.</p><p>Plus, additional, nonbreaking qualifier suffixes can be
-appended if/when increasingly granular workspaces needed. These additional qualifiers can use <code>-</code> to facilitate human readability,
+appended if/when increasingly granular workspaces are needed. These additional qualifiers can use <code>-</code> to facilitate human readability,
 as well as machine parsing:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#a6e22e>locals</span> {
 </span></span><span style=display:flex><span>  <span style=color:#a6e22e>workspace_parts</span> = split(<span style=color:#e6db74>&#34;_&#34;</span>, <span style=color:#a6e22e>terraform</span>.<span style=color:#a6e22e>workspace</span>)
 </span></span><span style=display:flex><span>
