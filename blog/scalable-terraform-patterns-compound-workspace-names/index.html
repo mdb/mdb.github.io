@@ -18,7 +18,7 @@ Terraform reuse patterns, as well as logical infrastructure segmentation.</p><p>
 preferences), but <code>${AWS_ACCOUNT_ID}_${ENV}_${AWS_REGION}</code>-style
 workspace names have often worked well for me. For example:</p><ul><li><code>123_prod_us-west-2</code></li><li><code>123_prod_us-east-1</code></li><li><code>456_staging_us-east-1</code></li><li><code>789_dev_us-east-1</code></li></ul><p>If necessary, additional, more descriptive qualifier suffixes can be appended,
 too. For example:</p><ul><li><code>123_prod_us-east-1_blue</code></li><li><code>123_prod_us-east-1_green</code></li><li><code>789_dev_us-east-1_pull-request-2</code></li><li><code>789_dev_us-east-1_commit-1234567</code></li></ul><p>So, what&rsquo;s this solve for, exactly? Read on&mldr;</p><div class=note><p>👋 NOTE: This overview largely focuses on AWS, but the compound workspace name
-pattern can be used against with cloud providers too, or even SaaS providers
+pattern can be used against non-AWS infrastructure providers too, or even SaaS providers
 like GitHub, Datadog, PagerDuty, etc. However, doing so may require tweaking the
 pattern a bit, as AWS account ID and AWS region are
 likely not applicable in non-AWS contexts. For example, a compound workspace name
