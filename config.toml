@@ -2,6 +2,9 @@ languageCode = "en-us"
 title = "Mike Ball"
 theme = "mdb"
 
+[params]
+  description = "Personal information, recent projects, prints, and 10+ years of musings on technology and software engineering."
+
 [permalinks]
   blog = "/blog/:title/"
   projects = "/projects/:title/"
