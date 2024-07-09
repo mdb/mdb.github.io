@@ -85,7 +85,7 @@ for some background on Terraform's <a href="https://developer.hashicorp.com/terr
 
 ## More explanation: What's this solve for?
 
-Ultimately, the Terraform compound workspace naming pattern seeks to enable efficient, scalabile, testable, reliable, and maintainable cloud infrastructure management.
+Ultimately, the Terraform compound workspace naming pattern seeks to enable efficient, scalable, testable, reliable, and maintainable cloud infrastructure management.
 
 ### Derive context from the workspace name
 
