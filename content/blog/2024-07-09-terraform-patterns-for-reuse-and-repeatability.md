@@ -21,10 +21,10 @@ abstractions of opinionated Terraform "recipes:"
 
 ```mermaid
 graph LR;
-  A[TF project 1]-->|apply|cloud-provider-1[cloud provider];
-  B[TF project 2]-->|apply|cloud-provider-2[cloud provider];
-  C[TF project 3]-->|apply|cloud-provider-3[cloud provider];
-  D[TF project 4]-->|apply|cloud-provider-4[cloud-provider];
+  A[TF project 1]-->|apply|cloud-provider[cloud provider];
+  B[TF project 2]-->|apply|cloud-provider;
+  C[TF project 3]-->|apply|cloud-provider;
+  D[TF project 4]-->|apply|cloud-provider;
 
   E[TF module]-->A
   E-->B
@@ -152,7 +152,7 @@ similar (same-ish?) resources:
 
 ```mermaid
 graph LR;
-  subgraph cloud-provider
+  subgraph cloud-provider[cloud provider]
     resource-1;
     resource-2;
     resource-3;
