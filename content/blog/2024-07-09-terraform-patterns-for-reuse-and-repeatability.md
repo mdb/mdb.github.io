@@ -148,7 +148,7 @@ terraform apply
 Additionally, Terraform offers various built-in constructs for authoring
 elegant, [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) [HCL](https://github.com/hashicorp/hcl) and expressing logic _within_ a Terraform configuration. These
 constructs enable reasonably minimal Terraform HCL to manage a large volume of
-resources:
+similar (same-ish?) resources:
 
 ```mermaid
 graph LR;
