@@ -2,10 +2,10 @@
 resource configurations across multiple distinct Terraform projects. Child modules expose a simple interface to
 a more complex underlying configuration, similar to a programming language library or class; they&rsquo;re generic
 abstractions of opinionated Terraform &ldquo;recipes:&rdquo;</p><pre class=mermaid>graph LR;
-  A[TF project 1]-->|apply|cloud-provider-1[cloud provider];
-  B[TF project 2]-->|apply|cloud-provider-2[cloud provider];
-  C[TF project 3]-->|apply|cloud-provider-3[cloud provider];
-  D[TF project 4]-->|apply|cloud-provider-4[cloud-provider];
+  A[TF project 1]-->|apply|cloud-provider[cloud provider];
+  B[TF project 2]-->|apply|cloud-provider;
+  C[TF project 3]-->|apply|cloud-provider;
+  D[TF project 4]-->|apply|cloud-provider;
 
   E[TF module]-->A
   E-->B
