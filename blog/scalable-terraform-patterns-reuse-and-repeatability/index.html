@@ -1,0 +1,137 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>Scalable Terraform Patterns: Reuse and Repeatability | Mike Ball</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="An overview of native Terraform constructs enabling reuse and repeatability."><meta name=generator content="Hugo 0.101.0"><meta name=ROBOTS content="INDEX, FOLLOW"><link rel=stylesheet href=/main.min.c5cd7095f5e0084c9c1443dd669fe45e35b608fb90a8fd34626d2125428e076f.css></head><body class=blog-post><header><div class=mark><a href=/>Mike Ball</a></div><button>Toggle Navigation</button><div class=nav-wrap><nav class=primary><ul><li><a href=/blog>Blog</a></li><li><a href=#about>About</a></li></ul></nav><nav class=secondary><ul><li><a href=https://github.com/mdb>GitHub</a></li><li><a href=https://instagram.com/clapclapexcitement>Instagram</a></li></ul></nav><nav class=tertiary><ul><li><a href=https://tiendah.bigcartel.com>Shop</a></li><li><a href=#about>Contact</a></li></ul></nav></div></header><main role=main><div class=blog-post><aside class=divider><a href=/blog/>Blog</a></aside><time>July 9, 2024</time><article><header><h1>Scalable Terraform Patterns: Reuse and Repeatability</h1></header><div><p><em>A colleague asked me about native Terraform constructs enabling reuse and repeatability: &ldquo;You mean modules and whatnot?,&rdquo; he asked. Essentially yes, though it&rsquo;s probably worth elaborating a bit on both modules and all the whatnot. This is my overview of Terraform&rsquo;s three main mechanisms for reuse and repeatability.</em></p><nav id=TableOfContents><ul><li><a href=#child-modules-generic-composable-recipes>Child modules: Generic, composable &ldquo;recipes&rdquo;</a></li><li><a href=#workspaces-apply-a-single-root-module-project-against-multiple-targets>Workspaces: apply a single root module project against multiple targets</a></li><li><a href=#built-in-constructs-enable-hcl-dry-ness-and-logic-within-a-root-or-child-module>Built-in constructs: Enable HCL DRY-ness and logic within a root or child module</a></li></ul></nav><h2 id=child-modules-generic-composable-recipes>Child modules: Generic, composable &ldquo;recipes&rdquo;</h2><p>Terraform <a href=https://developer.hashicorp.com/terraform/language/modules#child-modules>child modules</a> offer a mechanism for abstracting, packaging, and re-using common Terraform
+resource configurations across multiple distinct Terraform projects. Child modules expose a simple interface to
+a more complex underlying configuration, similar to a programming language library or class; they&rsquo;re generic
+abstractions of opinionated Terraform &ldquo;recipes:&rdquo;</p><pre class=mermaid>graph LR;
+  A[TF project 1]-->|apply|cloud-provider-1[cloud provider];
+  B[TF project 2]-->|apply|cloud-provider-2[cloud provider];
+  C[TF project 3]-->|apply|cloud-provider-3[cloud provider];
+  D[TF project 4]-->|apply|cloud-provider-4[cloud-provider];
+
+  E[TF module]-->A
+  E-->B
+  E-->C
+  E-->D
+</pre><p>Overview:</p><ul><li>often have their own build/test/version/release CI/CD lifecycle separate and independent
+from (and agnostic to) their consumption and use amongst dependent projects (like a library, an NPM module, or a Go package, or a <a href="https://github.com/marketplace?type=actions">marketplace GitHub Action</a>)</li><li>enable platformization by decoupling <em>capability enablement</em> from the <em>use of enabled capabilities</em></li><li>can be external or in-house</li><li>can be sourced from the local file system, an HTTP endpoint, git repositories, or
+from a <a href=https://registry.terraform.io/browse/modules>Terraform registry</a></li><li>rich <a href=https://registry.terraform.io/browse/modules>open source community</a></li></ul><p>For example, a specific version of the <a href=https://github.com/cloudposse/terraform-aws-dynamodb>cloudpossee/terraform-aws-dynamodb</a> module can be sourced from the public <a href=https://registry.terraform.io/modules/cloudposse/dynamodb/aws/latest>Terraform registry</a> and instantiated within a Terraform root module project configuration:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#66d9ef>module</span> <span style=color:#e6db74>&#34;main&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>source</span>  = <span style=color:#e6db74>&#34;cloudposse/dynamodb/aws&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>version</span> = <span style=color:#e6db74>&#34;0.33.0&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>name</span>              = <span style=color:#e6db74>&#34;my-table&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>namespace</span>         = <span style=color:#e6db74>&#34;eg&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>hash_key</span>          = <span style=color:#e6db74>&#34;HashKey&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>range_key</span>         = <span style=color:#e6db74>&#34;RangeKey&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>enable_autoscaler</span> = <span style=color:#66d9ef>false</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=workspaces-apply-a-single-root-module-project-against-multiple-targets>Workspaces: apply a single root module project against multiple targets</h2><p>Terraform <a href=https://developer.hashicorp.com/terraform/language/state/workspaces>workspaces</a> facilitate the ability to apply a single Terraform <a href=https://developer.hashicorp.com/terraform/language/modules#the-root-module>root module</a> project configuration against multiple
+target contexts; each workspace gets a corresponding distinct and isolated Terraform <a href=https://developer.hashicorp.com/terraform/language/state>state</a>).</p><pre class=mermaid>graph LR;
+  subgraph production[prod AWS account]
+    prod-account-us-east-1[us-east-1];
+    prod-account-us-west-2[us-west-2];
+  end
+
+  subgraph staging[staging AWS account]
+    staging-account-us-east-1[us-east-1];
+    staging-account-us-west-2[us-west-2];
+  end
+
+  subgraph dev[dev AWS account]
+    dev-account-us-east-1[us-east-1];
+  end
+
+  subgraph tfstate[TF state AWS account]
+    prod-us-east-1-state[state]-->prod-account-us-east-1;
+    prod-us-west-2-state[state]-->prod-account-us-west-2;
+    staging-us-east-1-state[state]-->staging-account-us-east-1;
+    staging-us-west-2-state[state]-->staging-account-us-west-2;
+    dev-us-east-1-state[state]-->dev-account-us-east-1;
+  end
+
+  A[TF project w/ single backend config declaration]-->|apply workspace_1|dev-us-east-1-state;
+  A-->|apply workspace_2|staging-us-east-1-state;
+  A-->|apply workspace_3|staging-us-west-2-state;
+  A-->|apply workspace_4|prod-us-east-1-state;
+  A-->|apply workspace_5|prod-us-west-2-state;
+</pre><p>Overview:</p><ul><li>create multiple, logical groupings of resources – each associated with its own, independent <a href=https://developer.hashicorp.com/terraform/language/state>Terraform state</a> and name – from a single Terraform configuration</li><li>common use case: apply the same project configuration against multiple named environments, such as <code>dev</code>, <code>staging</code>, and <code>prod</code></li><li>See <a href=/blog/scalable-terraform-patterns-compound-workspace-names/>Scalable Terraform patterns: compound workspace names</a> and <a href=/blog/using-terraform-workspaces/>Using Terraform workspaces</a> for more details.</li></ul><p>For example, consider a simple root module project with a single <a href=https://developer.hashicorp.com/terraform/language/settings/backends/configuration>terraform
+backend</a> configuration:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#a6e22e>terraform</span> {<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # Terraform automatically saves each workspace&#39;s state to a distinct,
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # workspace-specific object path:
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # s3://${BUCKET}/env:/${terraform.workspace}/${KEY}
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  #
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # If no workspace is specified, Terraform uses the &#39;default&#39; workspace and saves
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # the state to:
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # s3://${BUCKET}/${KEY}
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#a6e22e>backend</span> <span style=color:#e6db74>&#34;s3&#34;</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>bucket</span> = <span style=color:#e6db74>&#34;tf-state&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>key</span>    = <span style=color:#e6db74>&#34;terraform.tfstate&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#66d9ef>
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;some_resource&#34;</span> <span style=color:#e6db74>&#34;resource&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>name</span> = <span style=color:#a6e22e>terraform</span>.<span style=color:#a6e22e>workspace</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>The project can be applied against multiple named workspace targets; each
+workspace&rsquo;s Terraform state is persisted to a distinct S3 object path, isolating
+workspace operations:</p><pre tabindex=0><code>terraform workspace select -or-create &#34;foo&#34;
+...
+terraform plan
+...
+terraform apply
+...
+</code></pre><pre tabindex=0><code>terraform workspace select -or-create &#34;bar&#34;
+...
+terraform plan
+...
+terraform apply
+...
+</code></pre><h2 id=built-in-constructs-enable-hcl-dry-ness-and-logic-within-a-root-or-child-module>Built-in constructs: Enable HCL DRY-ness and logic within a root or child module</h2><p>Additionally, Terraform offers various built-in constructs for authoring
+elegant, <a href=https://en.wikipedia.org/wiki/Don%27t_repeat_yourself>DRY</a> <a href=https://github.com/hashicorp/hcl>HCL</a> and expressing logic <em>within</em> a Terraform configuration. These
+constructs enable reasonably minimal Terraform HCL to manage a large volume of
+resources:</p><pre class=mermaid>graph LR;
+  subgraph cloud-provider
+    resource-1;
+    resource-2;
+    resource-3;
+    etc;
+  end
+
+  A[TF project]-->|apply|state;
+  state-->cloud-provider;
+</pre><p>Overview:</p><ul><li>the <a href=https://developer.hashicorp.com/terraform/language/meta-arguments/for_each>for_each</a> and <a href=https://developer.hashicorp.com/terraform/language/meta-arguments/count>count</a> meta-arguments
+allow a single HCL resource block to operate on multiple infrastructure objects.</li><li>support for <a href=https://developer.hashicorp.com/terraform/language/expressions/dynamic-blocks>dynamic blocks</a> enables repeatable nested blocks within a single HCL resource</li><li>various <a href=https://developer.hashicorp.com/terraform/language/expressions/operators>logical operators</a> and <a href=https://developer.hashicorp.com/terraform/language/expressions/conditionals>conditionals</a> enable
+conditional logic</li><li><a href=https://developer.hashicorp.com/terraform/language/values/locals>local values</a> assigns a name to an <a href=https://developer.hashicorp.com/terraform/language/expressions>expression</a>, negating the need to
+repeat the expression throughout a Terraform configuration</li><li>built-in <a href=https://developer.hashicorp.com/terraform/language/expressions/function-calls>functions</a> offer helpful utilities</li><li>See <a href=/blog/advanced-terraform-logic/>Advanced Terraform Logic</a> for an overview tying much of this together</li></ul><p>As a contrived example, consider the following Terraform configuration;
+leveraging some of the above-described contexts, relatively minimal HCL can
+scales to manage an infinite number of resources.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#a6e22e>locals</span> {<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # grafana_dashboards reads a YAML file encoding a list of desired dashboard names
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # into a local variable.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#a6e22e>grafana_dashboards</span> = yamldecode(file(<span style=color:#e6db74>&#34;</span><span style=color:#e6db74>${</span><span style=color:#a6e22e>path</span>.module<span style=color:#e6db74>}</span><span style=color:#e6db74>/dashboards.yaml&#34;</span>))<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # grafana_folders is a list of unique folder names.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#a6e22e>grafana_folders</span> = distinct([
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>dashboard</span> <span style=color:#66d9ef>in</span> <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>grafana_dashboards</span> <span style=color:#f92672>:</span> <span style=color:#a6e22e>dashboard</span>.<span style=color:#a6e22e>folder</span>
+</span></span><span style=display:flex><span>  ])
+</span></span><span style=display:flex><span>}<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e># grafana_folder.all creates a Grafana folder for each grafana_folders item.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;grafana_folder&#34;</span> <span style=color:#e6db74>&#34;all&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>for_each</span> = toset(<span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>grafana_folders</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>title</span> = each.<span style=color:#a6e22e>value</span>
+</span></span><span style=display:flex><span>}<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e># grafana_dashboard.all creates a Grafana dashboard for each grafana_dashboards item.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;grafana_dashboard&#34;</span> <span style=color:#e6db74>&#34;all&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>for_each</span> = { <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>dashboard</span> <span style=color:#66d9ef>in</span> <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>grafana_dashboards</span> <span style=color:#f92672>:</span> <span style=color:#a6e22e>dashboard</span>.<span style=color:#a6e22e>dashboard</span> =&gt; <span style=color:#a6e22e>dashboard</span> }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>folder</span>      = <span style=color:#a6e22e>grafana_folder</span>.<span style=color:#a6e22e>all</span>[each.<span style=color:#a6e22e>value</span>.<span style=color:#a6e22e>folder</span>].<span style=color:#a6e22e>id</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>config_json</span> = jsonencode({
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>title</span> = each.<span style=color:#a6e22e>value</span>.<span style=color:#a6e22e>dashboard</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>uid</span>   = replace(lower(each.<span style=color:#a6e22e>value</span>.<span style=color:#a6e22e>dashboard</span>), <span style=color:#e6db74>&#34;_&#34;</span>, <span style=color:#e6db74>&#34;-&#34;</span>)
+</span></span><span style=display:flex><span>  })
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div></div><ul class=tags><li><a href=/tags/terraform>terraform</a></li><li><a href=/tags/terraform-patterns>terraform-patterns</a></li><li><a href=/tags/iac>iac</a></li></ul></article></div></main><footer><section><h1 id=about>Info</h1><div><h2>Mike Ball</h2><p>I live in Philadelphia and work as a multi-disciplinary software engineer & designer.</p><p>Over the years, I've developed front end web applications, built backend services, automated cloud infrastructure management, designed CI/CD pipelines for high scale distributed systems, and contributed to numerous open source software projects.</p><p>I've also worked in graphic and UX design. Buy prints of my illustrations at <a href=https://tiendah.bigcartel.com>Tiendah</a>.</div><div class=double><h2>Shop Tiendah</h2><ul class="gallery store-feed"></ul><h2>Instagram</h2><ul class="gallery ig-feed"></ul></div><div><h2>Etc.</h2><ul><li><a href=http://github.com/mdb>GitHub</a></li><li><a href=http://twitter.com/clapexcitement>Twitter</a></li><li><a href=https://instagram.com/clapclapexcitement>Instagram</a></li><li><a href=/index.xml>RSS Feed</a></li><li><a href=https://tiendah.bigcartel.com>Shop Tiendah</a></li></ul><h2>Contact</h2><p>Interested in working with me? <a href=mailto:mikedball@gmail.com>Get in touch</a>.</p></div></section></footer><script type=text/javascript src=/js/main.min.1499c53fed57df32a56089f3dde8b4b4d048c1ea53001475ffa6ec668ee36960.js></script>
+<script type=text/javascript>(function(e,t,n,s,o,i,a){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,i=t.createElement(n),a=t.getElementsByTagName(n)[0],i.async=1,i.src=s,a.parentNode.insertBefore(i,a)})(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-54324621-1","auto"),ga("send","pageview")</script><script type=module>
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+      </script></body></html>
