@@ -9,7 +9,7 @@ thumbnail: terraform2_thumb.jpg
 teaser: An overview of native Terraform constructs enabling reuse and repeatability.
 display_toc: true
 intro: |
- A colleague asked me about native Terraform constructs enabling reuse and repeatability: "You mean modules and whatnot?," he asked. Essentially yes, though it's probably worth elaborating a bit on both modules and all the whatnot. This is my overview of Terraform's three main mechanisms for reuse and repeatability.
+ A colleague asked me about native Terraform constructs enabling reuse and repeatability: "You mean modules and whatnot?," he asked. Essentially yes, though it's worth elaborating a bit on both modules and all the whatnot. This is my overview of Terraform's three main mechanisms for reuse and repeatability.
 ---
 
 ## Child modules: Generic, composable "recipes"
@@ -60,7 +60,7 @@ module "main" {
 ## Workspaces: apply a single root module project against multiple targets
 
 Terraform [workspaces](https://developer.hashicorp.com/terraform/language/state/workspaces) facilitate the ability to apply a single Terraform [root module](https://developer.hashicorp.com/terraform/language/modules#the-root-module) project configuration against multiple
-target contexts; each workspace gets a corresponding distinct and isolated Terraform [state](https://developer.hashicorp.com/terraform/language/state)).
+target contexts; each workspace gets a corresponding distinct and isolated Terraform [state](https://developer.hashicorp.com/terraform/language/state), but uses the same underlying HCL project declaration codified in `*.tf` files.
 
 ```mermaid
 graph LR;
@@ -96,7 +96,7 @@ graph LR;
 Overview:
 
 * create multiple, logical groupings of resources – each associated with its own, independent [Terraform state](https://developer.hashicorp.com/terraform/language/state) and name – from a single Terraform configuration
-* common use case: apply the same project configuration against multiple named environments, such as `dev`, `staging`, and `prod`
+* common use cases: apply the same project configuration multiple times against multiple named environments, such as `dev`, `staging`, and `prod`. Or: apply the same project configuration multiple times against multiple AWS regions, such as `us-east-1`, `us-west-2`, etc.
 * See [Scalable Terraform patterns: compound workspace names](/blog/scalable-terraform-patterns-compound-workspace-names/) and [Using Terraform workspaces](/blog/using-terraform-workspaces/) for more details.
 
 For example, consider a simple root module project with a single [terraform
