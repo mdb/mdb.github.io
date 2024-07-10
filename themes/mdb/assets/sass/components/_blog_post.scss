@@ -1,22 +1,25 @@
 div.blog-post {
   overflow: hidden;
+  margin: 0 auto;
+  width: 75%;
+
+  @include breakpoint(tablet) {
+    width: 95%;
+  }
+
+  @include breakpoint(mobile) {
+    width: 95%;
+  }
 
   time {
-    margin-top: $big_spacer;
-    width: 25%;
-    float: left;
+    display: block;
+    margin-bottom: $big_spacer;
     font-family: $secondary_font_family;
+    font-size: 125%;
     color: $secondary_text_color;
   }
 
   article {
-    float: left;
-    width: 75%;
-
-    header {
-      width: auto;
-    }
-
     img {
       width: 100%;
     }
@@ -30,19 +33,6 @@ div.blog-post {
       p:last-of-type {
         margin-bottom: 0;
       }
-    }
-  }
-
-  article,
-  time {
-    @include breakpoint(tablet) {
-      width: 95%;
-      padding: 0 $spacer;
-    }
-
-    @include breakpoint(mobile) {
-      width: 95%;
-      padding: 0 $spacer;
     }
   }
 }

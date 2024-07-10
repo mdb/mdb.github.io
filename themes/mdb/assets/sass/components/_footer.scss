@@ -32,7 +32,8 @@ footer {
       font-size: 100%;
     }
 
-    a, a:visited {
+    a,
+    a:visited {
       color: $link_color;
     }
 
@@ -49,8 +50,11 @@ footer {
       @include breakpoint(desktop) {
         width: 100%;
 
-        p, h2, ul {
-          padding: 0 $spacer;
+        p,
+        h2,
+        ul {
+          padding-left: $spacer;
+          padding-right: $spacer;
         }
       }
 
@@ -97,7 +101,8 @@ footer {
       }
 
       ul.gallery.ig-feed {
-        li, li a {
+        li,
+        li a {
           height: 108px;
 
           @include breakpoint(desktop) {

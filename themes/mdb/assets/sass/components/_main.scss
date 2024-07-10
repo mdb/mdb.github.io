@@ -8,7 +8,9 @@ main {
       padding: 0;
 
       h1 {
-        margin: $big_spacer 0;
+        margin: $big_spacer 0 $big_spacer 0;
+        border-top: $divider;
+        padding-top: $big_spacer * 1.5;
         font-size: 250%;
       }
     }

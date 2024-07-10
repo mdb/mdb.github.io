@@ -1,15 +1,10 @@
 {{ define "body_class" }}blog-post{{ end }} {{ define "main" }} {{ $section :=
 .Site.GetPage "section" .Section }}
 <div class="blog-post">
-  <aside class="divider">
-    <a href="{{ .CurrentSection.Permalink }}"
-      >{{with .CurrentSection.Title }}{{. | singularize }}{{end}}</a
-    >
-  </aside>
-  <time>{{- .Date.Format "January 2, 2006" -}}</time>
   <article>
     <header>
       <h1>{{- .Title -}}</h1>
+      <time>{{- .Date.Format "January 2, 2006" -}}</time>
     </header>
     <div>
       {{ if .Params.intro }}

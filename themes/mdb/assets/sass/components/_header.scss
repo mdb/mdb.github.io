@@ -1,3 +1,21 @@
+body.blog-post {
+  header {
+    div.mark {
+      margin: 0 auto;
+      float: none;
+      width: 100px;
+    }
+
+    nav {
+      display: none;
+    }
+
+    button {
+      display: none;
+    }
+  }
+}
+
 header {
   @include container_section;
 
@@ -9,16 +27,12 @@ header {
     width: 25%;
     float: left;
 
-    @include breakpoint(desktop) {
-      margin-left: $spacer;
-    }
-
     a {
       text-indent: -5000px;
       display: block;
       width: 100px;
       height: 100px;
-      background: url('/images/mark_grayscale.png') center center;
+      background: url("/images/mark_grayscale.png") center center;
       float: left;
 
       &:hover {
@@ -47,6 +61,9 @@ header {
     border-bottom: 8px solid $secondary_text_color;
 
     @include breakpoint {
+      // NOTE: change this to block to display the "hamburger" menu on smaller
+      // screens menu on smaller screens.
+      // For now, it's disabled entirely
       display: block;
       margin: 50px $spacer 0 0;
     }
@@ -58,7 +75,7 @@ header {
     &:before {
       width: 40px;
       height: 34px;
-      content: '.';
+      content: ".";
       text-indent: -5000px;
       border-top: 8px solid $secondary_text_color;
       position: absolute;
@@ -80,11 +97,11 @@ header {
       padding: 0;
     }
 
-    a, a:visited {
+    a,
+    a:visited {
       color: $secondary_text_color;
       font-family: $secondary_font_family;
       font-size: 11px;
-
 
       @include breakpoint {
         background: #000;
