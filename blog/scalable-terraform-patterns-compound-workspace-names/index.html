@@ -252,7 +252,7 @@ workspace name pattern helps here, too.</p><p>Because each <code>${AWS_ACCOUNT_I
 on its own logical subgroup of infrastructure managed by its own <a href=https://developer.hashicorp.com/terraform/language/state>Terraform
 state</a>, <code>prod</code>&rsquo;s <code>us-east-1</code>
 infrastructure can be <code>terraform apply</code>&rsquo;d separately and independently from <code>prod</code>&rsquo;s'
-<code>us-east-1</code> infrastructure. In effect, this limits the failure domain of Terraform
+<code>us-east-2</code> and <code>us-west-2</code> infrastructure. In effect, this limits the failure domain of Terraform
 operations, ensuring better reliability of Terraform operations.</p><p>It offers some other benefits, too:</p><ul><li>it enables testability via progressive deployment patterns; infrastructure changes can be
 incrementally introduced to subsets of infrastructure</li><li>individual workspace-defined subgroups of infrastructure can be efficiently destroyed (and
 recreated afresh) in isolation, if ever that&rsquo;s necessary.</li><li>it paves a path towards global traffic management; a separate layer of
