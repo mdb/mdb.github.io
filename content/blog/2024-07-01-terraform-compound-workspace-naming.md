@@ -429,7 +429,7 @@ Because each `${AWS_ACCOUNT_ID}_${ENV}_${AWS_REGION}`-named workspace operates
 on its own logical subgroup of infrastructure managed by its own [Terraform
 state](https://developer.hashicorp.com/terraform/language/state), `prod`'s `us-east-1`
 infrastructure can be `terraform apply`'d separately and independently from `prod`'s'
-`us-east-1` infrastructure. In effect, this limits the failure domain of Terraform
+infrastructure in other regions. In effect, this limits the failure domain of Terraform
 operations, ensuring better reliability of Terraform operations.
 
 It offers some other benefits, too:
