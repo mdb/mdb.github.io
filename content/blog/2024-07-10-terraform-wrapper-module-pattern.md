@@ -12,16 +12,17 @@ intro: An overview of what I refer to as the Terraform **wrapper module pattern*
 
 ## Problem
 
-Internal to your organization, you want to provide engineers simplified, higher level abstractions for managing AWS resources via [Terraform child modules](/blog/scalable-terraform-patterns-reuse-and-repeatability/#child-modules-generic-composable-recipes).
-You could build such modules in-house, but you're wary of the required level of effort
-and resulting maintenance burden, especially considering the rich ecosystem of
+Internal to your organization, you want to provide engineers simplified, higher
+level abstractions for managing AWS resources via [Terraform child modules](/blog/scalable-terraform-patterns-reuse-and-repeatability/#child-modules-generic-composable-recipes).
+You could build such modules in-house, but you're wary of the level of effort
+required to do so and the resulting maintenance burden, especially considering the existing ecosystem of
 well-regarded [community-maintained open source modules](https://registry.terraform.io/browse/modules).
-However, you'd also like to impose some specific governance constraints and a
-simplified interfaces, restricting each module's use to blessed patterns. Many
-of the [community-maintained open source modules](https://registry.terraform.io/browse/modules)
-support input variables and usage patterns that are too broad and aren't compliant
-with your organization's "golden path" standards, guardrails, and supported
-patterns.
+However, many of the [community modules](https://registry.terraform.io/browse/modules)
+support input variables and usage patterns that are too broad, require too much
+specialized AWS knowledge, and aren't compliant with your organization's "golden
+path" standards, guardrails, and supported patterns. You'd like to impose some
+specific constraints and simplified interfaces, restricting each module's use
+to blessed patterns and easing use for internal users.
 
 ## Solution
 
