@@ -3,7 +3,7 @@ title: "Scalable Terraform patterns: compound workspace names"
 date: 2024-07-01
 tags:
 - terraform
-- terraform-pattern
+- terraform-patterns
 - iac
 - aws
 thumbnail: terraform3_thumb.png
