@@ -35,7 +35,7 @@ As a contrived example, consider CloudPosse's [S3 Bucket module](https://registr
 is well-maintained, highly regarded, and has a fairly mature development-and-release
 lifecycle backed by CI/CD and automated tests. However, out of the box, the module
 accepts over 58 input variables, perhaps making it a bit _too_ flexible for some
-organizations internal standards.
+organizations' internal standards.
 
 By wrapping its use in a higher level child module akin to the following, a
 more limited interface can be imposed, exposing _only_ the ability to specify a
