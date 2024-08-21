@@ -25,9 +25,15 @@ document.addEventListener("DOMContentLoaded", () => {
         .map((image) => {
           return `
           <li class="item">
-            <a class="thumbnail" href="${image.permalink}">
+            <a class="thumbnail" href="#ig-${image.id}">
               <img src="${image.github_media_url}" />
             </a>
+            <div id="ig-${image.id}" class="overlay">
+              <div class="image">
+                <img src="${image.github_media_url}" />
+              </div>
+              <a title="close" class="close" href="#/"></a>
+            </div>
           </li>`;
         })
         .join("");

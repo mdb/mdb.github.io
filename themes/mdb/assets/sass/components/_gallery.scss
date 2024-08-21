@@ -83,6 +83,62 @@ ul.gallery {
       }
     }
 
+    .overlay {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.7);
+      transition: opacity 500ms;
+      visibility: hidden;
+      opacity: 0;
+      z-index: 1000000;
+
+      &:target {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      .image {
+        margin: $spacer * 2 auto;
+        padding: $spacer;
+        height: 90%;
+        overflow: scroll;
+        transition: all 5s ease-in-out;
+        position: relative;
+
+        img {
+          border: $spacer solid #fff;
+          height: 97%;
+          margin: 0 auto;
+        }
+      }
+
+      .close {
+        display: block;
+        position: absolute;
+        top: $spacer;
+        right: $spacer;
+        transition: all 200ms;
+        line-height: 30px;
+        width: 30px;
+        height: 30px;
+        border-radius: 30px;
+        text-align: center;
+        font-weight: bold;
+        text-decoration: none;
+        background: #000;
+        color: #fff;
+
+        &:after {
+          content: "x";
+          text-indent: 0;
+          font-family: $secondary_font_family;
+        }
+      }
+    }
+
     .details {
       padding: 5px;
 
