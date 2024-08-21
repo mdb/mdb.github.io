@@ -26,6 +26,21 @@
   }
 }
 
+button#load-more {
+  height: 50px;
+  width: 200px;
+  margin: 0 auto $spacer * 2 auto;
+  display: block;
+  background: #000;
+  color: #fff;
+  border: none;
+  font-family: $secondary_font_family;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 ul.gallery {
   padding-top: 35px;
   overflow: hidden;
@@ -79,12 +94,12 @@ ul.gallery {
       time {
         font-family: $secondary_font_family;
         color: $secondary_text_color;
-        margin-bottom: .75em;
+        margin-bottom: 0.75em;
         display: block;
       }
 
       h2 {
-        margin-bottom: .65em;
+        margin-bottom: 0.65em;
         line-height: 1.75em;
 
         a {
@@ -96,14 +111,14 @@ ul.gallery {
       p {
         color: $secondary_text_color;
         font-style: italic;
-        margin-bottom: .65em;
+        margin-bottom: 0.65em;
       }
     }
   }
 }
 
 ul.gallery.ig-feed {
-  margin-bottom: $spacer*2;
+  margin-bottom: $spacer * 2;
 
   @include breakpoint(mobile) {
     margin-bottom: 0;
@@ -113,13 +128,13 @@ ul.gallery.ig-feed {
     height: auto;
     padding-bottom: 0;
 
-    &:nth-child(n+13) {
+    &:nth-child(n + 13) {
       display: none;
     }
   }
 
   &.full-feed {
-    li:nth-child(n+13) {
+    li:nth-child(n + 13) {
       display: block;
     }
   }
