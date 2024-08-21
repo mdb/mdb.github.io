@@ -20,27 +20,29 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function populateIgFeed(data) {
-    const galleries = document.querySelectorAll("ul.ig-feed"),
-      items = data.data
+    const galleries = document.querySelectorAll("ul.ig-feed");
+
+    galleries.forEach((gallery, index) => {
+      const items = data.data
         .map((image) => {
+          const id = `ig-${index}-${image.id}`;
+
           return `
-          <li class="item">
-            <a class="thumbnail" href="#ig-${image.id}">
-              <img src="${image.github_media_url}" />
-            </a>
-            <div id="ig-${image.id}" class="overlay">
-              <div class="image">
+            <li class="item">
+              <a class="thumbnail" href="#${id}">
                 <img src="${image.github_media_url}" />
-              </div>
-              <a title="close" class="close" href="#/"></a>
-            </div>
-          </li>`;
+              </a>
+              <a href="#/" id="${id}" class="overlay">
+                <div class="image">
+                  <img src="${image.github_media_url}" />
+                </div>
+              </a>
+            </li>`;
         })
         .join("");
 
-    galleries.forEach(
-      (gallery) => (gallery.innerHTML = gallery.innerHTML + items),
-    );
+      gallery.innerHTML = gallery.innerHTML + items;
+    });
 
     return data;
   }
