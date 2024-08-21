@@ -58,6 +58,11 @@ document.addEventListener("DOMContentLoaded", () => {
       loadMoreButton.remove();
     }
 
+    // only render 5 'next' pages
+    if (data.paging.next && data.paging.next.includes("-6.json")) {
+      return false;
+    }
+
     gallery.innerHTML = `${gallery.innerHTML}<button id="load-more">Load more</button>`;
     loadMoreButton = document.querySelector(loadMoreSelector);
 
