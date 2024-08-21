@@ -83,6 +83,45 @@ ul.gallery {
       }
     }
 
+    a.overlay {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.7);
+      transition: opacity 500ms;
+      visibility: hidden;
+      opacity: 0;
+      z-index: 1000000;
+      height: 100%;
+      width: 100%;
+
+      &:target {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      .image {
+        margin: $spacer * 2 auto;
+        height: 90%;
+        overflow: scroll;
+        transition: all 5s ease-in-out;
+        position: relative;
+
+        // override footer gallery style
+        float: none;
+        // override footer gallery style
+        width: auto;
+
+        img {
+          border: $spacer solid #fff;
+          height: 95%;
+          margin: 0 auto;
+        }
+      }
+    }
+
     .details {
       padding: 5px;
 

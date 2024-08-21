@@ -20,21 +20,29 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function populateIgFeed(data) {
-    const galleries = document.querySelectorAll("ul.ig-feed"),
-      items = data.data
+    const galleries = document.querySelectorAll("ul.ig-feed");
+
+    galleries.forEach((gallery, index) => {
+      const items = data.data
         .map((image) => {
+          const id = `ig-${index}-${image.id}`;
+
           return `
-          <li class="item">
-            <a class="thumbnail" href="${image.permalink}">
-              <img src="${image.github_media_url}" />
-            </a>
-          </li>`;
+            <li class="item">
+              <a class="thumbnail" href="#${id}">
+                <img src="${image.github_media_url}" />
+              </a>
+              <a href="#/" id="${id}" class="overlay">
+                <div class="image">
+                  <img src="${image.github_media_url}" />
+                </div>
+              </a>
+            </li>`;
         })
         .join("");
 
-    galleries.forEach(
-      (gallery) => (gallery.innerHTML = gallery.innerHTML + items),
-    );
+      gallery.innerHTML = gallery.innerHTML + items;
+    });
 
     return data;
   }
@@ -50,6 +58,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (loadMoreButton) {
       loadMoreButton.remove();
+    }
+
+    // only render 5 'next' pages
+    if (data.paging.next && data.paging.next.includes("-6.json")) {
+      return false;
     }
 
     gallery.innerHTML = `${gallery.innerHTML}<button id="load-more">Load more</button>`;
