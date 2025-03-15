@@ -21,9 +21,9 @@ Leverage [dynamic blocks](https://developer.hashicorp.com/packer/docs/templates/
 
 ## Example
 
-For example, the following Packer template supports a `create_nonroot_devices`
-input variable. By default, its value is `false`; `packer build` results in an AMI
-with no nonroot `launch_block_device_mappings`:
+The following Packer template supports a `create_nonroot_devices` input variable.
+By default, its value is `false`; `packer build` results in an AMI with no
+nonroot `launch_block_device_mappings`:
 
 ```hcl
 packer {
@@ -107,7 +107,7 @@ build {
 }
 ```
 
-To build an AMI with a nonroot `/dev/xvdf`, override `var.create_nonroot_devices`
+To build an AMI with a nonroot `/dev/xvdf` device, override `var.create_nonroot_devices`
 with `true` at `packer build` time:
 
 ```
