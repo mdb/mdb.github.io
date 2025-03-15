@@ -53,8 +53,8 @@ locals {
 }
 
 source "amazon-ebs" "foo" {
-  region = "us-west-2"
-
+  region        = "us-west-2"
+  ssh_username  = "ubuntu"
   instance_type = "m6i.4xlarge"
 
   source_ami_filter {
@@ -84,7 +84,7 @@ source "amazon-ebs" "foo" {
     volume_size           = 200
   }
 
-  # conditionally create non root block device mappings
+  # conditionally create nonroot block device mappings
   dynamic "launch_block_device_mappings" {
     for_each = local.nonroot_devices
 
