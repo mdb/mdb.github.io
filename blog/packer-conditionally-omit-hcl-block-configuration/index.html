@@ -29,8 +29,8 @@ with no nonroot <code>launch_block_device_mappings</code>:</p><div class=highlig
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#66d9ef>source</span> <span style=color:#e6db74>&#34;amazon-ebs&#34; &#34;devbox_ami&#34;</span> {
-</span></span><span style=display:flex><span>  region <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;us-west-2&#34;</span>
-</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  region        <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;us-west-2&#34;</span>
+</span></span><span style=display:flex><span>  ssh_username  <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;ubuntu&#34;</span>
 </span></span><span style=display:flex><span>  instance_type <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;m6i.4xlarge&#34;</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>  <span style=color:#66d9ef>source_ami_filter</span> {
@@ -60,7 +60,7 @@ with no nonroot <code>launch_block_device_mappings</code>:</p><div class=highlig
 </span></span><span style=display:flex><span>    volume_size           <span style=color:#f92672>=</span> <span style=color:#ae81ff>200</span>
 </span></span><span style=display:flex><span>  }<span style=color:#75715e>
 </span></span></span><span style=display:flex><span><span style=color:#75715e>
-</span></span></span><span style=display:flex><span><span style=color:#75715e>  # conditionally create non root block device mappings
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # conditionally create nonroot block device mappings
 </span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>dynamic</span> <span style=color:#e6db74>&#34;launch_block_device_mappings&#34;</span> {
 </span></span><span style=display:flex><span>    for_each <span style=color:#f92672>=</span> <span style=color:#66d9ef>local</span>.<span style=color:#66d9ef>nonroot_devices</span>
 </span></span><span style=display:flex><span>
