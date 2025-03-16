@@ -28,7 +28,7 @@ nonroot <code>launch_block_device_mappings</code>:</p><div class=highlight><pre 
 </span></span></span><span style=display:flex><span><span style=color:#75715e></span>  nonroot_devices <span style=color:#f92672>=</span> <span style=color:#66d9ef>var</span>.<span style=color:#66d9ef>create_nonroot_devices</span> <span style=color:#960050;background-color:#1e0010>?</span> [<span style=color:#e6db74>&#34;/dev/xvdf&#34;</span>] <span style=color:#960050;background-color:#1e0010>:</span> []
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>source</span> <span style=color:#e6db74>&#34;amazon-ebs&#34; &#34;devbox_ami&#34;</span> {
+</span></span><span style=display:flex><span><span style=color:#66d9ef>source</span> <span style=color:#e6db74>&#34;amazon-ebs&#34; &#34;foo&#34;</span> {
 </span></span><span style=display:flex><span>  region        <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;us-west-2&#34;</span>
 </span></span><span style=display:flex><span>  ssh_username  <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;ubuntu&#34;</span>
 </span></span><span style=display:flex><span>  instance_type <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;m6i.4xlarge&#34;</span>
@@ -75,7 +75,7 @@ nonroot <code>launch_block_device_mappings</code>:</p><div class=highlight><pre 
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#66d9ef>build</span> {
-</span></span><span style=display:flex><span>  sources <span style=color:#f92672>=</span> [<span style=color:#e6db74>&#34;source.amazon-ebs.devbox_ami&#34;</span>]
+</span></span><span style=display:flex><span>  sources <span style=color:#f92672>=</span> [<span style=color:#e6db74>&#34;source.amazon-ebs.foo&#34;</span>]
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>  <span style=color:#66d9ef>post</span><span style=color:#960050;background-color:#1e0010>-</span><span style=color:#66d9ef>processor</span> <span style=color:#e6db74>&#34;manifest&#34;</span> {
 </span></span><span style=display:flex><span>    output <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;manifest.json&#34;</span>
