@@ -210,7 +210,7 @@ graph LR;
     prod-account-us-east-1[us-east-1];
     prod-account-us-west-2[us-west-2];
   end
-      
+
   subgraph staging[staging AWS account]
     staging-account-us-east-1[us-east-1];
     staging-account-us-west-2[us-west-2];
@@ -219,7 +219,7 @@ graph LR;
   subgraph dev[dev AWS account]
     dev-account-us-east-1[us-east-1];
   end
-      
+
   prod-us-east-1[TF project]-->|apply|prod-account-us-east-1;
   prod-us-west-2[TF project]-->|apply|prod-account-us-west-2;
   staging-us-east-1[TF project]-->|apply|staging-account-us-east-1;
@@ -359,7 +359,7 @@ graph LR;
     prod-account-us-east-1[us-east-1];
     prod-account-us-west-2[us-west-2];
   end
-      
+
   subgraph staging[staging AWS account]
     staging-account-us-east-1[us-east-1];
     staging-account-us-west-2[us-west-2];
@@ -368,7 +368,7 @@ graph LR;
   subgraph dev[dev AWS account]
     dev-account-us-east-1[us-east-1];
   end
-      
+
   subgraph tfstate[TF state AWS account]
     prod-us-east-1-state[state]-->prod-account-us-east-1;
     prod-us-west-2-state[state]-->prod-account-us-west-2;
@@ -376,7 +376,7 @@ graph LR;
     staging-us-west-2-state[state]-->staging-account-us-west-2;
     dev-us-east-1-state[state]-->dev-account-us-east-1;
   end
-      
+
   prod-us-east-1[TF project w/ bespoke backend config]-->|apply|prod-us-east-1-state;
   prod-us-west-2[TF project w/ bespoke backend config]-->|apply|prod-us-west-2-state;
   staging-us-east-1[TF project w/ bespoke backend config]-->|apply|staging-us-east-1-state;
