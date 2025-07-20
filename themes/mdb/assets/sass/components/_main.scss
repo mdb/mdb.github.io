@@ -56,6 +56,12 @@ main {
           margin: 0 auto;
           display: block;
         }
+
+        p {
+          // Prevent larger text paragraph styles elsewhere from taking effect
+          // on mermaid diagram text.
+          font-size: 1em;
+        }
       }
 
       code {
