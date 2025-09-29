@@ -5,7 +5,7 @@ theme = "mdb"
 enableRobotsTXT = true
 
 [params]
-  description = "Personal information, recent projects, prints, and 10+ years of musings on technology and software engineering."
+  description = "Personal information, recent projects, prints, and 15+ years of musings on technology and software engineering."
   robots = [
     "AdsBot-Google",
     "Amazonbot",
