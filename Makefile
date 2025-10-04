@@ -1,4 +1,4 @@
-HUGO_VERSION=0.101.0-ext
+HUGO_VERSION=0.111.0-ext
 HUGO_IMAGE=klakegg/hugo:$(HUGO_VERSION)
 
 all: build
