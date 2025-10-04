@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <a href="#/" id="${id}" class="overlay">
                 <div class="image">
                   <img src="${image.github_media_url}" />
+                  <p>${image.caption ? image.caption : ''}</p>
                 </div>
               </a>
             </li>`;
@@ -133,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const contributions = data[item]
         .map((contrib) => {
           const date = new Date(contrib.created_at);
-          const formattedDate = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
+          const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 
           return `<li><time>${formattedDate}</time> <a href="${contrib.html_url}">${contrib.title}</a></li>`;
         })
