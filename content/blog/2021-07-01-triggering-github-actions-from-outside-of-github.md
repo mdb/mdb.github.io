@@ -26,7 +26,6 @@ jobs:
   greet:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - name: Say-Hello
         run: echo "Hello!"
 ```
@@ -59,7 +58,6 @@ jobs:
   greet:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - name: Say-Hello
         run: echo "Hello, ${{ github.event.client_payload.name }}!"
 ```
