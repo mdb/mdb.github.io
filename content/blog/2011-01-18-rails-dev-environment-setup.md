@@ -2,7 +2,6 @@
 title: Setting up a Ruby on Rails Dev Environment
 published: false
 date: 2011-01-18
-published: false
 tags:
 - ruby
 - ruby on rails
