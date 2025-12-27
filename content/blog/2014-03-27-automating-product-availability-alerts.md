@@ -1,7 +1,7 @@
 ---
 title: Automating Product Availability Alerts
 date: 2014-03-27
-published: false
+is_published: false
 tags:
 - heroku
 - twilio

@@ -7,7 +7,7 @@ tags:
 - wordpress
 - php
 - nonprofit
-published: false
+draft: true
 thumbnail: books_thumb.png
 images:
   - nested:
