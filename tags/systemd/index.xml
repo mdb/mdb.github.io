@@ -1,2 +1,49 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>systemd on Mike Ball</title><link>/tags/systemd/</link><description>Recent content in systemd on Mike Ball</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 18 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/systemd/index.xml" rel="self" type="application/rss+xml"/><item><title>A systemd Cheat Sheet</title><link>/blog/a-systemd-cheat-sheet/</link><pubDate>Fri, 18 Dec 2020 00:00:00 +0000</pubDate><guid>/blog/a-systemd-cheat-sheet/</guid><description>Generally, systemd is the standard init system across Linux distributions. systemctl is its central CLI management tool. This is a brief overview and cheat sheet.
-Background systemd is responsible for initializing and managing components, services, and daemons that must be started after the kernel is booted. Such components are often referred to as &amp;ldquo;userland&amp;rdquo; components. resources managed by systemd are called units; these are defined in unit files service management unit files are suffixed with a .</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Systemd on Mike Ball</title><link>/tags/systemd/</link><description>Recent content in Systemd on Mike Ball</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 18 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/systemd/index.xml" rel="self" type="application/rss+xml"/><item><title>A systemd Cheat Sheet</title><link>/blog/a-systemd-cheat-sheet/</link><pubDate>Fri, 18 Dec 2020 00:00:00 +0000</pubDate><guid>/blog/a-systemd-cheat-sheet/</guid><description>&lt;p&gt;&lt;em&gt;Generally, &lt;code&gt;systemd&lt;/code&gt; is the standard init system across Linux
+distributions. &lt;code&gt;systemctl&lt;/code&gt; is its central CLI management tool.
+This is a brief overview and cheat sheet.&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id="background"&gt;Background&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemd&lt;/code&gt; is responsible for initializing and managing components, services,
+and daemons that must be started after the kernel is booted. Such components
+are often referred to as &amp;ldquo;userland&amp;rdquo; components.&lt;/li&gt;
+&lt;li&gt;resources managed by &lt;code&gt;systemd&lt;/code&gt; are called &lt;em&gt;units&lt;/em&gt;; these are defined in unit
+files&lt;/li&gt;
+&lt;li&gt;service management unit files are suffixed with a &lt;code&gt;.service&lt;/code&gt; (though there are
+other types of units too, such as &lt;code&gt;.socket&lt;/code&gt;, &lt;code&gt;.device&lt;/code&gt;, &lt;code&gt;.mount&lt;/code&gt;, etc. This overview
+focuses on &lt;code&gt;.service&lt;/code&gt; units, though)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="startingstopping-services"&gt;Starting/Stopping services&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemctl start something.service&lt;/code&gt; - start a service&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl stop something.service&lt;/code&gt; - stop a service&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl restart something.service&lt;/code&gt; - restart a service&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="reloading-configuration"&gt;Reloading configuration&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemctl reload something.service&lt;/code&gt; - reload a service&amp;rsquo;s configuration
+without restarting the service, assuming the service is capable of this&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl reload-or-restart something.service&lt;/code&gt; - reload a service&amp;rsquo;s
+configuration in place, if the service is capable of doing so (otherwise, restart the
+service to pick up the new configuration)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl daemon-reload&lt;/code&gt; reloads the entire &lt;code&gt;systemd&lt;/code&gt; process&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="enabling-services"&gt;Enabling services&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemctl enable something.service&lt;/code&gt; - &lt;em&gt;enable&lt;/em&gt; a service, causing the service
+to be automatically started at boot (Note, however, this does not start the
+service in the current session; that still requires a &lt;code&gt;start&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl disable something.service&lt;/code&gt; - disable a service from starting at boot&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="querying-status"&gt;Querying status&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemctl status something.service&lt;/code&gt; - outputs the service&amp;rsquo;s state, the cgroup hierarchy, and the first serveral log lines&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl is-active something.service&lt;/code&gt; - reports if a service is running&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl is-enabled something.service&lt;/code&gt; - reports if a service is enabled&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl is-failed something.service&lt;/code&gt; - reports if a service is in a failed state&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="learning-more-about-a-systems-units"&gt;Learning more about a system&amp;rsquo;s units&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemctl list-units&lt;/code&gt; - lists active units&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl list-units --all --state=active&lt;/code&gt; - lists all active units&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;(Other options exist too.)&lt;/p&gt;</description></item></channel></rss>

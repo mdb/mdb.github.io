@@ -1,2 +1,41 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>command line on Mike Ball</title><link>/tags/command-line/</link><description>Recent content in command line on Mike Ball</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 30 Aug 2011 00:00:00 +0000</lastBuildDate><atom:link href="/tags/command-line/index.xml" rel="self" type="application/rss+xml"/><item><title>Basic Command Line Tools</title><link>/blog/basic-command-line-tools/</link><pubDate>Tue, 30 Aug 2011 00:00:00 +0000</pubDate><guid>/blog/basic-command-line-tools/</guid><description>A co-worker expressed interest in learning more Unix command line operations. This collection seeks to supplement his basic knowledge with some additional tips and tools.
-Searching Source Code ack can be downloaded at betterthangrep.com and is a great, free tool for searching a project’s source code. Usage: ack string will return the relative paths to all the files containing the matched string, the line on which the string is found with the match highlighted, and the line number on which the match lives, all while ignoring those files contained within .</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Command Line on Mike Ball</title><link>/tags/command-line/</link><description>Recent content in Command Line on Mike Ball</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 30 Aug 2011 00:00:00 +0000</lastBuildDate><atom:link href="/tags/command-line/index.xml" rel="self" type="application/rss+xml"/><item><title>Basic Command Line Tools</title><link>/blog/basic-command-line-tools/</link><pubDate>Tue, 30 Aug 2011 00:00:00 +0000</pubDate><guid>/blog/basic-command-line-tools/</guid><description>&lt;p&gt;A co-worker expressed interest in learning more Unix command line operations. This collection seeks to supplement his basic knowledge with some additional tips and tools.&lt;/p&gt;
+&lt;h2 id="searching-source-code"&gt;Searching Source Code&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;ack can be downloaded at betterthangrep.com and is a great, free tool for searching a project’s source code. Usage: ack string will return the relative paths to all the files containing the matched string, the line on which the string is found with the match highlighted, and the line number on which the match lives, all while ignoring those files contained within .git or .svn directories.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ack --js searchtext&lt;/code&gt; will perform a search on all *.js files.&lt;/li&gt;
+&lt;li&gt;If you still prefer &lt;code&gt;grep&lt;/code&gt;, the following would return the relative paths to all the files in which the text &amp;ldquo;string&amp;rdquo; is found: &lt;code&gt;grep -rl string . | grep -v \.svn&lt;/code&gt;, excluding files in .svn directories.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="diffing"&gt;Diffing&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;diff -rq some_directory some_other_directory&lt;/code&gt; will recursively diff all files in some_directory and some_other_directory, printing the files containing any descrepencies to the terminal.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;diff file_one file_two&lt;/code&gt; will output to the terminal all instances of descrepencies between file_one and file_two, as well as outputing the line/column number in which the differences exist.&lt;/li&gt;
+&lt;li&gt;Alternatively, &lt;code&gt;colordiff&lt;/code&gt; is a tool which provides colorized ouput to &lt;code&gt;diff&lt;/code&gt;. If you’re using homebrew, colordiff can be installed with &lt;code&gt;brew install colordiff&lt;/code&gt;. See &lt;code&gt;man colordiff&lt;/code&gt; for usage.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="miscellaneous-operations-on-files"&gt;Miscellaneous Operations on Files&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;cat filename&lt;/code&gt; will output the contents of filename to the terminal.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;less filename&lt;/code&gt; provides a much better way to inspect large files from the command line. It outputs only a full screen view of a file’s contents. Use &lt;code&gt;j&lt;/code&gt; and &lt;code&gt;k&lt;/code&gt; to scroll up and down. b and f navigate a full screen up and down. Use /pattern to search for the text pattern.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cat file1 &amp;gt;&amp;gt; file2&lt;/code&gt; will write the contents of &lt;code&gt;file1&lt;/code&gt; to &lt;code&gt;file2&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;touch filename&lt;/code&gt; will create a file named filname within the current directory.&lt;/li&gt;
+&lt;li&gt;Once installed, &lt;code&gt;tree&lt;/code&gt; produces a depth-indented listing of files.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;chmod 760 filename&lt;/code&gt; changes the permissions on &lt;code&gt;filename&lt;/code&gt; to &lt;code&gt;760&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="maintainenance-monitoring-and-debugging"&gt;Maintainenance, Monitoring, and Debugging&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ps xa&lt;/code&gt; lists all the running processes on your machine.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ps xa | grep java&lt;/code&gt; will will check if a process named &lt;code&gt;java&lt;/code&gt; is running. &lt;code&gt;kill -9 xxxx&lt;/code&gt;, where &lt;code&gt;xxxxx&lt;/code&gt; is the process id, will kill the &lt;code&gt;java&lt;/code&gt; process. This is useful if something has frozen.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;top&lt;/code&gt; is a system monitor tool that produces a frequently-updated list of processes. By default, the processes are ordered by percentage of CPU usage.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;tail -f log_file_name&lt;/code&gt; outputs the log file’s content to the terminal, which is helpful when troubleshooting code such as PHP or Apache.&lt;/li&gt;
+&lt;li&gt;Cheat is a RubyGem that provides command-line access to simple cheat sheets, not unlike a simplified, user-edited man page. An out-of-the-box Cheat installation provides a few basic starter cheat sheets which can be edited and extended easily. It’s also relatively easy to add your own additional cheat sheets. Example Usage: &lt;code&gt;cheat html&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Most commands have a &lt;code&gt;-help&lt;/code&gt; option which will list a command’s arguments and options. Example: &lt;code&gt;cd -help&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Similarly, &lt;code&gt;man&lt;/code&gt; provides more detailed documentation. Example: &lt;code&gt;man mysqldump&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="working-with-a-server"&gt;Working With a Server&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ssh username@hostname.com&lt;/code&gt; provides &lt;code&gt;ssh&lt;/code&gt; acess.&lt;/li&gt;
+&lt;li&gt;Similarly, &lt;code&gt;ftp username@hostname.com&lt;/code&gt; and &lt;code&gt;sftp username@hostname.com&lt;/code&gt; provide &lt;code&gt;ftp&lt;/code&gt; and &lt;code&gt;sftp&lt;/code&gt; access, respectively.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;scp /path/to/local/file username@hostname:path/to/copy/to&lt;/code&gt; can be used to copy files to a server over &lt;code&gt;ssh&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Similarly, &lt;code&gt;scp username@hostname:/path/to/remote/file /local/path/to/copy/to/&lt;/code&gt; copies a file from a server to your local machine.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;wget&lt;/code&gt; can be used to retrieve content from a web server. Example: &lt;code&gt;wget http://hostname.com/somefile.zip&lt;/code&gt; will download &lt;code&gt;somefile.zip&lt;/code&gt; from &lt;code&gt;http://hostname.com&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Similarly, &lt;code&gt;curl -O http://hostname.com/download.tar.gz&lt;/code&gt; will download &lt;code&gt;download.tar.gz&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

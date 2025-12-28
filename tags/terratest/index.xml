@@ -1,4 +1,13 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>terratest on Mike Ball</title><link>/tags/terratest/</link><description>Recent content in terratest on Mike Ball</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 21 Dec 2023 00:00:00 +0000</lastBuildDate><atom:link href="/tags/terratest/index.xml" rel="self" type="application/rss+xml"/><item><title>Automated Terraform Plan Analysis With Terratest</title><link>/blog/automated-terraform-plan-analysis-with-terratest/</link><pubDate>Thu, 21 Dec 2023 00:00:00 +0000</pubDate><guid>/blog/automated-terraform-plan-analysis-with-terratest/</guid><description>How can terratest be used to automate Terraform plan analysis?
-Problem You want to automate Terraform plan analysis in CI/CD, offsetting some of the manual toil associated with plan assessment. Tools like OPA offer policy-as-code solutions, but your team prefers to write Go.
-Solution Usually, terratest is leveraged as a tool for authoring Terraform end-to-end tests that make post-terraform apply assertions on the correctness of the resulting infrastructure.
-However, terratest can also be used to programmatically analyze Terraform plan output, effectively offering a Go-based alternative to tools like OPA and similar policy-as-code tools.</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Terratest on Mike Ball</title><link>/tags/terratest/</link><description>Recent content in Terratest on Mike Ball</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 21 Dec 2023 00:00:00 +0000</lastBuildDate><atom:link href="/tags/terratest/index.xml" rel="self" type="application/rss+xml"/><item><title>Automated Terraform Plan Analysis With Terratest</title><link>/blog/automated-terraform-plan-analysis-with-terratest/</link><pubDate>Thu, 21 Dec 2023 00:00:00 +0000</pubDate><guid>/blog/automated-terraform-plan-analysis-with-terratest/</guid><description>&lt;p&gt;&lt;em&gt;How can &lt;a href="https://terratest.gruntwork.io/"&gt;terratest&lt;/a&gt; be used to automate &lt;a href="https://developer.hashicorp.com/terraform/cli/commands/plan"&gt;Terraform plan&lt;/a&gt; analysis?&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id="problem"&gt;Problem&lt;/h2&gt;
+&lt;p&gt;You want to automate &lt;a href="https://developer.hashicorp.com/terraform/cli/commands/plan"&gt;Terraform
+plan&lt;/a&gt; analysis in
+CI/CD, offsetting some of the manual toil associated with plan assessment. Tools
+like &lt;a href="https://mikeball.info/blog/terraform-plan-validation-with-open-policy-agent/"&gt;OPA&lt;/a&gt; offer
+policy-as-code solutions, but your team prefers to write Go.&lt;/p&gt;
+&lt;h2 id="solution"&gt;Solution&lt;/h2&gt;
+&lt;p&gt;Usually, &lt;a href="https://terratest.gruntwork.io/"&gt;terratest&lt;/a&gt; is leveraged as a tool for
+authoring Terraform end-to-end tests that make post-&lt;code&gt;terraform apply&lt;/code&gt; assertions on
+the correctness of the resulting infrastructure.&lt;/p&gt;
+&lt;p&gt;However, &lt;code&gt;terratest&lt;/code&gt; can also be used to programmatically analyze Terraform plan
+output, effectively offering a Go-based alternative to tools like OPA and similar policy-as-code tools.&lt;/p&gt;</description></item></channel></rss>

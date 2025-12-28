@@ -1,5 +1,53 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>linux on Mike Ball</title><link>/tags/linux/</link><description>Recent content in linux on Mike Ball</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 21 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>An Intro to Unix File Permissions</title><link>/blog/an-intro-to-unix-file-permissions/</link><pubDate>Sun, 21 Mar 2021 00:00:00 +0000</pubDate><guid>/blog/an-intro-to-unix-file-permissions/</guid><description>Unix file permissions can be strange and confusing. This is a basic introduction and cheat sheet.
-ls -l file.txt shows you file.txt&amp;rsquo;s permissions, among other things:
--rw-r--r-- 1 mike staff 0 Nov 1 20:09 file.txt But what does this stuff mean?
-The file name &amp;ndash; file.txt &amp;ndash; is reported on the far right. To its left, ls reports the date and time when file.txt was last modified: Nov 1 20:09. To the left of this, file.</description></item><item><title>A systemd Cheat Sheet</title><link>/blog/a-systemd-cheat-sheet/</link><pubDate>Fri, 18 Dec 2020 00:00:00 +0000</pubDate><guid>/blog/a-systemd-cheat-sheet/</guid><description>Generally, systemd is the standard init system across Linux distributions. systemctl is its central CLI management tool. This is a brief overview and cheat sheet.
-Background systemd is responsible for initializing and managing components, services, and daemons that must be started after the kernel is booted. Such components are often referred to as &amp;ldquo;userland&amp;rdquo; components. resources managed by systemd are called units; these are defined in unit files service management unit files are suffixed with a .</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on Mike Ball</title><link>/tags/linux/</link><description>Recent content in Linux on Mike Ball</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 21 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>An Intro to Unix File Permissions</title><link>/blog/an-intro-to-unix-file-permissions/</link><pubDate>Sun, 21 Mar 2021 00:00:00 +0000</pubDate><guid>/blog/an-intro-to-unix-file-permissions/</guid><description>&lt;p&gt;&lt;em&gt;Unix file permissions can be strange and confusing. This is a basic introduction and cheat sheet.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ls -l file.txt&lt;/code&gt; shows you &lt;code&gt;file.txt&lt;/code&gt;&amp;rsquo;s &lt;em&gt;permissions&lt;/em&gt;, among other things:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-txt" data-lang="txt"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;-rw-r--r-- 1 mike staff 0 Nov 1 20:09 file.txt
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;But what does this stuff mean?&lt;/p&gt;
+&lt;p&gt;The file name &amp;ndash; &lt;code&gt;file.txt&lt;/code&gt; &amp;ndash; is reported on the far right. To its left, &lt;code&gt;ls&lt;/code&gt; reports the date and time when &lt;code&gt;file.txt&lt;/code&gt; was last modified: &lt;code&gt;Nov 1 20:09&lt;/code&gt;. To the left of this, &lt;code&gt;file.txt&lt;/code&gt;&amp;rsquo;s size &amp;ndash; &lt;code&gt;0&lt;/code&gt; &amp;ndash; is shown in bytes. To its left, &lt;code&gt;staff&lt;/code&gt; is the group that can access &lt;code&gt;file.txt&lt;/code&gt; and &lt;code&gt;mike&lt;/code&gt; is the file&amp;rsquo;s owner. The &lt;code&gt;1&lt;/code&gt; to the left of &lt;code&gt;mike&lt;/code&gt; represents &lt;code&gt;file.txt&lt;/code&gt;&amp;rsquo;s &lt;a href="https://en.wikipedia.org/wiki/Hard_link"&gt;hard link&lt;/a&gt; count.&lt;/p&gt;</description></item><item><title>A systemd Cheat Sheet</title><link>/blog/a-systemd-cheat-sheet/</link><pubDate>Fri, 18 Dec 2020 00:00:00 +0000</pubDate><guid>/blog/a-systemd-cheat-sheet/</guid><description>&lt;p&gt;&lt;em&gt;Generally, &lt;code&gt;systemd&lt;/code&gt; is the standard init system across Linux
+distributions. &lt;code&gt;systemctl&lt;/code&gt; is its central CLI management tool.
+This is a brief overview and cheat sheet.&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id="background"&gt;Background&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemd&lt;/code&gt; is responsible for initializing and managing components, services,
+and daemons that must be started after the kernel is booted. Such components
+are often referred to as &amp;ldquo;userland&amp;rdquo; components.&lt;/li&gt;
+&lt;li&gt;resources managed by &lt;code&gt;systemd&lt;/code&gt; are called &lt;em&gt;units&lt;/em&gt;; these are defined in unit
+files&lt;/li&gt;
+&lt;li&gt;service management unit files are suffixed with a &lt;code&gt;.service&lt;/code&gt; (though there are
+other types of units too, such as &lt;code&gt;.socket&lt;/code&gt;, &lt;code&gt;.device&lt;/code&gt;, &lt;code&gt;.mount&lt;/code&gt;, etc. This overview
+focuses on &lt;code&gt;.service&lt;/code&gt; units, though)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="startingstopping-services"&gt;Starting/Stopping services&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemctl start something.service&lt;/code&gt; - start a service&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl stop something.service&lt;/code&gt; - stop a service&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl restart something.service&lt;/code&gt; - restart a service&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="reloading-configuration"&gt;Reloading configuration&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemctl reload something.service&lt;/code&gt; - reload a service&amp;rsquo;s configuration
+without restarting the service, assuming the service is capable of this&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl reload-or-restart something.service&lt;/code&gt; - reload a service&amp;rsquo;s
+configuration in place, if the service is capable of doing so (otherwise, restart the
+service to pick up the new configuration)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl daemon-reload&lt;/code&gt; reloads the entire &lt;code&gt;systemd&lt;/code&gt; process&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="enabling-services"&gt;Enabling services&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemctl enable something.service&lt;/code&gt; - &lt;em&gt;enable&lt;/em&gt; a service, causing the service
+to be automatically started at boot (Note, however, this does not start the
+service in the current session; that still requires a &lt;code&gt;start&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl disable something.service&lt;/code&gt; - disable a service from starting at boot&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="querying-status"&gt;Querying status&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemctl status something.service&lt;/code&gt; - outputs the service&amp;rsquo;s state, the cgroup hierarchy, and the first serveral log lines&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl is-active something.service&lt;/code&gt; - reports if a service is running&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl is-enabled something.service&lt;/code&gt; - reports if a service is enabled&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl is-failed something.service&lt;/code&gt; - reports if a service is in a failed state&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="learning-more-about-a-systems-units"&gt;Learning more about a system&amp;rsquo;s units&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemctl list-units&lt;/code&gt; - lists active units&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl list-units --all --state=active&lt;/code&gt; - lists all active units&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;(Other options exist too.)&lt;/p&gt;</description></item></channel></rss>

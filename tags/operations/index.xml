@@ -1,9 +1,58 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>operations on Mike Ball</title><link>/tags/operations/</link><description>Recent content in operations on Mike Ball</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 18 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/operations/index.xml" rel="self" type="application/rss+xml"/><item><title>A systemd Cheat Sheet</title><link>/blog/a-systemd-cheat-sheet/</link><pubDate>Fri, 18 Dec 2020 00:00:00 +0000</pubDate><guid>/blog/a-systemd-cheat-sheet/</guid><description>Generally, systemd is the standard init system across Linux distributions. systemctl is its central CLI management tool. This is a brief overview and cheat sheet.
-Background systemd is responsible for initializing and managing components, services, and daemons that must be started after the kernel is booted. Such components are often referred to as &amp;ldquo;userland&amp;rdquo; components. resources managed by systemd are called units; these are defined in unit files service management unit files are suffixed with a .</description></item><item><title>Using wget over Ansible's get_url</title><link>/blog/using-wget-over-ansibles-get_url/</link><pubDate>Wed, 23 Dec 2015 00:00:00 +0000</pubDate><guid>/blog/using-wget-over-ansibles-get_url/</guid><description>Problem: In provisioning a server, your Ansible playbook needs to download files from a URL behinded authentication, such as a private GitHub repository. In Ansible 2.0, Ansible&amp;rsquo;s get_url supports custom headers — such as Authorization — but pre-2.0 Ansible does not.
-Solution: Use wget, a wgetrc, and ansible-vault.
-Step 1: Generate a GitHub access token
-Step 2: Store the token in an Ansible group_var at your_playbook_dir/group_vars/all:
-github_token: &amp;#34;your access token value&amp;#34; Step 3: Use ansible-vault to encrypt your github_token; enter a password at the prompt:</description></item><item><title>Apache Persistent Connection Problems</title><link>/blog/apache-persistent-connection-problems/</link><pubDate>Sun, 18 Oct 2015 00:00:00 +0000</pubDate><guid>/blog/apache-persistent-connection-problems/</guid><description>Problem: Apache worker thread pool is exhausted; server CPU consumption is high.
-Solution: reduce the Apache KeepAliveTimeout from its 15 second default (disclaimer: maybe, depending on circumstances).
-Background HTTP keep-alive functionality seeks to improve efficiency. In effect, HTTP keep-alive — also referred to as HTTP persistent connection and HTTP connection reuse allows the use of a single TCP connection to send and receive multiple HTTP requests and responses.
-Keep-alive reduces the latency associated with opening a new TCP connection for each HTTP request.</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Operations on Mike Ball</title><link>/tags/operations/</link><description>Recent content in Operations on Mike Ball</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 18 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/operations/index.xml" rel="self" type="application/rss+xml"/><item><title>A systemd Cheat Sheet</title><link>/blog/a-systemd-cheat-sheet/</link><pubDate>Fri, 18 Dec 2020 00:00:00 +0000</pubDate><guid>/blog/a-systemd-cheat-sheet/</guid><description>&lt;p&gt;&lt;em&gt;Generally, &lt;code&gt;systemd&lt;/code&gt; is the standard init system across Linux
+distributions. &lt;code&gt;systemctl&lt;/code&gt; is its central CLI management tool.
+This is a brief overview and cheat sheet.&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id="background"&gt;Background&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemd&lt;/code&gt; is responsible for initializing and managing components, services,
+and daemons that must be started after the kernel is booted. Such components
+are often referred to as &amp;ldquo;userland&amp;rdquo; components.&lt;/li&gt;
+&lt;li&gt;resources managed by &lt;code&gt;systemd&lt;/code&gt; are called &lt;em&gt;units&lt;/em&gt;; these are defined in unit
+files&lt;/li&gt;
+&lt;li&gt;service management unit files are suffixed with a &lt;code&gt;.service&lt;/code&gt; (though there are
+other types of units too, such as &lt;code&gt;.socket&lt;/code&gt;, &lt;code&gt;.device&lt;/code&gt;, &lt;code&gt;.mount&lt;/code&gt;, etc. This overview
+focuses on &lt;code&gt;.service&lt;/code&gt; units, though)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="startingstopping-services"&gt;Starting/Stopping services&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemctl start something.service&lt;/code&gt; - start a service&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl stop something.service&lt;/code&gt; - stop a service&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl restart something.service&lt;/code&gt; - restart a service&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="reloading-configuration"&gt;Reloading configuration&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemctl reload something.service&lt;/code&gt; - reload a service&amp;rsquo;s configuration
+without restarting the service, assuming the service is capable of this&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl reload-or-restart something.service&lt;/code&gt; - reload a service&amp;rsquo;s
+configuration in place, if the service is capable of doing so (otherwise, restart the
+service to pick up the new configuration)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl daemon-reload&lt;/code&gt; reloads the entire &lt;code&gt;systemd&lt;/code&gt; process&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="enabling-services"&gt;Enabling services&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemctl enable something.service&lt;/code&gt; - &lt;em&gt;enable&lt;/em&gt; a service, causing the service
+to be automatically started at boot (Note, however, this does not start the
+service in the current session; that still requires a &lt;code&gt;start&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl disable something.service&lt;/code&gt; - disable a service from starting at boot&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="querying-status"&gt;Querying status&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemctl status something.service&lt;/code&gt; - outputs the service&amp;rsquo;s state, the cgroup hierarchy, and the first serveral log lines&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl is-active something.service&lt;/code&gt; - reports if a service is running&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl is-enabled something.service&lt;/code&gt; - reports if a service is enabled&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl is-failed something.service&lt;/code&gt; - reports if a service is in a failed state&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="learning-more-about-a-systems-units"&gt;Learning more about a system&amp;rsquo;s units&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemctl list-units&lt;/code&gt; - lists active units&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl list-units --all --state=active&lt;/code&gt; - lists all active units&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;(Other options exist too.)&lt;/p&gt;</description></item><item><title>Using wget over Ansible's get_url</title><link>/blog/using-wget-over-ansibles-get_url/</link><pubDate>Wed, 23 Dec 2015 00:00:00 +0000</pubDate><guid>/blog/using-wget-over-ansibles-get_url/</guid><description>&lt;p&gt;Problem: In provisioning a server, your Ansible playbook needs to download files from a URL behinded authentication, such as a private GitHub repository. In Ansible 2.0, Ansible&amp;rsquo;s &lt;a href=""&gt;get_url&lt;/a&gt; supports custom headers — such as &lt;code&gt;Authorization&lt;/code&gt; — but pre-2.0 Ansible does not.&lt;/p&gt;
+&lt;p&gt;Solution: Use &lt;code&gt;wget&lt;/code&gt;, a &lt;code&gt;wgetrc&lt;/code&gt;, and &lt;code&gt;ansible-vault&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Step 1: Generate a &lt;a href="https://github.com/settings/tokens"&gt;GitHub access token&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Step 2: Store the token in an Ansible &lt;code&gt;group_var&lt;/code&gt; at &lt;code&gt;your_playbook_dir/group_vars/all&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;github_token&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;your access token value&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Step 3: Use &lt;code&gt;ansible-vault&lt;/code&gt; to encrypt your &lt;code&gt;github_token&lt;/code&gt;; enter a password at the prompt:&lt;/p&gt;</description></item><item><title>Apache Persistent Connection Problems</title><link>/blog/apache-persistent-connection-problems/</link><pubDate>Sun, 18 Oct 2015 00:00:00 +0000</pubDate><guid>/blog/apache-persistent-connection-problems/</guid><description>&lt;p&gt;Problem: Apache worker thread pool is exhausted; server CPU consumption is high.&lt;/p&gt;
+&lt;p&gt;Solution: reduce the Apache &lt;code&gt;KeepAliveTimeout&lt;/code&gt; from its 15 second default (disclaimer: maybe, depending on circumstances).&lt;/p&gt;
+&lt;h2 id="background"&gt;Background&lt;/h2&gt;
+&lt;p&gt;HTTP keep-alive functionality seeks to improve efficiency. In effect, HTTP keep-alive — also referred to as &lt;em&gt;HTTP persistent connection&lt;/em&gt; and &lt;em&gt;HTTP connection reuse&lt;/em&gt; allows the use of a single TCP connection to send and receive multiple HTTP requests and responses.&lt;/p&gt;
+&lt;p&gt;Keep-alive reduces the latency associated with opening a new TCP connection for each HTTP request. It also reduces server CPU usage: by reusing an open connection, the server isn&amp;rsquo;t required to utilize CPU resources necessary to open a new TCP connection (and handle HTTPS, if relevant).&lt;/p&gt;</description></item></channel></rss>

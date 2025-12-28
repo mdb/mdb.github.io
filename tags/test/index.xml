@@ -1,5 +1,45 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>test on Mike Ball</title><link>/tags/test/</link><description>Recent content in test on Mike Ball</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 11 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/test/index.xml" rel="self" type="application/rss+xml"/><item><title>Go Test Parallelization</title><link>/blog/go-test-parallelization/</link><pubDate>Fri, 11 Jun 2021 00:00:00 +0000</pubDate><guid>/blog/go-test-parallelization/</guid><description>A brief introduction to using Go&amp;rsquo;s testing package&amp;rsquo;s T.Parallel() to parallelize tests.
-Problem Your Go project&amp;rsquo;s tests are slow and run serially. Or perhaps they&amp;rsquo;re not slow, but they run serially and could be faster.
-Solution Consider running the test cases in parallel.
-Simple non-parallelized example As a starting point, consider a simple non-parallelized test:
-package main import ( &amp;#34;io/ioutil&amp;#34; &amp;#34;os&amp;#34; &amp;#34;testing&amp;#34; &amp;#34;time&amp;#34; ) func TestSimple(t *testing.T) { testCases := []struct { name string }{{ &amp;#34;1&amp;#34;, }, { &amp;#34;2&amp;#34;, }, { &amp;#34;3&amp;#34;, }, { &amp;#34;4&amp;#34;, }, { &amp;#34;5&amp;#34;, }} t.</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Test on Mike Ball</title><link>/tags/test/</link><description>Recent content in Test on Mike Ball</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 11 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/test/index.xml" rel="self" type="application/rss+xml"/><item><title>Go Test Parallelization</title><link>/blog/go-test-parallelization/</link><pubDate>Fri, 11 Jun 2021 00:00:00 +0000</pubDate><guid>/blog/go-test-parallelization/</guid><description>&lt;p&gt;&lt;em&gt;A brief introduction to using Go&amp;rsquo;s &lt;code&gt;testing&lt;/code&gt; package&amp;rsquo;s &lt;a href="https://golang.org/pkg/testing/#T.Parallel"&gt;&lt;code&gt;T.Parallel()&lt;/code&gt;&lt;/a&gt; to parallelize tests.&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id="problem"&gt;Problem&lt;/h2&gt;
+&lt;p&gt;Your Go project&amp;rsquo;s tests are slow and run serially. Or perhaps they&amp;rsquo;re not slow, but they run serially and could be faster.&lt;/p&gt;
+&lt;h2 id="solution"&gt;Solution&lt;/h2&gt;
+&lt;p&gt;Consider running the test cases in parallel.&lt;/p&gt;
+&lt;h2 id="simple-non-parallelized-example"&gt;Simple non-parallelized example&lt;/h2&gt;
+&lt;p&gt;As a starting point, consider a simple non-parallelized test:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-golang" data-lang="golang"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;package&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; (
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;io/ioutil&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;os&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;testing&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;time&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;TestSimple&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;t&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;testing&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;T&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;testCases&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; []&lt;span style="color:#66d9ef"&gt;struct&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;name&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }{{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;1&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }, {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;2&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }, {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;3&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }, {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;4&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }, {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;5&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;t&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Logf&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;Running %s tests...&amp;#34;&lt;/span&gt;, len(&lt;span style="color:#a6e22e"&gt;testCases&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;i&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;tc&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;range&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;testCases&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;t&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Run&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;tc&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;name&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;func&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;t&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;testing&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;T&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;time&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Sleep&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;3&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;time&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Second&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;expected&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;strconv&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Itoa&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;i&lt;/span&gt; &lt;span style="color:#f92672"&gt;+&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;expected&lt;/span&gt; &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;tc&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;name&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;t&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Errorf&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;expected index %s to equal test %s&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;expected&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;tc&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;name&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; })
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The code leverages a common &lt;a href="https://dave.cheney.net/2019/05/07/prefer-table-driven-tests"&gt;table driven testing&lt;/a&gt; pattern: individual test case names are stored in a &lt;code&gt;testCases&lt;/code&gt; anonymous struct literal and each test case is subject to an assertion. To futher illustrate the benefits of parallelization, the code also sleeps for three seconds during each test case iteration.&lt;/p&gt;</description></item></channel></rss>
