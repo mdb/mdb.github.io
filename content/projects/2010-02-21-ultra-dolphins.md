@@ -3,7 +3,7 @@ title: Ultra Dolphins
 date: 2010-02-21
 date_completed: Winter 2007
 thumbnail: ultra_dolphins_thumb.gif
-published: false
+draft: true
 tags:
 - UX
 - design

@@ -1,7 +1,7 @@
 ---
 title: Greater Philadelphia Chamber of Commerce
 date: 2010-02-23
-published: false
+draft: true
 date_completed: August 2007 &ndash; March 2010
 thumbnail: gpcc_thumb.png
 tags:

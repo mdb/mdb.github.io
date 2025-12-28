@@ -4,7 +4,7 @@ date: 2014-07-07
 tags:
 - javascript
 thumbnail: default.png
-published: false
+is_published: false
 teaser: A few notes on JavaScript modules.
 ---
 

@@ -4,7 +4,7 @@ date: 2016-04-15
 tags:
 - rake
 - ruby
-published: true
+is_published: true
 thumbnail: cage_thumb.png
 teaser: How to use Ruby OptionParser in Rake
 ---
