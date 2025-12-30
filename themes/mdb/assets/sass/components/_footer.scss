@@ -24,6 +24,11 @@ footer {
       }
     }
 
+    h2 a, h2 a:visited {
+      font-size: 100%;
+      color: $inverse_text_color;
+    }
+
     a {
       font-size: 125%;
     }
