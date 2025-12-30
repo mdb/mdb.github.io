@@ -1,4 +1,71 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Mike Ball</title><link>/</link><description>Recent content on Mike Ball</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 21 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Terraform: self-validating plan-time permissions checks</title><link>/blog/terraform-self-validating-plan-time-permissions-checks/</link><pubDate>Fri, 21 Mar 2025 00:00:00 +0000</pubDate><guid>/blog/terraform-self-validating-plan-time-permissions-checks/</guid><description>&lt;h2 id="problem"&gt;Problem&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Mike Ball</title><link>/</link><description>Recent content on Mike Ball</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 30 Dec 2025 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Infinity Cats</title><link>/blog/infinity-cats/</link><pubDate>Tue, 30 Dec 2025 00:00:00 +0000</pubDate><guid>/blog/infinity-cats/</guid><description>&lt;style&gt;
+body {
+ background-image: url('/images/blog/colorful_cats_800x800.jpg');
+ background-repeat: repeat;
+}
+
+header, main {
+ visibility: hidden;
+}
+
+.browser-window {
+ visibility: hidden; /* uncomment to view CSS animation */
+ width: 99%;
+ height: 5000px;
+ overflow: hidden;
+ background: #f1f1f1;
+ border-radius: 5px;
+ position: relative;
+ border: 1px solid #e1e1e1;
+}
+
+.image-container {
+ border-radius: 5px;
+ width: 100%;
+ height: 80000px;
+ background-image: url('/images/blog/colorful_cats_800x800.jpg');
+ background-repeat: repeat-y;
+ background-position: 0 0;
+ animation: slide 200s linear infinite;
+}
+
+@keyframes slide {
+ from {
+ background-position: 0 100%;
+ }
+ to {
+ background-position: 0 0; 
+ }
+}
+
+.browser-window::before {
+ content: "";
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ height: 25px;
+ background: #e1e1e1;
+ border-top-left-radius: 5px;
+ border-top-right-radius: 5px;
+}
+
+.browser-window::after {
+ content: "";
+ position: absolute;
+ top: 8px;
+ left: 10px;
+ width: 10px;
+ height: 10px;
+ background: #ff5f56; /* red */
+ border-radius: 50%;
+ box-shadow: 15px 0 0 #ffbd2e, /* yellow */
+ 30px 0 0 #27c93f; /* green */
+}
+&lt;/style&gt;
+&lt;div class="browser-window"&gt;
+ &lt;div class="image-container"&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Terraform: self-validating plan-time permissions checks</title><link>/blog/terraform-self-validating-plan-time-permissions-checks/</link><pubDate>Fri, 21 Mar 2025 00:00:00 +0000</pubDate><guid>/blog/terraform-self-validating-plan-time-permissions-checks/</guid><description>&lt;h2 id="problem"&gt;Problem&lt;/h2&gt;
 &lt;p&gt;Your Terraform module uses the &lt;a href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs"&gt;AWS&lt;/a&gt; provider. In CI/CD, the &lt;code&gt;plan&lt;/code&gt; associated with a GitHub pull request passes. However, after merging the pull request,
 the full &lt;code&gt;apply&lt;/code&gt; fails; the IAM role used by the AWS provider lacks sufficient permissions.&lt;/p&gt;
 &lt;p&gt;How can you &amp;ldquo;shift left&amp;rdquo; and discover such problems earlier in the CI/CD
