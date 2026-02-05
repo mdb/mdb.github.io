@@ -21,8 +21,8 @@ provider.</em></p><h2 id=tldr-example>TL;DR example</h2><div class=highlight><pr
 </span></span></code></pre></div><h2 id=example-use-case>Example use case</h2><p>Your organization&rsquo;s CI/CD pipeline features distinct, loosely coupled <em>build</em>
 and <em>deploy</em> phases.</p><p>At a <em>build</em> phase, your organization builds and publishes build artifacts &ndash;
 including deployment configuration data &ndash; as GitHub release assets.</p><p>For example, container image URIs, Kubernetes deployment descriptors, an application
-version manifest, or environment-specific configuration encoded in JSON or YAML
-is attached to each semantically-versioned GitHub release.</p><p>Later, at a <em>deploy</em> phase &ndash; decoupled from the <em>build</em> phase &ndash; you&rsquo;d like to
+version manifest, helm values, or environment-specific configuration encoded in
+JSON or YAML is attached to each semantically-versioned GitHub release.</p><p>Later, at a <em>deploy</em> phase &ndash; decoupled from the <em>build</em> phase &ndash; you&rsquo;d like to
 read release assets&rsquo; contents in Terraform and use the assets&rsquo; values to drive
 parameterized resource configurations applied to the targeted environment.</p><p>As an example, consider a CI/CD pipeline targeting AWS ECS:</p><pre class=mermaid>flowchart TB
   subgraph build[Build Phase]
@@ -37,7 +37,7 @@ parameterized resource configurations applied to the targeted environment.</p><p
     gh_asset[Read deployment.yaml associated w/ GitHub release vX.Y.Z] --> decode[Decode its values]
     decode --> ecs[Configure AWS ECS service accordingly]
   end
-</pre><p>Previously, accomplishing this with the
+</pre><div class=note><p>NOTE: The example targets ECS but, theoretically, the pattern could be utilized to drive any Terraform pipeline, regardless of compute platform.</p></div><p>Previously, accomplishing this with the
 <a href=https://registry.terraform.io/providers/integrations/github/latest/docs>GitHub Terraform provider</a>
 required workarounds: shelling out via a <code>local-exec</code> provisioner, using an
 <code>external</code> data source, or fetching the asset outside Terraform and passing its
