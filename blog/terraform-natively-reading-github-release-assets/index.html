@@ -1,0 +1,101 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>Terraform: natively reading GitHub release assets | Mike Ball</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="Reading release assets in Terraform via the `github_release_asset` data source."><meta name=generator content="Hugo 0.152.2"><meta name=ROBOTS content="INDEX, FOLLOW"><link rel=stylesheet href=/main.min.5a7f29a0a9d592f23ecc3a5226aaa84afa4da4e88b8ec65da8185a6d3b08a5bc.css></head><body class=blog-post><header><div class=mark><a href=/>Mike Ball</a></div><button>Toggle Navigation</button><div class=nav-wrap><nav class=primary><ul><li><a href=/blog>Blog</a></li><li><a href=#about>About</a></li></ul></nav><nav class=secondary><ul><li><a href=https://github.com/mdb>GitHub</a></li><li><a href=/instagram>Instagram</a></li></ul></nav><nav class=tertiary><ul><li><a href=https://tiendah.bigcartel.com>Shop</a></li><li><a href=#about>Contact</a></li></ul></nav></div></header><main role=main><div class=blog-post><article><header><h1>Terraform: natively reading GitHub release assets</h1><time>January 31, 2026</time></header><div><p><em>Recently, I <a href=https://github.com/integrations/terraform-provider-github/pull/2514>contributed</a>
+the <a href=https://registry.terraform.io/providers/integrations/github/latest/docs/data-sources/release_asset>github_release_asset</a> data source to the
+GitHub Terraform provider. It&rsquo;s now available in <a href=https://github.com/integrations/terraform-provider-github/releases/tag/v6.11.0>v6.11.0+ releases</a> of the
+provider.</em></p><h2 id=tldr-example>TL;DR example</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#75715e># Fetch the most recent my-org/foo GitHub release associated with a tag.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>data</span> <span style=color:#e6db74>&#34;github_release&#34;</span> <span style=color:#e6db74>&#34;latest&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>repository</span>  <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;foo&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>owner</span>       <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;my-org&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>retrieve_by</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;latest&#34;</span>
+</span></span><span style=display:flex><span>}<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e># Fetch the deployment.yaml manifest associated with the latest GitHub release.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>data</span> <span style=color:#e6db74>&#34;github_release_asset&#34;</span> <span style=color:#e6db74>&#34;deployment_config&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>repository</span>             <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;foo&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>owner</span>                  <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;my-org&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>asset_id</span>               <span style=color:#f92672>=</span> [
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>asset</span> <span style=color:#66d9ef>in</span> data.<span style=color:#a6e22e>github_release</span>.<span style=color:#a6e22e>latest</span>.<span style=color:#a6e22e>assets</span> <span style=color:#f92672>:</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>asset</span>.<span style=color:#a6e22e>id</span> <span style=color:#a6e22e>if</span> <span style=color:#a6e22e>asset</span>.<span style=color:#a6e22e>name</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;deployment.yaml&#34;</span>
+</span></span><span style=display:flex><span>  ][<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>download_file_contents</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=example-use-case>Example use case</h2><p>Your organization&rsquo;s CI/CD pipeline features distinct, loosely coupled <em>build</em>
+and <em>deploy</em> phases.</p><p>At a <em>build</em> phase, your organization builds and publishes build artifacts &ndash;
+including deployment configuration data &ndash; as GitHub release assets.</p><p>For example, container image URIs, Kubernetes deployment descriptors, an application
+version manifest, or environment-specific configuration encoded in JSON or YAML
+is attached to each semantically-versioned GitHub release.</p><p>Later, at a <em>deploy</em> phase &ndash; decoupled from the <em>build</em> phase &ndash; you&rsquo;d like to
+read release assets&rsquo; contents in Terraform and use the assets&rsquo; values to drive
+parameterized resource configurations applied to the targeted environment.</p><p>As an example, consider a CI/CD pipeline targeting AWS ECS:</p><pre class=mermaid>flowchart TB
+  subgraph build[Build Phase]
+    direction LR
+    artifacts[Generate artifacts] --> asset[deployment.yaml, Docker image, ECS task definition, etc.] --> release[Publish GitHub release vX.Y.Z]
+  end
+
+  build -.-> deploy
+
+  subgraph deploy[Terraform Deploy Phase]
+    direction LR
+    gh_asset[Read deployment.yaml associated w/ GitHub release vX.Y.Z] --> decode[Decode its values]
+    decode --> ecs[Configure AWS ECS service accordingly]
+  end
+</pre><p>Previously, accomplishing this with the
+<a href=https://registry.terraform.io/providers/integrations/github/latest/docs>GitHub Terraform provider</a>
+required workarounds: shelling out via a <code>local-exec</code> provisioner, using an
+<code>external</code> data source, or fetching the asset outside Terraform and passing its
+contents as a variable.</p><h2 id=using-the-github_release_asset-data-source>Using the <code>github_release_asset</code> data source</h2><p>Now, release asset data &ndash; like the above described YAML or JSON files &ndash; can be
+read natively with Terraform. For example:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#66d9ef>variable</span> <span style=color:#e6db74>&#34;release&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>type</span>        <span style=color:#f92672>=</span> <span style=color:#a6e22e>string</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>description</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;The semantically versioned tag associated with the GitHub release to deploy&#34;</span>
+</span></span><span style=display:flex><span>}<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e># Fetch the my-org/foo GitHub release associated with a tag.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>data</span> <span style=color:#e6db74>&#34;github_release&#34;</span> <span style=color:#e6db74>&#34;latest&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>repository</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;foo&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>owner</span>      <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;my-org&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>tag_name</span>   <span style=color:#f92672>=</span> var.<span style=color:#a6e22e>release</span>
+</span></span><span style=display:flex><span>}<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e># Fetch the deployment.yaml manifest associated with the GitHub release.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>data</span> <span style=color:#e6db74>&#34;github_release_asset&#34;</span> <span style=color:#e6db74>&#34;deployment_config&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>repository</span>             <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;foo&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>owner</span>                  <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;my-org&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>asset_id</span>               <span style=color:#f92672>=</span> [
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>asset</span> <span style=color:#66d9ef>in</span> data.<span style=color:#a6e22e>github_release</span>.<span style=color:#a6e22e>latest</span>.<span style=color:#a6e22e>assets</span> <span style=color:#f92672>:</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>asset</span>.<span style=color:#a6e22e>id</span> <span style=color:#a6e22e>if</span> <span style=color:#a6e22e>asset</span>.<span style=color:#a6e22e>name</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;deployment.yaml&#34;</span>
+</span></span><span style=display:flex><span>  ][<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>download_file_contents</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>}<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e># Decode the deployment.yaml manifest.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#a6e22e>locals</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>deployment_config</span> <span style=color:#f92672>=</span> yamldecode(
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>base64decode</span>(data.<span style=color:#a6e22e>github_release_asset</span>.<span style=color:#a6e22e>deployment_config</span>.<span style=color:#a6e22e>file_contents</span>)
+</span></span><span style=display:flex><span>  )
+</span></span><span style=display:flex><span>}<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e># Use local.deployment_config.* values to drive Terraform configuration.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;aws_ecs_service&#34;</span> <span style=color:#e6db74>&#34;foo&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>task_definition</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>deployment_config</span>.<span style=color:#a6e22e>task_arn</span>
+</span></span><span style=display:flex><span>  ...
+</span></span></code></pre></div><p>Then, to apply a specific versioned release (including a past release; in
+theory, the pattern could also drive rollbacks):</p><pre tabindex=0><code>terraform apply \
+  -var &#34;release=v1.0.3&#34;
+</code></pre><h2 id=why-whats-this-give-you>Why? What&rsquo;s this give you?</h2><p>YMMV, but these are the benefits I had in mind when <a href=https://github.com/integrations/terraform-provider-github/pull/2514>contributing the data
+source</a>:</p><ul><li><strong>Native Terraform integration</strong>: no need for awkward orchestration, like
+using <code>local-exec</code> provisioners, <code>external</code> data sources, or pre-fetching
+assets outside Terraform.</li><li><strong>Human-friendly version-controlled deployments</strong>: deploy any release by specifying its
+semantic version tag; the same mechanism can drive rollbacks to previous versions.</li><li><strong>Out-of-the-box UI, API, and developer experience benefits</strong>: GitHub provides
+a web interface for browsing releases over time, viewing changelogs, and downloading
+assets, plus a REST API for programmatic access beyond Terraform; this lends
+itself well to empowering future platform capabilities even beyond the immediate
+build/deploy use case.</li><li><strong>Decoupled build and deploy</strong>: build artifacts are immutably versioned in
+GitHub releases; the deploy phase reads them without tight coupling or
+requiring redundant, hardcoded, error prone input data.</li><li><strong>Single source of truth</strong>: GitHub releases serve as the common, authoritative
+source for point-in-time application configuration, providing a shared data
+source to any downstream process (not just deploy automation).</li></ul></div><ul class=tags><li><a href=/tags/terraform>terraform</a></li><li><a href=/tags/github>github</a></li><li><a href=/tags/iac>iac</a></li></ul></article></div></main><footer><section><h1 id=about>Info</h1><div><h2><a href=/>Mike Ball</a></h2><p>I live in Philadelphia and work as a multi-disciplinary software engineer & designer.</p><p>Over the years, I've developed front end web applications, built
+backend services, automated cloud infrastructure management, designed
+CI/CD pipelines for high scale distributed systems, developed developer
+platforms for large organizations, and contributed to numerous open
+source software projects.</p><p>I've also worked in graphic and UX design. Buy prints of my illustrations at <a href=https://tiendah.bigcartel.com>Tiendah</a>.</p></div><div class=double><h2>Shop Tiendah</h2><ul class="gallery store-feed"></ul><h2>Instagram</h2><ul class="gallery ig-feed"></ul></div><div><h2>Etc.</h2><ul><li><a href=http://github.com/mdb>GitHub</a></li><li><a href=https://clapclapexcitement.bsky.social>Bluesky</a></li><li><a href=https://instagram.com/clapclapexcitement>Instagram</a></li><li><a href=/index.xml>RSS Feed</a></li><li><a href=https://tiendah.bigcartel.com>Shop Tiendah</a></li></ul><h2>Contact</h2><p>Interested in working with me? <a href=mailto:mikedball@gmail.com>Get in touch</a>.</p></div></section></footer><script type=text/javascript src=/js/main.min.542672b67aa924d06e857fba942ea82bceb1ba468d461ef62da049fad70cd0a7.js></script><script type=text/javascript>(function(e,t,n,s,o,i,a){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,i=t.createElement(n),a=t.getElementsByTagName(n)[0],i.async=1,i.src=s,a.parentNode.insertBefore(i,a)})(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-54324621-1","auto"),ga("send","pageview")</script><script type=module>
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+      </script></body></html>
