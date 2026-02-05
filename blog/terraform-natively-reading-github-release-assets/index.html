@@ -37,7 +37,7 @@ parameterized resource configurations applied to the targeted environment.</p><p
     gh_asset[Read deployment.yaml associated w/ GitHub release vX.Y.Z] --> decode[Decode its values]
     decode --> ecs[Configure AWS ECS service accordingly]
   end
-</pre><div class=note><p>NOTE: The example targets ECS but, theoretically, the pattern could be utilized to drive any Terraform pipeline, regardless of compute platform.</p></div><p>Previously, accomplishing this with the
+</pre><div class=note><p>NOTE: The example targets ECS but, theoretically, the pattern could be utilized to drive any Terraform pipeline, regardless of compute platform.</p><p>For example, a machine-readable <a href=https://en.wikipedia.org/wiki/Bill_of_materials>Bill of Materials</a> associated with a GitHub release could be read from multiple downstream Terraform pipelines that all use the BOM as common input data.</p></div><p>Previously, accomplishing this with the
 <a href=https://registry.terraform.io/providers/integrations/github/latest/docs>GitHub Terraform provider</a>
 required workarounds: shelling out via a <code>local-exec</code> provisioner, using an
 <code>external</code> data source, or fetching the asset outside Terraform and passing its
