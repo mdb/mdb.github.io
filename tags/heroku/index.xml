@@ -4,7 +4,7 @@
 &lt;p&gt;Step 1: Create a &lt;a href="https://api.heroku.com/signup"&gt;Heroku&lt;/a&gt; account.&lt;/p&gt;
 &lt;p&gt;Step 2: Install the &lt;a href="https://toolbelt.herokuapp.com"&gt;Heroku Toolbelt&lt;/a&gt;, which includes the Heroku command line client, Git, and Foreman.&lt;/li&gt;&lt;/p&gt;
 &lt;p&gt;Step 3: Log in by entering the following in the command line:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;heroku login
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;heroku login
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Step 4: Install &lt;a href="http://nodejs.org"&gt;Node.js&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Step 5: Create an Express app.&lt;/p&gt;
 &lt;p&gt;Let’s call it &lt;code&gt;heroku-demo&lt;/code&gt;:&lt;/p&gt;</description></item><item><title>Using South on a Heroku-hosted Django Project</title><link>/blog/using-south-on-a-heroku-hosted-django-project/</link><pubDate>Sat, 18 Feb 2012 00:00:00 +0000</pubDate><guid>/blog/using-south-on-a-heroku-hosted-django-project/</guid><description>&lt;p&gt;&lt;strong&gt;Problem&lt;/strong&gt;: You need to add new fields to the admin of a Django project hosted on Heroku but don&amp;rsquo;t want to destroy data by running &lt;code&gt;syncdb&lt;/code&gt; on your Heroku-hosted database.&lt;/p&gt;

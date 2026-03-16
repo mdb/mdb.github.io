@@ -2,7 +2,7 @@
 &lt;h2 id="set-up-your-repository"&gt;Set Up Your Repository&lt;/h2&gt;
 &lt;p&gt;Fork a project by visiting its URL on GitHub and clicking the &amp;ldquo;Fork&amp;rdquo; button&lt;/p&gt;
 &lt;p&gt;Clone your fork to your local machine:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git clone git@github.com:yourUsername/project-name.git
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git clone git@github.com:yourUsername/project-name.git
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Assign the original repository to a remote called &amp;ldquo;upstream&amp;rdquo; to retrieve updates from the original repository you forked:&lt;/p&gt;</description></item><item><title>Quiet Logger: HTML5 WordPress Theme</title><link>/blog/quiet-logger-html5-wordpress-theme/</link><pubDate>Fri, 26 Mar 2010 00:00:00 +0000</pubDate><guid>/blog/quiet-logger-html5-wordpress-theme/</guid><description>&lt;p&gt;Given increasing enthusiasm for HTML5, as well as an interest in light-weight Wordpress themes, I created Quiet Logger, a minimal WordPress theme typeset in Baskerville and coded with HTML5.&lt;/p&gt;
 &lt;h2 id="features"&gt;Features&lt;/h2&gt;
 &lt;ul&gt;

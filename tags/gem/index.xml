@@ -7,23 +7,23 @@
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;Install &lt;code&gt;phl_geocode&lt;/code&gt;:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;gem install phl_geocode
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;gem install phl_geocode
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Require &lt;code&gt;phl_geocode&lt;/code&gt;:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-ruby" data-lang="ruby"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;require &lt;span style="color:#e6db74"&gt;&amp;#34;phl_geocode&amp;#34;&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-ruby" data-lang="ruby"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;require &lt;span style="color:#e6db74"&gt;&amp;#34;phl_geocode&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Instantiate a &lt;code&gt;PHLGeocode&lt;/code&gt; instance:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-ruby" data-lang="ruby"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;phl &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;PHLGeocode&lt;/span&gt;&lt;span style="color:#f92672"&gt;.&lt;/span&gt;new
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-ruby" data-lang="ruby"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;phl &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;PHLGeocode&lt;/span&gt;&lt;span style="color:#f92672"&gt;.&lt;/span&gt;new
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Get latitude/longitude coordinates for a Philadelphia address:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-ruby" data-lang="ruby"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;phl&lt;span style="color:#f92672"&gt;.&lt;/span&gt;get_coordinates &lt;span style="color:#e6db74"&gt;&amp;#34;1500 market street&amp;#34;&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-ruby" data-lang="ruby"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;phl&lt;span style="color:#f92672"&gt;.&lt;/span&gt;get_coordinates &lt;span style="color:#e6db74"&gt;&amp;#34;1500 market street&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Example response:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-ruby" data-lang="ruby"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;{
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-ruby" data-lang="ruby"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;{
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;:address&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;1500 MARKET ST&amp;#34;&lt;/span&gt;,
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;:similarity&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;100&lt;/span&gt;,
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;:latitude&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;39&lt;/span&gt;&lt;span style="color:#f92672"&gt;.&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;9521740263203&lt;/span&gt;,

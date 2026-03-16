@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ruby on Mike Ball</title><link>/tags/ruby/</link><description>Recent content in Ruby on Mike Ball</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 15 Apr 2016 00:00:00 +0000</lastBuildDate><atom:link href="/tags/ruby/index.xml" rel="self" type="application/rss+xml"/><item><title>Using OptionParser in Rake</title><link>/blog/using-optionparser-in-rake/</link><pubDate>Fri, 15 Apr 2016 00:00:00 +0000</pubDate><guid>/blog/using-optionparser-in-rake/</guid><description>&lt;p&gt;Problem: you&amp;rsquo;d like to leverage named arguments in your Ruby &lt;code&gt;Rake&lt;/code&gt; task.&lt;/p&gt;
 &lt;p&gt;Solution: use &lt;code&gt;OptionParser&lt;/code&gt; to parse the named arguments. Note the need to &lt;em&gt;also&lt;/em&gt; call &lt;code&gt;#OptionParser#order!(ARGV)&lt;/code&gt;, which is often absent from internet documentation.&lt;/p&gt;
 &lt;p&gt;This example uses Ruby &lt;code&gt;2.2.2&lt;/code&gt; and Rake &lt;code&gt;11.1.2&lt;/code&gt;.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-ruby" data-lang="ruby"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;require &lt;span style="color:#e6db74"&gt;&amp;#39;optparse&amp;#39;&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-ruby" data-lang="ruby"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;require &lt;span style="color:#e6db74"&gt;&amp;#39;optparse&amp;#39;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;task &lt;span style="color:#e6db74"&gt;:hello&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;do&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; options &lt;span style="color:#f92672"&gt;=&lt;/span&gt; {
@@ -38,7 +38,7 @@
 &lt;p&gt;&lt;a href="http://github.com/mdb/lobber"&gt;View its source code on GitHub »&lt;/a&gt;&lt;/p&gt;</description></item><item><title>Streamlined Rails Gem Updates on Gem in a Box</title><link>/blog/streamlined-rails-gem-updates-on-gem-in-a-box/</link><pubDate>Mon, 11 Feb 2013 00:00:00 +0000</pubDate><guid>/blog/streamlined-rails-gem-updates-on-gem-in-a-box/</guid><description>&lt;p&gt;&lt;strong&gt;Problem&lt;/strong&gt;: Per recent Ruby on Rails security patches, you need to update your Rails applications. However, because you host Rails and its related gems on a private &lt;a href="https://github.com/cwninja/geminabox"&gt;Gem in a Box&lt;/a&gt; gem server, it’s a bit cumbersome to manually download the necessary gems from &lt;a href="http://rubygems.org"&gt;Rubygems.org&lt;/a&gt;, and then upload them to your Gem in a Box gem server.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Solution&lt;/strong&gt;: bash and curl.&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;1.&lt;/b&gt; List the necessary gems in a &lt;code&gt;gems.txt&lt;/code&gt; file:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;rails
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;rails
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;actionmailer
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;activemodel
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;actionview
@@ -52,23 +52,23 @@
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;Install &lt;code&gt;phl_geocode&lt;/code&gt;:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;gem install phl_geocode
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;gem install phl_geocode
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Require &lt;code&gt;phl_geocode&lt;/code&gt;:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-ruby" data-lang="ruby"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;require &lt;span style="color:#e6db74"&gt;&amp;#34;phl_geocode&amp;#34;&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-ruby" data-lang="ruby"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;require &lt;span style="color:#e6db74"&gt;&amp;#34;phl_geocode&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Instantiate a &lt;code&gt;PHLGeocode&lt;/code&gt; instance:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-ruby" data-lang="ruby"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;phl &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;PHLGeocode&lt;/span&gt;&lt;span style="color:#f92672"&gt;.&lt;/span&gt;new
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-ruby" data-lang="ruby"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;phl &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;PHLGeocode&lt;/span&gt;&lt;span style="color:#f92672"&gt;.&lt;/span&gt;new
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Get latitude/longitude coordinates for a Philadelphia address:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-ruby" data-lang="ruby"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;phl&lt;span style="color:#f92672"&gt;.&lt;/span&gt;get_coordinates &lt;span style="color:#e6db74"&gt;&amp;#34;1500 market street&amp;#34;&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-ruby" data-lang="ruby"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;phl&lt;span style="color:#f92672"&gt;.&lt;/span&gt;get_coordinates &lt;span style="color:#e6db74"&gt;&amp;#34;1500 market street&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Example response:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-ruby" data-lang="ruby"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;{
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-ruby" data-lang="ruby"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;{
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;:address&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;1500 MARKET ST&amp;#34;&lt;/span&gt;,
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;:similarity&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;100&lt;/span&gt;,
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;:latitude&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;39&lt;/span&gt;&lt;span style="color:#f92672"&gt;.&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;9521740263203&lt;/span&gt;,
