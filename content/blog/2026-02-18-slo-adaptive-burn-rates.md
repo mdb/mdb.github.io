@@ -174,12 +174,19 @@ separates real incidents from normal variance for your service.
 
 ## Implementing in Terraform
 
-Here's what this looks like as a Terraform module for Datadog SLO monitors:
+Here's what this looks like as Terraform configuring a Datadog
+[SLO](https://registry.terraform.io/providers/DataDog/datadog/latest/docs/resources/service_level_objective)
+and [burn rate alerts](https://docs.datadoghq.com/monitors/types/slo/):
 
 ```terraform
 variable "slo_target" {
   description = "SLO target percentage (e.g. 99.0 for 99%)"
   type        = number
+}
+
+variable "metric_name" {
+  description = "The Datadog metric name to monitor"
+  type        = string
 }
 
 locals {
@@ -204,37 +211,73 @@ locals {
 ```
 
 The slow burn rate uses `behavior_burn_rate * 2 / 3` to maintain the same
-relative relationship between fast and slow windows as the original pattern.
+relative relationship between fast and slow windows as the Google SRE
+multi-window, multi-burn-rate pattern.
 
-The thresholds get wired into [Datadog monitor](https://registry.terraform.io/providers/DataDog/datadog/latest/docs/resources/monitor.html)
-queries like this:
+First, define the SLO itself as a metric-based
+[`datadog_service_level_objective`](https://registry.terraform.io/providers/DataDog/datadog/latest/docs/resources/service_level_objective):
 
 ```terraform
-resource "datadog_monitor" "fast_burn_1h" {
-  name = "SLO burn: 2% budget in 1 hour"
-  type = "metric alert"
+resource "datadog_service_level_objective" "this" {
+  name = "${var.metric_name} Success Rate"
+  type = "metric"
 
-  query = join("", [
-    "sum(last_1h):",
-    "100 * sum:${var.metric_name}{!status:error}.as_count()",
-    " / sum:${var.metric_name}{*}.as_count()",
-    " < ${local.threshold_fast}",
-  ])
+  query {
+    numerator   = "sum:${var.metric_name}{!status:error}.as_count()"
+    denominator = "sum:${var.metric_name}{*}.as_count()"
+  }
 
-  monitor_thresholds {
-    critical = local.threshold_fast
+  thresholds {
+    timeframe = "30d"
+    target    = var.slo_target
   }
 }
 ```
 
-NOTE: Datadog also supports native [SLO burn rate alerts](https://docs.datadoghq.com/monitors/types/slo/)
-that handle burn-rate math internally. The metric alert approach shown above
-trades the simplicity of native SLO burn rate alerting for flexibility: you can
-combine fast and slow burn monitors into a [composite monitor](https://docs.datadoghq.com/monitors/types/composite/)
-with additional conditions (e.g., a minimum error count gate to suppress alerts
-on low-traffic services), and you have full control over the query structure and
-thresholds. If you don't need that level of control, Datadog's built-in SLO
-alerts are generally more simple to set up and maintain.
+Next, wire the adaptive burn rates into native `slo alert` monitors using the
+[`burn_rate()` query syntax](https://docs.datadoghq.com/monitors/types/slo/).
+The burn rate threshold is compared directly against the adaptive rate -- Datadog
+handles the underlying math:
+
+```terraform
+# Fast burn: 2% of budget in 1 hour
+resource "datadog_monitor" "fast_burn_1h" {
+  name = "SLO burn: 2% budget in 1 hour"
+  type = "slo alert"
+
+  query = join("", [
+    "burn_rate(\"${datadog_service_level_objective.this.id}\")",
+    ".over(\"30d\")",
+    ".long_window(\"1h\").short_window(\"5m\")",
+    " > ${local.burn_rate_fast}",
+  ])
+
+  monitor_thresholds {
+    critical = local.burn_rate_fast
+  }
+}
+
+# Slow burn: 5% of budget in 4 hours
+resource "datadog_monitor" "slow_burn_4h" {
+  name = "SLO burn: 5% budget in 4 hours"
+  type = "slo alert"
+
+  query = join("", [
+    "burn_rate(\"${datadog_service_level_objective.this.id}\")",
+    ".over(\"30d\")",
+    ".long_window(\"4h\").short_window(\"30m\")",
+    " > ${local.burn_rate_slow}",
+  ])
+
+  monitor_thresholds {
+    critical = local.burn_rate_slow
+  }
+}
+```
+
+Each `slo alert` monitor uses a long window / short window pair. Both windows
+must breach the threshold simultaneously for the monitor to fire, which is the
+multi-window part of the Google SRE pattern built right into the query.
 
 ## Adopting SLO-adaptive burn rates
 
