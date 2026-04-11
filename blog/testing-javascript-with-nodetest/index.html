@@ -1,0 +1,86 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>Testing JavaScript with node:test | Mike Ball</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="Using Node.js's built-in test runner and assertion library to avoid third-party test dependencies."><meta name=generator content="Hugo 0.159.0"><meta name=ROBOTS content="INDEX, FOLLOW"><link rel=stylesheet href=/main.min.5a7f29a0a9d592f23ecc3a5226aaa84afa4da4e88b8ec65da8185a6d3b08a5bc.css></head><body class=blog-post><header><div class=mark><a href=/>Mike Ball</a></div><button>Toggle Navigation</button><div class=nav-wrap><nav class=primary><ul><li><a href=/blog>Blog</a></li><li><a href=#about>About</a></li></ul></nav><nav class=secondary><ul><li><a href=https://github.com/mdb>GitHub</a></li><li><a href=/instagram>Instagram</a></li></ul></nav><nav class=tertiary><ul><li><a href=https://tiendah.bigcartel.com>Shop</a></li><li><a href=#about>Contact</a></li></ul></nav></div></header><main role=main><div class=blog-post><article><header><h1>Testing JavaScript with node:test</h1><time>March 29, 2026</time></header><div><p><em>Node.js ships with a built-in test runner, assertion library, and mocking
+framework. For some projects &ndash; simple GitHub Actions, minimal CLI tools, and
+lightweight scripts &ndash; these built-ins eliminate the need for Jest, Mocha, or
+other third-party test dependencies.</em></p><h2 id=the-problem>The problem</h2><p>You want to test some JavaScript, but are wary of adding dependency management
+complexity. For a focused, minimal utility third party test framework dependencies
+can dwarf the code it tests.</p><p>For example, the popular <a href=https://jestjs.io/>jest</a> framework has about ~200
+transitive dependencies.</p><pre tabindex=0><code>devDependencies:
+  jest: ^29.7.0          # ~200 transitive packages
+  @types/jest: ^29.5.0
+</code></pre><h2 id=solution-nodetest>Solution: <code>node:test</code></h2><p>Since version 20, Node.js ships with a built-in <code>node:test</code> module. It provides <code>describe</code>,
+<code>it</code>, and <code>test</code> functions, lifecycle hooks, mocking, snapshot testing, watch
+mode, and code coverage. Usage requires no <code>package.json</code>, no <code>npm install</code>, and
+no configuration files.</p><h3 id=a-minimal-example>A minimal example</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-js data-lang=js><span style=display:flex><span><span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>describe</span>, <span style=color:#a6e22e>it</span> } <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#39;node:test&#39;</span>);
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>assert</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#39;node:assert&#39;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>describe</span>(<span style=color:#e6db74>&#39;add&#39;</span>, () =&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>it</span>(<span style=color:#e6db74>&#39;adds two numbers&#39;</span>, () =&gt; {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>assert</span>.<span style=color:#a6e22e>strictEqual</span>(<span style=color:#ae81ff>1</span> <span style=color:#f92672>+</span> <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>3</span>);
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>it</span>(<span style=color:#e6db74>&#39;returns NaN for non-numeric input&#39;</span>, () =&gt; {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>assert</span>.<span style=color:#a6e22e>ok</span>(Number.isNaN(Number(<span style=color:#e6db74>&#39;x&#39;</span>) <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>));
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>});
+</span></span></code></pre></div><p>Run it:</p><pre tabindex=0><code>node --test add.test.js
+</code></pre><pre tabindex=0><code>▶ add
+  ✔ adds two numbers (0.3ms)
+  ✔ returns NaN for non-numeric input (0.1ms)
+▶ add (1.2ms)
+
+ℹ tests 2
+ℹ suites 1
+ℹ pass 2
+ℹ fail 0
+</code></pre><h3 id=assertions>Assertions</h3><p><code>node:assert</code> covers common assertion patterns:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-js data-lang=js><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>assert</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#39;node:assert&#39;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// Strict equality
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>assert</span>.<span style=color:#a6e22e>strictEqual</span>(<span style=color:#a6e22e>actual</span>, <span style=color:#a6e22e>expected</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// Deep equality for objects and arrays
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>assert</span>.<span style=color:#a6e22e>deepStrictEqual</span>({ <span style=color:#a6e22e>a</span><span style=color:#f92672>:</span> <span style=color:#ae81ff>1</span> }, { <span style=color:#a6e22e>a</span><span style=color:#f92672>:</span> <span style=color:#ae81ff>1</span> });
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// Truthy check
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>assert</span>.<span style=color:#a6e22e>ok</span>(<span style=color:#a6e22e>someValue</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// Error assertions
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>assert</span>.<span style=color:#66d9ef>throws</span>(() =&gt; { <span style=color:#66d9ef>throw</span> <span style=color:#66d9ef>new</span> Error(<span style=color:#e6db74>&#39;boom&#39;</span>); }, <span style=color:#e6db74>/boom/</span>);
+</span></span><span style=display:flex><span><span style=color:#66d9ef>await</span> <span style=color:#a6e22e>assert</span>.<span style=color:#a6e22e>rejects</span>(<span style=color:#a6e22e>asyncFn</span>(), { <span style=color:#a6e22e>code</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;ERR_INVALID_ARG&#39;</span> });
+</span></span></code></pre></div><h3 id=mocking>Mocking</h3><p><code>node:test</code>&rsquo;s <code>mock</code> object provides function spies, method stubs, module mocking,
+and timer control:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-js data-lang=js><span style=display:flex><span><span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>describe</span>, <span style=color:#a6e22e>it</span>, <span style=color:#a6e22e>mock</span> } <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#39;node:test&#39;</span>);
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>assert</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#39;node:assert&#39;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>describe</span>(<span style=color:#e6db74>&#39;mocking&#39;</span>, () =&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>it</span>(<span style=color:#e6db74>&#39;spies on function calls&#39;</span>, () =&gt; {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>fn</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>mock</span>.<span style=color:#a6e22e>fn</span>((<span style=color:#a6e22e>a</span>, <span style=color:#a6e22e>b</span>) =&gt; <span style=color:#a6e22e>a</span> <span style=color:#f92672>+</span> <span style=color:#a6e22e>b</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fn</span>(<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fn</span>(<span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>4</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>assert</span>.<span style=color:#a6e22e>strictEqual</span>(<span style=color:#a6e22e>fn</span>.<span style=color:#a6e22e>mock</span>.<span style=color:#a6e22e>callCount</span>(), <span style=color:#ae81ff>2</span>);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>assert</span>.<span style=color:#a6e22e>deepStrictEqual</span>(<span style=color:#a6e22e>fn</span>.<span style=color:#a6e22e>mock</span>.<span style=color:#a6e22e>calls</span>[<span style=color:#ae81ff>0</span>].<span style=color:#a6e22e>arguments</span>, [<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>]);
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>it</span>(<span style=color:#e6db74>&#39;stubs object methods&#39;</span>, () =&gt; {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>obj</span> <span style=color:#f92672>=</span> { <span style=color:#a6e22e>greet</span><span style=color:#f92672>:</span> () =&gt; <span style=color:#e6db74>&#39;hello&#39;</span> };
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>mock</span>.<span style=color:#a6e22e>method</span>(<span style=color:#a6e22e>obj</span>, <span style=color:#e6db74>&#39;greet&#39;</span>, () =&gt; <span style=color:#e6db74>&#39;mocked&#39;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>assert</span>.<span style=color:#a6e22e>strictEqual</span>(<span style=color:#a6e22e>obj</span>.<span style=color:#a6e22e>greet</span>(), <span style=color:#e6db74>&#39;mocked&#39;</span>);
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>});
+</span></span></code></pre></div><p>Each test context (<code>t.mock</code>) automatically restores mocks after the test
+completes, avoiding the manual teardown often required by other frameworks.</p><p>Timer mocking is also built in:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-js data-lang=js><span style=display:flex><span><span style=color:#a6e22e>it</span>(<span style=color:#e6db74>&#39;advances timers&#39;</span>, (<span style=color:#a6e22e>t</span>) =&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>mock</span>.<span style=color:#a6e22e>timers</span>.<span style=color:#a6e22e>enable</span>({ <span style=color:#a6e22e>apis</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;setTimeout&#39;</span>] });
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>fn</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>mock</span>.<span style=color:#a6e22e>fn</span>();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>setTimeout</span>(<span style=color:#a6e22e>fn</span>, <span style=color:#ae81ff>1000</span>);
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>mock</span>.<span style=color:#a6e22e>timers</span>.<span style=color:#a6e22e>tick</span>(<span style=color:#ae81ff>1000</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>assert</span>.<span style=color:#a6e22e>strictEqual</span>(<span style=color:#a6e22e>fn</span>.<span style=color:#a6e22e>mock</span>.<span style=color:#a6e22e>callCount</span>(), <span style=color:#ae81ff>1</span>);
+</span></span><span style=display:flex><span>});
+</span></span></code></pre></div><h3 id=test-discovery-and-cli-flags>Test discovery and CLI flags</h3><p><code>node --test</code> auto-discovers test files matching common patterns
+(<code>**/*.test.js</code>, <code>**/test-*.js</code>, <code>**/test/**/*.js</code>). Useful flags:</p><table><thead><tr><th>Flag</th><th>Purpose</th></tr></thead><tbody><tr><td><code>--test</code></td><td>Enable the test runner</td></tr><tr><td><code>--test-name-pattern</code></td><td>Filter tests by name (regex)</td></tr><tr><td><code>--test-only</code></td><td>Run only tests marked <code>{ only: true }</code></td></tr><tr><td><code>--watch</code></td><td>Re-run tests on file change</td></tr><tr><td><code>--experimental-test-coverage</code></td><td>Collect V8 code coverage</td></tr><tr><td><code>--test-reporter=spec</code></td><td>Choose output format (<code>spec</code>, <code>tap</code>, <code>dot</code>)</td></tr><tr><td><code>--test-concurrency</code></td><td>Control parallel execution</td></tr></tbody></table><h2 id=further-reading>Further reading</h2><ul><li><a href=https://nodejs.org/api/test.html>Node.js test runner documentation</a></li><li><a href=https://nodejs.org/api/assert.html>Node.js assert documentation</a></li></ul></div><ul class=tags><li><a href=/tags/nodejs>nodejs</a></li><li><a href=/tags/testing>testing</a></li><li><a href=/tags/javascript>javascript</a></li></ul></article></div></main><footer><section><h1 id=about>Info</h1><div><h2><a href=/>Mike Ball</a></h2><p>I live in Philadelphia and work as a multi-disciplinary software engineer & designer.</p><p>Over the years, I've developed front end web applications, built
+backend services, automated cloud infrastructure management, designed
+CI/CD pipelines for high scale distributed systems, developed developer
+platforms for large organizations, and contributed to numerous open
+source software projects.</p><p>I've also worked in graphic and UX design. Buy prints of my illustrations at <a href=https://tiendah.bigcartel.com>Tiendah</a>.</p></div><div class=double><h2>Shop Tiendah</h2><ul class="gallery store-feed"></ul><h2>Instagram</h2><ul class="gallery ig-feed"></ul></div><div><h2>Etc.</h2><ul><li><a href=http://github.com/mdb>GitHub</a></li><li><a href=https://clapclapexcitement.bsky.social>Bluesky</a></li><li><a href=https://instagram.com/clapclapexcitement>Instagram</a></li><li><a href=/index.xml>RSS Feed</a></li><li><a href=https://tiendah.bigcartel.com>Shop Tiendah</a></li></ul><h2>Contact</h2><p>Interested in working with me? <a href=mailto:mikedball@gmail.com>Get in touch</a>.</p></div></section></footer><script type=text/javascript src=/js/main.min.542672b67aa924d06e857fba942ea82bceb1ba468d461ef62da049fad70cd0a7.js></script><script type=text/javascript>(function(e,t,n,s,o,i,a){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,i=t.createElement(n),a=t.getElementsByTagName(n)[0],i.async=1,i.src=s,a.parentNode.insertBefore(i,a)})(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-54324621-1","auto"),ga("send","pageview")</script></body></html>
