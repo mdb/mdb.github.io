@@ -1,26 +1,23 @@
 ---
-title: "Verifying Terraform"
+title: "Verifying and validating Terraform: techniques for testing infrastructure-as-code"
 date: 2026-04-13
 tags:
 - terraform
 - terraform-patterns
 - iac
 - testing
-thumbnail: terraform5_thumb.png
-teaser: An overview of techniques for verifying Terraform in CI, from linting to end-to-end testing.
+thumbnail: terraform3_thumb.png
+teaser: An overview of techniques for testing Terraform, from linting to end-to-end testing.
 display_toc: true
-draft: true
 intro: |
- Beyond `terraform plan`-ing and manually reviewing plan output, what other techniques can verify Terraform code across the development and CI/CD lifecycle?
+  Beyond `terraform plan`-ing and manually reviewing plan output, how else can
+  Terraform code be validated and verified?
+
+  Written primarily for Terraform newcomers, the following offers a
+  non-exhaustive overview of some techniques and options for testing Terraform,
+  and my take on when and where each best plugs into the infrastructure-as-code
+  development and CI/CD lifecycle.
 ---
-
-## The verification spectrum
-
-Not all verification techniques serve the same purpose or run at the same phase.
-Some catch style issues before a plan ever runs; others validate real
-infrastructure after an apply. Written primarily for Terraform newcomers, the
-following offers an overview of techniques, options, and my take on when/where
-they plug into the infrastructure-as-code lifecycle.
 
 ## Static analysis & linting
 
@@ -45,7 +42,7 @@ terraform fmt \
 
 ### tflint
 
-[tflint](https://github.com/terraform-linters/tflint) goes further: catch
+Tools like [tflint](https://github.com/terraform-linters/tflint) go further: catch
 provider-specific issues, deprecated syntax, and enforcing naming conventions.
 Combined with the
 [tflint-ruleset-aws](https://github.com/terraform-linters/tflint-ruleset-aws)
@@ -281,8 +278,8 @@ blocks complete (or when a test fails).
 
 ### Root modules vs. child modules
 
-**Child module tests** verify the [child module](https://mikeball.info/blog/scalable-terraform-patterns-reuse-and-repeatability/#child-modules-generic-composable-recipes)'s own interface and behavior in
-isolation, outside its usage amongst consumers. In my experience, they typically
+_Child_ module tests verify the [child module](https://mikeball.info/blog/scalable-terraform-patterns-reuse-and-repeatability/#child-modules-generic-composable-recipes)'s own interface and behavior in
+isolation, outside its usage among consumers. In my experience, they typically
 run as part of the child module's independent CI/CD lifecycle, outside that
 module's use amongst consumers:
 
@@ -296,7 +293,7 @@ modules/vpc/
     └── e2e.tftest.hcl  # real providers; slower
 ```
 
-**Root module tests** verify the [root module](https://developer.hashicorp.com/terraform/language/modules) composition: that child modules
+_Root_ module tests verify the [root module](https://developer.hashicorp.com/terraform/language/modules) composition: that child modules
 are wired together correctly, that workspace-specific variable values produce the
 expected configuration, and that the integrated system functions as intended:
 
@@ -323,7 +320,7 @@ dependencies.
 * **What:** catch governance violations, security misconfigurations,
 compliance drift, risky operations, cost implications, destructive changes to
 critical resources
-**When:** Post-plan, pre-apply. Often in a dedicated CI step analyzing
+* **When:** Post-plan, pre-apply. Often in a dedicated CI step analyzing
 the plan JSON.
 
 Policy-as-code tools evaluate a Terraform plan against codified rules. Unlike
@@ -401,11 +398,11 @@ contracts, external policy for organization-level and/or operation-specific guar
 Beyond strict pass/fail policy checks, the Terraform plan JSON can be analyzed
 programmatically for risk assessment and decision support. This analysis doesn't
 necessarily _gate_ -- it might surface warnings, annotate pull requests, or flag
-changes for additional review.
+changes for additional review. Alternatively, it might be used to auto-approve
+pull requests deemed acceptable.
 
-Takeaway: Policy-as-code is the primary mechanism for enforcing organizational standards
-across teams. Adopt it when you need governance beyond what any single module
-author can natively embed in Terraform.
+Takeaway: Policy-as-code helps enforce standards across teams. Adopt it when you
+need governance beyond what any single module author can natively embed in Terraform.
 
 ## Assistive analysis
 
@@ -421,6 +418,7 @@ Terraform CI/CD pipelines can also be augmented with with assistive, information
   the financial impact of a change
 - custom scripts that annotate PRs with the count of creates, updates, and
   destroys
+- AI-driven plain text plan explanation
 
 Programmatic plan analysis fills the gap between automated policy gates and
 manual review. Use it to surface risk, estimate impact, and give authors and
@@ -476,12 +474,13 @@ assertions and visibility.
 
 | Layer | When | What it catches |
 |---|---|---|
-| `fmt`, `validate`, `tflint` | pre-plan | Style, syntax, structural issues |
+| `fmt`, `tflint` | pre-plan | Style, syntax, structural issues |
 | Input validation | plan-time | Bad input values |
 | Preconditions/postconditions | plan/apply-time | Environmental assumptions, resource guarantees |
-| `terraform test` (mocks) | pre-plan | Logic errors, output correctness |
-| `terraform test` (real) | pre-plan | End-to-end infrastructure correctness |
+| `terraform test` (mocks, child modules) | pre-plan | Logic errors, output correctness |
+| `terraform test` (real, child modules) | pre-plan | End-to-end infrastructure correctness |
 | Policy-as-code | post-plan | Governance, security, compliance violations, risk, cost, destructive change warnings |
+| Assistive analysis tooling | post-plan | Risk, cost, intent/impact validation |
 | Check blocks | apply-time | Ongoing infrastructure health |
 
 ## Further reading
