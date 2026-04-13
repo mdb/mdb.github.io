@@ -1,0 +1,266 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>Verifying and validating Terraform: techniques for testing infrastructure-as-code | Mike Ball</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="An overview of techniques for testing Terraform, from linting to end-to-end testing."><meta name=generator content="Hugo 0.159.0"><meta name=ROBOTS content="INDEX, FOLLOW"><link rel=stylesheet href=https://mikeball.info/main.min.c635e04198fbb34a98709c98096a1bba982ea1957f90a22d636b308c653b833e.css></head><body class=blog-post><header><div class=mark><a href=/>Mike Ball</a></div><button>Toggle Navigation</button><div class=nav-wrap><nav class=primary><ul><li><a href=/blog>Blog</a></li><li><a href=#about>About</a></li></ul></nav><nav class=secondary><ul><li><a href=https://github.com/mdb>GitHub</a></li><li><a href=/instagram>Instagram</a></li></ul></nav><nav class=tertiary><ul><li><a href=https://tiendah.bigcartel.com>Shop</a></li><li><a href=#about>Contact</a></li></ul></nav></div></header><main role=main><div class=blog-post><article><header><h1>Verifying and validating Terraform: techniques for testing infrastructure-as-code</h1><time>April 13, 2026</time></header><div><p><em><p>Beyond <code>terraform plan</code>-ing and manually reviewing plan output, how else can
+Terraform code be validated and verified?</p><p>Written primarily for Terraform newcomers, the following offers a
+non-exhaustive overview of some techniques and options for testing Terraform,
+and my take on when and where each best plugs into the infrastructure-as-code
+development and CI/CD lifecycle.</p></em></p><nav id=TableOfContents><ul><li><a href=#static-analysis--linting>Static analysis & linting</a><ul><li><a href=#terraform-fmt>terraform fmt</a></li><li><a href=#tflint>tflint</a></li></ul></li><li><a href=#input-variable-validation>Input variable validation</a></li><li><a href=#lifecycle-preconditions-and-postconditions>Lifecycle preconditions and postconditions</a></li><li><a href=#terraform-test-with-mock-providers><code>terraform test</code> with mock providers</a></li><li><a href=#terraform-test-with-real-providers><code>terraform test</code> with real providers</a><ul><li><a href=#root-modules-vs-child-modules>Root modules vs. child modules</a></li></ul></li><li><a href=#policy-as-code>Policy-as-code</a><ul><li><a href=#open-policy-agent-opa>Open Policy Agent (OPA)</a></li><li><a href=#checkov>Checkov</a></li><li><a href=#native-terraform-vs-external-policy-tools>Native Terraform vs. external policy tools</a></li></ul></li><li><a href=#assistive-analysis>Assistive analysis</a></li><li><a href=#check-blocks>Check blocks</a><ul><li><a href=#checks-vs-postconditions>Checks vs. postconditions</a></li><li><a href=#when-to-use-checks>When to use checks</a></li></ul></li><li><a href=#putting-it-together>Putting it together</a></li><li><a href=#further-reading>Further reading</a></li></ul></nav><h2 id=static-analysis--linting>Static analysis & linting</h2><ul><li><strong>What:</strong> Style violations, formatting inconsistencies, common
+anti-patterns.</li><li><strong>When:</strong> Pre-plan. Often as a pre-commit hook or early CI step.</li></ul><p>The simplest verification: does the code satisfy style and structural
+preferences?</p><p>Examples&mldr;</p><h3 id=terraform-fmt>terraform fmt</h3><p>Exit non-zero if Terraform code is not properly formatted:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-sh data-lang=sh><span style=display:flex><span>terraform fmt <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span>  -recursive <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span>  -check
+</span></span></code></pre></div><h3 id=tflint>tflint</h3><p>Tools like <a href=https://github.com/terraform-linters/tflint>tflint</a> go further: catch
+provider-specific issues, deprecated syntax, and enforcing naming conventions.
+Combined with the
+<a href=https://github.com/terraform-linters/tflint-ruleset-aws>tflint-ruleset-aws</a>
+(or equivalent provider-specific rulesets), it can flag invalid instance types,
+nonexistent AMIs, and similar provider-aware problems.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-sh data-lang=sh><span style=display:flex><span>tflint --recursive
+</span></span></code></pre></div><h2 id=input-variable-validation>Input variable validation</h2><ul><li><strong>What:</strong> Invalid input values before they cause downstream failures.</li><li><strong>When:</strong> Plan-time.</li></ul><p>Terraform&rsquo;s native <a href=https://developer.hashicorp.com/terraform/language/expressions/custom-conditions#input-variable-validation>input variable validation</a>
+conditions let a module define constraints on its own inputs:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#66d9ef>variable</span> <span style=color:#e6db74>&#34;ami&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>type</span>        <span style=color:#f92672>=</span> <span style=color:#a6e22e>string</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>description</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;The Amazon machine image (AMI) ID to use.&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>validation</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>condition</span>     <span style=color:#f92672>=</span> length(var.<span style=color:#a6e22e>ami</span>) <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>4</span> <span style=color:#f92672>&amp;&amp;</span> substr(var.<span style=color:#a6e22e>ami</span>, <span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>4</span>) <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;ami-&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>error_message</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;The ami value must be a valid AWS AMI ID starting with </span><span style=color:#960050;background-color:#1e0010>\</span><span style=color:#e6db74>&#34;</span><span style=color:#a6e22e>ami</span><span style=color:#f92672>-</span><span style=color:#960050;background-color:#1e0010>\</span><span style=color:#e6db74>&#34;.&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>variable</span> <span style=color:#e6db74>&#34;environment&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>type</span>        <span style=color:#f92672>=</span> <span style=color:#a6e22e>string</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>description</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;The target environment.&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>validation</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>condition</span>     <span style=color:#f92672>=</span> contains([<span style=color:#e6db74>&#34;dev&#34;</span>, <span style=color:#e6db74>&#34;staging&#34;</span>, <span style=color:#e6db74>&#34;prod&#34;</span>], var.<span style=color:#a6e22e>environment</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>error_message</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Environment must be one of: dev, staging, prod.&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>This is particularly valuable in <a href=https://developer.hashicorp.com/terraform/language/modules#child-modules>child modules</a>;
+the module itself enforces its own contract.</p><h2 id=lifecycle-preconditions-and-postconditions>Lifecycle preconditions and postconditions</h2><ul><li><strong>What:</strong> Assumptions about the environment (preconditions) and
+guarantees about the result (postconditions).</li><li><strong>When:</strong> Plan-time (preconditions), apply-time (postconditions).</li></ul><p><a href=https://developer.hashicorp.com/terraform/language/expressions/custom-conditions#preconditions-and-postconditions>Custom conditions</a>
+let you embed assertions directly into resource and data source lifecycle blocks:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#66d9ef>data</span> <span style=color:#e6db74>&#34;aws_ami&#34;</span> <span style=color:#e6db74>&#34;app&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>most_recent</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>filter</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span>   <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;name&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>values</span> <span style=color:#f92672>=</span> [<span style=color:#e6db74>&#34;my-app-*&#34;</span>]
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;aws_instance&#34;</span> <span style=color:#e6db74>&#34;app&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>instance_type</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;t3.micro&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>ami</span>           <span style=color:#f92672>=</span> data.<span style=color:#a6e22e>aws_ami</span>.<span style=color:#a6e22e>app</span>.<span style=color:#a6e22e>id</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>lifecycle</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>precondition</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>condition</span>     <span style=color:#f92672>=</span> data.<span style=color:#a6e22e>aws_ami</span>.<span style=color:#a6e22e>app</span>.<span style=color:#a6e22e>architecture</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;x86_64&#34;</span>
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>error_message</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;The AMI must use the x86_64 architecture.&#34;</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>postcondition</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>condition</span>     <span style=color:#f92672>=</span> <span style=color:#a6e22e>self</span>.<span style=color:#a6e22e>public_ip</span> <span style=color:#f92672>!=</span> <span style=color:#e6db74>&#34;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>error_message</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;The instance must receive a public IP.&#34;</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Preconditions and postconditions are <em>blocking</em>: a failure halts the plan or
+apply. This distinguishes them from check blocks (discussed below), which only
+warn.</p><p><a href=/blog/terraform-self-validating-plan-time-permissions-checks/>Terraform: self-validating plan-time permissions checks</a>
+demonstrates how postconditions on data sources can &ldquo;shift left&rdquo; on permissions
+validation, catching IAM issues at <code>plan</code> time rather than <code>apply</code> time.</p><p>Takeaway: Use preconditions to validate assumptions your configuration depends on.
+Use postconditions to assert guarantees about the resources you create.</p><h2 id=terraform-test-with-mock-providers><code>terraform test</code> with mock providers</h2><ul><li><strong>What:</strong> Catch logic errors in module behavior without creating real
+infrastructure.</li><li><strong>When:</strong> Local development, CI, pre-merge. No cloud credentials needed.</li></ul><p>Beginning in Terraform v1.7, <a href=https://developer.hashicorp.com/terraform/language/tests/mocking>mock providers</a>
+allow <code>terraform test</code> to exercise a configuration without calling any real
+provider APIs. Mock providers generate fake data for computed attributes while
+accepting user-provided values for everything else.</p><p>Consider a module that constructs a resource name from inputs:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#75715e># modules/naming/main.tf
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>variable</span> <span style=color:#e6db74>&#34;project&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>type</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>string</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>variable</span> <span style=color:#e6db74>&#34;environment&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>type</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>string</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>locals</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>name</span> <span style=color:#f92672>=</span> var.<span style=color:#a6e22e>environment</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;prod&#34;</span> <span style=color:#f92672>?</span> <span style=color:#e6db74>&#34;</span><span style=color:#e6db74>${</span>var.<span style=color:#a6e22e>project</span><span style=color:#e6db74>}</span><span style=color:#e6db74>-</span><span style=color:#e6db74>${</span>var.<span style=color:#a6e22e>environment</span><span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span> <span style=color:#f92672>:</span> <span style=color:#e6db74>&#34;</span><span style=color:#e6db74>${</span>var.<span style=color:#a6e22e>project</span><span style=color:#e6db74>}</span><span style=color:#e6db74>-dev&#34;</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>output</span> <span style=color:#e6db74>&#34;name&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>value</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>name</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>A test with a mock provider verifies the logic in isolation:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#75715e># modules/naming/tests/unit.tftest.hcl
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>run</span> <span style=color:#e6db74>&#34;name_format&#34;</span> {
+</span></span><span style=display:flex><span>  command <span style=color:#f92672>=</span> <span style=color:#66d9ef>plan</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>variables</span> {
+</span></span><span style=display:flex><span>    project     <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;myapp&#34;</span>
+</span></span><span style=display:flex><span>    environment <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;prod&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>assert</span> {
+</span></span><span style=display:flex><span>    condition     <span style=color:#f92672>=</span> output.name <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;myapp-prod&#34;</span>
+</span></span><span style=display:flex><span>    error_message <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Expected name &#39;myapp-prod&#39;, got &#39;${output.name}&#39;&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>For configurations that reference provider-managed resources, mock providers fill
+in computed values so the plan can complete:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#75715e># tests/unit.tftest.hcl
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>mock_provider</span> <span style=color:#e6db74>&#34;aws&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>mock_resource</span> <span style=color:#e6db74>&#34;aws_s3_bucket&#34;</span> {
+</span></span><span style=display:flex><span>    defaults <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>      arn <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;arn:aws:s3:::test-bucket&#34;</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>run</span> <span style=color:#e6db74>&#34;bucket_tags&#34;</span> {
+</span></span><span style=display:flex><span>  command <span style=color:#f92672>=</span> <span style=color:#66d9ef>plan</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>variables</span> {
+</span></span><span style=display:flex><span>    bucket_name <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;test-bucket&#34;</span>
+</span></span><span style=display:flex><span>    environment <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;dev&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>assert</span> {
+</span></span><span style=display:flex><span>    condition     <span style=color:#f92672>=</span> aws_s3_bucket.main.tags[&#34;Environment&#34;] <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;dev&#34;</span>
+</span></span><span style=display:flex><span>    error_message <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Environment tag not set correctly.&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><code>override_resource</code>, <code>override_data</code>, and <code>override_module</code> allow you to control
+specific values with finer granularity.</p><p>Takeaway: Mock-based tests are fast and have no dependency on real cloud
+provider APIs. They&rsquo;re good for validating module logic, conditional expressions,
+<code>for_each</code> behavior, and output correctness. They can&rsquo;t verify the infrastructure
+actually works.</p><h2 id=terraform-test-with-real-providers><code>terraform test</code> with real providers</h2><ul><li><strong>What:</strong> End-to-end correctness of the provisioned infrastructure.</li><li><strong>When:</strong> CI, typically against a sandbox or development environment. Requires credentials.</li></ul><p>When <code>command = apply</code> (the default) is used without mocks, <code>terraform test</code>
+provisions real infrastructure, makes assertions against it, and tears it down:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#75715e># tests/e2e.tftest.hcl
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>variables</span> {
+</span></span><span style=display:flex><span>  environment <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;test&#34;</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>run</span> <span style=color:#e6db74>&#34;creates_bucket&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>variables</span> {
+</span></span><span style=display:flex><span>    bucket_name <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;my-e2e-test-bucket&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>assert</span> {
+</span></span><span style=display:flex><span>    condition     <span style=color:#f92672>=</span> aws_s3_bucket.main.bucket <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;my-e2e-test-bucket&#34;</span>
+</span></span><span style=display:flex><span>    error_message <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Bucket name does not match.&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>assert</span> {
+</span></span><span style=display:flex><span>    condition     <span style=color:#f92672>=</span> aws_s3_bucket.main.versioning[0].enabled <span style=color:#f92672>==</span> <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>    error_message <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Versioning should be enabled.&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Helper modules can manage test fixtures:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>run</span> <span style=color:#e6db74>&#34;setup_vpc&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>module</span> {
+</span></span><span style=display:flex><span>    source <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;./testing/setup&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>run</span> <span style=color:#e6db74>&#34;deploy_into_vpc&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>variables</span> {
+</span></span><span style=display:flex><span>    vpc_id <span style=color:#f92672>=</span> <span style=color:#66d9ef>run</span>.<span style=color:#66d9ef>setup_vpc</span>.<span style=color:#66d9ef>vpc_id</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>assert</span> {
+</span></span><span style=display:flex><span>    condition     <span style=color:#f92672>=</span> aws_instance.app.subnet_id !<span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;&#34;</span>
+</span></span><span style=display:flex><span>    error_message <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Instance was not placed in a subnet.&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><code>terraform test</code> automatically cleans up resources automatically when all run
+blocks complete (or when a test fails).</p><h3 id=root-modules-vs-child-modules>Root modules vs. child modules</h3><p><em>Child</em> module tests verify the <a href=https://mikeball.info/blog/scalable-terraform-patterns-reuse-and-repeatability/#child-modules-generic-composable-recipes>child module</a>&rsquo;s own interface and behavior in
+isolation, outside its usage among consumers. In my experience, they typically
+run as part of the child module&rsquo;s independent CI/CD lifecycle, outside that
+module&rsquo;s use amongst consumers:</p><pre tabindex=0><code>modules/vpc/
+├── main.tf
+├── variables.tf
+├── outputs.tf
+└── tests/
+    ├── unit.tftest.hcl # mock providers; fast
+    └── e2e.tftest.hcl  # real providers; slower
+</code></pre><p><em>Root</em> module tests verify the <a href=https://developer.hashicorp.com/terraform/language/modules>root module</a> composition: that child modules
+are wired together correctly, that workspace-specific variable values produce the
+expected configuration, and that the integrated system functions as intended:</p><pre tabindex=0><code>deployments/api/
+├── main.tf
+├── variables.tf
+├── terraform.tfvars
+└── tests/
+    └── unit.tftest.hcl
+    └── integration.tftest.hcl
+</code></pre><p>Typically, I recommend investing more in child module tests &ndash; these
+verify the fundamental &ldquo;building blocks&rdquo; used by root modules.</p><p>Takeaway: Real-provider tests give the highest confidence but are the slowest and most
+expensive to run. Use them to verify the things mock tests can&rsquo;t: actual
+provider behavior, IAM interactions, network connectivity, and resource
+dependencies.</p><h2 id=policy-as-code>Policy-as-code</h2><ul><li><strong>What:</strong> catch governance violations, security misconfigurations,
+compliance drift, risky operations, cost implications, destructive changes to
+critical resources</li><li><strong>When:</strong> Post-plan, pre-apply. Often in a dedicated CI step analyzing
+the plan JSON.</li></ul><p>Policy-as-code tools evaluate a Terraform plan against codified rules. Unlike
+input validation (which a module author embeds), policy-as-code can be maintained
+centrally by a platform or security team and enforced across all Terraform pipelines.
+Or, it can be module-specific, and impose safeguards prohibiting plan-specific actions,
+such as the planned deletion of production-critical infrastructure.</p><h3 id=open-policy-agent-opa>Open Policy Agent (OPA)</h3><p><a href=https://www.openpolicyagent.org/>OPA</a> evaluates <a href=https://www.openpolicyagent.org/docs/latest/policy-language/>Rego</a>
+policies against Terraform plan JSON. The workflow:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-sh data-lang=sh><span style=display:flex><span><span style=color:#75715e># Generate plan JSON</span>
+</span></span><span style=display:flex><span>terraform plan -out<span style=color:#f92672>=</span>plan.binary
+</span></span><span style=display:flex><span>terraform show -json plan.binary &gt; plan.json
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Evaluate policies</span>
+</span></span><span style=display:flex><span>opa eval <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span>  --data policies/ <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span>  --input plan.json <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;data.terraform.analysis.deny&#34;</span> <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span>  --fail
+</span></span></code></pre></div><p>An example policy preventing public S3 buckets:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-rego data-lang=rego><span style=display:flex><span><span style=color:#66d9ef>package</span> <span style=color:#a6e22e>terraform</span><span style=color:#f92672>.</span><span style=color:#a6e22e>analysis</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>deny[<span style=color:#a6e22e>msg</span>] {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>resource</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>input</span><span style=color:#f92672>.</span><span style=color:#a6e22e>resource_changes</span>[<span style=color:#a6e22e>_</span>]
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>resource</span><span style=color:#f92672>.</span><span style=color:#a6e22e>type</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;aws_s3_bucket_public_access_block&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>change</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>resource</span><span style=color:#f92672>.</span><span style=color:#a6e22e>change</span><span style=color:#f92672>.</span><span style=color:#a6e22e>after</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>not</span> <span style=color:#a6e22e>change</span><span style=color:#f92672>.</span><span style=color:#a6e22e>block_public_acls</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>msg</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>sprintf</span>(<span style=color:#e6db74>&#34;S3 bucket %s must block public ACLs&#34;</span><span style=color:#f92672>,</span> [<span style=color:#a6e22e>resource</span><span style=color:#f92672>.</span><span style=color:#a6e22e>address</span>])
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>OPA policies can also be tested independently via <code>opa test</code>, giving confidence
+that the policies themselves are correct (see <a href=/blog/terraform-plan-validation-with-open-policy-agent/>Terraform Plan Validation With
+Open Policy Agent</a> for
+a full walkthrough).</p><p>Tools like <a href=https://www.openpolicyagent.org/ecosystem/entry/conftest>conftest</a>
+offer offer higher level convenience utilities on top of OPA.</p><h3 id=checkov>Checkov</h3><p><a href=https://www.checkov.io/>Checkov</a> is another popular policy-as-code tool; it
+offers hundreds of built-in policies for common cloud misconfigurations out of
+the box:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-sh data-lang=sh><span style=display:flex><span>checkov -d . --framework terraform
+</span></span></code></pre></div><p>Checkov can also scan plan JSON for runtime-aware analysis, and supports custom
+policies when the built-in rules don&rsquo;t cover your requirements.</p><h3 id=native-terraform-vs-external-policy-tools>Native Terraform vs. external policy tools</h3><p>Native Terraform validation (input validation, preconditions) is simpler and
+lives alongside the code it protects. External tools like OPA and Checkov enable
+centralized governance across many Terraform pipelines and can analyze
+properties of the plan JSON that native Terraform offers no interface for
+testing (e.g., &ldquo;this plan must not destroy more than N resources&rdquo; or &ldquo;this plan
+must not modify resources tagged <code>critical</code>&rdquo;).</p><p>The two approaches are complementary: native validation for module-level
+contracts, external policy for organization-level and/or operation-specific guardrails.</p><p>Beyond strict pass/fail policy checks, the Terraform plan JSON can be analyzed
+programmatically for risk assessment and decision support. This analysis doesn&rsquo;t
+necessarily <em>gate</em> &ndash; it might surface warnings, annotate pull requests, or flag
+changes for additional review. Alternatively, it might be used to auto-approve
+pull requests deemed acceptable.</p><p>Takeaway: Policy-as-code helps enforce standards across teams. Adopt it when you
+need governance beyond what any single module author can natively embed in Terraform.</p><h2 id=assistive-analysis>Assistive analysis</h2><ul><li><strong>What:</strong> Risky operations, cost implications, destructive changes to
+critical resources.</li><li><strong>When:</strong> Post-plan, pre-merge or pre-apply.</li></ul><p>Terraform CI/CD pipelines can also be augmented with with assistive, informational tooling:</p><ul><li><a href=https://github.com/dineshba/tf-summarize>tf-summarize</a> generates a
+human-readable summary of planned changes</li><li>cost estimation tools (like <a href=https://www.infracost.io/>Infracost</a>) surface
+the financial impact of a change</li><li>custom scripts that annotate PRs with the count of creates, updates, and
+destroys</li><li>AI-driven plain text plan explanation</li></ul><p>Programmatic plan analysis fills the gap between automated policy gates and
+manual review. Use it to surface risk, estimate impact, and give authors and
+reviewers better context.</p><h2 id=check-blocks>Check blocks</h2><ul><li><strong>What:</strong> make ongoing infrastructure health assertions.</li><li><strong>When:</strong> Every plan and apply &ndash; but failures only <em>warn</em>, they don&rsquo;t block.</li></ul><p>Terraform <a href=https://developer.hashicorp.com/terraform/language/checks>check blocks</a>
+are a distinct verification mechanism: they&rsquo;re assertions about your
+infrastructure that are decoupled from any specific resource lifecycle. A failing
+check produces a warning, not an error.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#a6e22e>check</span> <span style=color:#e6db74>&#34;api_health&#34;</span> {
+</span></span><span style=display:flex><span>  data <span style=color:#e6db74>&#34;http&#34;</span> <span style=color:#e6db74>&#34;api&#34;</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>url</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;https://</span><span style=color:#e6db74>${</span><span style=color:#a6e22e>aws_lb</span>.<span style=color:#a6e22e>api</span>.<span style=color:#a6e22e>dns_name</span><span style=color:#e6db74>}</span><span style=color:#e6db74>/healthz&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>assert</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>condition</span>     <span style=color:#f92672>=</span> data.<span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>api</span>.<span style=color:#a6e22e>status_code</span> <span style=color:#f92672>==</span> <span style=color:#ae81ff>200</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>error_message</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;API health check returned </span><span style=color:#e6db74>${</span>data.<span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>api</span>.<span style=color:#a6e22e>status_code</span><span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Check blocks can define their own scoped data sources (as shown above) that
+aren&rsquo;t accessible elsewhere in the configuration. This makes them useful for
+verifying external state without polluting the module&rsquo;s resource graph.</p><h3 id=checks-vs-postconditions>Checks vs. postconditions</h3><table><thead><tr><th></th><th>Postconditions</th><th>Checks</th></tr></thead><tbody><tr><td><strong>Scope</strong></td><td>Tied to a specific resource</td><td>Independent of any resource</td></tr><tr><td><strong>On failure</strong></td><td>Blocks the plan/apply</td><td>Warns but continues</td></tr><tr><td><strong>Use case</strong></td><td>&ldquo;This resource <em>must</em> have property X&rdquo;</td><td>&ldquo;The system <em>should</em> be in state Y&rdquo;</td></tr></tbody></table><h3 id=when-to-use-checks>When to use checks</h3><ul><li>Verify that a deployed service is responding after apply</li><li>Assert that a certificate is valid or not near expiry</li><li>Validate assumptions about external systems your configuration depends on</li></ul><p>Takeaway: Checks often operate as a post-apply safety net. They surface drift and environmental
+issues as warnings on every run without blocking operations. Pair them with
+postconditions: postconditions for hard guarantees, checks for soft
+assertions and visibility.</p><h2 id=putting-it-together>Putting it together</h2><table><thead><tr><th>Layer</th><th>When</th><th>What it catches</th></tr></thead><tbody><tr><td><code>fmt</code>, <code>tflint</code></td><td>pre-plan</td><td>Style, syntax, structural issues</td></tr><tr><td>Input validation</td><td>plan-time</td><td>Bad input values</td></tr><tr><td>Preconditions/postconditions</td><td>plan/apply-time</td><td>Environmental assumptions, resource guarantees</td></tr><tr><td><code>terraform test</code> (mocks, child modules)</td><td>pre-plan</td><td>Logic errors, output correctness</td></tr><tr><td><code>terraform test</code> (real, child modules)</td><td>pre-plan</td><td>End-to-end infrastructure correctness</td></tr><tr><td>Policy-as-code</td><td>post-plan</td><td>Governance, security, compliance violations, risk, cost, destructive change warnings</td></tr><tr><td>Assistive analysis tooling</td><td>post-plan</td><td>Risk, cost, intent/impact validation</td></tr><tr><td>Check blocks</td><td>apply-time</td><td>Ongoing infrastructure health</td></tr></tbody></table><h2 id=further-reading>Further reading</h2><ul><li><a href=https://developer.hashicorp.com/terraform/language/expressions/custom-conditions>Terraform custom conditions</a></li><li><a href=https://developer.hashicorp.com/terraform/language/tests>Terraform tests</a></li><li><a href=https://developer.hashicorp.com/terraform/language/tests/mocking>Terraform mock providers</a></li><li><a href=https://developer.hashicorp.com/terraform/language/checks>Terraform check blocks</a></li><li><a href=https://www.openpolicyagent.org/docs/latest/terraform/>Open Policy Agent Terraform support</a></li><li><a href=/blog/automated-terraform-plan-analysis-with-terratest/>Automated Terraform Plan Analysis With Terratest</a></li><li><a href=/blog/terraform-plan-validation-with-open-policy-agent/>Terraform Plan Validation With Open Policy Agent</a></li><li><a href=/blog/terraform-self-validating-plan-time-permissions-checks/>Terraform: self-validating plan-time permissions checks</a></li></ul></div><ul class=tags><li><a href=/tags/terraform>terraform</a></li><li><a href=/tags/terraform-patterns>terraform-patterns</a></li><li><a href=/tags/iac>iac</a></li><li><a href=/tags/testing>testing</a></li></ul></article></div></main><footer><section><h1 id=about>Info</h1><div><h2><a href=/>Mike Ball</a></h2><p>I live in Philadelphia and work as a multi-disciplinary software engineer & designer.</p><p>Over the years, I've developed front end web applications, built
+backend services, automated cloud infrastructure management, designed
+CI/CD pipelines for high scale distributed systems, developed developer
+platforms for large organizations, and contributed to numerous open
+source software projects.</p><p>I've also worked in graphic and UX design. Buy prints of my illustrations at <a href=https://tiendah.bigcartel.com>Tiendah</a>.</p></div><div class=double><h2>Shop Tiendah</h2><ul class="gallery store-feed"></ul><h2>Instagram</h2><ul class="gallery ig-feed"></ul></div><div><h2>Etc.</h2><ul><li><a href=http://github.com/mdb>GitHub</a></li><li><a href=https://clapclapexcitement.bsky.social>Bluesky</a></li><li><a href=https://instagram.com/clapclapexcitement>Instagram</a></li><li><a href=/index.xml>RSS Feed</a></li><li><a href=https://tiendah.bigcartel.com>Shop Tiendah</a></li></ul><h2>Contact</h2><p>Interested in working with me? <a href=mailto:mikedball@gmail.com>Get in touch</a>.</p></div></section></footer><script type=text/javascript src=/js/main.min.542672b67aa924d06e857fba942ea82bceb1ba468d461ef62da049fad70cd0a7.js></script><script type=text/javascript>(function(e,t,n,s,o,i,a){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,i=t.createElement(n),a=t.getElementsByTagName(n)[0],i.async=1,i.src=s,a.parentNode.insertBefore(i,a)})(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-54324621-1","auto"),ga("send","pageview")</script></body></html>
