@@ -1,3 +1,4 @@
+baseURL = "https://mikeball.info/"
 languageCode = "en-us"
 title = "Mike Ball"
 theme = "mdb"
