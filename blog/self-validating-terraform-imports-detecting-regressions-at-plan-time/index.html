@@ -1,0 +1,390 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>Self-validating Terraform imports: detecting regressions at plan time | Mike Ball</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="How can a Terraform configuration prove — at plan time, before any apply — that importing an existing live resource does not change its behavior?"><meta name=generator content="Hugo 0.160.1"><meta name=ROBOTS content="INDEX, FOLLOW"><link rel=stylesheet href=https://mikeball.info/main.min.c635e04198fbb34a98709c98096a1bba982ea1957f90a22d636b308c653b833e.css></head><body class=blog-post><header><div class=mark><a href=/>Mike Ball</a></div><button>Toggle Navigation</button><div class=nav-wrap><nav class=primary><ul><li><a href=/blog>Blog</a></li><li><a href=#about>About</a></li></ul></nav><nav class=secondary><ul><li><a href=https://github.com/mdb>GitHub</a></li><li><a href=/instagram>Instagram</a></li></ul></nav><nav class=tertiary><ul><li><a href=https://tiendah.bigcartel.com>Shop</a></li><li><a href=#about>Contact</a></li></ul></nav></div></header><main role=main><div class=blog-post><article><header><h1>Self-validating Terraform imports: detecting regressions at plan time</h1><time>May 9, 2026</time></header><div><p><em><p>When bringing existing cloud infrastructure under Terraform control via
+<a href=https://developer.hashicorp.com/terraform/language/import><code>import</code> blocks</a>,
+it&rsquo;s often necessary to verify that the authored configuration perfectly
+matches live state. For smaller configurations, eyeballing the plan
+output is feasible. For large configurations with hundreds of resources &ndash; or
+for resources whose state is opaque JSON &ndash; it isn&rsquo;t.</p><p>How can we automate assurances that an import-only Terraform change doesn&rsquo;t
+introduce regressions? In my experience, a few creative techniques may help:
+lifecycle postconditions on data sources, the Cloud Control API for resources
+whose typed schema is incomplete, and <a href=https://www.conftest.dev/>conftest</a>
+policies on the plan JSON.</p></em></p><nav id=TableOfContents><ul><li><a href=#the-problem>The problem</a></li><li><a href=#layer-1-native-data-sources--lifecycle-postconditions>Layer 1: native data sources + lifecycle postconditions</a></li><li><a href=#layer-2-cloud-control-api-as-an-escape-hatch>Layer 2: Cloud Control API as an escape hatch</a></li><li><a href=#layer-3-canonicalize-before-comparing>Layer 3: canonicalize before comparing</a></li><li><a href=#layer-4-out-of-band-resource-detection>Layer 4: out-of-band resource detection</a></li><li><a href=#layer-5-conftest-policies-on-the-plan-json>Layer 5: conftest policies on the plan JSON</a></li><li><a href=#the-unique-challenges-of-rule_json>The unique challenges of <code>rule_json</code></a><ul><li><a href=#rule_json-is-empty-in-state-on-first-import><code>rule_json</code> is empty in state on first import</a></li><li><a href=#the-sha-256-tag-postcondition-is-tautological>The SHA-256 tag postcondition is tautological</a></li><li><a href=#auto-managed-rule-entries>Auto-managed rule entries</a></li><li><a href=#provider-bug-44009-nesting-depth--3>Provider bug <code>#44009</code>: nesting depth ≥ 3</a></li></ul></li><li><a href=#tying-it-together>Tying it together</a></li><li><a href=#further-reading>Further reading</a></li></ul></nav><h2 id=the-problem>The problem</h2><p>You&rsquo;re importing an existing collection of live cloud resources into Terraform
+via <code>import</code> blocks. The desired outcome:</p><ul><li><code>terraform apply</code> is a behavioral no-op against live infrastructure.</li><li>The authored configuration matches live state in every way that
+matters.</li><li>Future drift is detected on every subsequent plan.</li></ul><p><code>terraform plan</code> alone is inadequate. Plan output shows <em>Terraform&rsquo;s</em>
+view of the diff between authored config and refreshed state, but:</p><ul><li>The provider&rsquo;s import codepath may populate state from one schema
+representation while authored config uses another, masking real drift.</li><li>Some resource attributes (e.g., complex JSON blobs) are easy to glance
+over in plan output even when they encode meaningful behavior.</li><li>A &ldquo;no changes&rdquo; plan only proves that <em>Terraform</em> thinks nothing
+changes — not that the authored config truly mirrors live.</li></ul><p>The techniques below bake verification into the plan itself, ensuring a CI
+plan job fails on any drift between authored config and live state.</p><h2 id=layer-1-native-data-sources--lifecycle-postconditions>Layer 1: native data sources + lifecycle postconditions</h2><p>For attributes a typed data source already exposes, the simplest gate is
+a <a href=https://developer.hashicorp.com/terraform/language/expressions/custom-conditions#preconditions-and-postconditions>lifecycle
+postcondition</a>
+that compares the authored value against the live value, returned by a
+data source.</p><p>Consider an <a href=https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/wafv2_ip_set><code>aws_wafv2_ip_set</code></a>
+being adopted via an <code>import</code> block. The corresponding <a href=https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/wafv2_ip_set><code>aws_wafv2_ip_set</code> data source</a> exposes
+<code>addresses</code>, so the postcondition can perform a pure-HCL set comparison:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#75715e># Adopt the existing live IP set into Terraform state.
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>import</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>to</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>aws_wafv2_ip_set</span>.<span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>id</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;my-allowlist/abc123-def456-.../REGIONAL&#34;</span>
+</span></span><span style=display:flex><span>}<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e># Live state, fetched fresh on every plan.
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>data</span> <span style=color:#e6db74>&#34;aws_wafv2_ip_set&#34;</span> <span style=color:#e6db74>&#34;live&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>name</span>  <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;my-allowlist&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>scope</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;REGIONAL&#34;</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;aws_wafv2_ip_set&#34;</span> <span style=color:#e6db74>&#34;main&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>name</span>               <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;my-allowlist&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>scope</span>              <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;REGIONAL&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>ip_address_version</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;IPV4&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>addresses</span>          <span style=color:#f92672>=</span> var.<span style=color:#a6e22e>allowed_cidrs</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>lifecycle</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>postcondition</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>condition</span> <span style=color:#f92672>=</span> toset(<span style=color:#a6e22e>self</span>.<span style=color:#a6e22e>addresses</span>) <span style=color:#f92672>==</span> toset(data.<span style=color:#a6e22e>aws_wafv2_ip_set</span>.<span style=color:#a6e22e>live</span>.<span style=color:#a6e22e>addresses</span>)
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>error_message</span> <span style=color:#f92672>=</span> format(
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;IPv4 allowlist drift: only-authored=%v only-live=%v&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>setsubtract</span>(toset(<span style=color:#a6e22e>self</span>.<span style=color:#a6e22e>addresses</span>), toset(data.<span style=color:#a6e22e>aws_wafv2_ip_set</span>.<span style=color:#a6e22e>live</span>.<span style=color:#a6e22e>addresses</span>)),
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>setsubtract</span>(toset(data.<span style=color:#a6e22e>aws_wafv2_ip_set</span>.<span style=color:#a6e22e>live</span>.<span style=color:#a6e22e>addresses</span>), toset(<span style=color:#a6e22e>self</span>.<span style=color:#a6e22e>addresses</span>)),
+</span></span><span style=display:flex><span>      )
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>The plan fails if <code>var.allowed_cidrs</code> doesn&rsquo;t match the live IP set,
+with a diff in the error message surfacing the discrepancy.</p><p>The same pattern works for any resource whose typed data source offers
+the relevant field — regex pattern sets via
+<a href=https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/wafv2_regex_pattern_set><code>aws_wafv2_regex_pattern_set</code></a>, security group rules via
+<a href=https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/security_group><code>aws_security_group</code></a>,
+DNS records via <a href=https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route53_record><code>aws_route53_record</code></a>, and so on.</p><p>For example, applied to a regex pattern set:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#a6e22e>import</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>to</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>aws_wafv2_regex_pattern_set</span>.<span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>id</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;my-excluded-paths/abc123-def456-.../REGIONAL&#34;</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>data</span> <span style=color:#e6db74>&#34;aws_wafv2_regex_pattern_set&#34;</span> <span style=color:#e6db74>&#34;live&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>name</span>  <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;my-excluded-paths&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>scope</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;REGIONAL&#34;</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;aws_wafv2_regex_pattern_set&#34;</span> <span style=color:#e6db74>&#34;main&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>name</span>  <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;my-excluded-paths&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>scope</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;REGIONAL&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>dynamic</span> <span style=color:#e6db74>&#34;regular_expression&#34;</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>for_each</span> <span style=color:#f92672>=</span> var.<span style=color:#a6e22e>regex_excludes</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>content</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>regex_string</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>regular_expression</span>.<span style=color:#a6e22e>value</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>lifecycle</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>postcondition</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>condition</span> <span style=color:#f92672>=</span> (
+</span></span><span style=display:flex><span>        toset(var.<span style=color:#a6e22e>regex_excludes</span>)
+</span></span><span style=display:flex><span>        <span style=color:#f92672>==</span> toset([<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>r</span> <span style=color:#66d9ef>in</span> data.<span style=color:#a6e22e>aws_wafv2_regex_pattern_set</span>.<span style=color:#a6e22e>live</span>.<span style=color:#a6e22e>regular_expression</span> <span style=color:#f92672>:</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>regex_string</span>])
+</span></span><span style=display:flex><span>      )
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>error_message</span> <span style=color:#f92672>=</span> format(
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;Regex pattern set drift: only-authored=%v only-live=%v&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>setsubtract</span>(
+</span></span><span style=display:flex><span>          toset(var.<span style=color:#a6e22e>regex_excludes</span>),
+</span></span><span style=display:flex><span>          toset([<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>r</span> <span style=color:#66d9ef>in</span> data.<span style=color:#a6e22e>aws_wafv2_regex_pattern_set</span>.<span style=color:#a6e22e>live</span>.<span style=color:#a6e22e>regular_expression</span> <span style=color:#f92672>:</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>regex_string</span>]),
+</span></span><span style=display:flex><span>        ),
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>setsubtract</span>(
+</span></span><span style=display:flex><span>          toset([<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>r</span> <span style=color:#66d9ef>in</span> data.<span style=color:#a6e22e>aws_wafv2_regex_pattern_set</span>.<span style=color:#a6e22e>live</span>.<span style=color:#a6e22e>regular_expression</span> <span style=color:#f92672>:</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>regex_string</span>]),
+</span></span><span style=display:flex><span>          toset(var.<span style=color:#a6e22e>regex_excludes</span>),
+</span></span><span style=display:flex><span>        ),
+</span></span><span style=display:flex><span>      )
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=layer-2-cloud-control-api-as-an-escape-hatch>Layer 2: Cloud Control API as an escape hatch</h2><p>What if the typed AWS provider data source doesn&rsquo;t expose the field
+you need to compare? The <a href=https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/wafv2_web_acl><code>aws_wafv2_web_acl</code> data source</a>, for instance,
+currently returns only <code>arn</code>, <code>description</code>, and <code>id</code> — not the rule body that
+defines what the ACL actually <em>does</em>.</p><p>This matters more than it first sounds. The plan diff alone is a poor signal
+on checking whether authored config matches live state for two compounding
+reasons:</p><ul><li><strong>Refreshed state isn&rsquo;t live state.</strong> The plan shows authored config vs.
+refreshed <em>Terraform state</em>, which is the provider&rsquo;s interpretation
+of live AWS — not live AWS itself. When the provider stores a value
+under a different attribute than the one being authored (more on
+this in the <a href=#rule_json-is-empty-in-state-on-first-import><code>rule_json</code> challenges</a>
+section below), the plan can show a giant diff that&rsquo;s a
+representational artifact rather than a real authored-vs-live
+delta — or, conversely, hide a real delta the provider didn&rsquo;t
+surface.</li><li><strong>Byte-level noise.</strong> Even when refreshed state <em>does</em> track live,
+two API representations of the same logical content can differ on
+key ordering, default-empty fields, casing, and auto-managed
+entries that rotate over time. Eyeballing thousands of lines of
+plan output for behaviorally-meaningful changes is impractical.</li></ul><p>A separate live-state read, independent of TF state&rsquo;s representation,
+sidesteps both. The
+<a href=https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/cloudcontrolapi_resource><code>aws_cloudcontrolapi_resource</code></a>
+data source helps. It wraps the
+<a href=https://docs.aws.amazon.com/cloudcontrolapi/>AWS Cloud Control API</a>,
+which exposes any CloudFormation-modeled resource as a generic
+properties JSON string.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#66d9ef>data</span> <span style=color:#e6db74>&#34;aws_cloudcontrolapi_resource&#34;</span> <span style=color:#e6db74>&#34;live_web_acl&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>type_name</span>  <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;AWS::WAFv2::WebACL&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>identifier</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;my-acl|abc123-def456-...|REGIONAL&#34;</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>locals</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>live_rules</span> <span style=color:#f92672>=</span> jsondecode(data.<span style=color:#a6e22e>aws_cloudcontrolapi_resource</span>.<span style=color:#a6e22e>live_web_acl</span>.<span style=color:#a6e22e>properties</span>).<span style=color:#a6e22e>Rules</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><code>local.live_rules</code> now holds the live rule body — the same data the
+WAFv2 API&rsquo;s <code>GetWebACL</code> returns — accessible to a postcondition. For
+example:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#a6e22e>import</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>to</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>aws_wafv2_web_acl</span>.<span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>id</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;abc123-def456-.../my-acl/REGIONAL&#34;</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;aws_wafv2_web_acl&#34;</span> <span style=color:#e6db74>&#34;main&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>name</span>  <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;my-acl&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>scope</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;REGIONAL&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>default_action</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>allow</span> {}
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>rule_json</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>authored_rule_json</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>visibility_config</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>cloudwatch_metrics_enabled</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>sampled_requests_enabled</span>   <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>metric_name</span>                <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;my-acl&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>lifecycle</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>postcondition</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>condition</span> <span style=color:#f92672>=</span> jsonencode(<span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>live_rules</span>) <span style=color:#f92672>==</span> jsonencode(<span style=color:#a6e22e>jsondecode</span>(<span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>authored_rule_json</span>))
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>error_message</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Web ACL rule body diverges from authored rule_json.&#34;</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>However, sometimes raw <code>jsonencode</code> equality is too brittle (key order,
+default-empty fields, and casing differences may trip it up); see
+<a href=#layer-3-canonicalize-before-comparing>Layer 3</a> for the
+canonicalization steps that make the comparison reliable.</p><p>The same pattern is applicable any time the legacy AWS provider&rsquo;s
+typed schema is incomplete: pivot to Cloud Control via
+<code>type_name = "AWS::Service::ResourceType"</code> and project the field
+of interest from <code>properties</code>.</p><p>The <a href=https://registry.terraform.io/providers/hashicorp/awscc/latest/docs><code>hashicorp/awscc</code></a>
+provider — auto-generated from the same CloudFormation registry — is
+another option, often with friendlier ergonomics. Its plural data
+sources (e.g., <code>awscc_shield_protections</code>) are particularly useful for
+enumerating all instances of a resource type for out-of-band drift
+detection (see &ldquo;Out-of-band resources&rdquo; below).</p><h2 id=layer-3-canonicalize-before-comparing>Layer 3: canonicalize before comparing</h2><p>When the comparison target is a JSON blob rather than a flat set, raw
+equality is rarely enough. Two byte-different JSON strings can encode
+the same logical content if any of the following differ:</p><ul><li>Map key ordering.</li><li>Whitespace and indentation.</li><li>Default-empty fields one side includes and the other omits.</li><li>Casing of structural keys (e.g., <code>Arn</code> vs <code>ARN</code>).</li><li>Auto-managed entries that rotate over time.</li></ul><p>In my experience, ~three normalization techniques tend to handle the bulk of these:</p><p><strong>1. Name-key, then <code>jsonencode</code>.</strong> Reshape both sides into a map keyed by
+some stable identifier (e.g., a rule&rsquo;s <code>Name</code>) and <code>jsonencode</code> the
+result. <code>jsonencode</code> produces deterministic key ordering, so two
+logically-equal maps produce byte-equal strings.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#a6e22e>locals</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>live_canonical</span> <span style=color:#f92672>=</span> jsonencode({
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>r</span> <span style=color:#66d9ef>in</span> <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>live_rules</span> <span style=color:#f92672>:</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>Name</span> =&gt; <span style=color:#a6e22e>r</span>
+</span></span><span style=display:flex><span>  })
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>authored_canonical</span> <span style=color:#f92672>=</span> jsonencode({
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>r</span> <span style=color:#66d9ef>in</span> jsondecode(<span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>rule_json</span>) <span style=color:#f92672>:</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>Name</span> =&gt; <span style=color:#a6e22e>r</span>
+</span></span><span style=display:flex><span>  })
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>2. Strip default-empty fields.</strong> CloudFormation (and therefore Cloud
+Control) tends to populate fields like <code>RuleLabels: []</code> and
+<code>ExcludedRules: []</code> even when they&rsquo;re empty, while the underlying
+service API (and authored config) omits them entirely. A regex strip on
+the JSON encoding handles every depth uniformly:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#a6e22e>locals</span> {
+</span></span><span style=display:flex><span>  <span style=color:#960050;background-color:#1e0010>_</span><span style=color:#a6e22e>empty_pattern</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;(?:RuleLabels|ExcludedRules|ManagedRuleGroupConfigs)&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>stripped</span> <span style=color:#f92672>=</span> replace(
+</span></span><span style=display:flex><span>    replace(<span style=color:#a6e22e>jsonencode</span>(<span style=color:#a6e22e>thing</span>), <span style=color:#e6db74>&#34;/,</span><span style=color:#960050;background-color:#1e0010>\</span><span style=color:#e6db74>&#34;</span><span style=color:#960050;background-color:#1e0010>$</span>{<span style=color:#a6e22e>local</span>.<span style=color:#960050;background-color:#1e0010>_</span><span style=color:#a6e22e>empty_pattern</span>}<span style=color:#960050;background-color:#1e0010>\</span><span style=color:#e6db74>&#34;:</span><span style=color:#960050;background-color:#1e0010>\\</span><span style=color:#e6db74>[</span><span style=color:#960050;background-color:#1e0010>\\</span><span style=color:#e6db74>]/&#34;</span>, <span style=color:#e6db74>&#34;&#34;</span>),
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;/</span><span style=color:#960050;background-color:#1e0010>\</span><span style=color:#e6db74>&#34;</span><span style=color:#960050;background-color:#1e0010>$</span>{<span style=color:#a6e22e>local</span>.<span style=color:#960050;background-color:#1e0010>_</span><span style=color:#a6e22e>empty_pattern</span>}<span style=color:#960050;background-color:#1e0010>\</span><span style=color:#e6db74>&#34;:</span><span style=color:#960050;background-color:#1e0010>\\</span><span style=color:#e6db74>[</span><span style=color:#960050;background-color:#1e0010>\\</span><span style=color:#e6db74>],/&#34;</span>, <span style=color:#e6db74>&#34;&#34;</span>,
+</span></span><span style=display:flex><span>  )
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Two passes handle either comma placement (<code>,"FIELD":[]</code> mid-object,
+<code>"FIELD":[],</code> start-of-object). HCL&rsquo;s <code>for</code> expressions can&rsquo;t recurse
+into arbitrary nested structures, so a string-level regex on the
+serialized form is the practical approach.</p><p><strong>3. Normalize representational differences.</strong> When two APIs disagree on
+casing or naming for the same field — Cloud Control uses PascalCase
+<code>Arn</code>, the WAFv2 API uses uppercase <code>ARN</code>, etc. — rewrite the JSON-key
+syntax before comparison:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#a6e22e>locals</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>normalized</span> <span style=color:#f92672>=</span> replace(<span style=color:#a6e22e>stripped</span>, <span style=color:#e6db74>&#34;</span><span style=color:#960050;background-color:#1e0010>\</span><span style=color:#e6db74>&#34;</span><span style=color:#a6e22e>Arn</span><span style=color:#960050;background-color:#1e0010>\</span><span style=color:#e6db74>&#34;:&#34;</span>, <span style=color:#e6db74>&#34;</span><span style=color:#960050;background-color:#1e0010>\</span><span style=color:#e6db74>&#34;</span><span style=color:#a6e22e>ARN</span><span style=color:#960050;background-color:#1e0010>\</span><span style=color:#e6db74>&#34;:&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Anchoring the rewrite to JSON key syntax (<code>"Arn":</code>) prevents collisions
+with values that happen to contain the same substring.</p><p>The postcondition then becomes a simple string equality on the
+canonical forms:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;aws_wafv2_web_acl&#34;</span> <span style=color:#e6db74>&#34;main&#34;</span> {<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # ...
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>rule_json</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>authored_rule_json</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>lifecycle</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>postcondition</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>condition</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>live_canonical</span> <span style=color:#f92672>==</span> <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>authored_canonical</span>
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>error_message</span> <span style=color:#f92672>=</span> format(
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;rule body diverges from authored rule_json (live sha256=%s, authored sha256=%s)&#34;</span>,
+</span></span><span style=display:flex><span>        sha256(<span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>live_canonical</span>),
+</span></span><span style=display:flex><span>        sha256(<span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>authored_canonical</span>),
+</span></span><span style=display:flex><span>      )
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=layer-4-out-of-band-resource-detection>Layer 4: out-of-band resource detection</h2><p>Consider a separate failure mode: someone (or some automation) creates a
+resource directly in AWS that the Terraform root module <em>doesn&rsquo;t</em> manage but
+<em>should</em> — adjacent to the resources it does manage, in the blast
+radius of any future change.</p><p>The pattern: enumerate every live instance of a resource type, then
+assert via postcondition that each one is either Terraform-managed or
+explicitly allowlisted as known unmanaged.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#66d9ef>data</span> <span style=color:#e6db74>&#34;awscc_shield_protections&#34;</span> <span style=color:#e6db74>&#34;live_ids&#34;</span> {}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>data</span> <span style=color:#e6db74>&#34;awscc_shield_protection&#34;</span> <span style=color:#e6db74>&#34;live&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>for_each</span> <span style=color:#f92672>=</span> data.<span style=color:#a6e22e>awscc_shield_protections</span>.<span style=color:#a6e22e>live_ids</span>.<span style=color:#a6e22e>ids</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>id</span>       <span style=color:#f92672>=</span> each.<span style=color:#a6e22e>key</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>lifecycle</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>postcondition</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>condition</span> <span style=color:#f92672>=</span> (<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>        # FMS-managed protections are auto-named — passes.
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>startswith</span>(<span style=color:#a6e22e>coalesce</span>(<span style=color:#a6e22e>self</span>.<span style=color:#a6e22e>name</span>, <span style=color:#e6db74>&#34;&#34;</span>), <span style=color:#e6db74>&#34;FMManagedShieldProtection&#34;</span>)<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>        # Explicit allowlist of known direct protections — passes.
+</span></span></span><span style=display:flex><span>        <span style=color:#f92672>||</span> contains(var.<span style=color:#a6e22e>expected_outofband_protection_ids</span>, <span style=color:#a6e22e>self</span>.<span style=color:#a6e22e>protection_id</span>)
+</span></span><span style=display:flex><span>      )
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>error_message</span> <span style=color:#f92672>=</span> format(
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;Out-of-band Shield protection: protection_id=%s name=%s. Either bring under Terraform, remove from AWS, or add to the allowlist.&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>self</span>.<span style=color:#a6e22e>protection_id</span>, <span style=color:#a6e22e>self</span>.<span style=color:#a6e22e>name</span>,
+</span></span><span style=display:flex><span>      )
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Each protection is one Cloud Control GetResource call at refresh time,
+bounded by the count of protections in the account. The cost is
+proportional to live state, paid once per plan.</p><h2 id=layer-5-conftest-policies-on-the-plan-json>Layer 5: conftest policies on the plan JSON</h2><p>Native Terraform postconditions guard the resource lifecycle but can&rsquo;t
+see properties of the plan itself: how many resources are being
+destroyed, whether a sensitive resource is being modified, whether a
+specific attribute changed value. For that, <a href=https://www.conftest.dev/><code>conftest</code></a> — wrapping
+<a href=https://www.openpolicyagent.org/>OPA</a> Rego — evaluates policies
+against the plan JSON.</p><p>In my experience, there are three useful policy shapes for import-and-validate work:</p><p><strong>1. Drift detection across a JSON-encoded attribute.</strong> A <code>warn</code> rule
+that surfaces add/remove/modify deltas between <code>change.before</code> and
+<code>change.after</code> for a JSON-encoded attribute, summarized by stable
+identifier:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-rego data-lang=rego><span style=display:flex><span><span style=color:#66d9ef>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>import</span> <span style=color:#a6e22e>rego</span><span style=color:#f92672>.</span><span style=color:#a6e22e>v1</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>warn_rule_body_drift <span style=color:#66d9ef>contains</span> <span style=color:#a6e22e>msg</span> <span style=color:#66d9ef>if</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>some</span> <span style=color:#a6e22e>r</span> <span style=color:#66d9ef>in</span> <span style=color:#a6e22e>input</span><span style=color:#f92672>.</span><span style=color:#a6e22e>resource_changes</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>r</span><span style=color:#f92672>.</span><span style=color:#a6e22e>type</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;aws_wafv2_web_acl&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>is_update_or_replace</span>(<span style=color:#a6e22e>r</span><span style=color:#f92672>.</span><span style=color:#a6e22e>change</span><span style=color:#f92672>.</span><span style=color:#a6e22e>actions</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>before</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>json</span><span style=color:#f92672>.</span><span style=color:#a6e22e>unmarshal</span>(<span style=color:#a6e22e>r</span><span style=color:#f92672>.</span><span style=color:#a6e22e>change</span><span style=color:#f92672>.</span><span style=color:#a6e22e>before</span><span style=color:#f92672>.</span><span style=color:#a6e22e>rule_json</span>)
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>after</span>  <span style=color:#f92672>:=</span> <span style=color:#a6e22e>json</span><span style=color:#f92672>.</span><span style=color:#a6e22e>unmarshal</span>(<span style=color:#a6e22e>r</span><span style=color:#f92672>.</span><span style=color:#a6e22e>change</span><span style=color:#f92672>.</span><span style=color:#a6e22e>after</span><span style=color:#f92672>.</span><span style=color:#a6e22e>rule_json</span>)
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>before</span> <span style=color:#f92672>!=</span> <span style=color:#a6e22e>after</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>msg</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>sprintf</span>(
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;WAF Web ACL &#39;%s&#39; rule body changed — added: %v, removed: %v, modified: %v&#34;</span><span style=color:#f92672>,</span>
+</span></span><span style=display:flex><span>    [
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>r</span><span style=color:#f92672>.</span><span style=color:#a6e22e>address</span><span style=color:#f92672>,</span>
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>added_rules</span>(<span style=color:#a6e22e>before</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>after</span>)<span style=color:#f92672>,</span>
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>removed_rules</span>(<span style=color:#a6e22e>before</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>after</span>)<span style=color:#f92672>,</span>
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>modified_rules</span>(<span style=color:#a6e22e>before</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>after</span>)<span style=color:#f92672>,</span>
+</span></span><span style=display:flex><span>    ]<span style=color:#f92672>,</span>
+</span></span><span style=display:flex><span>  )
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>added_rules(<span style=color:#a6e22e>b</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>a</span>) <span style=color:#f92672>:=</span> {<span style=color:#a6e22e>n</span> <span style=color:#f92672>|</span> <span style=color:#66d9ef>some</span> <span style=color:#a6e22e>rule</span> <span style=color:#66d9ef>in</span> <span style=color:#a6e22e>a</span>; <span style=color:#a6e22e>n</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>rule</span><span style=color:#f92672>.</span><span style=color:#a6e22e>Name</span>; <span style=color:#66d9ef>not</span> <span style=color:#a6e22e>name_in</span>(<span style=color:#a6e22e>n</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>b</span>)}
+</span></span><span style=display:flex><span>removed_rules(<span style=color:#a6e22e>b</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>a</span>) <span style=color:#f92672>:=</span> {<span style=color:#a6e22e>n</span> <span style=color:#f92672>|</span> <span style=color:#66d9ef>some</span> <span style=color:#a6e22e>rule</span> <span style=color:#66d9ef>in</span> <span style=color:#a6e22e>b</span>; <span style=color:#a6e22e>n</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>rule</span><span style=color:#f92672>.</span><span style=color:#a6e22e>Name</span>; <span style=color:#66d9ef>not</span> <span style=color:#a6e22e>name_in</span>(<span style=color:#a6e22e>n</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>a</span>)}
+</span></span><span style=display:flex><span>modified_rules(<span style=color:#a6e22e>b</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>a</span>) <span style=color:#f92672>:=</span> {<span style=color:#a6e22e>n</span> <span style=color:#f92672>|</span> <span style=color:#66d9ef>some</span> <span style=color:#a6e22e>rb</span> <span style=color:#66d9ef>in</span> <span style=color:#a6e22e>b</span>; <span style=color:#66d9ef>some</span> <span style=color:#a6e22e>ra</span> <span style=color:#66d9ef>in</span> <span style=color:#a6e22e>a</span>; <span style=color:#a6e22e>rb</span><span style=color:#f92672>.</span><span style=color:#a6e22e>Name</span> <span style=color:#f92672>==</span> <span style=color:#a6e22e>ra</span><span style=color:#f92672>.</span><span style=color:#a6e22e>Name</span>; <span style=color:#a6e22e>rb</span> <span style=color:#f92672>!=</span> <span style=color:#a6e22e>ra</span>; <span style=color:#a6e22e>n</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>rb</span><span style=color:#f92672>.</span><span style=color:#a6e22e>Name</span>}
+</span></span></code></pre></div><p><code>warn</code> rather than <code>deny</code> because rule body changes are routinely
+intentional. The goal is to make sure a reviewer sees the structural
+diff, the same way a manual diff tool would surface it.</p><p><strong>2. Fingerprint-tag transition warnings.</strong> A SHA-256 of the JSON-encoded
+attribute, written into the resource as a tag, gives a one-line
+fingerprint that flips on any meaningful change. Conftest can warn on
+transitions:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-terraform data-lang=terraform><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;aws_wafv2_web_acl&#34;</span> <span style=color:#e6db74>&#34;main&#34;</span> {<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>  # ...
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>rule_json</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>rule_json</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>tags</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;rule-json-sha256&#34;</span> <span style=color:#f92672>=</span> sha256(<span style=color:#a6e22e>local</span>.<span style=color:#a6e22e>rule_json</span>)
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-rego data-lang=rego><span style=display:flex><span>warn_fingerprint_changed <span style=color:#66d9ef>contains</span> <span style=color:#a6e22e>msg</span> <span style=color:#66d9ef>if</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>some</span> <span style=color:#a6e22e>r</span> <span style=color:#66d9ef>in</span> <span style=color:#a6e22e>input</span><span style=color:#f92672>.</span><span style=color:#a6e22e>resource_changes</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>before</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>object</span><span style=color:#f92672>.</span><span style=color:#a6e22e>get</span>(<span style=color:#a6e22e>r</span><span style=color:#f92672>.</span><span style=color:#a6e22e>change</span><span style=color:#f92672>.</span><span style=color:#a6e22e>before</span><span style=color:#f92672>,</span> [<span style=color:#e6db74>&#34;tags&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;rule-json-sha256&#34;</span>]<span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;&#34;</span>)
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>after</span>  <span style=color:#f92672>:=</span> <span style=color:#a6e22e>object</span><span style=color:#f92672>.</span><span style=color:#a6e22e>get</span>(<span style=color:#a6e22e>r</span><span style=color:#f92672>.</span><span style=color:#a6e22e>change</span><span style=color:#f92672>.</span><span style=color:#a6e22e>after</span><span style=color:#f92672>,</span> [<span style=color:#e6db74>&#34;tags&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;rule-json-sha256&#34;</span>]<span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;&#34;</span>)
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>before</span> <span style=color:#f92672>!=</span> <span style=color:#e6db74>&#34;&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>after</span> <span style=color:#f92672>!=</span> <span style=color:#e6db74>&#34;&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>before</span> <span style=color:#f92672>!=</span> <span style=color:#a6e22e>after</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>msg</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>sprintf</span>(<span style=color:#e6db74>&#34;WAF &#39;%s&#39; rule body fingerprint changed %s → %s&#34;</span><span style=color:#f92672>,</span> [<span style=color:#a6e22e>r</span><span style=color:#f92672>.</span><span style=color:#a6e22e>address</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>before</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>after</span>])
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>3. Provider-bug-trip prevention.</strong> Some provider bugs only surface
+under specific authoring shapes. Encode the constraint as a <code>deny</code> rule
+on the plan JSON so it&rsquo;s caught at policy time rather than at refresh
+time:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-rego data-lang=rego><span style=display:flex><span>deny <span style=color:#66d9ef>contains</span> <span style=color:#a6e22e>msg</span> <span style=color:#66d9ef>if</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>some</span> <span style=color:#a6e22e>r</span> <span style=color:#66d9ef>in</span> <span style=color:#a6e22e>input</span><span style=color:#f92672>.</span><span style=color:#a6e22e>resource_changes</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>r</span><span style=color:#f92672>.</span><span style=color:#a6e22e>type</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;aws_wafv2_web_acl&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>some</span> <span style=color:#a6e22e>rule</span> <span style=color:#66d9ef>in</span> <span style=color:#a6e22e>json</span><span style=color:#f92672>.</span><span style=color:#a6e22e>unmarshal</span>(<span style=color:#a6e22e>r</span><span style=color:#f92672>.</span><span style=color:#a6e22e>change</span><span style=color:#f92672>.</span><span style=color:#a6e22e>after</span><span style=color:#f92672>.</span><span style=color:#a6e22e>rule_json</span>)
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>depth_three_or_more</span>(<span style=color:#a6e22e>rule</span><span style=color:#f92672>.</span><span style=color:#a6e22e>Statement</span>)
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>msg</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>sprintf</span>(
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;WAF &#39;%s&#39; rule %q has 3+ chained logical operators - this trips provider state-flatten bug&#34;</span><span style=color:#f92672>,</span>
+</span></span><span style=display:flex><span>    [<span style=color:#a6e22e>r</span><span style=color:#f92672>.</span><span style=color:#a6e22e>address</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>rule</span><span style=color:#f92672>.</span><span style=color:#a6e22e>Name</span>]<span style=color:#f92672>,</span>
+</span></span><span style=display:flex><span>  )
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>(Bounded unrolling — Rego forbids recursive rules, so chains beyond a
+fixed depth need explicit unrolled checks.)</p><h2 id=the-unique-challenges-of-rule_json>The unique challenges of <code>rule_json</code></h2><p>Most of the above techniques apply broadly. A few wrinkles are specific
+to AWS WAFv2&rsquo;s
+<a href=https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/wafv2_web_acl#rule_json-1><code>rule_json</code></a>
+attribute, where the resource&rsquo;s authoritative behavior lives in a JSON
+blob rather than typed HCL blocks.</p><h3 id=rule_json-is-empty-in-state-on-first-import><code>rule_json</code> is empty in state on first import</h3><p>When the AWS provider imports a WAFv2 Web ACL, it populates the typed
+<code>rule { }</code> block schema from the API response — <em>not</em> <code>rule_json</code>. So
+on the first plan after <code>import</code>, <code>change.before.rule_json</code> is empty,
+even when live AWS has a fully-populated rule body.</p><p>Two consequences follow, both important:</p><ul><li><strong>The plan diff is misleading.</strong> The plan shows a giant
+<code>+ rule_json = jsonencode([...])</code> block for every imported Web ACL —
+not because the authored body differs from live AWS, but because TF
+state has no <code>rule_json</code> to compare against. The diff is a
+representational artifact, not an authored-vs-live delta. Eyeballing
+it can&rsquo;t tell a reviewer whether the authored config actually
+matches live behavior.</li><li><strong>Conftest is vacuously true.</strong> Any policy comparing
+<code>change.before.rule_json</code> to <code>change.after.rule_json</code> passes
+trivially because <code>before</code> is empty.</li></ul><p>This is the central reason the Cloud Control postconditions in
+<a href=#layer-2-cloud-control-api-as-an-escape-hatch>Layer 2</a> matter most
+on first import: they read live state directly — independently of TF
+state&rsquo;s representation — and assert authored ≡ live byte-for-byte
+after canonicalization. With the lifecycle postconditions in place,
+the plan fails if they diverge, regardless of how the plan diff looks.</p><p>The order of operations inverts across the import lifecycle:</p><ul><li><strong>Before first apply:</strong> the lifecycle postconditions in
+<code>web_acls.tf</code> (Layer 3 above) are the authoritative gate. They
+compare authored <code>rule_json</code> against live state fetched via Cloud
+Control, ignoring what&rsquo;s in Terraform state entirely.</li><li><strong>After first apply:</strong> <code>rule_json</code> lands in state, and from that
+point on, <code>change.before.rule_json</code> is populated with what
+Terraform last wrote. The conftest <code>rule_body_drift</code> policy
+becomes the operative steady-state gate.</li></ul><p>The Cloud Control postconditions can be removed as a follow-up cleanup
+once steady state is reached — or kept as belt-and-suspenders against
+out-of-band edits.</p><h3 id=the-sha-256-tag-postcondition-is-tautological>The SHA-256 tag postcondition is tautological</h3><p>It&rsquo;s tempting to gate via <code>self.tags["rule-json-sha256"] == sha256(local.rule_json[k])</code> in a postcondition. This <em>looks</em> like it
+asserts something — and it does, but tautologically. In a postcondition,
+<code>self</code> is the planned value, which already includes the planned tag,
+which is by definition <code>sha256(local.rule_json[k])</code>. The check
+self-references and always passes.</p><p>For the SHA tag to be a meaningful gate, compare it against a separate
+data source&rsquo;s view of live state — at which point it adds nothing
+beyond a direct rule body comparison via Cloud Control. The tag is most
+useful as a <em>signal</em> in plan diffs and console UIs, with the actual
+gate elsewhere.</p><h3 id=auto-managed-rule-entries>Auto-managed rule entries</h3><p>Some service features add rules out-of-band that aren&rsquo;t authorable via
+<code>rule_json</code>. AWS Shield Advanced, for example, injects
+<code>ShieldMitigationRuleGroup_*</code> rules at priority 10000000 with rotating
+UUIDs during active mitigations. These would surface as rule-body
+drift on every plan unless filtered. Strip them at canonicalization
+time, in both the live-vs-authored postcondition and the conftest
+drift policy:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-rego data-lang=rego><span style=display:flex><span>filter_aws_managed(<span style=color:#a6e22e>rules</span>) <span style=color:#f92672>:=</span> [<span style=color:#a6e22e>r</span> <span style=color:#f92672>|</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>some</span> <span style=color:#a6e22e>r</span> <span style=color:#66d9ef>in</span> <span style=color:#a6e22e>rules</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>not</span> <span style=color:#a6e22e>is_aws_managed</span>(<span style=color:#a6e22e>r</span>)
+</span></span><span style=display:flex><span>]
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>is_aws_managed(<span style=color:#a6e22e>rule</span>) <span style=color:#66d9ef>if</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>rule</span><span style=color:#f92672>.</span><span style=color:#a6e22e>Priority</span> <span style=color:#f92672>&gt;=</span> <span style=color:#ae81ff>10000000</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>contains</span>(<span style=color:#a6e22e>rule</span><span style=color:#f92672>.</span><span style=color:#a6e22e>Statement</span><span style=color:#f92672>.</span><span style=color:#a6e22e>RuleGroupReferenceStatement</span><span style=color:#f92672>.</span><span style=color:#a6e22e>ARN</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;:&lt;aws-internal-account-id&gt;:&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>The same pattern &ndash; strip rotating, service-managed entries before
+comparing &ndash; applies any time the live shape includes things the author
+can&rsquo;t (or shouldn&rsquo;t) own.</p><h3 id=provider-bug-44009-nesting-depth--3>Provider bug <code>#44009</code>: nesting depth ≥ 3</h3><p>The AWS provider&rsquo;s WAFv2 typed <code>rule { }</code> schema currently fails to
+refresh <code>Not(Or(IPv4, IPv6))</code> and other depth-≥-3 logical-operator
+trees correctly (see <a href=https://github.com/hashicorp/terraform-provider-aws/issues/44009><code>hashicorp/terraform-provider-aws#44009</code></a>).
+<code>rule_json</code> sidesteps this by avoiding the typed schema entirely on
+the write path, but only if the live rule body is also at depth ≤ 2.</p><p>If live state has a depth-3 statement that pre-dates the import, the
+options are:</p><ol><li>Flatten it live via <code>update-web-acl</code> before importing (De Morgan&rsquo;s laws give logical equivalents — <code>!(A ∨ B) ≡ !A ∧ !B</code>)</li><li>Accept refresh failures until the provider bug is fixed</li></ol><p>The <code>scope_down_depth.rego</code> policy above guards the authored side
+against future regressions: a contributor who edits the rule builder
+to emit a depth-3 statement gets a deny in CI rather than a refresh
+failure six months later.</p><h2 id=tying-it-together>Tying it together</h2><table><thead><tr><th>Layer</th><th>Mechanism</th><th>What it catches</th></tr></thead><tbody><tr><td>1</td><td>Native data source + lifecycle postcondition</td><td>Drift on attributes the typed data source exposes (IP set addresses, regex patterns)</td></tr><tr><td>2</td><td>Cloud Control API data source</td><td>Drift on attributes the typed schema doesn&rsquo;t expose (WAFv2 rule body)</td></tr><tr><td>3</td><td>JSON canonicalization (name-key, strip empties, casing normalization)</td><td>False-positive diffs from representation differences</td></tr><tr><td>4</td><td>Plural Cloud Control data source + per-instance postcondition</td><td>Out-of-band resources adjacent to managed ones</td></tr><tr><td>5</td><td>conftest policies on plan JSON</td><td>Plan-level drift, fingerprint transitions, provider-bug-tripping shapes</td></tr></tbody></table><p>Each layer compensates for the others&rsquo; gaps.</p><ul><li>Postconditions catch authored-vs-live drift</li><li>conftest catches plan-level patterns postconditions can&rsquo;t see</li><li>out-of-band gates catch what the configuration explicitly doesn&rsquo;t manage but lives next to what it does</li></ul><p>The result is a Terraform plan that proves &ndash; at plan time, before
+apply &ndash; that the import-only change is behaviorally inert against live
+infrastructure. This simplifies the reviewer&rsquo;s job to confirming that
+the gates themselves are sound, rather than visually reviewing thousands
+of lines of plan output (and PS - <a href=/blog/verifying-and-validating-terraform-techniques-for-testing-infrastructure-as-code/#terraform-test-with-mock-providers>the gates&rsquo; correctness can even be tested</a>).</p><h2 id=further-reading>Further reading</h2><ul><li><a href=https://developer.hashicorp.com/terraform/language/expressions/custom-conditions>Terraform custom conditions</a></li><li><a href=https://developer.hashicorp.com/terraform/language/import>Terraform import blocks</a></li><li><a href=https://docs.aws.amazon.com/cloudcontrolapi/>AWS Cloud Control API</a></li><li><a href=https://www.openpolicyagent.org/docs/latest/terraform/>Open Policy Agent Terraform support</a></li><li><a href=https://www.conftest.dev/>conftest</a></li><li><a href=/blog/verifying-and-validating-terraform-techniques-for-testing-infrastructure-as-code/>Verifying and validating Terraform: techniques for testing infrastructure-as-code</a></li><li><a href=/blog/terraform-self-validating-plan-time-permissions-checks/>Terraform: self-validating plan-time permissions checks</a></li><li><a href=/blog/terraform-plan-validation-with-open-policy-agent/>Terraform Plan Validation With Open Policy Agent</a></li></ul></div><ul class=tags><li><a href=/tags/terraform>terraform</a></li><li><a href=/tags/iac>iac</a></li><li><a href=/tags/testing>testing</a></li></ul></article></div></main><footer><section><h1 id=about>Info</h1><div><h2><a href=/>Mike Ball</a></h2><p>I live in Philadelphia and work as a multi-disciplinary software engineer & designer.</p><p>Over the years, I've developed front end web applications, built
+backend services, automated cloud infrastructure management, designed
+CI/CD pipelines for high scale distributed systems, developed developer
+platforms for large organizations, and contributed to numerous open
+source software projects.</p><p>I've also worked in graphic and UX design. Buy prints of my illustrations at <a href=https://tiendah.bigcartel.com>Tiendah</a>.</p></div><div class=double><h2>Shop Tiendah</h2><ul class="gallery store-feed"></ul><h2>Instagram</h2><ul class="gallery ig-feed"></ul></div><div><h2>Etc.</h2><ul><li><a href=http://github.com/mdb>GitHub</a></li><li><a href=https://clapclapexcitement.bsky.social>Bluesky</a></li><li><a href=https://instagram.com/clapclapexcitement>Instagram</a></li><li><a href=/index.xml>RSS Feed</a></li><li><a href=https://tiendah.bigcartel.com>Shop Tiendah</a></li></ul><h2>Contact</h2><p>Interested in working with me? <a href=mailto:mikedball@gmail.com>Get in touch</a>.</p></div></section></footer><script type=text/javascript src=/js/main.min.542672b67aa924d06e857fba942ea82bceb1ba468d461ef62da049fad70cd0a7.js></script><script type=text/javascript>(function(e,t,n,s,o,i,a){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,i=t.createElement(n),a=t.getElementsByTagName(n)[0],i.async=1,i.src=s,a.parentNode.insertBefore(i,a)})(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-54324621-1","auto"),ga("send","pageview")</script></body></html>
