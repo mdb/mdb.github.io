@@ -108,8 +108,6 @@ footer {
       ul.gallery.ig-feed {
         li,
         li a {
-          height: 108px;
-
           @include breakpoint(desktop) {
             height: 200px;
           }
